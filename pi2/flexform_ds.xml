@@ -1,0 +1,58 @@
+<T3DataStructure>
+	<sheets>	
+		<default>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapTitle</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<apiKey>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.apiKey</label>
+							<config>
+								<type>input</type>
+								<size>100</size>
+							</config>
+						</TCEforms>
+					</apiKey>
+						
+					<mapWidth>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapWidth</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</mapWidth>
+						
+					<mapHeight>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapHeight</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</mapHeight>
+					
+					<userGroups>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.userGroup</label>
+							<config>
+								<type>select</type>
+								<foreign_table>fe_groups</foreign_table>
+								<foreign_table_where>ORDER BY fe_groups.title</foreign_table_where>
+								<size>10</size>
+								<maxitems>50</maxitems>
+							</config>
+						</TCEforms>
+					</userGroups>
+
+				</el>
+			</ROOT>
+			
+		</default>
+	</sheets>
+</T3DataStructure>

@@ -1,0 +1,104 @@
+<T3DataStructure>
+	<sheets>
+		<default>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.title</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<description>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.description</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</description>
+					
+					<street>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.street</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</street>
+					
+					<city>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.city</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</city>
+					
+					<state>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.state</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+								</config>
+						</TCEforms>
+					</state>
+					
+					<zip>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.zip</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+							</config>
+						</TCEforms>
+					</zip>
+				</el>
+			</ROOT>
+		</default>
+		
+		<mapConfig>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapTitle</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<apiKey>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.apiKey</label>
+							<config>
+								<type>input</type>
+								<size>50</size>
+							</config>
+						</TCEforms>
+					</apiKey>
+						
+					<mapWidth>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapWidth</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</mapWidth>
+						
+					<mapHeight>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapHeight</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</mapHeight>
+
+				</el>
+			</ROOT>
+		</mapConfig>
+	</sheets>
+</T3DataStructure>
