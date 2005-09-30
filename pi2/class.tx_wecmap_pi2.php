@@ -70,8 +70,6 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "default");
 		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
 		
-		debug($userGroups, "user group");
-		
 		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap.php');
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap");
 		$map = new $className($apiKey, $width, $height);

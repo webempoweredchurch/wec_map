@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>pi1/class.tx_wecmap_pi1.php</string>
+	<string>pi2/class.tx_wecmap_pi2.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -72,7 +72,7 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>30</integer>
+				<integer>3</integer>
 				<key>line</key>
 				<integer>53</integer>
 			</dict>
@@ -100,44 +100,28 @@
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>0</integer>
+				<integer>70</integer>
 				<key>line</key>
-				<integer>1</integer>
+				<integer>15</integer>
 			</dict>
-			<key>columnSelection</key>
-			<false/>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>64</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>1</integer>
-			</dict>
+			<integer>14</integer>
 		</dict>
 		<key>pi2/class.tx_wecmap_pi2.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>24</integer>
+				<integer>75</integer>
 				<key>line</key>
-				<integer>59</integer>
+				<integer>70</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>27</integer>
+			<integer>50</integer>
 		</dict>
 		<key>sv1/class.tx_wecmap_sv1.php</key>
 		<dict>
