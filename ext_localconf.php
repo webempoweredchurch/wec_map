@@ -52,6 +52,26 @@ t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_yahoo',
 		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'geocode_service/class.tx_wecmap_geocode_yahoo.php',
 		'className' => 'tx_wecmap_geocode_yahoo',
 	)
+);
+
+t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_google',
+	array(
+
+		'title' => 'Google Maps Address Lookup',
+		'description' => '',
+
+		'subtype' => '',
+
+		'available' => TRUE,
+		'priority' => 100,
+		'quality' => 100,
+
+		'os' => '',
+		'exec' => '',
+
+		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'geocode_service/class.tx_wecmap_geocode_google.php',
+		'className' => 'tx_wecmap_geocode_google',
+	)
 );	
 	
 t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_worldkit',
