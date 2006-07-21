@@ -62,7 +62,7 @@ class tx_wecmap_marker extends tslib_pibase {
 		$this->index = $index;
 		
 		$this->title = $title;
-		$this->description = $description;
+		$this->description = addslashes($description);
 		$this->color = $color;
 		$this->strokeColor = $strokeColor;
 		
