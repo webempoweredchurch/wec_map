@@ -14,25 +14,63 @@ t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_wecmap_pi1.php','_pi1','list_type',1);
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi2/class.tx_wecmap_pi2.php','_pi2','list_type',1);
 
-t3lib_extMgm::addService($_EXTKEY,  'addressLookup' /* sv type */,  'tx_wecmap_sv1' /* sv key */,
-		array(
+t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_geocoder',
+	array(
+	'title' => 'Geocoder.us Address Lookup',
+	'description' => '',
 
-			'title' => 'Geocoder.us Address Lookup',
-			'description' => '',
+	'subtype' => '',
 
-			'subtype' => '',
+	'available' => TRUE,
+	'priority' => 50,
+	'quality' => 50,
 
-			'available' => TRUE,
-			'priority' => 50,
-			'quality' => 50,
+	'os' => '',
+	'exec' => '',
 
-			'os' => '',
-			'exec' => '',
+	'classFile' => t3lib_extMgm::extPath($_EXTKEY).'geocode_service/class.tx_wecmap_geocode_geocoder.php',
+	'className' => 'tx_wecmap_geocode_geocoder',
+	)
+);
 
-			'classFile' => t3lib_extMgm::extPath($_EXTKEY).'sv1/class.tx_wecmap_sv1.php',
-			'className' => 'tx_wecmap_sv1',
-		)
-	);
+
+t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_yahoo',
+	array(
+
+		'title' => 'Yahoo! Maps Address Lookup',
+		'description' => '',
+
+		'subtype' => '',
+
+		'available' => TRUE,
+		'priority' => 75,
+		'quality' => 75,
+
+		'os' => '',
+		'exec' => '',
+
+		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'geocode_service/class.tx_wecmap_geocode_yahoo.php',
+		'className' => 'tx_wecmap_geocode_yahoo',
+	)
+);	
 	
+t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_worldkit',
+	array(
+		'title' => 'Worldkit City Lookup',
+		'description' => '',
+
+		'subtype' => '',
+
+		'available' => TRUE,
+		'priority' => 25,
+		'quality' => 25,
+
+		'os' => '',
+		'exec' => '',
+
+		'classFile' => t3lib_extMgm::extPath($_EXTKEY).'geocode_service/class.tx_wecmap_geocode_worldkit.php',
+		'className' => 'tx_wecmap_geocode_worldkit',
+	)
+);
 	
 ?>

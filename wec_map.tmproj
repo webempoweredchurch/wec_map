@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>currentDocument</key>
-	<string>pi2/class.tx_wecmap_pi2.php</string>
+	<string>class.tx_wecmap_map.php</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -20,7 +20,7 @@
 		</dict>
 	</array>
 	<key>fileHierarchyDrawerWidth</key>
-	<integer>200</integer>
+	<integer>328</integer>
 	<key>metaData</key>
 	<dict>
 		<key>README.txt</key>
@@ -53,33 +53,33 @@
 				<integer>0</integer>
 			</dict>
 		</dict>
-		<key>class.tx_wecmap.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>105</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>30</integer>
-		</dict>
 		<key>class.tx_wecmap_cache.php</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>3</integer>
+				<integer>6</integer>
 				<key>line</key>
-				<integer>53</integer>
+				<integer>69</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>25</integer>
+			<integer>55</integer>
+		</dict>
+		<key>class.tx_wecmap_map.php</key>
+		<dict>
+			<key>caret</key>
+			<dict>
+				<key>column</key>
+				<integer>2</integer>
+				<key>line</key>
+				<integer>100</integer>
+			</dict>
+			<key>firstVisibleColumn</key>
+			<integer>0</integer>
+			<key>firstVisibleLine</key>
+			<integer>70</integer>
 		</dict>
 		<key>ext_tables.sql</key>
 		<dict>
@@ -95,62 +95,44 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>pi1/class.tx_wecmap_pi1.php</key>
+		<key>map_service/google/google.tmpl</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>70</integer>
+				<integer>9</integer>
 				<key>line</key>
-				<integer>15</integer>
+				<integer>19</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>14</integer>
+			<integer>0</integer>
 		</dict>
-		<key>pi2/class.tx_wecmap_pi2.php</key>
+		<key>map_service/yahoo/yahoo.tmpl</key>
 		<dict>
 			<key>caret</key>
 			<dict>
 				<key>column</key>
-				<integer>75</integer>
+				<integer>0</integer>
 				<key>line</key>
-				<integer>70</integer>
+				<integer>20</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
 			<key>firstVisibleLine</key>
-			<integer>50</integer>
-		</dict>
-		<key>sv1/class.tx_wecmap_sv1.php</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>2</integer>
-				<key>line</key>
-				<integer>54</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
 			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>23</integer>
 		</dict>
 	</dict>
 	<key>openDocuments</key>
 	<array>
-		<string>class.tx_wecmap.php</string>
+		<string>class.tx_wecmap_map.php</string>
 		<string>class.tx_wecmap_cache.php</string>
-		<string>pi1/class.tx_wecmap_pi1.php</string>
-		<string>pi2/class.tx_wecmap_pi2.php</string>
-		<string>README.txt</string>
-		<string>ext_tables.sql</string>
-		<string>sv1/class.tx_wecmap_sv1.php</string>
+		<string>map_service/google/google.tmpl</string>
 	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{219, 4}, {1025, 828}}</string>
+	<string>{{531, -42}, {794, 804}}</string>
 </dict>
 </plist>

@@ -76,10 +76,10 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "mapConfig");
 		
 		/* Create the map class and add markers to the map */
-		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap.php');
-		$className=t3lib_div::makeInstanceClassName("tx_wecmap");
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
+		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);		
-		$map->addMarker($street, $city, $state, $zip, $description);
+		$map->addMarkerByAddress($street, $city, $state, $zip, "This is my title", $description);
 		$content = $map->drawMap();
 		
 		return $this->pi_wrapInBaseClass($content);

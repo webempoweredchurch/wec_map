@@ -70,22 +70,43 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "default");
 		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
 		
-		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap.php');
-		$className=t3lib_div::makeInstanceClassName("tx_wecmap");
+		/* Create the Map object */
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
+		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);
 		
 		if($userGroups) {
 			$where = "usergroup IN (".$userGroups.")";
 		}
-				
+		
+		/* Select all frontend users */		
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", $where);
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
-			$description = $row["username"];
-			$map->addMarker($row['address'], $row['city'], $row['zone'], $row['zip'], $description);
+			/* Only try to add marker if there's a city */
+			if($row['city'] != '') {
+				$title = $this->makeTitle($row);
+				$description = $this->makeDescription($row);
+				
+				$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description);
+			}
 		}		
 		
-		$content = $map->drawMap();
-		return $this->pi_wrapInBaseClass($content);
+		/* Draw the map */
+		return $this->pi_wrapInBaseClass($map->drawMap());
+	}
+	
+	function makeTitle($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
+		return $output;
+	}
+	
+	function makeDescription($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
+		return $output;
 	}
 }
 

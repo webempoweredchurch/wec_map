@@ -1,0 +1,21 @@
+<!-- ###MAP### begin -->
+<script type="text/javascript" src="http://api.maps.yahoo.com/v2.0/fl/javascript/apiloader.js"></script>
+<script>
+	var map = new Map('map', '$this->key', new LatLon(###LAT###, ###LONG###), 3);";
+	
+	###PANZOOM_CONTROL###		
+	###MARKERS###
+</script>
+<!-- ###MAP### end -->
+
+<!-- ###MARKER### begin -->
+map.addMarkerByLatLon(new CustomPOIMarker('###INDEX###', '###TITLE###', '###DESCRIPTION###', '###COLOR###', '###STROKE_COLOR###'), new LatLon(###LAT###, ###LONG###));
+<!-- ###MARKER### end -->
+
+<!-- ###TYPE_CONTROL### begin -->
+map.addControl(new GSmallMapControl());
+<!-- ###TYPE_CONTROL### end -->
+
+<!-- ###PANZOOM_CONTROL### begin -->
+map.addTool(new PanTool(), true);
+<!-- ###PANZOOM_CONTROL### bend -->

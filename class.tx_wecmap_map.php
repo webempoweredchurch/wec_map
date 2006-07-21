@@ -33,7 +33,13 @@
  */
 
 
+define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
 require_once(PATH_tslib.'class.tslib_pibase.php');
+require_once(PATH_tslib.'class.tslib_content.php');
+require_once('class.tx_wecmap_marker.php');
+require_once('map_service/google/class.tx_wecmap_marker_google.php');
+require_once('map_service/google/class.tx_wecmap_map_google.php');
+
 
 /**
  * Main class for the wec_map extension.  This class sits between the various 
@@ -43,9 +49,9 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  * @package TYPO3
  * @subpackage tx_wecmap
  */
-class tx_wecmap extends tslib_pibase {
-	var $prefixId = 'tx_wecmap';		// Same as class name
-	var $scriptRelPath = 'class.tx_wecmap.php';	// Path to this script relative to the extension dir.
+class tx_wecmap_map extends tslib_pibase {
+	var $prefixId = 'tx_wecmap_map';		// Same as class name
+	var $scriptRelPath = 'class.tx_wecmap_map.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
 	var $pi_checkCHash = TRUE;
 
@@ -57,6 +63,7 @@ class tx_wecmap extends tslib_pibase {
 	var $height;
 				
 	var $js;
+	var $key;
 	
 	/* 
 	 * Class constructor.  Creates javscript array.
@@ -65,33 +72,29 @@ class tx_wecmap extends tslib_pibase {
 	 * @param 	string		The longitude for the center point on the map.
 	 * @param	string		The initial zoom level of the map.
 	 */
-	function tx_wecmap($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
+	function tx_wecmap_map($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
 		$this->js = array();
-		$this->markerArray = array();
-		
+		$this->markers = array();
 		$this->key = $key;
 
-		if($width != '') {
-			$this->width = $width;
-		} else {
-			$this->width = 250;
-		}
-		
-		if($height != '') {
-			$this->height = $height;
-		} else {
-			$this->height = 250;
-		}
+		$this->width = $width;
+		$this->height = $height;
 		
 		if ($lat != '' || $long != '') {
 			$this->setCenter($lat, $long);
 		}
-		
 		if ($zoom != '') {
 			$this->setZoom($zoom);
 		}
 		
 	}
+	
+	function autoCenterAndZoom(){}
+	
+	
+	
+	function drawMap() {}
+	
 	
 	/*
 	 * Sets the center value for the current map to specified values.
@@ -116,33 +119,23 @@ class tx_wecmap extends tslib_pibase {
 		$this->zoom = $zoom;
 	}
 	
-	
-	/*
-	 * Sets the center and zoom values for the current map dynamically, based
-	 * on the markers to be displayed on the map.
-	 *
-	 * @return	void		No return value needed.  Changes made to object model.
-	 */
-	function autoCenterAndZoom() {		
+	function getLatLongBounds() {
 		$minLat = 360;
 		$maxLat = -360;
 		$minLong = 360;
 		$maxLong = -360;
 		
-		$width = 500;
-		$height = 700;
-
 		/* Find min and max zoom lat and long */		
-		foreach($this->markerArray as $marker) {			
-			if ($marker['lat'] < $minLat) 
-				$minLat = $marker['lat'];
-			if ($marker['lat'] > $maxLat) 
-				$maxLat = $marker['lat'];
+		foreach($this->markers as $marker) {			
+			if ($marker->getLatitude() < $minLat) 
+				$minLat = $marker->getLatitude();
+			if ($marker->getLatitude() > $maxLat) 
+				$maxLat = $marker->getLatitude();
 			
-			if ($marker['long'] < $minLong) 
-				$minLong = $marker['long'];
-			if ($marker['long'] > $maxLong) 
-				$maxLong = $marker['long'];
+			if ($marker->getLongitude() < $minLong) 
+				$minLong = $marker->getLongitude();
+			if ($marker->getLongitude() > $maxLong) 
+				$maxLong = $marker->getLongitude();
 		}
 
 		/* If we only have one point, expand the boundaries slightly to avoid
@@ -156,63 +149,7 @@ class tx_wecmap extends tslib_pibase {
 			$minLat = $minLat - 0.001;
 		}
 		
-		/* Calculate the span of the lat/long boundaries */
-		$latSpan = $maxLat-$minLat;
-		$longSpan = $maxLong-$minLong;
-		
-		/* Calculate center lat/long based on boundary markers */
-		$lat = ($minLat + $maxLat) / 2;
-		$long = ($minLong + $maxLong) / 2;
-		
-		//$pixelsPerLatDegree = pow(2, 17-$zoom);
-		//$pixelsPerLongDegree = pow(2,17 - $zoom) *  0.77162458338772;
-		$wZoom = 17 - log($this->width, 2) +  log($longSpan, 2);
-		$hZoom = 17 - log($this->height, 2) + log($latSpan, 2);
-				
-		$zoom = ceil(($wZoom > $hZoom) ? $wZoom : $hZoom);
-		if ($zoom > 14) {
-			$zoom = 14;
-		}
-		elseif ($zoom < 2) {
-			$zoom = 2;
-		}
-		
-		$this->setCenter($lat, $long);
-		$this->setZoom($zoom);
-	}
-	
-	/* 
-	 * Outputs the HTML and Javascript required for a Google Map.  
-	 *
-	 * @return	string		The HTML/Javascript representation of the map.
-	 */
-	function drawMap() {
-		$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&v=1&key='.$this->key.'" type="text/javascript"></script>';
-		
-		if ($this->lat == '' || $this->long == '' || $this->zoom == '') {
-			$this->autoCenterAndZoom();
-		}
-
-		$this->js['mapDiv'] = '<div id="map" style="width: '.$this->width.'px; height: '.$this->height.'px"></div>';
-		$this->js['start'] = '<script type="text/javascript">
-								//<![CDATA[';
-		$this->js['createMarker'] = 'function createMarker(point, text) {
-				                 		var marker = new GMarker(point);
-				                     GEvent.addListener(marker, "click", function() { marker.openInfoWindowHtml(text); });
-				                     return marker;
-				                 }';						
-		$this->js['browserCheckStart'] = 'if (GBrowserIsCompatible()) {';
-		$this->js['createMap'] = 'var map = new GMap(document.getElementById("map"));
-										  var myPoint = new GPoint('.$this->long.', '.$this->lat.');
-										  map.centerAndZoom(myPoint, '.$this->zoom.');
-										  map.addControl(new GSmallMapControl());
-										  map.addControl(new GMapTypeControl());';	
-		$this->js['markers'] = $this->markers;					
-		$this->js['browserCheckEnd'] = '}';
-		$this->js['end'] = '  //]]>
-								 </script>';
-		
-		return implode(chr(10), $this->js);
+		return array("maxLat" => $maxLat, "maxLong" => $maxLong, "minLat" => $minLat, "minLong" => $minLong);
 	}
 	
 	/*
@@ -225,14 +162,37 @@ class tx_wecmap extends tslib_pibase {
 	 * @param	string	The description to be displayed in the marker popup.
 	 * @return	void		No return needed.  Address added to marker object.
 	 */
-	function addMarker($street, $city, $state, $zip, $description='') {
+	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='') {		
+		
+		/* Geocode the address */
 		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		
+		/* Create a marker at the specified latitude and longitdue */
+		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description);	
+	}
+	
+	/*
+	 * Adds a lat/long to the currently list of markers rendered on the map.
+	 *
+	 * @param	double	The latitude.
+	 * @param	double	The longitude.
+	 * @param	string	The description to be displayed in the marker popup.
+	 * @return	void		No return needed.  Lat/long added to marker object.
+	 */
+	function addMarkerByLatLong($lat, $long, $title='', $description='') {
+		$latlong = array();
+		$latlong['lat'] = $lat;
+		$latlong['long'] = $long;
 		
 		if($latlong['lat']!='' && $latlong['long']!='') {
-			$this->markers = $this->markers.chr(10).'map.addOverlay(createMarker(new GPoint('.$latlong['long'].', '.$latlong['lat'].'), "'.$description.'"));';			
-			$this->markerArray[] = $latlong;
+			$classname = t3lib_div::makeInstanceClassname('tx_wecmap_marker_google');
+			$this->markers[] = new $classname(count($this->markers), 
+											  $latlong['lat'], 
+											  $latlong['long'], 
+											  $title, 
+											  $description);
 		}
 	}
 	
@@ -240,8 +200,8 @@ class tx_wecmap extends tslib_pibase {
 
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_map.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_map.php']);
 }
 
 

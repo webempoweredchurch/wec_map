@@ -41,10 +41,13 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
  * @package TYPO3
  * @subpackage tx_wecmap
  */
-class tx_wecmap_sv1 extends t3lib_svbase {
-	var $prefixId = 'tx_wecmap_sv1';		// Same as class name
-	var $scriptRelPath = 'sv1/class.tx_wecmap_sv1.php';	// Path to this script relative to the extension dir.
+class tx_wecmap_geocode_geocoder extends t3lib_svbase {
+	var $prefixId = 'tx_wecmap_geocode_geocoder';		// Same as class name
+	var $scriptRelPath = 'geocode_service/class.tx_wecmap_geocode_geocoder.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
+	
+	var $url = 'http://rpc.geocoder.us/service/rest?address=';
+	
 	
 	/**
 	 * Performs an address lookup using the geocoder.us web service.
@@ -55,13 +58,11 @@ class tx_wecmap_sv1 extends t3lib_svbase {
 	 * @param	string	The ZIP code.
 	 * @return	array		Array containing latitude and longitude.  If lookup failed, empty array is returned.
 	 */
-	function lookup($street, $city, $state, $zip)	{
-		
-		$url = 'http://rpc.geocoder.us/service/rest?address=';
+	function lookup($street, $city, $state, $zip, $country)	{		
 		$address = $street.', '.$city.', '.$state.' '.$zip;
 		$address = str_replace(' ', '%20', $address);
 		
-		$xml = file_get_contents($url.$address);
+		$xml = file_get_contents($this->url.$address);
 		
 		$latlong = array();
 		if($xml != "couldn't find this address! sorry") {
@@ -78,8 +79,8 @@ class tx_wecmap_sv1 extends t3lib_svbase {
 
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/sv1/class.tx_wecmap_sv1.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/sv1/class.tx_wecmap_sv1.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/geocode_service/class.tx_wecmap_geocode_geocoder.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/geocode_service/class.tx_wecmap_geocode_geocoder.php']);
 }
 
 ?>

@@ -1,0 +1,40 @@
+<!-- ###MAP### begin -->
+<script src="http://maps.google.com/maps?file=api&v=2&key=###API_KEY###" type="text/javascript"></script>
+
+<div id="map" style="width:###WIDTH###px; height:###HEIGHT###px"></div>
+
+<script>
+	function createMarker(point, icon, text) {
+		var marker = new GMarker(point, icon);
+		GEvent.addListener(marker, "click", function() { marker.openInfoWindowHtml(text); });
+		return marker;
+	}
+	
+	function drawMap() {						
+		if (GBrowserIsCompatible()) {
+			var map = new GMap2(document.getElementById("map"));
+			var myPoint = new GLatLng(###CENTER_LAT###, ###CENTER_LONG###);
+			map.setCenter(myPoint, ###ZOOM###);
+
+			map.addControl(new GLargeMapControl());
+			map.addControl(new GMapTypeControl());
+		
+			// Create our "tiny" marker icon
+			var icon = new GIcon();
+			icon.image = "typo3conf/ext/wec_map/images/mm_20_red.png";
+			icon.shadow = "typo3conf/ext/wec_map/images/mm_20_shadow.png";
+			icon.iconSize = new GSize(12, 20);
+			icon.shadowSize = new GSize(22, 20);
+			icon.iconAnchor = new GPoint(6, 20);
+			icon.infoWindowAnchor = new GPoint(5, 1);
+		
+			###MARKERS###
+		}
+	}
+	
+</script>
+<!-- ###MAP### end -->
+
+<!-- ###MARKER### begin -->
+map.addOverlay(createMarker(new GLatLng(###LAT###,###LONG###), icon, ###DESCRIPTION###));			
+<!-- ###MARKER### end -->
