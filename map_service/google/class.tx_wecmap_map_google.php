@@ -90,14 +90,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		$htmlContent .= '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
 		
-		$htmlContent .= $this->mapDiv("map", $this->width, $this->height);
+		$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
 		$jsContent = array();
 		$jsContent[] .= $this->js_createMarker();
 		$jsContent[] .= $this->js_drawMapStart();
-		$jsContent[] .= $this->js_newGMap2("map");
-		$jsContent[] .= $this->js_setCenter("map", $this->lat, $this->long, $this->zoom);
-		$jsContent[] .= $this->js_addControl("map", "new GLargeMapControl()");
-		$jsContent[] .= $this->js_addControl("map", "new GMapTypeControl()");
+		$jsContent[] .= $this->js_newGMap2('map');
+		$jsContent[] .= $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
+		$jsContent[] .= $this->js_addControl('map', "new GLargeMapControl()");
+		$jsContent[] .= $this->js_addControl('map', "new GMapTypeControl()");
 		$jsContent[] .= $this->js_icon();
 		foreach($this->markers as $marker) {
 			$jsContent[] .= $marker->writeJS();
