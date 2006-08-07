@@ -93,12 +93,11 @@ class tx_wecmap_backend {
 	}
 	
 	function drawMap($PA, $fobj) {
-		/*
 		$row = $PA['row'];
 		
 		$width = "400";
 		$height = "400";
-		$apiKey = "ABQIAAAApTKWZGXBnodwNIHa961YyxTrZ8hZ_np1PAWaZkBe45rdmQGNqxQtcR3tLdSsFOOB0TSI3FnDJMPGfw";
+		$apiKey = "ABQIAAAApTKWZGXBnodwNIHa961YyxSfIPKRHQxvlXxuimPYzBQZi0LLbBSre1ZDkwf9rmUuOtM3M0THLTyvsQ";
 		
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);
@@ -108,7 +107,6 @@ class tx_wecmap_backend {
 		
 		
 		return $content;
-		*/
 	}
 	
 }

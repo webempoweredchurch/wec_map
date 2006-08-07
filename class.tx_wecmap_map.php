@@ -33,9 +33,11 @@
  */
 
 
+/*
 define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
 require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(PATH_tslib.'class.tslib_content.php');
+*/
 require_once('class.tx_wecmap_marker.php');
 require_once('map_service/google/class.tx_wecmap_marker_google.php');
 require_once('map_service/google/class.tx_wecmap_map_google.php');
@@ -49,7 +51,7 @@ require_once('map_service/google/class.tx_wecmap_map_google.php');
  * @package TYPO3
  * @subpackage tx_wecmap
  */
-class tx_wecmap_map extends tslib_pibase {
+class tx_wecmap_map {
 	var $prefixId = 'tx_wecmap_map';		// Same as class name
 	var $scriptRelPath = 'class.tx_wecmap_map.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
@@ -181,19 +183,23 @@ class tx_wecmap_map extends tslib_pibase {
 	 * @param	string	The description to be displayed in the marker popup.
 	 * @return	void		No return needed.  Lat/long added to marker object.
 	 */
-	function addMarkerByLatLong($lat, $long, $title='', $description='') {
+	function addMarkerByLatLong($lat, $long, $title='', $description='') {		
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
 		
 		if($latlong['lat']!='' && $latlong['long']!='') {
-			$classname = t3lib_div::makeInstanceClassname('tx_wecmap_marker_google');
+			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
 			$this->markers[] = new $classname(count($this->markers), 
 											  $latlong['lat'], 
 											  $latlong['long'], 
 											  $title, 
 											  $description);
 		}
+	}
+	
+	function getMarkerClassName() {
+		return $this->markerClassName;
 	}
 	
 }

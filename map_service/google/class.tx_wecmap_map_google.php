@@ -55,6 +55,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $js;
 	var $key;
 	
+	var $markerClassName = 'tx_wecmap_marker_google';
+	
 	/* 
 	 * Class constructor.  Creates javscript array.
 	 * @param	string		The Google Maps API Key
@@ -63,6 +65,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	string		The initial zoom level of the map.
 	 */
 	function tx_wecmap_map_google($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
+		$this->prefixId = "tx_wecmap_map_google";
 		$this->js = array();
 		$this->markers = array();
 		$this->key = $key;
@@ -76,9 +79,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if ($zoom != '') {
 			$this->setZoom($zoom);
 		}
-		
-	}
-	
+	}	
 	
 	function drawMap() {						
 		if(!isset($this->lat) or !isset($this->long)) {
@@ -144,13 +145,20 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 	
 	function js_icon() {
+		if (TYPO3_MODE=='BE')	{
+			$path = t3lib_extMgm::extRelPath('wec_map');
+		} else {
+			$path = t3lib_extMgm::siteRelPath('wec_map');
+		}
+		
 		return 'var icon = new GIcon();
-				icon.image = "typo3conf/ext/wec_map/images/mm_20_red.png";
-				icon.shadow = "typo3conf/ext/wec_map/images/mm_20_shadow.png";
+				icon.image = "'.$path.'images/mm_20_red.png";
+				icon.shadow = "'.$path.'images/mm_20_shadow.png";
 				icon.iconSize = new GSize(12, 20);
 				icon.shadowSize = new GSize(22, 20);
 				icon.iconAnchor = new GPoint(6, 20);
 				icon.infoWindowAnchor = new GPoint(5, 1);';
+				
 	}
 
 

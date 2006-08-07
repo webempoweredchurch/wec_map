@@ -10,8 +10,10 @@ $LOCAL_LANG = Array (
 		'tt_content.list_type_pi1' => 'Simple Map',
 		'tt_content.list_type_pi2' => 'Frontend User Map',
 		
-		'tt_content.pi_flexform.description' => 'Description of Address',
-		'tt_content.pi_flexform.title' => 'Address',
+		'tt_content.pi_flexform.sheet' => 'Address',
+		
+		'tt_content.pi_flexform.title' => 'Title',
+		'tt_content.pi_flexform.description' => 'Description',
 		'tt_content.pi_flexform.street' => 'Street Address',
 		'tt_content.pi_flexform.city' => 'City',
 		'tt_content.pi_flexform.state' => 'State',

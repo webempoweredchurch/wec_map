@@ -26,6 +26,7 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
+require_once (PATH_t3lib.'class.t3lib_refindex.php');
 
 /**
  * Main address lookup class for the wec_map extension.  Looks up existing
@@ -51,9 +52,7 @@ class tx_wecmap_cache {
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
 	function lookup($street, $city, $state, $zip, $country, $forceLookup=false) {
-		
-		//debug("performing lookup", "wecmap_cache");
-			 	
+					 	
 		/* Lookup the hashed current address in the cache table. */	
 		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
 		
@@ -103,12 +102,12 @@ class tx_wecmap_cache {
 		/* Found a cached match */	
 		if ($latlong) {
 			if($latlong['lat']==0 and $latlong['long']==0) {
-				$statusCode = -1;
+				$statusCode = -1; /* Previous lookup failed */
 			} else {			
-				$statusCode = 1;
+				$statusCode = 1; /* Previous lookup succeeded */
 			}
 		} else {
-			$statusCode = 0;
+			$statusCode = 0; /* Lookup has not been performed */
 		}
 		
 		return $statusCode;
@@ -126,9 +125,7 @@ class tx_wecmap_cache {
 	 * @param	string		The country name.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
-	function find($street, $city, $state, $zip, $country) {
-		//debug("searching db...", "tx_wecmap_cache");
-		
+	function find($street, $city, $state, $zip, $country) {	
 		$hash = tx_wecmap_cache::hash($street, $city, $state, $zip, $country);
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "tx_wecmap_cache", ' address_hash="'.$hash.'"');
 		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
@@ -151,9 +148,7 @@ class tx_wecmap_cache {
 	 * @param	string		Longitude.
 	 * @return	none		
 	 */
-	function insert($street, $city, $state, $zip, $country, $lat, $long) {
-		//debug("inserting into db....", "tx_wecmap_cache");
-		
+	function insert($street, $city, $state, $zip, $country, $lat, $long) {		
 		/* Check if value is already in DB */
 		if (tx_wecmap_cache::find($street,$city,$state,$zip,$country)) {
 			/* Update existing entry */
@@ -169,8 +164,21 @@ class tx_wecmap_cache {
 		
 			/* Write address to cache table */
 			$result = $GLOBALS['TYPO3_DB']->exec_INSERTquery("tx_wecmap_cache", $insertArray);
-		}
+		}		
 	} 
+	
+	function updateByUID($uid, $lat, $long) {
+		$latlong = array("latitude" => $lat, "longitude" => $long);
+		$result = $GLOBALS['TYPO3_DB']->exec_UPDATEquery("tx_wecmap_cache", " uid=".$uid, $latlong);
+	}
+	
+	function deleteByUID($uid) {
+		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache", " uid=".$uid);
+	}
+	
+	function deleteAll() {
+		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache","");
+	}
 	
 	/*
 	 * Deletes a specified address from the cache table.
