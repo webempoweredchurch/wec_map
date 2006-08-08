@@ -87,7 +87,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 				
 		$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
-		$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
+		//$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
 		
 		$htmlContent .= '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
 		
