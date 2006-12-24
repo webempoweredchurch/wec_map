@@ -11,7 +11,7 @@
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(
-	'title' => 'Map',
+	'title' => 'WEC Map',
 	'description' => 'Mapping extension that connects to geocoding databases and Google Maps API.',
 	'category' => 'plugin',
 	'shy' => 0,
