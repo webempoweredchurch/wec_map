@@ -186,7 +186,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$latitude = t3lib_div::_GP('latitude');
 		$longitude = t3lib_div::_GP('longitude');
 		$cmd = t3lib_div::_GP('cmd');
-
 		switch($cmd) {
 			case 'update' : 
 				tx_wecmap_cache::updateByUID($uid, $latitude, $longitude);
@@ -210,13 +209,12 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		foreach($displayRows as $row) {				
 			// Add icon/title and ID:
 			$cells = array();
-
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['uid']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit address" alt="" /></a></td>';
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['uid']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="Delete address" alt="" /></a></td>';
+			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit address" alt="" /></a></td>';
+			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="Delete address" alt="" /></a></td>';
 			
 			$cells[] = '<td>'.$row['address'].'</td>';
 				
-			if ($row['uid'] == $uid && $cmd = 'edit') {
+			if ($row['address_hash'] == $uid && $cmd = 'edit') {
 				$cells[] = '<td><input name="latitude" value="'.$row['latitude'].'" size="8"/></td>';
 				$cells[] = '<td><input name="longitude" value="'.$row['longitude'].'" size="8"/></td>';
 				$cells[] = '<td><input type="submit" value="Update" /></td>';
