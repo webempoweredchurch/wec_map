@@ -62,7 +62,7 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 			$zip = null;
 			$state = null;
 		}
-			
+
 		$url = 'http://api.local.yahoo.com/MapsService/V1/geocode?'.
 				'appid='.$this->applicationID.'&'.
 				$this->buildURL('street', $street).

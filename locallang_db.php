@@ -23,6 +23,11 @@ $LOCAL_LANG = Array (
 		'tt_content.pi_flexform.mapWidth' => 'Width (pixels)',
 		'tt_content.pi_flexform.mapHeight' => 'Height (pixels)',
 		'tt_content.pi_flexform.apiKey' => 'Google Maps API Key',
+
+		'tt_content.pi_flexform.controlsTitle' => 'Map Controls',
+		'tt_content.pi_flexform.conType' => 'Show Map Type',
+		'tt_content.pi_flexform.conOverview' => 'Show Overview Map',
+		'tt_content.pi_flexform.conLargeMap' => 'Show Large Map Controls',
 		
 		'tt_content.pi_flexform.userGroup' => 'Frontend User Groups',
 	),

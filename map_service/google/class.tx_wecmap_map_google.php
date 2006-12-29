@@ -54,6 +54,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				
 	var $js;
 	var $key;
+	var $controls;
 	
 	var $markerClassName = 'tx_wecmap_marker_google';
 	
@@ -69,6 +70,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->js = array();
 		$this->markers = array();
 		$this->key = $key;
+		$this->controls = array();
 
 		$this->width = $width;
 		$this->height = $height;
@@ -81,13 +83,38 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 	}	
 	
+	/**
+	 * Enables controls for Google Maps, for example zoom level slider or mini map.
+	 *
+	 * @return void
+	 **/
+	function addControl($name) {
+		switch ($name)
+		{
+			case 'largeMap':
+				$this->controls[] .= $this->js_addControl('map', "new GLargeMapControl()");
+				break;
+			
+			case 'overviewMap':
+				$this->controls[] .= $this->js_addControl('map', "new GOverviewMapControl()");
+				break;
+					
+			case 'mapType':
+				$this->controls[] .= $this->js_addControl('map', "new GMapTypeControl()");
+				break;
+			default:
+				break;
+		}
+	}
+	
 	function drawMap() {						
 		if(!isset($this->lat) or !isset($this->long)) {
 			$this->autoCenterAndZoom();
 		}
 				
 		$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
-		$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
+		$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
+		$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 		
 		//$htmlContent .= '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
 		
@@ -97,8 +124,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$jsContent[] .= $this->js_drawMapStart();
 		$jsContent[] .= $this->js_newGMap2('map');
 		$jsContent[] .= $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
-		$jsContent[] .= $this->js_addControl('map', "new GLargeMapControl()");
-		$jsContent[] .= $this->js_addControl('map', "new GMapTypeControl()");
+		foreach( $this->controls as $control ) {
+			$jsContent[] .= $control;
+		}
 		$jsContent[] .= $this->js_icon();
 		foreach($this->markers as $marker) {
 			$jsContent[] .= $marker->writeJS();
