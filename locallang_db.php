@@ -26,9 +26,13 @@ $LOCAL_LANG = Array (
 
 		'tt_content.pi_flexform.controlsTitle' => 'Map Controls',
 		'tt_content.pi_flexform.conType' => 'Show Map Type',
+		'tt_content.pi_flexform.conScale' => 'Show Scale',	
 		'tt_content.pi_flexform.conOverview' => 'Show Overview Map',
-		'tt_content.pi_flexform.conLargeMap' => 'Show Large Map Controls',
-		
+		'tt_content.pi_flexform.conLargeMap' => 'Size of Map Controls',
+		'tt_content.pi_flexform.conLargeMapL' => 'Large',
+		'tt_content.pi_flexform.conLargeMapS' => 'Small',
+		'tt_content.pi_flexform.conLargeMapZ' => 'Zoom only',
+								
 		'tt_content.pi_flexform.userGroup' => 'Frontend User Groups',
 	),
 );

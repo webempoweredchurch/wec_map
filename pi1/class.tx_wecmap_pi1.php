@@ -75,16 +75,24 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$width = $this->pi_getFFvalue($piFlexForm, "mapWidth", "mapConfig");
 		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "mapConfig");
 		
-		$largeMap = $this->pi_getFFvalue($piFlexForm, "largeMap", "mapControls");
+		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
 		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
 		$mapType = $this->pi_getFFvalue($piFlexForm, "mapType", "mapControls");
-
+		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
+		
 		/* Create the map class and add markers to the map */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);	
 
-		if($largeMap) $map->addControl('largeMap');
+		if($mapControlSize == 'large') {
+			$map->addControl('largeMap');	
+		} else if ($mapControlSize == 'small') {
+			$map->addControl('smallMap');	
+		} else if ($mapControlSize == 'zoomonly') {
+			$map->addControl('smallZoom');	
+		}
+		if($scale) $map->addControl('scale');
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 

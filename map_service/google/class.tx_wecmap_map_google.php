@@ -95,6 +95,18 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$this->controls[] .= $this->js_addControl('map', "new GLargeMapControl()");
 				break;
 			
+			case 'smallMap':
+				$this->controls[] .= $this->js_addControl('map', "new GSmallMapControl()");
+				break;
+			
+			case 'scale':
+				$this->controls[] .= $this->js_addControl('map', "new GScaleControl()");
+				break;
+			
+			case 'smallZoom':
+				$this->controls[] .= $this->js_addControl('map', "new GSmallZoomControl()");
+				break;
+
 			case 'overviewMap':
 				$this->controls[] .= $this->js_addControl('map', "new GOverviewMapControl()");
 				break;
