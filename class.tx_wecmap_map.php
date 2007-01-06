@@ -172,7 +172,7 @@ class tx_wecmap_map {
 		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
-		
+ 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);	
 	}

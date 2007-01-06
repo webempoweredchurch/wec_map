@@ -119,10 +119,16 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					
 					// add a little info so users know what to do
 					$title = 'Info';
-					$description = 'Zoom in to see more users from this country.<br />' . $row['country'];
+					$description = 'Zoom in to see more users from this country: ' . $row['country'];
+					
+					// USA needs a zip to show a country only marker
+					$zip = null;
+					if($row['country'] == 'USA') {
+						$zip = 20001;
+					}
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, null, null, null, $row['country'], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, null, null, $zip, $row['country'], $title, $description, 0,2);
 				}
 
 				
@@ -149,7 +155,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			}
 
 		}		
-		t3lib_div::debug($countries);
+
 		/* Draw the map */
 		return $this->pi_wrapInBaseClass($map->drawMap());
 	}
