@@ -223,7 +223,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
  	 */
 	function autoCenterAndZoom() {	
 		$latlong = $this->getLatLongBounds();
-		
+
 		$minLat = $latlong['minLat'];
 		$maxLat = $latlong['maxLat'];
 		$minLong = $latlong['minLong'];
@@ -241,18 +241,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		//$pixelsPerLongDegree = pow(2,17 - $zoom) *  0.77162458338772;
 		$wZoom = 17 - log($this->width, 2) +  log($longSpan, 2);
 		$hZoom = 17 - log($this->height, 2) + log($latSpan, 2);
-			
+
 		$zoom = ceil(($wZoom > $hZoom) ? $wZoom : $hZoom);
-		if ($zoom > 14) {
-			$zoom = 14;
-		}
-		elseif ($zoom < 2) {
+
+		if ($zoom < 2) {
 			$zoom = 2;
 		}
 	
 		$this->setCenter($lat, $long);
-		// Should be 17
-		$this->setZoom(16 - $zoom);
+		
+		$this->setZoom(17 - $zoom);
 	}
 }
 
