@@ -70,27 +70,86 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "default");
 		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
 		
+		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
+		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
+		$mapType = $this->pi_getFFvalue($piFlexForm, "mapType", "mapControls");
+		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
+		
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);
 		
+		// set map controls as defined in the flex form
+		if($mapControlSize == 'large') {
+			$map->addControl('largeMap');	
+		} else if ($mapControlSize == 'small') {
+			$map->addControl('smallMap');	
+		} else if ($mapControlSize == 'zoomonly') {
+			$map->addControl('smallZoom');	
+		}
+		if($scale) $map->addControl('scale');
+		if($overviewMap) $map->addControl('overviewMap');
+		if($mapType) $map->addControl('mapType');
+		
+		// if a user group was set, make sure only those users from that group
+		// will be selected in the query
 		if($userGroups) {
 			$where = "usergroup IN (".$userGroups.")";
 		}
 		
 		/* Select all frontend users */		
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", $where);
+		
+		// create country and zip code array to keep track of which country and state we already added to the map.
+		// the point is to create only one marker per country on a higher zoom level to not
+		// overload the map with all the markers and do the same with zip codes.
+		$countries = array();
+		$cities = array();
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
+
 			/* Only try to add marker if there's a city */
 			if($row['city'] != '') {
+
+				// if we haven't added a marker for this country yet, do so.
+				if(!in_array($row['country'], $countries) && !empty($row['country'])) {
+					
+					// add this country to the array
+					$countries[] = $row['country'];
+					
+					// add a little info so users know what to do
+					$title = 'Info';
+					$description = 'Zoom in to see more users from this country.<br />' . $row['country'];
+					
+					// add a marker for this country and only show it between zoom levels 0 and 2.
+					$map->addMarkerByAddress(null, null, null, null, $row['country'], $title, $description, 0,2);
+				}
+
+				
+				// if we haven't added a marker for this zip code yet, do so.
+				if(!in_array($row['city'], $cities) && !empty($row['city'])) {
+					
+					// add this country to the array
+					$cities[] = $row['city'];
+					
+					// add a little info so users know what to do
+					$title = 'Info';
+					$description = 'Zoom in to see more users from this area.';
+					
+					// add a marker for this country and only show it between zoom levels 0 and 2.
+					$map->addMarkerByAddress(null, $row['city'], null, null, $row['country'], $title, $description, 3,7);
+				}
+				
+				// make title and description
 				$title = $this->makeTitle($row);
 				$description = $this->makeDescription($row);
 				
-				$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description);
+				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
+				$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
 			}
+
 		}		
-		
+		t3lib_div::debug($countries);
 		/* Draw the map */
 		return $this->pi_wrapInBaseClass($map->drawMap());
 	}
