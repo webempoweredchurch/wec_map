@@ -11,7 +11,9 @@ $LOCAL_LANG = Array (
 		'list_mode_2' => 'Mode 2',	
 		'list_mode_3' => 'Mode 3',	
 		'back' => 'Back',	
-		'submit_button_label' => 'Click here to submit value',	
+		'submit_button_label' => 'Click here to submit value',
+		'pi2_title' => 'FE User Map',
+		'pi2_plus_wiz_description' => 'Adds a map displaying all FE Users.',
 	),
 	'dk' => Array (
 		'list_mode_1' => 'Visning 1',	
