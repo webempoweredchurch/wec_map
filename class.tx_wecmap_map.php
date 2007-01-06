@@ -128,16 +128,18 @@ class tx_wecmap_map {
 		$maxLong = -360;
 		
 		/* Find min and max zoom lat and long */		
-		foreach($this->markers as $marker) {			
-			if ($marker->getLatitude() < $minLat) 
-				$minLat = $marker->getLatitude();
-			if ($marker->getLatitude() > $maxLat) 
-				$maxLat = $marker->getLatitude();
-			
-			if ($marker->getLongitude() < $minLong) 
-				$minLong = $marker->getLongitude();
-			if ($marker->getLongitude() > $maxLong) 
-				$maxLong = $marker->getLongitude();
+		foreach($this->markers as $key => $markers) {			
+			foreach( $markers as $marker ) {
+				if ($marker->getLatitude() < $minLat) 
+					$minLat = $marker->getLatitude();
+				if ($marker->getLatitude() > $maxLat) 
+					$maxLat = $marker->getLatitude();
+
+				if ($marker->getLongitude() < $minLong) 
+					$minLong = $marker->getLongitude();
+				if ($marker->getLongitude() > $maxLong) 
+					$maxLong = $marker->getLongitude();
+			}
 		}
 
 		/* If we only have one point, expand the boundaries slightly to avoid
@@ -164,15 +166,15 @@ class tx_wecmap_map {
 	 * @param	string	The description to be displayed in the marker popup.
 	 * @return	void		No return needed.  Address added to marker object.
 	 */
-	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='') {		
-		
+	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
+
 		/* Geocode the address */
 		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
 		
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description);	
+		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);	
 	}
 	
 	/*
@@ -183,14 +185,14 @@ class tx_wecmap_map {
 	 * @param	string	The description to be displayed in the marker popup.
 	 * @return	void		No return needed.  Lat/long added to marker object.
 	 */
-	function addMarkerByLatLong($lat, $long, $title='', $description='') {		
+	function addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
 		
 		if($latlong['lat']!='' && $latlong['long']!='') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$this->markers[] = new $classname(count($this->markers), 
+			$this->markers[$minzoom.':'.$maxzoom][] = new $classname(count($this->markers), 
 											  $latlong['lat'], 
 											  $latlong['long'], 
 											  $title, 

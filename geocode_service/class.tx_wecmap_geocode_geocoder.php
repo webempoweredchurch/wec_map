@@ -61,9 +61,8 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 	function lookup($street, $city, $state, $zip, $country)	{		
 		$address = $street.', '.$city.', '.$state.' '.$zip;
 		$address = str_replace(' ', '%20', $address);
-		
-		$xml = file_get_contents($this->url.$address);
-		
+
+		$xml = t3lib_div::getURL($this->url.'['.$address.']');
 		$latlong = array();
 		if($xml != "couldn't find this address! sorry") {
 			$xml = t3lib_div::xml2array($xml);

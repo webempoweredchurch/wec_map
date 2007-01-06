@@ -11,7 +11,7 @@ Design
 1a) Simple Map displays a Flexform for address entry.  This address is drawn on the map.
 1b) Frontend User Map tries to draw a map containing all frontend users of your website.
 2) The map class is responsible for actually rendering the HTML and Javascript for the map, but does not perform address lookups.  Instead, it passes addresses to the caching/lookup class
-3) The caching/lookup class, creates a hash of the current address, and checks the database to see if that address has already been looked up.  If so, it returns lat/long.  If not, it begins the lookup service.
+3) The caching/lookup class creates a hash of the current address, and checks the database to see if that address has already been looked up.  If so, it returns lat/long.  If not, it begins the lookup service.
 4) The lookup service starts with the highest quality service (probably the fastest/cheapest) and continues through all available services until a match has been found.  When it finds a match, the lat/long are returned for storage in the cache.
 4a).  The only service currently implemented is the free Geocoder.us service.  It performs a lookup using a RESTful interface.
 

@@ -56,7 +56,7 @@ class tx_wecmap_cache {
 		/* Lookup the hashed current address in the cache table. */	
 		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
 		
-		/* Found a cached match */	
+		/* Didn't find a cached match */	
 		if (is_null($latlong)) {
 			/* Intiate service chain to find lat/long */
 			$serviceChain='';

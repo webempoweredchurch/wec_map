@@ -123,7 +123,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(!isset($this->lat) or !isset($this->long)) {
 			$this->autoCenterAndZoom();
 		}
-				
+
 		$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
 		$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
 		$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
@@ -132,23 +132,33 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
 		$jsContent = array();
-		$jsContent[] .= $this->js_createMarker();
-		$jsContent[] .= $this->js_drawMapStart();
-		$jsContent[] .= $this->js_newGMap2('map');
-		$jsContent[] .= $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
+		$jsContent[] = $this->js_createMarker();
+		$jsContent[] = $this->js_drawMapStart();
+		$jsContent[] = $this->js_newGMap2('map');
+		$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
 		foreach( $this->controls as $control ) {
-			$jsContent[] .= $control;
+			$jsContent[] = $control;
 		}
-		$jsContent[] .= $this->js_icon();
-		foreach($this->markers as $marker) {
-			$jsContent[] .= $marker->writeJS();
+		$jsContent[] = $this->js_icon();
+		$jsContent[] = $this->js_newGMarkerManager('mgr', 'map');
+		$jsContent[] = 'var markers;'; 
+		foreach($this->markers as $key => $markers) {
+			$jsContent[] = 'markers = null;'; 
+			$jsContent[] = 'markers = [];'; 
+			$key = explode(':',$key);
+			foreach( $markers as $marker ) {
+				$jsContent[] = 'markers.push('. $marker->writeJS() .');';
+			}
+			$jsContent[] = 'mgr.addMarkers(markers, ' . $key[0] . ', ' . $key[1] . ');';
 		}
-		$jsContent[] .= $this->js_drawMapEnd();
+
+		$jsContent[] = 'mgr.refresh();';
+		$jsContent[] = $this->js_drawMapEnd();
 		
 		return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent));
 	}
 	
-	function mapDiv($id, $height, $width) {
+	function mapDiv($id, $width, $height) {
 		return '<div id="'.$id.'" style="width:'.$width.'px; height:'.$height.'px;"></div>';
 	}
 	
@@ -174,7 +184,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	function js_newGMap2($name) {
 		return 'var '.$name.' = new GMap2(document.getElementById("'.$name.'"));';
 	}	
-		
+	
+	function js_newGMarkerManager($mgrName, $map) {
+		return 'var ' . $mgrName . ' = new GMarkerManager(' . $map . ');';	
+	}	
+	
 	function js_setCenter($name, $lat, $long, $zoom) {
 		return $name.'.setCenter(new GLatLng('.$lat.', '.$long.'), '.$zoom.');';
 	}

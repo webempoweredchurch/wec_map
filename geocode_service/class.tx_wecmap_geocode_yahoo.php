@@ -71,14 +71,15 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 				$this->buildURL('zip', $zip).
 				$this->buildURL('country', $country);
 														
-		$xml = file_get_contents($url);
-		
-		$latlong = array();
-		$xml = t3lib_div::xml2array($xml);
+		$xml = t3lib_div::getURL($url);
+
+		if($xml !== false) {
+			$latlong = array();
+			$xml = t3lib_div::xml2array($xml);
 				
-		$latlong['lat'] = $xml['Result']['Latitude'];
-		$latlong['long'] = $xml['Result']['Longitude'];
-		
+			$latlong['lat'] = $xml['Result']['Latitude'];
+			$latlong['long'] = $xml['Result']['Longitude'];
+		}
 		if (is_null($xml['Result']['Latitude']) or is_null($xml['Result']['Longitude'])) {
 			return null;
 		} else {		

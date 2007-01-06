@@ -67,7 +67,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	}
 	
 	function writeJS() {
-		return 'map.addOverlay(createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, "<h1>'.$this->title.'</h1>'.$this->description.'"));';			
+		return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, "<h1>'.$this->title.'</h1>'.$this->description.'")';			
 		
 	}
 }

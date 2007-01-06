@@ -65,7 +65,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				$this->buildURL('output', 'csv').
 				$this->buildURL('key', $key);
 
-		$csv = file_get_contents($url);
+		$csv = t3lib_div::getURL($url);
 		
 		$latlong = array();
 		$csv = explode(',', $csv);
