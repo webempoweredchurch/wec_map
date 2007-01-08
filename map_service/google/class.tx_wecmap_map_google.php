@@ -250,6 +250,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	
 		$this->setCenter($lat, $long);
 		
+		
 		$this->setZoom(17 - $zoom);
 	}
 }
