@@ -61,14 +61,15 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 		if(!$key) {
 			// get key from configuration
 			$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-			$key=$conf['apiKey.']['googleGeo'];
+			$key=$conf['apiKey.']['google'];
 		}
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
-				$this->buildURL('output', 'kml').
+				$this->buildURL('output', 'xml').
 				$this->buildURL('key', $key);
 
 		$xml = t3lib_div::getURL($url);
+
 		$xml = t3lib_div::xml2array($xml);
 
 		$latlong = array();

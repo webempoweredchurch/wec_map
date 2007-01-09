@@ -80,7 +80,7 @@ class tx_wecmap_backend {
 				$status = "Geocoding has not been performed for this address.";
 				break;
 			case 1:
-				$status = "Geocoding successfull!";
+				$status = "Geocoding successful!";
 				break;
 		}
 		
