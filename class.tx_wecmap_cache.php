@@ -163,7 +163,7 @@ class tx_wecmap_cache {
 			$insertArray['longitude'] = $long;
 		
 			/* Write address to cache table */
-			//$result = $GLOBALS['TYPO3_DB']->exec_INSERTquery("tx_wecmap_cache", $insertArray);
+			$result = $GLOBALS['TYPO3_DB']->exec_INSERTquery("tx_wecmap_cache", $insertArray);
 		}		
 	} 
 	
