@@ -18,7 +18,8 @@ $LOCAL_LANG = Array (
 		'tt_content.pi_flexform.city' => 'City',
 		'tt_content.pi_flexform.state' => 'State',
 		'tt_content.pi_flexform.zip' => 'ZIP',
-		
+		'tt_content.pi_flexform.country' => 'Country',
+				
 		'tt_content.pi_flexform.mapTitle' => 'Map Details',
 		'tt_content.pi_flexform.mapWidth' => 'Width (pixels)',
 		'tt_content.pi_flexform.mapHeight' => 'Height (pixels)',

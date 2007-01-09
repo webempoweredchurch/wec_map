@@ -121,14 +121,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$title = 'Info';
 					$description = 'Zoom in to see more users from this country: ' . $row['country'];
 					
-					// USA needs a zip to show a country only marker
-					$zip = null;
-					if($row['country'] == 'USA') {
-						$zip = 20001;
-					}
-					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, null, null, $zip, $row['country'], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row['city'], null, null, $row['country'], $title, $description, 0,2);
 				}
 
 				

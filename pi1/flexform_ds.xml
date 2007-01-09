@@ -62,10 +62,21 @@
 							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.zip</label>
 							<config>
 								<type>input</type>
-								<size>50</size>
+								<size>10</size>
 							</config>
 						</TCEforms>
 					</zip>
+					
+					<country>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.country</label>
+							<config>
+								<type>input</type>
+								<size>20</size>
+							</config>
+						</TCEforms>
+					</country>
+					
 				</el>
 			</ROOT>
 		</default>
