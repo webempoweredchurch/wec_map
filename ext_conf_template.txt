@@ -1,0 +1,4 @@
+# cat=basic; type=string; label=Google Maps API key
+apiKey.google = 
+# cat=basic; type=string; label=Google Geocode API key
+apiKey.googleGeo =

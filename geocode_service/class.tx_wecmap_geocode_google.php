@@ -58,19 +58,27 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	 */
 	function lookup($street, $city, $state, $zip, $country, $key='')	{
 
+		if(!$key) {
+			// get key from configuration
+			$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+			$key=$conf['apiKey.']['googleGeo'];
+		}
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
-				$this->buildURL('output', 'csv').
+				$this->buildURL('output', 'kml').
 				$this->buildURL('key', $key);
 
-		$csv = t3lib_div::getURL($url);
-		
+		$xml = t3lib_div::getURL($url);
+		$xml = t3lib_div::xml2array($xml);
+
 		$latlong = array();
-		$csv = explode(',', $csv);
+		$coord = $xml['Response']['Placemark']['Point']['coordinates'];
 		
-		if($csv[0] == 200) {
-			$latlong['lat'] = $csv[2];
-			$latlong['long'] = $csv[3];
+		$coord = explode(',', $coord);
+
+		if($xml['Response']['Status']['code'] == 200) {
+			$latlong['lat'] = $coord[1];
+			$latlong['long'] = $coord[0];
 			
 			return $latlong;
 		} else {
