@@ -96,6 +96,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 
+		$map->addMarkerByAddress($street, $city, $state, $zip, $country, "This is my title", $description);
+		
 		$content = $map->drawMap();
 		
 		return $this->pi_wrapInBaseClass($content);
