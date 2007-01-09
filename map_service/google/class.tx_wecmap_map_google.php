@@ -69,7 +69,15 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->prefixId = "tx_wecmap_map_google";
 		$this->js = array();
 		$this->markers = array();
-		$this->key = $key;
+		
+		if(!$key) {
+			// get key from configuration
+			$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+			$this->key=$conf['apiKey.']['google'];
+		} else {
+			$this->key = $key;			
+		}
+
 		$this->controls = array();
 
 		$this->width = $width;

@@ -51,7 +51,7 @@ class tx_wecmap_cache {
 	 * @param	boolean		Force a new lookup for address.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
-	function lookup($street, $city, $state, $zip, $country, $forceLookup=false) {
+	function lookup($street, $city, $state, $zip, $country, $forceLookup=false, $key='') {
 					 	
 		/* Lookup the hashed current address in the cache table. */	
 		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
@@ -62,7 +62,7 @@ class tx_wecmap_cache {
 			$serviceChain='';
 			while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
 				$serviceChain.=','.$lookupObj->getServiceKey();
-				$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country);				
+				$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key='');				
 				
 				/* If we found a match, quit. Otherwise proceed to next best service */
 				if($latlong) {

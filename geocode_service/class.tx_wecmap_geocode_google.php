@@ -57,8 +57,6 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	 * @return	array		Array containing latitude and longitude.  If lookup failed, empty array is returned.
 	 */
 	function lookup($street, $city, $state, $zip, $country, $key='')	{
-		/* @todo	Remove hardcoded key.  Probably need to read from TYPO3_CONF_VARS. */
-		$key = "ABQIAAAAScd0pUOT9cBlpN4mGZvcdhT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRoVw8gdqw8aa4vFYZ-nFW1gmhCPw";
 
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
