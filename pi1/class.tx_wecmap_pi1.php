@@ -70,6 +70,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$city = $this->pi_getFFvalue($piFlexForm, "city", "default");
 		$state = $this->pi_getFFvalue($piFlexForm, "state", "default");
 		$zip = $this->pi_getFFvalue($piFlexForm, "zip", "default");
+		$country = $this->pi_getFFvalue($piFlexForm, "country", "default");
 		
 		$apiKey = $this->pi_getFFvalue($piFlexForm, "apiKey", "mapConfig");
 		$width = $this->pi_getFFvalue($piFlexForm, "mapWidth", "mapConfig");
