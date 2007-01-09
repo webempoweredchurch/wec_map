@@ -63,8 +63,8 @@ t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_google',
 		'subtype' => '',
 
 		'available' => TRUE,
-		'priority' => 70,
-		'quality' => 70,
+		'priority' => 100,
+		'quality' => 100,
 
 		'os' => '',
 		'exec' => '',
