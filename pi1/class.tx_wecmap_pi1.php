@@ -64,28 +64,56 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 		
-		/* Pull values from Flexform object into individual variables */
+		// get configuration from flexform or TS. Flexform values take
+		// precedence.
+		$title = $this->pi_getFFvalue($piFlexForm, "title", "default");
+		empty($title) ? $title = $conf['title']:null;
+		
 		$description = $this->pi_getFFvalue($piFlexForm, "description", "default");
+		empty($description) ? $description = $conf['description']:null;
+		
 		$street = $this->pi_getFFvalue($piFlexForm, "street", "default");
+		empty($street) ? $street = $conf['street']:null;
+		
 		$city = $this->pi_getFFvalue($piFlexForm, "city", "default");
+		empty($city) ? $city = $conf['city']:null;
+		
 		$state = $this->pi_getFFvalue($piFlexForm, "state", "default");
+		empty($state) ? $state = $conf['state']:null;
+		
 		$zip = $this->pi_getFFvalue($piFlexForm, "zip", "default");
+		empty($zip) ? $zip = $conf['zip']:null;
+		
 		$country = $this->pi_getFFvalue($piFlexForm, "country", "default");
+		empty($country) ? $country = $conf['country']:null;
 		
 		$apiKey = $this->pi_getFFvalue($piFlexForm, "apiKey", "mapConfig");
+		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
+
 		$width = $this->pi_getFFvalue($piFlexForm, "mapWidth", "mapConfig");
+		empty($width) ? $width = $conf['width']:null;
+		
 		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "mapConfig");
+		empty($height) ? $height = $conf['height']:null;
 		
 		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
-		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
-		$mapType = $this->pi_getFFvalue($piFlexForm, "mapType", "mapControls");
-		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
+		empty($mapControlSize) ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
 		
+		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
+		empty($overviewMap) ? $overviewMap = $conf['controls.']['showOverviewMap']:null;
+				
+		$mapType = $this->pi_getFFvalue($piFlexForm, "mapType", "mapControls");
+		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
+				
+		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
+		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
+
 		/* Create the map class and add markers to the map */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
+		$className = t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);	
 
+		// evaluate config to see which map controls we need to show
 		if($mapControlSize == 'large') {
 			$map->addControl('largeMap');	
 		} else if ($mapControlSize == 'small') {
@@ -93,12 +121,15 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		} else if ($mapControlSize == 'zoomonly') {
 			$map->addControl('smallZoom');	
 		}
+		
 		if($scale) $map->addControl('scale');
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
-
-		$map->addMarkerByAddress($street, $city, $state, $zip, $country, "This is my title", $description);
 		
+		// add the marker to the map
+		$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);
+		
+		// draw the map
 		$content = $map->drawMap();
 		
 		return $this->pi_wrapInBaseClass($content);

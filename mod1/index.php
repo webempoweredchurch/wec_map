@@ -267,9 +267,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		if ($cmd == 'edit') {
 			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';
 		}
-		
-				
-				
+
 		return $output;
 	}
 }
