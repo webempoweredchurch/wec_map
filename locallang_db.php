@@ -34,7 +34,7 @@ $LOCAL_LANG = Array (
 		'tt_content.pi_flexform.conLargeMapS' => 'Small',
 		'tt_content.pi_flexform.conLargeMapZ' => 'Zoom only',
 								
-		'tt_content.pi_flexform.userGroup' => 'Frontend User Groups',
+		'tt_content.pi_flexform.userGroup' => 'Filter by FE user group (default: all)',
 	),
 );
 ?>
