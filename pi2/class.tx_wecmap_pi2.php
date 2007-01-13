@@ -64,23 +64,37 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 		
-		/* Pull values from Flexform object into individual variables */		
+		// get config from flexform or TS. Flexforms take precedence.
 		$apiKey = $this->pi_getFFvalue($piFlexForm, "apiKey", "default");
+		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
+
 		$width = $this->pi_getFFvalue($piFlexForm, "mapWidth", "default");
-		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "default");
-		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
+		empty($width) ? $width = $conf['width']:null;
 		
+		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "default");
+		empty($height) ? $height = $conf['height']:null;
+		
+		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
+		empty($userGroups) ? $userGroups = $conf['userGroups']:null;
+
 		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
+		empty($mapControlSize) ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
+		
 		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
+		empty($overviewMap) ? $overviewMap = $conf['controls.']['showOverviewMap']:null;
+				
 		$mapType = $this->pi_getFFvalue($piFlexForm, "mapType", "mapControls");
+		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
+				
 		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
+		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 		
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);
 		
-		// set map controls as defined in the flex form
+		// evaluate map controls based on configuration
 		if($mapControlSize == 'large') {
 			$map->addControl('largeMap');	
 		} else if ($mapControlSize == 'small') {
