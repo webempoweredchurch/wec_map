@@ -126,8 +126,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			if($row['city'] != '') {
 
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row['country'], $countries) && !empty($row['country'])) {
-					
+				if(!in_array($row['country'], $countries) && !empty($row['country'])  && !empty($row['zip'])  && !empty($row['city'])) {
+					echo $row['city'];
 					// add this country to the array
 					$countries[] = $row['country'];
 					
@@ -136,12 +136,12 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$description = 'Zoom in to see more users from this country: ' . $row['country'];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, null, $row['country'], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row['country'], $title, $description, 0,2);
 				}
 
 				
 				// if we haven't added a marker for this zip code yet, do so.
-				if(!in_array($row['city'], $cities) && !empty($row['city'])) {
+				if(!in_array($row['city'], $cities) && !empty($row['city']) && !empty($row['zip'])) {
 					
 					// add this country to the array
 					$cities[] = $row['city'];
@@ -151,7 +151,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$description = 'Zoom in to see more users from this area.';
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, null, $row['country'], $title, $description, 3,7);
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row['country'], $title, $description, 3,7);
 				}
 				
 				// make title and description
