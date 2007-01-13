@@ -127,7 +127,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 				// if we haven't added a marker for this country yet, do so.
 				if(!in_array($row['country'], $countries) && !empty($row['country'])  && !empty($row['zip'])  && !empty($row['city'])) {
-					echo $row['city'];
+
 					// add this country to the array
 					$countries[] = $row['country'];
 					
