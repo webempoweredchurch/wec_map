@@ -65,22 +65,19 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 		}
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
-				$this->buildURL('output', 'xml').
+				$this->buildURL('output', 'csv').
 				$this->buildURL('key', $key);
 
-		$xml = t3lib_div::getURL($url);
-
-		$xml = t3lib_div::xml2array($xml);
+		$csv = t3lib_div::getURL($url);
 
 		$latlong = array();
-		$coord = $xml['Response']['Placemark']['Point']['coordinates'];
+		$csv = explode(',', $csv);
 		
-		$coord = explode(',', $coord);
+		
+		if($csv[0] == 200) {
+			$latlong['lat'] = $csv[2];
+			$latlong['long'] = $csv[3];
 
-		if($xml['Response']['Status']['code'] == 200) {
-			$latlong['lat'] = $coord[1];
-			$latlong['long'] = $coord[0];
-			
 			return $latlong;
 		} else {
 			return null;
