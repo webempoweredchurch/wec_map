@@ -3,6 +3,7 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 if (TYPO3_MODE=="BE")    {       
     t3lib_extMgm::addModule("tools","txwecmapM1","",t3lib_extMgm::extPath($_EXTKEY)."mod1/");
+    t3lib_extMgm::addModule("tools","txwecmapM2","",t3lib_extMgm::extPath($_EXTKEY)."mod2/");
 }
 
 t3lib_div::loadTCA('tt_content');

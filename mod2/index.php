@@ -29,7 +29,7 @@ require_once('conf.php');
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
-$LANG->includeLLFile('EXT:wec_map/mod1/locallang.xml');
+$LANG->includeLLFile('EXT:wec_map/mod2/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
@@ -71,9 +71,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 */
 	function menuConfig()	{
 		global $LANG;
-		$this->MOD_MENU = array (
-			'function' => array (
+		$this->MOD_MENU = Array (
+			'function' => Array (
 				'1' => $LANG->getLL('function1'),
+				'2' => $LANG->getLL('function2'),
 			)
 		);
 		parent::menuConfig();
@@ -124,8 +125,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$this->content.=$this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
 			$this->content.=$this->doc->divider(5);
 
+
 			// Render content:
-			$this->content.=$this->moduleContent();
+			$this->moduleContent();
+
 
 			// ShortCut
 			if ($BE_USER->mayMakeShortcut())	{
@@ -165,7 +168,11 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
-				$this->content.=$this->geocodeAdmin();
+				$this->content.=$this->showMap();
+			break;
+			
+			case 2:
+				$this->content .= $this->mapSettings();
 			break;
 
 		}
@@ -176,106 +183,115 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	}
 	
 	/**
-	 * Rendering the encode-cache content
+	 * Show map settings
 	 *
-	 * @param	array		The Page tree data
-	 * @return	string		HTML for the information table.
-	 */
-	function geocodeAdmin()	{
-		$uid = t3lib_div::_GP('uid');
-		$latitude = t3lib_div::_GP('latitude');
-		$longitude = t3lib_div::_GP('longitude');
-		$cmd = t3lib_div::_GP('cmd');
-		switch($cmd) {
-			case 'update' : 
-				tx_wecmap_cache::updateByUID($uid, $latitude, $longitude);
-				unset($cmd);
-				unset($uid);
-				break;
-			case 'delete' :
-				if ($uid=="all") {
-					tx_wecmap_cache::deleteAll();
-				} else {
-					tx_wecmap_cache::deleteByUID($uid);
+	 * @return String
+	 **/
+	function mapSettings() {
+		return 'bla';
+	}
+
+	/**
+	 * Shows map
+	 *
+	 * @return String
+	 **/
+	function showMap() {
+		/* Create the Map object */
+		$width = 500;
+		$height = 500;
+		
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
+		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
+		$map = new $className($apiKey, $width, $height);
+
+		// evaluate map controls based on configuration
+		$map->addControl('largeMap');	
+
+		$map->addControl('scale');
+		$map->addControl('overviewMap');
+		$map->addControl('mapType');
+		
+		/* Select all frontend users */		
+		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", $where);
+		
+		// create country and zip code array to keep track of which country and state we already added to the map.
+		// the point is to create only one marker per country on a higher zoom level to not
+		// overload the map with all the markers and do the same with zip codes.
+		$countries = array();
+		$cities = array();
+		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
+
+			/* Only try to add marker if there's a city */
+			if($row['city'] != '') {
+
+				// if we haven't added a marker for this country yet, do so.
+				if(!in_array($row['country'], $countries) && !empty($row['country'])  && !empty($row['zip'])  && !empty($row['city'])) {
+
+					// add this country to the array
+					$countries[] = $row['country'];
+					
+					// add a little info so users know what to do
+					$title = 'Info';
+					$description = 'Zoom in to see more users from this country: ' . $row['country'];
+					
+					// add a marker for this country and only show it between zoom levels 0 and 2.
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row['country'], $title, $description, 0,2);
 				}
-				unset($cmd);
-				unset($uid);
-				break;
-		}
 
-		// Select rows:
-		$displayRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*','tx_wecmap_cache','');
-
-		foreach($displayRows as $row) {				
-			// Add icon/title and ID:
-			$cells = array();
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit address" alt="" /></a></td>';
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="Delete address" alt="" /></a></td>';
-			
-			$cells[] = '<td>'.$row['address'].'</td>';
 				
-			if ($row['address_hash'] == $uid && $cmd = 'edit') {
-				$cells[] = '<td><input name="latitude" value="'.$row['latitude'].'" size="8"/></td>';
-				$cells[] = '<td><input name="longitude" value="'.$row['longitude'].'" size="8"/></td>';
-				$cells[] = '<td><input type="submit" value="Update" /></td>';
-			} else {
-				$cells[] = '<td>'.$row['latitude'].'</td>';
-				$cells[] = '<td>'.$row['longitude'].'</td>';
-				$cells[] = '<td>&nbsp;</td>';
+				// if we haven't added a marker for this zip code yet, do so.
+				if(!in_array($row['city'], $cities) && !empty($row['city']) && !empty($row['zip'])) {
+					
+					// add this country to the array
+					$cities[] = $row['city'];
+					
+					// add a little info so users know what to do
+					$title = 'Info';
+					$description = 'Zoom in to see more users from this area.';
+					
+					// add a marker for this country and only show it between zoom levels 0 and 2.
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row['country'], $title, $description, 3,7);
+				}
+				
+				// make title and description
+				$title = $this->makeTitle($row);
+				$description = $this->makeDescription($row);
+				
+				
+				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
+				// if private was checked, don't use address to geocode
+				if($private) {
+					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+				} else {
+					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+				}
 			}
-										
-			// Compile Row:
-			$output.= '
-				<tr class="bgColor'.($cc%2 ? '-20':'-10').'">
-					'.implode('
-					',$cells).'
-				</tr>';
-			$cc++;
-
-			$countDisplayed++;
+			
+			$command = '<script type="/text/javascript">alert("blabla");drawMap();</script>';
+			return $map->drawMap() . $command;
 		}
-
-		list($count_allInTable) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*) AS count','tx_wecmap_cache','');
-
-		// Create header:
-		$cells = array();
-		$cells[] = '<td colspan="2">&nbsp;</td>';
-		$cells[] = '<td>Address</td>';
-		$cells[] = '<td>Latitude</td>';
-		$cells[] = '<td>Longitude</td>';
-		$cells[] = '<td>&nbsp;</td>';
-		
-		$output = '
-			<tr class="bgColor5 tableheader">
-				'.implode('
-				',$cells).'
-			</tr>'.$output;
-
-			// Compile final table and return:
-		
-		$output = '
-		<br/>
-		<br/>
-		Total cached addresses: <b>'.$count_allInTable['count'].'</b> '.
-			'<a href="'.$this->linkSelf('&cmd=delete&uid=all').'">'.
-			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="Delete all cached addresses!" alt="" />'.
-			'</a>'.
-		'<br/>'.
-		'<table border="0" cellspacing="1" cellpadding="3" id="tx-wecmap-cache" class="lrPadding c-list">'.$output.'</table>';
-		
-		
-		if ($cmd == 'edit') {
-			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';
-		}
-
+	}
+	
+	function makeTitle($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
+		return $output;
+	}
+	
+	function makeDescription($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
 		return $output;
 	}
 }
 
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/mod1/index.php'])	{
-include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/mod1/index.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/mod2/index.php'])	{
+include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/mod2/index.php']);
 }
 
 
