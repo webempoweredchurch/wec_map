@@ -131,12 +131,15 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(!isset($this->lat) or !isset($this->long)) {
 			$this->autoCenterAndZoom();
 		}
-
-		$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
-		$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
-		$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 		
-		//$htmlContent .= '<script src="http://maps.google.com/maps?file=api&v=2&key='.$this->key.'" type="text/javascript"></script>';
+		/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
+		if(TYPO3_MODE == 'FE') {
+			$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
+			$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
+			$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+		} else {
+			$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+		}
 		
 		$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
 		$jsContent = array();
