@@ -56,18 +56,45 @@ require_once('map_service/google/class.tx_wecmap_map_google.php');
 class tx_wecmap_backend {
 	
 	function checkGeocodeStatus($PA, $fobj) {
+		
 		$row = $PA['row'];
+		
+		return tx_wecmap_backend::drawGeocodeStatus($row);
 				
+	}
+	
+	function checkGeocodeStatusFF($PA, $fobj) {
+		$row = $PA['row']['pi_flexform'];
+		$row = t3lib_div::xml2array($row);
+		$row = $row['data']['default']['lDEF'];
+		
+		$data = array();
+		$data['street'] = $row['street']['vDEF'];
+		$data['city'] = $row['city']['vDEF'];
+		$data['zip'] = $row['zip']['vDEF'];
+		$data['state'] = $row['state']['vDEF'];
+		$data['country'] = $row['country']['vDEF'];
+		
+		return tx_wecmap_backend::drawGeocodeStatus($data);
+	}
+	
+	function drawGeocodeStatus($address) {
+		$row = $address;
+
 		$newlat = t3lib_div::_GP('lat');
 		$newlong = t3lib_div::_GP('long');
 		
 		$origlat = t3lib_div::_GP('original_lat');
 		$origlong = t3lib_div::_GP('original_long');
 		
-		if(($newlat != $origlat) or ($newlong != $origlong)) {
+		if (empty($newlat) && empty($newlong)) {
+			tx_wecmap_cache::delete($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
+		}
+
+		if((($newlat != $origlat) or ($newlong != $origlong)) and (!empty($newlat) && !empty($newlong))) {
 			tx_wecmap_cache::insert($row['street'], $row['city'], $row['state'], $row['zip'], $row['country'], $newlat, $newlong);
 		}
-		
+
 		$latlong = tx_wecmap_cache::lookup($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
 		$status = tx_wecmap_cache::status($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
 		
