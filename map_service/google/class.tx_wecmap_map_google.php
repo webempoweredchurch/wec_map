@@ -210,11 +210,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	
 	function js_icon() {
 		if (TYPO3_MODE=='BE')	{
-			$path = t3lib_extMgm::extRelPath('wec_map');
+			$path = t3lib_div::getIndpEnv('TYPO3_SITE_URL').t3lib_extMgm::siteRelPath('wec_map');
 		} else {
 			$path = t3lib_extMgm::siteRelPath('wec_map');
 		}
-		
+
 		return 'var icon = new GIcon();
 				icon.image = "'.$path.'images/mm_20_red.png";
 				icon.shadow = "'.$path.'images/mm_20_shadow.png";

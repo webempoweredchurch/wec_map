@@ -213,8 +213,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$map->addControl('mapType');
 		
 		/* Select all frontend users */		
-		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", $where);
-		
+		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", '');
+
 		// create country and zip code array to keep track of which country and state we already added to the map.
 		// the point is to create only one marker per country on a higher zoom level to not
 		// overload the map with all the markers and do the same with zip codes.
@@ -267,10 +267,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
 				}
 			}
-			
-			$command = '<script type="text/javascript">drawMap();</script>';
-			return $map->drawMap() . $command;
 		}
+		
+		$command = '<script type="text/javascript">drawMap();</script>';
+		return $map->drawMap() . $command;
 	}
 	
 	function makeTitle($row) {
