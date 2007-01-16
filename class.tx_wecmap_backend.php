@@ -130,7 +130,7 @@ class tx_wecmap_backend {
 		$map = new $className($apiKey, $width, $height);
 		
 		$map->addMarkerByAddress($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
-		$content = $map->drawMap();
+		//$content = $map->drawMap();
 		
 		
 		return $content;
