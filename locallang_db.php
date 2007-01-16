@@ -34,6 +34,8 @@ $LOCAL_LANG = Array (
 		'tt_content.pi_flexform.conLargeMapL' => 'Large',
 		'tt_content.pi_flexform.conLargeMapS' => 'Small',
 		'tt_content.pi_flexform.conLargeMapZ' => 'Zoom only',
+
+		'tt_content.pi_flexform.privacy' => 'Sensitive geocode (no address)',		
 								
 		'tt_content.pi_flexform.userGroup' => 'Filter by FE user group (default: all)',
 	),

@@ -89,6 +89,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 		
+		$private = $this->pi_getFFvalue($piFlexForm, "privacy", "default");
+		empty($private) ? $private = $conf['private']:null;
+		
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
@@ -158,8 +161,14 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				$title = $this->makeTitle($row);
 				$description = $this->makeDescription($row);
 				
+				
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
-				$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+				// if private was checked, don't use address to geocode
+				if($private) {
+					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+				} else {
+					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+				}
 			}
 
 		}		
