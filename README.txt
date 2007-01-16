@@ -1,16 +1,12 @@
-|-------------------|
-|------- USE -------|
-|-------------------|
+= USE =
 
  *  Get a free Google Maps API Key from Google (http://www.google.com/apis/maps/).  
  *  Enter the key globally right after installing the extension. 
  *  Add the frontend plugin Simple Map or Frontend User Map to a page and set options in the flexform or per TypoScript.
 
-|-------------------|
-|--- FE Plugins: ---|
-|-------------------|
+= FE Plugins =
 
-Simple Map:
+== Simple Map ==
  *  Shows just one user on the map. Configurable by TS and Flexform
  *  Example TS:
 plugin.tx_wecmap_pi1 {
@@ -30,7 +26,7 @@ plugin.tx_wecmap_pi1 {
 	country = Happy Country
 }
 
-FE User Map:
+== FE User Map ==
  * Shows all FE Users or only members of certain groups on the map
  * Layered markers, i.e. the lowest zoom only shows a few markers in countries with users, higher zoom levels show more and more markers until all users are finally shown. Improves speed over showing them all at once.
  * Example TS
@@ -47,21 +43,16 @@ plugin.tx_wecmap_pi2 {
 
 Order of precedence for configuration: Flexform first, then TS, then global settings (API Key)
 
-|-------------------|
-|--- BE Modules ----|
-|-------------------|
+= BE Modules =
 
-Geocode Cache: 
+== Geocode Cache ==
  * Allows to delete and edit the tx_wecmap_cache table directly
 
-Map FE Users:
+== Map FE Users ==
  *  Proof of concept for showing all FE Users in the Backend
  *  Provides link to directly edit a user's record
 
-
-|-------------------|
-|------ Design -----|
-|-------------------|
+= Design =
 
  *  Frontend plugin requests a map and passes all relevant addresses to the main map class.  There are two current frontend plugins and one BE module to demonstrate functionality (see above).
  *  The map class is responsible for actually rendering the HTML and Javascript for the map, but does not perform address lookups.  Instead, it passes addresses to the caching/lookup class
