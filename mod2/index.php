@@ -274,18 +274,35 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	}
 	
 	function makeTitle($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
-		return $output;
+		if(empty($row['name'])) {
+			return $row['first_name'] . ' ' . $row['last_name'];			
+		} else {
+			return $row['name'];
+		}
+
 	}
 	
 	function makeDescription($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
+		$output = $row['address'].'<br />';
+		$output .= $row['city'] . ', '.$row['zone']. ' '.$row['zip'];
+		$output .= '<br />'.$row['country'].'<br />';
+		$output .= $this->returnEditLink($row['uid'], 'Edit User Record');
+		$order  = array("\r\n", "\n", "\r");
+		$output = str_replace($order, '<br />', $output);
 		return $output;
 	}
+	
+	function returnEditLink($uid,$title) {
+		$tablename = 'fe_users';
+		$params = '&edit['.$tablename.']['.$uid.']=edit';
+		$out .=    '<a href="#" onclick="'.
+		t3lib_BEfunc::editOnClick($params,$GLOBALS['BACK_PATH']).
+		'">';
+		$out .= $title;
+		$out .= '<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit me" border="0" alt="" />';
+		$out .= '</a>';
+		return $out;
+		}
 }
 
 
