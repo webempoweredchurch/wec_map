@@ -46,21 +46,6 @@
 						</TCEforms>
 					</privacy>
 					
-					<pid>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.pid</label>
-				            <config>
-				                <type>group</type>
-				                <internal_type>db</internal_type>
-				                <allowed>pages</allowed>
-				                <size>3</size>
-				                <maxitems>22</maxitems>
-				                <minitems>0</minitems>
-				                <show_thumbs>1</show_thumbs>
-				            </config>
-						</TCEforms>
-					</pid>
-					
 					<userGroups>
 						<TCEforms>
 							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.userGroup</label>
@@ -73,7 +58,20 @@
 							</config>
 						</TCEforms>
 					</userGroups>
-
+					<pid>
+						<TCEforms>
+							<label>LLL:EXT:lang/locallang_general.php:LGL.startingpoint</label>
+				            <config>
+				                <type>group</type>
+				                <internal_type>db</internal_type>
+				                <allowed>pages</allowed>
+				                <size>3</size>
+				                <maxitems>22</maxitems>
+				                <minitems>0</minitems>
+				                <show_thumbs>1</show_thumbs>
+				            </config>
+						</TCEforms>
+					</pid>
 				</el>
 			</ROOT>
 			
