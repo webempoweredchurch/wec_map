@@ -166,7 +166,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$jsContent[] = 'mgr.refresh();';
 		$jsContent[] = $this->js_drawMapEnd();
 		
-		return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent));
+		// there is no onload() in the BE, so we need to call drawMap() manually.
+		if(TYPO3_MODE == 'BE') {
+			$manualCall = '<script type="text/javascript">drawMap();</script>';
+		} else {
+			$manualCall = null;
+		}
+		
+		return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
 	}
 	
 	function mapDiv($id, $width, $height) {

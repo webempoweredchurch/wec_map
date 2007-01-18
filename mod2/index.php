@@ -269,8 +269,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			}
 		}
 		
-		$command = '<script type="text/javascript">drawMap();</script>';
-		return $map->drawMap() . $command;
+		return $map->drawMap();
 	}
 	
 	function makeTitle($row) {

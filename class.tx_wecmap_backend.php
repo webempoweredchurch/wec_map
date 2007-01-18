@@ -121,16 +121,14 @@ class tx_wecmap_backend {
 	
 	function drawMap($PA, $fobj) {
 		$row = $PA['row'];
-		
 		$width = "400";
 		$height = "400";
 		
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);
-		
 		$map->addMarkerByAddress($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
+
 		$content = $map->drawMap();
-		
 		
 		return $content;
 	}
