@@ -36,7 +36,7 @@ $tempColumns = Array (
 t3lib_div::loadTCA('fe_users');
 t3lib_extMgm::addTCAcolumns('fe_users', $tempColumns, 1);
 $TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_map';
-$TCA['fe_users']['ctrl']['dividers2tabs'] = 1;
+// $TCA['fe_users']['ctrl']['dividers2tabs'] = 1;
 
 if (TYPO3_MODE=="BE")    $TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_wecmap_pi1_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_wecmap_pi1_wizicon.php';
 if (TYPO3_MODE=="BE")    $TBE_MODULES_EXT["xMOD_db_new_content_el"]["addElClasses"]["tx_wecmap_pi2_wizicon"] = t3lib_extMgm::extPath($_EXTKEY).'pi2/class.tx_wecmap_pi2_wizicon.php';
