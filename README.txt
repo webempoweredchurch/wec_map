@@ -49,8 +49,13 @@ Order of precedence for configuration: Flexform first, then TS, then global sett
  * Allows to delete and edit the tx_wecmap_cache table directly
 
 == Map FE Users ==
- *  Proof of concept for showing all FE Users in the Backend
- *  Provides link to directly edit a user's record
+ * Proof of concept for showing all FE Users in the Backend
+ * Provides link to directly edit a user's record
+ * Needs the API key to be specified globally from the Extension Manager
+
+== Map in BE records ==
+ * Shows a map for every BE user record
+ * Needs the API key to be specified globally from the Extension Manager
 
 = Design =
 
