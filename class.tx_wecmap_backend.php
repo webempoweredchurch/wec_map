@@ -81,6 +81,11 @@ class tx_wecmap_backend {
 	function drawGeocodeStatus($address) {
 		$row = $address;
 
+		// if there is no info about the user, return different status
+		if(empty($row['city'])) {
+			return 'Cannot determine latitude and longitude.  Please enter an address and save.';
+		}
+		
 		$newlat = t3lib_div::_GP('lat');
 		$newlong = t3lib_div::_GP('long');
 		
