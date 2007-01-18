@@ -77,6 +77,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
 		empty($userGroups) ? $userGroups = $conf['userGroups']:null;
 
+		$pid = $this->pi_getFFvalue($piFlexForm, "pid", "default");
+		empty($pid) ? $pid = $conf['pid']:null;
+
 		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
 		empty($mapControlSize) ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
 		
@@ -109,10 +112,16 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		
+		$where = null;
 		// if a user group was set, make sure only those users from that group
 		// will be selected in the query
 		if($userGroups) {
-			$where = "usergroup IN (".$userGroups.")";
+			$where .= "usergroup IN (".$userGroups.")";
+		}
+		
+		// if a storage folder pid was specified, filter by that
+		if($pid) {
+			$where .= " pid IN (". $pid .")";
 		}
 		
 		/* Select all frontend users */		

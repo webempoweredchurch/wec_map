@@ -39,6 +39,7 @@ plugin.tx_wecmap_pi2 {
 	controls.showMapType = 1
 	controls.showScale = 1
 	userGroups = 2,3,5
+	pid = 2,3,5
 }
 
 Order of precedence for configuration: Flexform first, then TS, then global settings (API Key)
