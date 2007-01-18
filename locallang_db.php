@@ -12,6 +12,8 @@ $LOCAL_LANG = Array (
 		
 		'tt_content.pi_flexform.sheet' => 'Address',
 		
+		'berecord_maplabel' => 'Map',
+		
 		'tt_content.pi_flexform.title' => 'Title',
 		'tt_content.pi_flexform.description' => 'Description',
 		'tt_content.pi_flexform.street' => 'Street Address',

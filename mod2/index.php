@@ -74,7 +74,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$this->MOD_MENU = Array (
 			'function' => Array (
 				'1' => $LANG->getLL('function1'),
-				'2' => $LANG->getLL('function2'),
+				// '2' => $LANG->getLL('function2'),
 			)
 		);
 		parent::menuConfig();
