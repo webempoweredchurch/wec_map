@@ -128,6 +128,11 @@ class tx_wecmap_backend {
 		$map = new $className($apiKey, $width, $height);
 		$map->addMarkerByAddress($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
 
+		// add some default controls to the map
+		$map->addControl('largeMap');	
+		$map->addControl('scale');
+		$map->addControl('mapType');
+		
 		$content = $map->drawMap();
 		
 		return $content;
