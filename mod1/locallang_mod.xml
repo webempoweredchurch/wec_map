@@ -6,7 +6,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Geocode Cache</label>
+			<label index="mlang_tabs_tab">WEC Map Admin</label>
 			<label index="mlang_labels_tabdescr">Caching for address-&gt;lat/long lookups.</label>
 		</languageKey>
 	</data>

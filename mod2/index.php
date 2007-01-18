@@ -39,7 +39,7 @@ require_once('../class.tx_wecmap_cache.php');
 
 
 /**
- * Module 'Geocode Cache' for the 'wec_geocode' extension.
+ * Module 'Map FE Users' for the 'wec_map' extension.
  *
  * @author	Jeff Segars <jeff@webempoweredchurch.org>
  * @package	TYPO3

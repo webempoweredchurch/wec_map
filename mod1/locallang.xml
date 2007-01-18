@@ -6,7 +6,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="title">Geocode Cache</label>
+			<label index="title">WEC Map Admin</label>
 			<label index="function1">Geocode Admin</label>
 			<label index="function2">Function #2</label>
 			<label index="function3">Function #3</label>

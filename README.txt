@@ -45,7 +45,7 @@ Order of precedence for configuration: Flexform first, then TS, then global sett
 
 = BE Modules =
 
-== Geocode Cache ==
+== WEC Map Admin ==
  * Allows to delete and edit the tx_wecmap_cache table directly
 
 == Map FE Users ==
