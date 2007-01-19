@@ -65,6 +65,8 @@ class tx_wecmap_backend {
 	
 	function checkGeocodeStatusFF($PA, $fobj) {
 		$row = $PA['row']['pi_flexform'];
+		if(empty($row)) return tx_wecmap_backend::drawGeocodeStatus($data);
+		
 		$row = t3lib_div::xml2array($row);
 		$row = $row['data']['default']['lDEF'];
 		
