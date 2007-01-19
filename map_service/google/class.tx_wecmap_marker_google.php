@@ -57,7 +57,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	function tx_wecmap_marker_google($index, $latitude, $longitude, $title, $description, $color='0xFF0000', $strokeColor='0xFFFFFF') {
 		$this->index = $index;
 		
-		$this->title = $title;
+		$this->title = addslashes($title);
 		$this->description = addslashes($description);
 		$this->color = $color;
 		$this->strokeColor = $strokeColor;
