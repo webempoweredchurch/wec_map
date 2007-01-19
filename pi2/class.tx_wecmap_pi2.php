@@ -94,7 +94,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		
 		$private = $this->pi_getFFvalue($piFlexForm, "privacy", "default");
 		empty($private) ? $private = $conf['private']:null;
-		
+		$private = true;
+
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
@@ -167,10 +168,25 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					
 					// add a little info so users know what to do
 					$title = 'Info';
-					$description = 'Zoom in to see more users from this area.';
+					$count = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)', 'fe_users', 'city="'. $row['city'] .'"');
+					$count = $count[0]['count(*)'];
 					
+					// extra processing if private is turned on
+					if($private) {
+						$maxzoom = 17;
+						if($count === 1) {
+							$description = 'There is '. $count .' user in '. $row['city'] .'.';
+						} else {
+							$description = 'There are '. $count .' users in '. $row['city'] .'.';							
+						}
+
+					} else {
+						$maxzoom = 7;
+						$description = 'Zoom in to see more users in ' . $row['city'] . '.';
+					}
+
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 3,7);
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 3,$maxzoom);
 				}
 				
 				// make title and description
@@ -178,11 +194,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				$description = $this->makeDescription($row);
 				
 				
-				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
-				// if private was checked, don't use address to geocode
-				if($private) {
-					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
-				} else {
+				// unless we are using privacy, add individual markers as well
+				if(!$private) {
 					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
 				}
 			}
