@@ -174,7 +174,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					// extra processing if private is turned on
 					if($private) {
 						$maxzoom = 17;
-						if($count === 1) {
+						if($count == 1) {
 							$description = 'There is '. $count .' user in '. $row['city'] .'.';
 						} else {
 							$description = 'There are '. $count .' users in '. $row['city'] .'.';							
