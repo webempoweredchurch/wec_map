@@ -126,6 +126,16 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		
+		// put all the data into an array
+		$data['city'] = $city;
+		$data['state'] = $state;
+		$data['street'] = $street;
+		$data['zip'] = $zip;
+		$data['country'] = $country;
+		$data['title'] = $title;
+		
+		if(empty($description)) $description = $this->makeDescription($data);
+		
 		// add the marker to the map
 		$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);
 		
@@ -133,6 +143,13 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$content = $map->drawMap();
 		
 		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	function makeDescription($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
+		return $output;
 	}
 }
 
