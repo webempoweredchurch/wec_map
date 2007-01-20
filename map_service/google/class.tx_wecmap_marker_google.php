@@ -58,7 +58,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$this->index = $index;
 		
 		$this->title = addslashes($title);
-		$this->description = addslashes($description);
+		$this->description = $this->filterNL2BR(addslashes($description));
 		$this->color = $color;
 		$this->strokeColor = $strokeColor;
 		
@@ -69,6 +69,14 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	function writeJS() {
 		return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, "<h1>'.$this->title.'</h1>'.$this->description.'")';			
 		
+	}
+	
+	function filterNL2BR($input) {
+		$order  = array("\r\n", "\n", "\r");
+		$replace = '<br />';			
+		$newstr = str_replace($order, $replace, $input);
+		
+		return $newstr;
 	}
 }
 

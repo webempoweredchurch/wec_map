@@ -286,8 +286,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$output .= $row['city'] . ', '.$row['zone']. ' '.$row['zip'];
 		$output .= '<br />'.$row['country'].'<br />';
 		$output .= $this->returnEditLink($row['uid'], 'Edit User Record');
-		$order  = array("\r\n", "\n", "\r");
-		$output = str_replace($order, '<br />', $output);
+
 		return $output;
 	}
 	
