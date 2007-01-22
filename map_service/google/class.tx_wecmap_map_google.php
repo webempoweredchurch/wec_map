@@ -152,7 +152,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 		$jsContent[] = $this->js_icon();
 		$jsContent[] = $this->js_newGMarkerManager('mgr', 'map');
-		$jsContent[] = 'var markers;'; 
+		$jsContent[] = 'var markers;';
 		foreach($this->markers as $key => $markers) {
 			$jsContent[] = 'markers = null;'; 
 			$jsContent[] = 'markers = [];'; 
