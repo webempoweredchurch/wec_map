@@ -188,7 +188,40 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return String
 	 **/
 	function mapSettings() {
-		return 'bla';
+		
+		// unserialize configuration so we can work with it
+		$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+		
+		echo '<pre>';
+		print_r($_POST);
+		echo '</pre>';
+
+		$scale = t3lib_div::_GP('tx-wecmap-mod1-scale');		
+		if($scale == 'on') {
+			$scale = 1;
+		} else {
+			$scale = 0;
+		}
+
+		$conf['mod1']['scale'] = $scale;
+		
+		$form = array();
+		$form[] = '<form method="POST">';
+		$form[] = '<label for="tx-wecmap-mod1-scale">Show Scale</label>';
+		if($scale) {
+			$form[] = '<input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" checked="checked"/>';
+		} else {
+			$form[] = '<input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" />';	
+		}
+		$form[] = '<input type="submit" name="tx-wecmap-mod1-submit" id="tx-wecmap-mod1-submit" value="Save" />';
+		$form[] = '</form>';
+		echo '<pre>';
+		print_r($conf);
+		echo '</pre>';
+		$sconf = serialize($conf);
+		$GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map'] = $sconf;
+		
+		return implode('', $form);
 	}
 
 	/**
