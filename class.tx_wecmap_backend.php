@@ -143,13 +143,19 @@ class tx_wecmap_backend {
 	}
 	
 	function drawMap($PA, $fobj) {
-		$row = $PA['row'];
+
 		$width = "400";
 		$height = "400";
 		
+		$street = tx_wecmap_backend::getFieldValue('street', $PA);
+        $city = tx_wecmap_backend::getFieldValue('city', $PA);
+        $state = tx_wecmap_backend::getFieldValue('state', $PA);
+        $zip = tx_wecmap_backend::getFieldValue('zip', $PA);
+        $country = tx_wecmap_backend::getFieldValue('country', $PA);
+
 		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
 		$map = new $className($apiKey, $width, $height);
-		$map->addMarkerByAddress($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
+		$map->addMarkerByAddress($street, $city, $state, $zip, $country);
 
 		// add some default controls to the map
 		$map->addControl('largeMap');	
@@ -160,5 +166,24 @@ class tx_wecmap_backend {
 		
 		return $content;
 	}
+	
+	function getFieldValue($key, $PA) {
+        $row = $PA['row'];
+        $addressFields = $PA['fieldConf']['config']['params']['addressFields'];
+		
+        if(isset($addressFields[$key])) {
+            $fieldName = $addressFields[$key];
+        } else {
+            $fieldName = $key;
+        }
+
+        if (isset($row[$fieldName])) {
+            $value = $row[$fieldName];
+        } else {
+            $value = '';
+        }
+
+        return $value;
+    }
 	
 }

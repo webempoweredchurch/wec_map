@@ -38,6 +38,26 @@ if($BE) {
 	);
 }
 
+$tempColumns = Array (
+	'tx_wecmap_map' => array (		
+		'exclude' => 1,		
+		'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_maplabel',		
+		'config' => array (
+			'type' => 'user',
+			'userFunc' => 'tx_wecmap_backend->drawMap',
+			'params' => array (
+				'addressFields' => array (
+					'street' => 'address',
+					'city' => 'city',
+					'state' => 'zone',
+					'zip' => 'zip',
+					'country' => 'static_info_country',
+				),
+			),
+		),
+	),
+);
+
 t3lib_div::loadTCA('fe_users');
 t3lib_extMgm::addTCAcolumns('fe_users', $tempColumns, 1);
 $TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_map';
