@@ -167,10 +167,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$jsContent[] = $this->js_drawMapEnd();
 		
 		// there is no onload() in the BE, so we need to call drawMap() manually.
-		if(TYPO3_MODE == 'BE') {
-			$manualCall = '<script type="text/javascript">drawMap();</script>';
-		} else {
+		if(TYPO3_MODE == 'FE') {
 			$manualCall = null;
+		} else {
+			$manualCall = '<script type="text/javascript">setTimeout("drawMap()",1);</script>';
 		}
 		
 		return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
