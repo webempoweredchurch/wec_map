@@ -200,6 +200,31 @@ class tx_wecmap_map {
 		}
 	}
 	
+	/**
+	 * Adds a marker by simple String
+	 *
+	 * @return void
+	 **/
+	function addMarkerByString($string, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
+		
+		// first split the string into it's components. It doesn't need to be perfect, it's just
+		// put together on the other end anyway
+		$address = explode(',', $string);
+
+		$street = $address[0];
+		$city = $address[1];
+		$state = $address[2];
+		$country = $address[3];
+		
+		/* Geocode the address */
+		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
+ 
+		/* Create a marker at the specified latitude and longitdue */
+		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
+	}
+	
 	function getMarkerClassName() {
 		return $this->markerClassName;
 	}
