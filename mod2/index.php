@@ -307,11 +307,12 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	
 	function makeTitle($row) {
 		if(empty($row['name'])) {
-			return $row['first_name'] . ' ' . $row['last_name'];			
+			$title = $row['first_name'] . ' ' . $row['last_name'];			
 		} else {
-			return $row['name'];
+			$title = $row['name'];
 		}
-
+		
+		return '<h1>'.$title.'</h1>';
 	}
 	
 	function makeDescription($row) {

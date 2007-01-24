@@ -132,7 +132,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$data['street'] = $street;
 		$data['zip'] = $zip;
 		$data['country'] = $country;
-		$data['title'] = $title;
+		$data['title'] = '<h1>'.$title.'</h1>';
 		
 		if(empty($description)) $description = $this->makeDescription($data);
 		
