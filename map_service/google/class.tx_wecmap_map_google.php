@@ -127,53 +127,64 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 	}
 	
-	function drawMap() {						
-		if(!isset($this->lat) or !isset($this->long)) {
-			$this->autoCenterAndZoom();
-		}
+	function drawMap() {
 		
-		/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
-		if(TYPO3_MODE == 'FE') {
-			$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
-			$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
-			$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
-		} else {
-			$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
-		}
-		
-		$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
-		$jsContent = array();
-		$jsContent[] = $this->js_createMarker();
-		$jsContent[] = $this->js_drawMapStart();
-		$jsContent[] = $this->js_newGMap2('map');
-		$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
-		foreach( $this->controls as $control ) {
-			$jsContent[] = $control;
-		}
-		$jsContent[] = $this->js_icon();
-		$jsContent[] = $this->js_newGMarkerManager('mgr', 'map');
-		$jsContent[] = 'var markers;';
-		foreach($this->markers as $key => $markers) {
-			$jsContent[] = 'markers = null;'; 
-			$jsContent[] = 'markers = [];'; 
-			$key = explode(':',$key);
-			foreach( $markers as $marker ) {
-				$jsContent[] = 'markers.push('. $marker->writeJS() .');';
+		// make sure we have markers to display and an API key
+		if ($this->hasThingsToDisplay() && $this->hasAPIKey()) { 						
+			
+			if(!isset($this->lat) or !isset($this->long)) {
+				$this->autoCenterAndZoom();
 			}
-			$jsContent[] = 'mgr.addMarkers(markers, ' . $key[0] . ', ' . $key[1] . ');';
-		}
+		
+			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
+			if(TYPO3_MODE == 'FE') {
+				$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
+				$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
+				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+			} else {
+				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+			}
+		
+			$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
+			$jsContent = array();
+			$jsContent[] = $this->js_createMarker();
+			$jsContent[] = $this->js_drawMapStart();
+			$jsContent[] = $this->js_newGMap2('map');
+			$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
+			foreach( $this->controls as $control ) {
+				$jsContent[] = $control;
+			}
+			$jsContent[] = $this->js_icon();
+			$jsContent[] = $this->js_newGMarkerManager('mgr', 'map');
+			$jsContent[] = 'var markers;';
+			foreach($this->markers as $key => $markers) {
+				$jsContent[] = 'markers = null;'; 
+				$jsContent[] = 'markers = [];'; 
+				$key = explode(':',$key);
+				foreach( $markers as $marker ) {
+					$jsContent[] = 'markers.push('. $marker->writeJS() .');';
+				}
+				$jsContent[] = 'mgr.addMarkers(markers, ' . $key[0] . ', ' . $key[1] . ');';
+			}
 
-		$jsContent[] = 'mgr.refresh();';
-		$jsContent[] = $this->js_drawMapEnd();
+			$jsContent[] = 'mgr.refresh();';
+			$jsContent[] = $this->js_drawMapEnd();
 		
-		// there is no onload() in the BE, so we need to call drawMap() manually.
-		if(TYPO3_MODE == 'FE') {
-			$manualCall = null;
-		} else {
-			$manualCall = '<script type="text/javascript">setTimeout("drawMap()",1);</script>';
+			// there is no onload() in the BE, so we need to call drawMap() manually.
+			if(TYPO3_MODE == 'FE') {
+				$manualCall = null;
+			} else {
+				$manualCall = '<script type="text/javascript">setTimeout("drawMap()",1);</script>';
+			}
+		
+			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
+		} else if (!$this->hasAPIKey()) {
+			$error = '<span>No Maps API key has been set for the wec_map extension. Please make sure
+				that you have set an API key either in the Extension Manager, or via TypoScript or 
+				Flexform. If you don\'t have an API key yet, you may obtain one free of charge from
+				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.</span>';
+			return $error;
 		}
-		
-		return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
 	}
 	
 	function mapDiv($id, $width, $height) {
@@ -270,6 +281,44 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		
 		$this->setZoom(17 - $zoom);
+	}
+	
+	/*
+     * Checks if a map has markers or a 
+     * specific center.Otherwise, we have nothing 
+     * to draw.
+     * @return        boolean        True/false whether the map is valid or not.
+     */
+    function hasThingsToDisplay() {
+        $valid = false;
+        
+        if(sizeof($this->markers) > 0) {
+            $validMarkers = true;
+        }
+        
+        if(isset($this->lat) and isset($this->long)) {
+            $validCenter = true;
+        }
+        
+        /* If we have an API key along with markers or a center point, its valid */
+        if($validMarkers or $validCenter) {
+            $valid = true;
+        }
+        
+        return $valid;
+    }
+
+	/**
+	 * Checks if an API key has been entered and displays an error message instead of the map if not.
+	 *
+	 * @return boolean
+	 **/
+	function hasAPIKey() {
+		if($this->key) {
+            return true;
+        } else {
+			return false;
+		}
 	}
 }
 
