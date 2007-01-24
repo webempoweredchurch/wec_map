@@ -29,6 +29,9 @@ require_once('conf.php');
 require_once($BACK_PATH.'init.php');
 require_once($BACK_PATH.'template.php');
 
+require_once(PATH_t3lib.'class.t3lib_install.php');
+require_once(PATH_t3lib.'class.t3lib_extmgm.php');
+
 $LANG->includeLLFile('EXT:wec_map/mod1/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
@@ -74,6 +77,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$this->MOD_MENU = array (
 			'function' => array (
 				'1' => $LANG->getLL('function1'),
+				'2' => $LANG->getLL('function2'),
 			)
 		);
 		parent::menuConfig();
@@ -166,6 +170,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
 				$this->content.=$this->geocodeAdmin();
+			break;
+			case 2:
+				$this->content.=$this->apiKeyAdmin();
 			break;
 
 		}
@@ -269,6 +276,76 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		}
 
 		return $output;
+	}
+
+	/*
+	 * Admin module for setting Google Maps API Key.
+	 * @return		string		HTML output of the module.
+	 */
+	function apiKeyAdmin() {
+		global $TYPO3_CONF_VARS;
+		$extKey = 'wec_map';
+	
+		$cmd = t3lib_div::_GP('cmd');
+		$newKey = t3lib_div::_GP('key');
+		switch($cmd) {
+			case 'setkey' : 
+				$this->saveApiKey($newKey);
+				$apiKey = $newKey;
+				
+				unset($cmd);
+				unset($newKey);
+				break;
+				
+			default :
+				$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$extKey]);
+				$apiKey = $extConf['apiKey.']['google'];
+				break;
+		}
+		
+		/* @todo	Localize! */
+		$content[] = '<p>';
+		$content[] = 'In order to use the WEC Map extension you must have a 
+					  Google Maps API Key. You can sign up for this key at
+					  <a href="http://www.google.com/apis/maps/signup.html">
+					  http://www.google.com/apis/maps/signup.html</a>.';
+		$content[] = '</p>';
+		
+		$content[] = '<form action="" method="POST">';
+		$content[] = '<input name="cmd" type="hidden" value="setkey" />';
+		$content[] = '<label for="key">Google Maps API Key</label>';
+		$content[] = '<input style="width: 50em;" name="key" value="'.$apiKey.'" />';
+		$content[] = '<input type="submit" value="Submit"/>';
+		$content[] = '</form>';
+		
+		return implode(chr(10), $content);
+	}
+	
+	/*
+	 * Saves the API key to localconf.php.
+	 * @param		string		The new Google Maps API Key.
+	 * @return		none
+	 */	
+	function saveApiKey($apiKey) {
+		global $TYPO3_CONF_VARS;
+		$extKey = 'wec_map';
+		
+		debug($apiKey, "saving...");
+		
+		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$extKey]);
+		$extConf['apiKey.']['google'] = $apiKey;
+		
+		// Instance of install tool
+		$instObj = t3lib_div::makeInstance('t3lib_install');
+		$instObj->allowUpdateLocalConf =1;
+		$instObj->updateIdentity = 'WEC Map';
+
+		// Get lines from localconf file
+		$lines = $instObj->writeToLocalconf_control();
+		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$extKey.'\']', serialize($extConf));
+		$instObj->writeToLocalconf_control($lines);
+		
+		t3lib_extMgm::removeCacheFiles();
 	}
 }
 
