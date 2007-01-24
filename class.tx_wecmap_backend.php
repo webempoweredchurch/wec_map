@@ -57,6 +57,13 @@ class tx_wecmap_backend {
 	
 	function checkGeocodeStatus($PA, $fobj) {
 		
+		// get key from configuration
+		$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+		$BE = $conf['geocodingStatus'];
+		
+		// if geocoding status is disabled, return
+		if(!$BE) return;
+				
 		$row = $PA['row'];
 		
 		return tx_wecmap_backend::drawGeocodeStatus($row);
@@ -64,6 +71,14 @@ class tx_wecmap_backend {
 	}
 	
 	function checkGeocodeStatusFF($PA, $fobj) {
+		
+		// get key from configuration
+		$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+		$BE = $conf['geocodingStatus'];
+		
+		// if geocoding status is disabled, return
+		if(!$BE) return;
+		
 		$row = $PA['row']['pi_flexform'];
 		if(empty($row)) return tx_wecmap_backend::drawGeocodeStatus($data);
 		
@@ -81,6 +96,7 @@ class tx_wecmap_backend {
 	}
 	
 	function drawGeocodeStatus($address) {
+		
 		$row = $address;
 
 		// if there is no info about the user, return different status

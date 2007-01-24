@@ -22,16 +22,21 @@ t3lib_extMgm::addStaticFile($_EXTKEY,"static/fe_user_map/","Frontend User Map");
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
 
-$tempColumns = Array (
-	'tx_wecmap_map' => array (		
-		'exclude' => 1,		
-		'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_maplabel',		
-		'config' => array (
-			'type' => 'user',
-			'userFunc' => 'tx_wecmap_backend->drawMap',
+// get key from configuration
+$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+$BE = $conf['feUserRecordMap'];
+if($BE) {
+	$tempColumns = Array (
+		'tx_wecmap_map' => array (		
+			'exclude' => 1,		
+			'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_maplabel',		
+			'config' => array (
+				'type' => 'user',
+				'userFunc' => 'tx_wecmap_backend->drawMap',
+			),
 		),
-	),
-);
+	);
+}
 
 t3lib_div::loadTCA('fe_users');
 t3lib_extMgm::addTCAcolumns('fe_users', $tempColumns, 1);
