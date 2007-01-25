@@ -307,7 +307,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content[] = '<p>';
 		$content[] = 'In order to use the WEC Map extension you must have a 
 					  Google Maps API Key. You can sign up for this key at
-					  <a href="http://www.google.com/apis/maps/signup.html" target="new">
+					  <a href="http://www.google.com/apis/maps/signup.html" target="_new">
 					  http://www.google.com/apis/maps/signup.html</a>.';
 		$content[] = '</p>';
 		

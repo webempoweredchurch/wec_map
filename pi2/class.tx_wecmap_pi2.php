@@ -94,7 +94,6 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		
 		$private = $this->pi_getFFvalue($piFlexForm, "privacy", "default");
 		empty($private) ? $private = $conf['private']:null;
-		$private = true;
 
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
