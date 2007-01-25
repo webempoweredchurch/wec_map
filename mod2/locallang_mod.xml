@@ -6,7 +6,7 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="mlang_tabs_tab">Map FE Users</label>
+			<label index="mlang_tabs_tab">FE User Map</label>
 			<label index="mlang_labels_tabdescr">Shows FE users and allows to edit their records.</label>
 		</languageKey>
 	</data>
