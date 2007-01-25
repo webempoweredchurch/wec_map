@@ -37,7 +37,7 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
 /**
  * Service providing lat/long lookup via the geocoder.us service.  
  *
- * @author Web Empowered Church Team <map@webempoweredchurch.org>
+ * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */

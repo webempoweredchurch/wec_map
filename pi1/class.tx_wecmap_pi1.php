@@ -30,7 +30,7 @@
 /**
  * Plugin 'Map' for the 'wec_map' extension.
  *
- * @author	Web Empowered Church Team <map@webempoweredchurch.org>
+ * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
  */
 
 
@@ -39,7 +39,7 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
 /**
  * Simple frontend plugin for displaying an address on a map.  
  *
- * @author Web Empowered Church Team <map@webempoweredchurch.org>
+ * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */

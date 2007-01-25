@@ -29,7 +29,7 @@
 /**
  * Plugin 'Map' for the 'wec_map' extension.
  *
- * @author	Web Empowered Church Team <map@webempoweredchurch.org>
+ * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
  */
 
 
@@ -39,7 +39,7 @@ require_once('class.tx_wecmap_marker.php');
  * Main class for the wec_map extension.  This class sits between the various 
  * frontend plugins and address lookup service to render map data.
  * 
- * @author Web Empowered Church Team <map@webempoweredchurch.org>
+ * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */
