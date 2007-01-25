@@ -2,7 +2,7 @@
 <T3locallang>
 	<meta type="array">
 		<type>module</type>
-		<description>Language labels for module &quot;tools_txwecgeocodeM1&quot;</description>
+		<description>Language labels for module &quot;tools_txwecmapM1&quot;</description>
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
@@ -10,6 +10,28 @@
 			<label index="function1">Geocode Admin</label>
 			<label index="function2">Settings</label>
 			<label index="function3">Function #3</label>
+			<label index="editAddress">Edit address</label>
+			<label index="deleteAddress">Delete address</label>
+			<label index="update">Update</label>
+			
+			<label index="address">Address</label>
+			<label index="latitude">Latitude</label>
+			<label index="longitude">Longitude</label>
+			
+			<label index="totalCachedAddresses">Total cached addresses</label>
+			<label index="deleteCache">Delete all cached addresses!</label>
+			
+			<label index="apiInstructions">
+				<![CDATA[
+				In order to use the WEC Map extension you must have a Google 
+				Maps API Key. You can sign up for this key at
+				<a href="http://www.google.com/apis/maps/signup.html" target="_new">
+				http://www.google.com/apis/maps/signup.html</a>.
+				]]>
+			</label>
+			<label index="googleMapsApiKey">Google Maps API Key</label>
+			<label index="submit">Submit</label>
+			
 		</languageKey>
 	</data>
 </T3locallang>

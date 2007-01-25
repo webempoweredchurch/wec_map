@@ -2,7 +2,7 @@
 /***********************************************************************
 * Copyright notice
 *
-* (c) 2005-2006 Foundation for Evangelism
+* (c) 2007 Foundation for Evangelism
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)

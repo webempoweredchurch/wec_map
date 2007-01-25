@@ -1,25 +1,30 @@
 <?php
 /***************************************************************
-*  Copyright notice
+* Copyright notice
 *
-*  (c) 2006 Jeff Segars <jeff@webempoweredchurch.org>
-*  All rights reserved
+* (c) 2007 Foundation For Evangelism (info@evangelize.org)
+* All rights reserved
 *
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
+* This file is part of the Web-Empowered Church (WEC)
+* (http://webempoweredchurch.org) ministry of the Foundation for Evangelism
+* (http://evangelize.org). The WEC is developing TYPO3-based
+* (http://typo3.org) free software for churches around the world. Our desire
+* is to use the Internet to help offer new life through Jesus Christ. Please
+* see http://WebEmpoweredChurch.org/Jesus.
 *
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
+* You can redistribute this file and/or modify it under the terms of the
+* GNU General Public License as published by the Free Software Foundation;
+* either version 2 of the License, or (at your option) any later version.
 *
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
+* The GNU General Public License can be found at
+* http://www.gnu.org/copyleft/gpl.html.
 *
-*  This copyright notice MUST APPEAR in all copies of the script!
+* This file is distributed in the hope that it will be useful for ministry,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+* GNU General Public License for more details.
+*
+* This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
 
@@ -44,12 +49,13 @@ require_once('../class.tx_wecmap_cache.php');
 /**
  * Module 'WEC Map Admin' for the 'wec_map' extension.
  *
- * @author	Jeff Segars <jeff@webempoweredchurch.org>
+ * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package	TYPO3
  * @subpackage	tx_wecmap
  */
 class  tx_wecmap_module1 extends t3lib_SCbase {
 	var $pageinfo;
+	var $extKey = 'wec_map';
 
 	/**
 	 * Initializes the Module
@@ -189,6 +195,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return	string		HTML for the information table.
 	 */
 	function geocodeAdmin()	{
+		global $LANG;
+		
 		$uid = t3lib_div::_GP('uid');
 		$latitude = t3lib_div::_GP('latitude');
 		$longitude = t3lib_div::_GP('longitude');
@@ -216,15 +224,15 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		foreach($displayRows as $row) {				
 			// Add icon/title and ID:
 			$cells = array();
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit address" alt="" /></a></td>';
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="Delete address" alt="" /></a></td>';
+			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
+			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
 			
 			$cells[] = '<td>'.$row['address'].'</td>';
 				
 			if ($row['address_hash'] == $uid && $cmd = 'edit') {
 				$cells[] = '<td><input name="latitude" value="'.$row['latitude'].'" size="8"/></td>';
 				$cells[] = '<td><input name="longitude" value="'.$row['longitude'].'" size="8"/></td>';
-				$cells[] = '<td><input type="submit" value="Update" /></td>';
+				$cells[] = '<td><input type="submit" value="'.$LANG->getLL('updateAddress').'" /></td>';
 			} else {
 				$cells[] = '<td>'.$row['latitude'].'</td>';
 				$cells[] = '<td>'.$row['longitude'].'</td>';
@@ -247,9 +255,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		// Create header:
 		$cells = array();
 		$cells[] = '<td colspan="2">&nbsp;</td>';
-		$cells[] = '<td>Address</td>';
-		$cells[] = '<td>Latitude</td>';
-		$cells[] = '<td>Longitude</td>';
+		$cells[] = '<td>'.$LANG->getLL('address').'</td>';
+		$cells[] = '<td>'.$LANG->getLL('latitude').'</td>';
+		$cells[] = '<td>'.$LANG->getLL('longitude').'</td>';
 		$cells[] = '<td>&nbsp;</td>';
 		
 		$output = '
@@ -263,9 +271,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$output = '
 		<br/>
 		<br/>
-		Total cached addresses: <b>'.$count_allInTable['count'].'</b> '.
+		'.$LANG->getLL('totalCachedAddresses').': <b>'.$count_allInTable['count'].'</b> '.
 			'<a href="'.$this->linkSelf('&cmd=delete&uid=all').'">'.
-			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="Delete all cached addresses!" alt="" />'.
+			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteCache').'" alt="'.$LANG->getLL('deleteCache').'" />'.
 			'</a>'.
 		'<br/>'.
 		'<table border="0" cellspacing="1" cellpadding="3" id="tx-wecmap-cache" class="lrPadding c-list">'.$output.'</table>';
@@ -283,8 +291,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return		string		HTML output of the module.
 	 */
 	function apiKeyAdmin() {
-		global $TYPO3_CONF_VARS;
-		$extKey = 'wec_map';
+		global $TYPO3_CONF_VARS, $LANG;
 	
 		$cmd = t3lib_div::_GP('cmd');
 		$newKey = t3lib_div::_GP('key');
@@ -298,49 +305,57 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				break;
 				
 			default :
-				$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$extKey]);
-				$apiKey = $extConf['apiKey.']['google'];
+				$apiKey = $this->getApiKey();
 				break;
 		}
 		
 		/* @todo	Localize! */
-		$content[] = '<p>';
-		$content[] = 'In order to use the WEC Map extension you must have a 
-					  Google Maps API Key. You can sign up for this key at
-					  <a href="http://www.google.com/apis/maps/signup.html" target="_new">
-					  http://www.google.com/apis/maps/signup.html</a>.';
+		$content[] = '<p style="margin-bottom:15px;">';
+		$content[] = $LANG->getLL('apiInstructions');
 		$content[] = '</p>';
 		
 		$content[] = '<form action="" method="POST">';
 		$content[] = '<input name="cmd" type="hidden" value="setkey" />';
-		$content[] = '<label for="key">Google Maps API Key</label>';
+		$content[] = '<label for="key">'.$LANG->getLL('googleMapsApiKey').'</label>';
 		$content[] = '<input style="width: 50em;" name="key" value="'.$apiKey.'" />';
-		$content[] = '<input type="submit" value="Submit"/>';
+		$content[] = '<input type="submit" value="'.$LANG->getLL('submit').'"/>';
 		$content[] = '</form>';
 		
 		return implode(chr(10), $content);
 	}
 	
 	/*
-	 * Saves the API key to localconf.php.
+	 * Looks up the API key in extConf within localconf.php
+	 * @return		string		The Google Maps API key.
+	 */
+	function getApiKey() {
+		global $TYPO3_CONF_VARS;
+		
+		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$this->extKey]);
+		$apiKey = $extConf['apiKey.']['google'];
+		
+		return $apiKey;
+	}
+	
+	/*
+	 * Saves the API key to extConf in localconf.php.
 	 * @param		string		The new Google Maps API Key.
 	 * @return		none
 	 */	
 	function saveApiKey($apiKey) {
 		global $TYPO3_CONF_VARS;
-		$extKey = 'wec_map';
 		
-		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$extKey]);
+		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$this->extKey]);
 		$extConf['apiKey.']['google'] = $apiKey;
 		
 		// Instance of install tool
 		$instObj = t3lib_div::makeInstance('t3lib_install');
 		$instObj->allowUpdateLocalConf =1;
-		$instObj->updateIdentity = 'WEC Map';
+		$instObj->updateIdentity = $this->extKey;
 
 		// Get lines from localconf file
 		$lines = $instObj->writeToLocalconf_control();
-		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$extKey.'\']', serialize($extConf));
+		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$this->extKey.'\']', serialize($extConf));
 		$instObj->writeToLocalconf_control($lines);
 		
 		t3lib_extMgm::removeCacheFiles();

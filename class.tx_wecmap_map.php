@@ -2,7 +2,7 @@
 /***************************************************************
 * Copyright notice
 *
-* (c) 2005 Foundation for Evangelism
+* (c) 2007 Foundation For Evangelism (info@evangelize.org)
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
@@ -33,15 +33,7 @@
  */
 
 
-/*
-define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
-require_once(PATH_tslib.'class.tslib_pibase.php');
-require_once(PATH_tslib.'class.tslib_content.php');
-*/
 require_once('class.tx_wecmap_marker.php');
-// require_once('map_service/google/class.tx_wecmap_marker_google.php');
-// require_once('map_service/google/class.tx_wecmap_map_google.php');
-
 
 /**
  * Main class for the wec_map extension.  This class sits between the various 
