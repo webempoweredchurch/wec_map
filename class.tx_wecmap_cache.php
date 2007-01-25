@@ -31,7 +31,8 @@ require_once (PATH_t3lib.'class.t3lib_refindex.php');
 /**
  * Main address lookup class for the wec_map extension.  Looks up existing
  * values in cache tables or initiates service chain to perform a lookup.
- * Also provides basic administrative functions for managing entries in the 
+ * Also provides basic administrative functions for managing entries in the
+ * cache. 
  *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
@@ -48,12 +49,13 @@ class tx_wecmap_cache {
 	 * @param	string		The state name.
 	 * @param	string		This ZIP code.
 	 * @param	string		The country name.
+	 * @param	string		The optional API key to use in the lookup.
 	 * @param	boolean		Force a new lookup for address.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
 	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
 
-		/* Lookup the hashed current address in the cache table. */	
+		/* Look up the address in the cache table. */	
 		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
 		
 		/* Didn't find a cached match */	
@@ -69,7 +71,8 @@ class tx_wecmap_cache {
 					break;
 				}
 			}
-
+			
+			/* Insert the lat/long into the cache.  */
 			tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $latlong['lat'], $latlong['long']);
 		}
 		
@@ -84,8 +87,8 @@ class tx_wecmap_cache {
 	
 	
 	/*
-	 * Returns the current geocoding status.  Geocoding may be successfull, failed, or may
-	 * not have been attempted.
+	 * Returns the current geocoding status.  Geocoding may be successfull, 
+	 * failed, or may not have been attempted.
 	 *
 	 * @param	string		The street address.
 	 * @param	string		The city name.
@@ -95,8 +98,7 @@ class tx_wecmap_cache {
 	 * @return	integer		Status code. -1=Failed, 0=Not Completed, 1=Successfull.
 	 */
 	function status($street, $city, $state, $zip, $country) {
-		//debug("checking status...", "tx_wecmap_cache");
-		
+		/* Look up the address in the cache table */
 		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
 		
 		/* Found a cached match */	
@@ -116,7 +118,8 @@ class tx_wecmap_cache {
 	
 	
 	/*
-	 * Looks up the latitude and longitude of a specified address in the cache table only.
+	 * Looks up the latitude and longitude of a specified address in the cache
+	 * table only.
 	 *
 	 * @param	string		The street address.
 	 * @param	string		The city name.
@@ -167,15 +170,33 @@ class tx_wecmap_cache {
 		}		
 	} 
 	
+	/*
+	 * Update a cached entry based on its address hash.
+	 *
+	 * @param	string		Address hash.
+	 * @param	float		New latitude.
+	 * @param	float		New longitude.
+	 * @return	none
+	 */
 	function updateByUID($uid, $lat, $long) {
 		$latlong = array("latitude" => $lat, "longitude" => $long);
 		$result = $GLOBALS['TYPO3_DB']->exec_UPDATEquery("tx_wecmap_cache", "address_hash='".$uid."'", $latlong);
 	}
 	
+	/*
+	 * Deletes a cached entry based on its address hash.
+	 *
+	 * @return	none
+	 */
 	function deleteByUID($uid) {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache", "address_hash='".$uid."'");
 	}
 	
+	/*
+	 * Deletes all cached entries.
+	 * 
+	 * @return	none
+	 */
 	function deleteAll() {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache","");
 	}
