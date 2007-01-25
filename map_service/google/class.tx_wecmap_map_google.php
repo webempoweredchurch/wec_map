@@ -129,8 +129,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	
 	function drawMap() {
 		
+		$ttd = $this->hasThingsToDisplay();
+		$hasKey = $this->hasAPIKey();
+		
 		// make sure we have markers to display and an API key
-		if ($this->hasThingsToDisplay() && $this->hasAPIKey()) { 						
+		if ($ttd && $hasKey) { 						
 			
 			if(!isset($this->lat) or !isset($this->long)) {
 				$this->autoCenterAndZoom();
@@ -178,11 +181,15 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 		
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
-		} else if (!$this->hasAPIKey()) {
+		} else if (!$hasKey) {
 			$error = '<span>No Maps API key has been set for the wec_map extension. Please make sure
 				that you have set an API key either in the Extension Manager, or via TypoScript or 
 				Flexform. If you don\'t have an API key yet, you may obtain one free of charge from
 				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.</span>';
+			return $error;
+		} else if (!$ttd) {
+			$error = '<span>There doesn\'t seem to be anything to display. Make sure the map is
+				configured correctly and there are users or markers set.</span>';
 			return $error;
 		}
 	}
