@@ -307,7 +307,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content[] = '<p>';
 		$content[] = 'In order to use the WEC Map extension you must have a 
 					  Google Maps API Key. You can sign up for this key at
-					  <a href="http://www.google.com/apis/maps/signup.html">
+					  <a href="http://www.google.com/apis/maps/signup.html" target="new">
 					  http://www.google.com/apis/maps/signup.html</a>.';
 		$content[] = '</p>';
 		
@@ -329,8 +329,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function saveApiKey($apiKey) {
 		global $TYPO3_CONF_VARS;
 		$extKey = 'wec_map';
-		
-		debug($apiKey, "saving...");
 		
 		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$extKey]);
 		$extConf['apiKey.']['google'] = $apiKey;
