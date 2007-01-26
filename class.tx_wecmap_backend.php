@@ -27,28 +27,14 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
-/**
- * Plugin 'Map' for the 'wec_map' extension.
- *
- * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
- */
-
-define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
-require_once(PATH_t3lib.'class.t3lib_tstemplate.php');
-require_once(PATH_t3lib.'class.t3lib_page.php');
-require_once(PATH_t3lib.'class.t3lib_timetrack.php');
-require_once(PATH_t3lib.'class.t3lib_userauth.php');
-require_once(PATH_tslib.'class.tslib_feuserauth.php');
-require_once(PATH_tslib.'class.tslib_fe.php');
-require_once(PATH_tslib.'class.tslib_content.php');
-
-require_once('class.tx_wecmap_map.php');
-require_once('class.tx_wecmap_cache.php');
-require_once('map_service/google/class.tx_wecmap_map_google.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 
 /**
- * Main class for the wec_map extension.  This class sits between the various 
- * frontend plugins and address lookup service to render map data.
+ * General purpose backend class for the WEC Map extension.  This class
+ * provides user functions for displaying geocode status and maps within
+ * TCEForms.
  * 
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
@@ -56,72 +42,99 @@ require_once('map_service/google/class.tx_wecmap_map_google.php');
  */
 class tx_wecmap_backend {
 	
-	function checkGeocodeStatus($PA, $fobj) {
-		
-		// get key from configuration
-		$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-		$BE = $conf['geocodingStatus'];
+	/**
+	 * Checks the geocoding status for the current record.  This function is
+	 * mainly responsible for taking backend record data and handing it to
+	 * drawGeocodeStatus().
+	 *
+	 * @param	array	Array with information about the current field.
+	 * @param	object	Parent object.  Instance of t3lib_tceforms.
+	 * @return	string	HTML output of current geocoding status and editing form.
+	 * @todo	Add ability for custom address fields, similar to drawMap.
+	 */
+	function checkGeocodeStatus($PA, &$fobj) {
 		
 		// if geocoding status is disabled, return
-		if(!$BE) return;
-				
-		$row = $PA['row'];
+		if(!tx_wecmap_backend::getExtConf('geocodingStatus')) return;
+
+		$street = tx_wecmap_backend::getFieldValue('street', $PA);
+        $city = tx_wecmap_backend::getFieldValue('city', $PA);
+        $state = tx_wecmap_backend::getFieldValue('state', $PA);
+        $zip = tx_wecmap_backend::getFieldValue('zip', $PA);
+        $country = tx_wecmap_backend::getFieldValue('country', $PA);	
 		
-		return tx_wecmap_backend::drawGeocodeStatus($row);
+		return tx_wecmap_backend::drawGeocodeStatus($street, $city, $state, $zip, $country);
 				
 	}
 	
-	function checkGeocodeStatusFF($PA, $fobj) {
-		
-		// get key from configuration
-		$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-		$BE = $conf['geocodingStatus'];
+	/**
+	 * Checks the goecoding status for the current FlexForm.  This function is
+	 * mainly responsible for taking FlexForm data and handing it to 
+	 * drawGeocodeStatus().
+	 * 
+	 * @param	array	Array with information about the current FlexForm.
+	 * @param	object	Parent object.  Instance of t3lib_tceforms.
+	 * @return	string	HTML output of current geocoding status and editing form.
+	 * @todo	Add ability for custom address fields, similar to drawMap.
+	 * @todo	Does our method of digging into FlexForms mess up localization?
+	 */
+	function checkGeocodeStatusFF($PA, &$fobj) {
 		
 		// if geocoding status is disabled, return
-		if(!$BE) return;
+		if(!tx_wecmap_backend::getExtConf('geocodingStatus')) return;
 		
-		$row = $PA['row']['pi_flexform'];
-		if(empty($row)) return tx_wecmap_backend::drawGeocodeStatus($data);
+		$street = tx_wecmap_backend::getFieldValueFromFF('street', $PA);
+        $city = tx_wecmap_backend::getFieldValueFromFF('city', $PA);
+        $state = tx_wecmap_backend::getFieldValueFromFF('state', $PA);
+        $zip = tx_wecmap_backend::getFieldValueFromFF('zip', $PA);
+        $country = tx_wecmap_backend::getFieldValueFromFF('country', $PA);
 		
-		$row = t3lib_div::xml2array($row);
-		$row = $row['data']['default']['lDEF'];
-		
-		$data = array();
-		$data['street'] = $row['street']['vDEF'];
-		$data['city'] = $row['city']['vDEF'];
-		$data['zip'] = $row['zip']['vDEF'];
-		$data['state'] = $row['state']['vDEF'];
-		$data['country'] = $row['country']['vDEF'];
-		
-		return tx_wecmap_backend::drawGeocodeStatus($data);
+		return tx_wecmap_backend::drawGeocodeStatus($street, $city, $state, $zip, $country);
 	}
 	
-	function drawGeocodeStatus($address) {
+	/**
+	 * Checks the geocoding status of the address and displays an editing form.
+	 *
+	 * @param	string	Street portion of the address.
+	 * @param	string	City portion of the address.
+	 * @param	string	State portion of the address.
+	 * @param	string	ZIP code portion of the address.
+	 * @param	string	Country portion of the address.
+	 * @return	string	HTML output of current geocoding status and editing form.
+	 * @todo	Add locallang labels.
+	 */
+	function drawGeocodeStatus($street, $city, $state, $zip, $country) {
 		
 		$row = $address;
 
 		// if there is no info about the user, return different status
-		if(empty($row['city'])) {
+		if(!$city) {
 			return 'Cannot determine latitude and longitude.  Please enter an address and save.';
 		}
 		
+		/* Grab the lat and long there were posted */
 		$newlat = t3lib_div::_GP('lat');
 		$newlong = t3lib_div::_GP('long');
 		
 		$origlat = t3lib_div::_GP('original_lat');
 		$origlong = t3lib_div::_GP('original_long');
 		
+		/* If the new lat/long are empty, delete our cached entry */
 		if (empty($newlat) && empty($newlong)) {
-			tx_wecmap_cache::delete($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
+			tx_wecmap_cache::delete($street, $city, $state, $zip, $country);
 		}
 
+		/* If the lat/long changed, then insert a new entry into the cache */
+		/* @todo	Need to think through the logic here.  Shouldn't we update?
+					I'm not sure how that changes when an address changes too
+					though. */
 		if((($newlat != $origlat) or ($newlong != $origlong)) and (!empty($newlat) && !empty($newlong))) {
-			tx_wecmap_cache::insert($row['street'], $row['city'], $row['state'], $row['zip'], $row['country'], $newlat, $newlong);
+			tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $newlat, $newlong);
 		}
-
-		$latlong = tx_wecmap_cache::lookup($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
-		$status = tx_wecmap_cache::status($row['street'], $row['city'], $row['state'], $row['zip'], $row['country']);
 		
+		/* Get the lat/long and status from the geocoder */
+		$latlong = tx_wecmap_cache::lookup($street, $city, $state, $zip, $country);
+		$status = tx_wecmap_cache::status($street, $city, $state, $zip, $country);
 		
 		switch($status) {
 			case -1:
@@ -143,6 +156,12 @@ class tx_wecmap_backend {
 		return '<p>'.$status.'</p><p>'.$form.'</p>';
 	}
 	
+	/**
+	 * Draws a backend map.
+	 * @param		array		Array with information about the current field.
+	 * @param		object		Parent object.  Instance of t3lib_tceforms.
+	 * @return		string		HTML to display the map within a backend record.
+	 */
 	function drawMap($PA, $fobj) {
 
 		$width = "400";
@@ -169,23 +188,87 @@ class tx_wecmap_backend {
 		return $content;
 	}
 	
+	/**
+	 * Checks the TCA for address mapping rules and returns the address value.  
+	 * If a mapping rule is defined, this tells us what field contains address 
+	 * related information.  If no rules are defined, we pick default fields 
+	 * to use.
+	 *
+	 * @param	string	The portion of the address we're trying to map.
+	 * @param	array	Array of field related data.
+	 * @return	string	The specified portion of the address.
+	 */
 	function getFieldValue($key, $PA) {
         $row = $PA['row'];
         $addressFields = $PA['fieldConf']['config']['params']['addressFields'];
 		
+		/* If the address mapping array has a mapping for this address, use it */
         if(isset($addressFields[$key])) {
             $fieldName = $addressFields[$key];
         } else {
+			/* Otherwise, use the default name */
             $fieldName = $key;
         }
-
+		
+		/* If the source data has a value for the address field, grab it */
         if (isset($row[$fieldName])) {
             $value = $row[$fieldName];
         } else {
+			/* Otherwise, use an empty string */
             $value = '';
         }
 
         return $value;
     }
+
+	/**
+	 * Checks the FlexForm for address mapping rules and returns the address value.  
+	 * If a mapping rule is defined, this tells us what field contains address 
+	 * related information.  If no rules are defined, we pick default fields 
+	 * to use.
+	 *
+	 * @param	string	The portion of the address we're trying to map.
+	 * @param	array	Array of field related data.
+	 * @return	string	The specified portion of the address.
+	 */
+	function getFieldValueFromFF($key, $PA) {
+		$addressFields = $PA['fieldConf']['config']['params']['addressFields'];
+		
+		$flexForm = t3lib_div::xml2array($PA['row']['pi_flexform']);
+		$flexForm = $flexForm['data']['default']['lDEF'];
+		
+		/* If the address mapping array has a map for this address, use it */
+		if(isset($addressFields[$key])) {
+			$fieldName = $addressFields[$key];
+		} else {
+			$fieldName = $key;
+		}
+		
+		
+		/* If the source data has a value for the addres field, grab it */
+		if (isset($flexForm[$fieldName]['vDEF'])) {
+			$value = $flexForm[$fieldName]['vDEF'];
+		} else {
+			$value = '';
+		}
+        return $value;
+	}
+	
+	/**
+	 * Gets extConf from TYPO3_CONF_VARS and returns the specified key.
+	 *
+	 * @param	string	The key to look up in extConf.
+	 * @return	mixed	The value of the specified key.
+	 */
+	function getExtConf($key) {
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+		return $extConf[$key];
+	}
 	
 }
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_backend.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_backend.php']);
+}
+
+?>

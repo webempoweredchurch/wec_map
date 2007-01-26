@@ -26,8 +26,6 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
-require_once (PATH_t3lib.'class.t3lib_refindex.php');
-
 /**
  * Main address lookup class for the wec_map extension.  Looks up existing
  * values in cache tables or initiates service chain to perform a lookup.
@@ -40,7 +38,7 @@ require_once (PATH_t3lib.'class.t3lib_refindex.php');
  */
 class tx_wecmap_cache {
 
-	/*
+	/**
 	 * Looks up the latitude and longitude of a specified address. Cache tables
 	 * are searched first, followed by external service lookups.
 	 *
@@ -86,7 +84,7 @@ class tx_wecmap_cache {
 	
 	
 	
-	/*
+	/**
 	 * Returns the current geocoding status.  Geocoding may be successfull, 
 	 * failed, or may not have been attempted.
 	 *
@@ -117,7 +115,7 @@ class tx_wecmap_cache {
 	
 	
 	
-	/*
+	/**
 	 * Looks up the latitude and longitude of a specified address in the cache
 	 * table only.
 	 *
@@ -139,7 +137,7 @@ class tx_wecmap_cache {
 	}
 	
 	
-	/*
+	/**
 	 * Inserts an address with a specified latitude and longitdue into the cache table.
 	 *
 	 * @param	string		The street address.
@@ -170,7 +168,7 @@ class tx_wecmap_cache {
 		}		
 	} 
 	
-	/*
+	/**
 	 * Update a cached entry based on its address hash.
 	 *
 	 * @param	string		Address hash.
@@ -183,7 +181,7 @@ class tx_wecmap_cache {
 		$result = $GLOBALS['TYPO3_DB']->exec_UPDATEquery("tx_wecmap_cache", "address_hash='".$uid."'", $latlong);
 	}
 	
-	/*
+	/**
 	 * Deletes a cached entry based on its address hash.
 	 *
 	 * @return	none
@@ -192,7 +190,7 @@ class tx_wecmap_cache {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache", "address_hash='".$uid."'");
 	}
 	
-	/*
+	/**
 	 * Deletes all cached entries.
 	 * 
 	 * @return	none
@@ -201,7 +199,7 @@ class tx_wecmap_cache {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache","");
 	}
 	
-	/*
+	/**
 	 * Deletes a specified address from the cache table.
 	 *
 	 * @param	string		The street address.
@@ -215,7 +213,7 @@ class tx_wecmap_cache {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery("tx_wecmap_cache", "address_hash='".tx_wecmap_cache::hash($street, $city, $state, $zip, $country)."'");
 	}
 	
-	/*
+	/**
 	 * Creates the address hash, which acts as a unique identifier for the cache table.
 	 *
 	 * @param	string		The street address.

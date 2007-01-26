@@ -26,29 +26,20 @@
 *
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
-/**
- * Plugin 'Map' for the 'wec_map' extension.
- *
- * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
- */
 
-
-require_once('class.tx_wecmap_marker.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_marker.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 
 /**
  * Main class for the wec_map extension.  This class sits between the various 
- * frontend plugins and address lookup service to render map data.
+ * frontend plugins and address lookup service to render map data.  All map
+ * services implement this abstract class.
  * 
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */
 class tx_wecmap_map {
-	var $prefixId = 'tx_wecmap_map';		// Same as class name
-	var $scriptRelPath = 'class.tx_wecmap_map.php';	// Path to this script relative to the extension dir.
-	var $extKey = 'wec_map';	// The extension key.
-	var $pi_checkCHash = TRUE;
-
 	var $lat;
 	var $long;
 	var $zoom;
@@ -59,12 +50,15 @@ class tx_wecmap_map {
 	var $js;
 	var $key;
 	
-	/* 
+	/** 
 	 * Class constructor.  Creates javscript array.
-	 * @param	string		The Google Maps API Key
+	 * @param	string		The API Key for the map.
+	 * @param	string		The width of the map.
+	 * @param	string		The height of the map.
 	 * @param	string		The latitude for the center point on the map.
 	 * @param 	string		The longitude for the center point on the map.
 	 * @param	string		The initial zoom level of the map.
+	 * @todo	Is our default constructor even used?
 	 */
 	function tx_wecmap_map($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
 		$this->js = array();
@@ -83,19 +77,29 @@ class tx_wecmap_map {
 		
 	}
 	
-	function autoCenterAndZoom(){}
-	
-	
-	
+	/**
+	 * Stub for the drawMap function.  Individual map services should implement
+	 * this method to output their own HTML and Javascript.
+	 * 
+	 */
 	function drawMap() {}
 	
+	
+	/**
+	 * Stub for the autoCenterAndZoom function.  Individual map services should
+	 * implement this method to perform their own centering and zooming based
+	 * on map attributes.
+	 * @todo	We should be able to generically autoCenter, but not zoom.
+	 */
+	function autoCenterAndZoom(){}
+		
 	
 	/*
 	 * Sets the center value for the current map to specified values.
 	 *
-	 * @param	string	The latitude for the center point on the map.
-	 * @param	string	The longitude for the center point on the map.
-	 * @return	void		No return value needed.  Changes made to object model.
+	 * @param	float		The latitude for the center point on the map.
+	 * @param	float		The longitude for the center point on the map.
+	 * @return	none
 	 */
 	function setCenter($lat, $long) {
 		$this->lat  = $lat;
@@ -103,16 +107,22 @@ class tx_wecmap_map {
 		$this->zoom = $zoom;
 	}
 	
-	/*
+	/**
 	 * Sets the zoom value for the current map to specified values.
 	 *
-	 * @param	string	The initial zoom level for the map.
-	 * @return	void		No return value needed.  Changes made to object model.
+	 * @param	integer		The initial zoom level for the map.
+	 * @return	none
 	 */
 	function setZoom($zoom) {
 		$this->zoom = $zoom;
 	}
 	
+	/**
+	 * Calculates the bounds for the latitude and longitude based on the
+	 * defined markers.
+	 *
+	 * @return	array	Array of minLat, minLong, maxLat, and maxLong.
+	 */
 	function getLatLongBounds() {
 		$minLat = 360;
 		$maxLat = -360;
@@ -148,20 +158,24 @@ class tx_wecmap_map {
 		return array("maxLat" => $maxLat, "maxLong" => $maxLong, "minLat" => $minLat, "minLong" => $minLong);
 	}
 	
-	/*
+	/**
 	 * Adds an address to the currently list of markers rendered on the map.
 	 *
-	 * @param	string	The street address.
-	 * @param	string	The city name.
-	 * @param	string	The state or province.
-	 *	@param	string	The ZIP code.
-	 * @param	string	The description to be displayed in the marker popup.
-	 * @return	void		No return needed.  Address added to marker object.
+	 * @param	string		The street address.
+	 * @param	string		The city name.
+	 * @param	string		The state or province.
+	 * @param	string		The ZIP code.
+	 * @param	string		The country name.
+	 * @param	string		The title for the marker popup.
+	 * @param	string		The description to be displayed in the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
 	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
 
 		/* Geocode the address */
-		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
  
@@ -169,13 +183,18 @@ class tx_wecmap_map {
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);	
 	}
 	
-	/*
+	
+	/**
 	 * Adds a lat/long to the currently list of markers rendered on the map.
 	 *
-	 * @param	double	The latitude.
-	 * @param	double	The longitude.
-	 * @param	string	The description to be displayed in the marker popup.
-	 * @return	void		No return needed.  Lat/long added to marker object.
+	 * @param	float		The latitude.
+	 * @param	float		The longitude.
+	 * @param	string		The title for the marker popup.
+	 * @param	string		The description to be displayed in the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
 	function addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
 		$latlong = array();
@@ -193,9 +212,15 @@ class tx_wecmap_map {
 	}
 	
 	/**
-	 * Adds a marker by simple String
+	 * Adds an address string to the current list of markers rendered on the map.
 	 *
-	 * @return void
+	 * @param	string		The full address string.
+	 * @param	string		The title for the marker popup.
+	 * @param	string		The description to be displayed in the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
 	function addMarkerByString($string, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 		
@@ -209,7 +234,6 @@ class tx_wecmap_map {
 		$country = $address[3];
 		
 		/* Geocode the address */
-		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
  
@@ -217,12 +241,16 @@ class tx_wecmap_map {
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
 	
+	/**
+	 * Returns the classname of the marker class.
+	 * @return	string	The name of the marker class.
+	 * @todo	Is this actually needed or can we use a built in PHP function?
+	 */
 	function getMarkerClassName() {
 		return $this->markerClassName;
 	}
 	
 }
-
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_map.php'])	{

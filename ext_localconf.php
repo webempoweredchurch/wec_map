@@ -1,19 +1,11 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
-  ## Extending TypoScript from static template uid=43 to set up userdefined tag:
-t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
-	tt_content.CSS_editor.ch.tx_wecmap_pi1 = < plugin.tx_wecmap_pi1.CSS_editor
-',43);
-
-## Extending TypoScript from static template uid=43 to set up userdefined tag:
-t3lib_extMgm::addTypoScript($_EXTKEY,'editorcfg','
-	tt_content.CSS_editor.ch.tx_wecmap_pi2 = < plugin.tx_wecmap_pi2.CSS_editor
-',43);
-
+/* Add the frontend plugins */
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_wecmap_pi1.php','_pi1','list_type',1);
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi2/class.tx_wecmap_pi2.php','_pi2','list_type',1);
 
+/* Add the Geocoder.us geocoding service. */
 t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_geocoder',
 	array(
 	'title' => 'Geocoder.us Address Lookup',
@@ -33,7 +25,7 @@ t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_geocoder',
 	)
 );
 
-
+/* Add the Yahoo! geocoding service */
 t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_yahoo',
 	array(
 
@@ -54,6 +46,7 @@ t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_yahoo',
 	)
 );
 
+/* Add the Google geocoding service */
 t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_google',
 	array(
 
@@ -73,7 +66,8 @@ t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_google',
 		'className' => 'tx_wecmap_geocode_google',
 	)
 );	
-	
+
+/* Add the Worldkit geocoding service. */	
 t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_worldkit',
 	array(
 		'title' => 'Worldkit City Lookup',

@@ -26,14 +26,6 @@
 *
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
-/**
- * Plugin 'Map' for the 'wec_map' extension.
- *
- * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
- */
-
-define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
-require_once(PATH_tslib.'class.tslib_pibase.php');
 
 /**
  * Main class for the wec_map extension.  This class sits between the various 
@@ -42,12 +34,9 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
+ * @todo	Is this class even used or do we go directly to the google marker class?
  */
-class tx_wecmap_marker extends tslib_pibase {
-	var $prefixId = 'tx_wecmap_marker';		// Same as class name
-	var $scriptRelPath = 'class.tx_wecmap_marker.php';	// Path to this script relative to the extension dir.
-	var $extKey = 'wec_map';	// The extension key.
-
+class tx_wecmap_marker {
 	var $index;
 
 	var $latitude;
