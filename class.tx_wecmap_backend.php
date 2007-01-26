@@ -53,7 +53,6 @@ class tx_wecmap_backend {
 	 * @todo	Add ability for custom address fields, similar to drawMap.
 	 */
 	function checkGeocodeStatus($PA, &$fobj) {
-		
 		// if geocoding status is disabled, return
 		if(!tx_wecmap_backend::getExtConf('geocodingStatus')) return;
 
@@ -101,9 +100,10 @@ class tx_wecmap_backend {
 	 * @param	string	ZIP code portion of the address.
 	 * @param	string	Country portion of the address.
 	 * @return	string	HTML output of current geocoding status and editing form.
-	 * @todo	Add locallang labels.
 	 */
 	function drawGeocodeStatus($street, $city, $state, $zip, $country) {
+		global $LANG;
+		$LANG->includeLLFile('EXT:wec_map/locallang_db.php');
 		
 		$row = $address;
 
@@ -138,18 +138,18 @@ class tx_wecmap_backend {
 		
 		switch($status) {
 			case -1:
-				$status = "Geocoding failed.";
+				$status = $LANG->getLL('geocodeFailed');
 				break;
 			case 0:
-				$status = "Geocoding has not been performed for this address.";
+				$status = $LANG->getLL('geocodeNotPerformed');
 				break;
 			case 1:
-				$status = "Geocoding successful!";
+				$status = $LANG->getLL('geocodeSuccessful');
 				break;
 		}
 		
-		$form = '<label for="lat">Latitude</label> <input name="lat" value="'.$latlong['lat'].'" />
-				 <label for="tx_wecmap[long]">Longitude</label>  <input name="long" value="'.$latlong['long'].'" />
+		$form = '<label for="lat">'.$LANG->getLL('latitude').'</label> <input name="lat" value="'.$latlong['lat'].'" />
+				 <label for="tx_wecmap[long]">'.$LANG->getLL('longitude').'</label>  <input name="long" value="'.$latlong['long'].'" />
 				 <input type="hidden" name="original_lat" value="'.$latlong['lat'].'" />
 				 <input type="hidden" name="original_long" value="'.$latlong['long'].'" />';
 		

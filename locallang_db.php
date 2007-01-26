@@ -15,6 +15,12 @@ $LOCAL_LANG = Array (
 		'berecord_maplabel' => 'Map',
 		'berecord_geocodelabel' => 'Coords',
 		
+		'geocodeFailed' => 'Geocoding failed.',
+		'geocodeNotPerformed' => 'Geocoding has not been performed for this address.',
+		'geocodeSuccessful' => 'Geocoding successful!',
+		'latitude' => 'Latitude',
+		'longitude' => 'Longitude',		
+		
 		'tt_content.pi_flexform.title' => 'Title',
 		'tt_content.pi_flexform.description' => 'Description',
 		'tt_content.pi_flexform.street' => 'Street Address',
