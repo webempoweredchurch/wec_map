@@ -101,7 +101,7 @@ class tx_wecmap_backend {
 	 */
 	function drawGeocodeStatus($street, $city, $state, $zip, $country) {
 		global $LANG;
-		$LANG->includeLLFile('EXT:wec_map/locallang_db.php');
+		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 		
 		$row = $address;
 

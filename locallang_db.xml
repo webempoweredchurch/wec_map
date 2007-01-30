@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description></description>
+        <type></type>
+        <csh_table></csh_table>
+        <labelContext type="array">
+        </labelContext>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="tt_content.list_type_pi1">Simple Map</label>
+            <label index="tt_content.list_type_pi2">Frontend User Map</label>
+            <label index="tt_content.pi_flexform.sheet">Address</label>
+            <label index="berecord_maplabel">Map</label>
+            <label index="berecord_geocodelabel">Coords</label>
+            <label index="geocodeFailed">Geocoding failed.</label>
+            <label index="geocodeNotPerformed">Geocoding has not been performed for this address.</label>
+            <label index="geocodeSuccessful">Geocoding successful!</label>
+            <label index="latitude">Latitude</label>
+            <label index="longitude">Longitude</label>
+            <label index="tt_content.pi_flexform.title">Title</label>
+            <label index="tt_content.pi_flexform.description">Description</label>
+            <label index="tt_content.pi_flexform.street">Street Address</label>
+            <label index="tt_content.pi_flexform.city">City</label>
+            <label index="tt_content.pi_flexform.state">State</label>
+            <label index="tt_content.pi_flexform.zip">ZIP</label>
+            <label index="tt_content.pi_flexform.country">Country</label>
+            <label index="tt_content.pi_flexform.coord">Coords</label>
+            <label index="tt_content.pi_flexform.mapTitle">Map Details</label>
+            <label index="tt_content.pi_flexform.mapWidth">Width (pixels)</label>
+            <label index="tt_content.pi_flexform.mapHeight">Height (pixels)</label>
+            <label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
+            <label index="tt_content.pi_flexform.controlsTitle">Map Controls</label>
+            <label index="tt_content.pi_flexform.conType">Show Map Type</label>
+            <label index="tt_content.pi_flexform.conNone">None</label>
+            <label index="tt_content.pi_flexform.conScale">Show Scale</label>
+            <label index="tt_content.pi_flexform.conOverview">Show Overview Map</label>
+            <label index="tt_content.pi_flexform.conLargeMap">Size of Map Controls</label>
+            <label index="tt_content.pi_flexform.conLargeMapL">Large</label>
+            <label index="tt_content.pi_flexform.conLargeMapS">Small</label>
+            <label index="tt_content.pi_flexform.conLargeMapZ">Zoom only</label>
+            <label index="tt_content.pi_flexform.privacy">Sensitive geocode (no address)</label>
+            <label index="tt_content.pi_flexform.userGroup">Filter by FE user group (default: all)</label>
+        </languageKey>
+    </data>
+    <orig_hash type="array">
+        <languageKey index="default" type="array">
+            <label index="tt_content.list_type_pi1" type="integer">225796182</label>
+            <label index="tt_content.list_type_pi2" type="integer">120586834</label>
+            <label index="tt_content.pi_flexform.sheet" type="integer">232242979</label>
+            <label index="berecord_maplabel" type="integer">74399392</label>
+            <label index="berecord_geocodelabel" type="integer">221407392</label>
+            <label index="geocodeFailed" type="integer">89896938</label>
+            <label index="geocodeNotPerformed" type="integer">181728665</label>
+            <label index="geocodeSuccessful" type="integer">96358869</label>
+            <label index="latitude" type="integer">61926260</label>
+            <label index="longitude" type="integer">162847420</label>
+            <label index="tt_content.pi_flexform.title" type="integer">192455458</label>
+            <label index="tt_content.pi_flexform.description" type="integer">190479069</label>
+            <label index="tt_content.pi_flexform.street" type="integer">179304820</label>
+            <label index="tt_content.pi_flexform.city" type="integer">92079470</label>
+            <label index="tt_content.pi_flexform.state" type="integer">74066497</label>
+            <label index="tt_content.pi_flexform.zip" type="integer">70553491</label>
+            <label index="tt_content.pi_flexform.country" type="integer">93787849</label>
+            <label index="tt_content.pi_flexform.coord" type="integer">221407392</label>
+            <label index="tt_content.pi_flexform.mapTitle" type="integer">6747234</label>
+            <label index="tt_content.pi_flexform.mapWidth" type="integer">181225966</label>
+            <label index="tt_content.pi_flexform.mapHeight" type="integer">113932431</label>
+            <label index="tt_content.pi_flexform.apiKey" type="integer">247013010</label>
+            <label index="tt_content.pi_flexform.controlsTitle" type="integer">138144243</label>
+            <label index="tt_content.pi_flexform.conType" type="integer">150739092</label>
+            <label index="tt_content.pi_flexform.conNone" type="integer">112064895</label>
+            <label index="tt_content.pi_flexform.conScale" type="integer">96911390</label>
+            <label index="tt_content.pi_flexform.conOverview" type="integer">162836771</label>
+            <label index="tt_content.pi_flexform.conLargeMap" type="integer">182502642</label>
+            <label index="tt_content.pi_flexform.conLargeMapL" type="integer">61250356</label>
+            <label index="tt_content.pi_flexform.conLargeMapS" type="integer">40239204</label>
+            <label index="tt_content.pi_flexform.conLargeMapZ" type="integer">201008951</label>
+            <label index="tt_content.pi_flexform.privacy" type="integer">232400027</label>
+            <label index="tt_content.pi_flexform.userGroup" type="integer">217984635</label>
+        </languageKey>
+    </orig_hash>
+    <orig_text type="array">
+        <languageKey index="default" type="array">
+        </languageKey>
+    </orig_text>
+</T3locallang>

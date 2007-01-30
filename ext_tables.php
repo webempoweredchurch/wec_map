@@ -21,8 +21,8 @@ $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1']='pi_fle
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi2']='pi_flexform';
 
 /* Adds the plugins and flexforms to the TCA */
-t3lib_extMgm::addPlugin(Array('LLL:EXT:wec_map/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY.'_pi1'),'list_type');
-t3lib_extMgm::addPlugin(Array('LLL:EXT:wec_map/locallang_db.php:tt_content.list_type_pi2', $_EXTKEY.'_pi2'),'list_type');
+t3lib_extMgm::addPlugin(Array('LLL:EXT:wec_map/locallang_db.xml:tt_content.list_type_pi1', $_EXTKEY.'_pi1'),'list_type');
+t3lib_extMgm::addPlugin(Array('LLL:EXT:wec_map/locallang_db.xml:tt_content.list_type_pi2', $_EXTKEY.'_pi2'),'list_type');
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', 'FILE:EXT:wec_map/pi1/flexform_ds.xml');
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi2', 'FILE:EXT:wec_map/pi2/flexform_ds.xml');
 
@@ -35,7 +35,7 @@ if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 	$mapTCA = array (
 		'tx_wecmap_map' => array (		
 			'exclude' => 1,		
-			'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_maplabel',		
+			'label' => 'LLL:EXT:wec_map/locallang_db.xml:berecord_maplabel',		
 			'config' => array (
 				'type' => 'passthrough',
 				'form_type' => 'user',
@@ -64,7 +64,7 @@ if(tx_wecmap_backend::getExtConf('geocodingStatus')) {
 	$geocodeTCA = array (
 		'tx_wecmap_geocode' => array (
 			'exclude' => 1,
-			'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_geocodelabel',
+			'label' => 'LLL:EXT:wec_map/locallang_db.xml:berecord_geocodelabel',
 			'config' => array(
 				'type' => 'passthrough',
 				'form_type' => 'user',

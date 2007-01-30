@@ -3,13 +3,13 @@
 		<default>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapTitle</sheetTitle>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapTitle</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<apiKey>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.apiKey</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.apiKey</label>
 							<config>
 								<type>input</type>
 								<size>100</size>
@@ -19,7 +19,7 @@
 						
 					<mapWidth>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapWidth</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapWidth</label>
 							<config>
 								<type>input</type>
 								<size>5</size>
@@ -29,7 +29,7 @@
 						
 					<mapHeight>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.mapHeight</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapHeight</label>
 							<config>
 								<type>input</type>
 								<size>5</size>
@@ -39,7 +39,7 @@
 					
 					<privacy>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.privacy</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.privacy</label>
 							<config>
 								<type>check</type>
 							</config>
@@ -48,7 +48,7 @@
 					
 					<userGroups>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.userGroup</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.userGroup</label>
 							<config>
 								<type>select</type>
 								<foreign_table>fe_groups</foreign_table>
@@ -79,30 +79,30 @@
 		<mapControls>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.controlsTitle</sheetTitle>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.controlsTitle</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<mapControlSize>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conLargeMap</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMap</label>
 							<config>
 								<type>radio</type>
 								<items type="array">
 									<numIndex index="0" type="array">
-										<numIndex index="0">LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conLargeMapL</numIndex>
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMapL</numIndex>
 										<numIndex index="1">large</numIndex>
 									</numIndex>
 									<numIndex index="1" type="array">
-										<numIndex index="0">LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conLargeMapS</numIndex>
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMapS</numIndex>
 										<numIndex index="1">small</numIndex>
 									</numIndex>
 									<numIndex index="2" type="array">
-										<numIndex index="0">LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conLargeMapZ</numIndex>
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMapZ</numIndex>
 										<numIndex index="1">zoomonly</numIndex>
 									</numIndex>
 									<numIndex index="3" type="array">
-										<numIndex index="0">LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conNone</numIndex>
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conNone</numIndex>
 										<numIndex index="1">none</numIndex>
 									</numIndex>
 								</items>
@@ -113,7 +113,7 @@
 						
 					<overviewMap>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conOverview</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conOverview</label>
 							<config>
 								<type>check</type>
 							</config>
@@ -122,7 +122,7 @@
 				
 					<scale>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conScale</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conScale</label>
 							<config>
 								<type>check</type>
 							</config>
@@ -131,7 +131,7 @@
 							
 					<mapType>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conType</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conType</label>
 							<config>
 								<type>check</type>
 							</config>
