@@ -140,7 +140,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(TYPO3_MODE == 'BE') {
 			global $LANG;
 		} else {
-			require_once(PATH_typo3.'sysext/lang/lang.php');
+			require_once(t3lib_extMgm::extPath('lang').'lang.php');			
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 		}
