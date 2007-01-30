@@ -124,6 +124,16 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			$where .= " pid IN (". $pid .")";
 		}
 		
+		// filter out records that shouldn't be shown, e.g. deleted, hidden
+		$filter = $this->cObj->enableFields('fe_users');
+		
+		// if the where clause is empty, add something generic to not mess up the
+		// enableFields part.
+		if(empty($where)) {
+			$where = '1=1';
+		}
+		$where .= $filter;
+
 		/* Select all frontend users */		
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", $where);
 		
