@@ -134,7 +134,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string	HTML and Javascript markup to draw the map.
 	 */
 	function drawMap() {		
-		
+
 		/* Initialize locallang.  If we're in the backend context, we're fine.
 		   If we're in the frontend, then we need to manually set it up. */
 		if(TYPO3_MODE == 'BE') {

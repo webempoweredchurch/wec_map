@@ -6,11 +6,18 @@ plugin.tx_wecmap_pi1 {
 	controls.showOverviewMap =
 	controls.showMapType = 
 	controls.showScale = 
-	title = 
-	description = 
-	street = 
-	city = 
-	zip = 
-	state = 
-	country = 
+	markers.1 {
+		title = 
+		description = 
+		street = 
+		city = 
+		zip = 
+		state = 
+		country =		
+	}
+	markers.2 {
+		title =
+		description =
+		address =
+	}
 }

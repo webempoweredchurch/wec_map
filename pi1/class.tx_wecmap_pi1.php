@@ -66,27 +66,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		
 		// get configuration from flexform or TS. Flexform values take
 		// precedence.
-		$title = $this->pi_getFFvalue($piFlexForm, "title", "default");
-		empty($title) ? $title = $conf['title']:null;
-		
-		$description = $this->pi_getFFvalue($piFlexForm, "description", "default");
-		empty($description) ? $description = $conf['description']:null;
-		
-		$street = $this->pi_getFFvalue($piFlexForm, "street", "default");
-		empty($street) ? $street = $conf['street']:null;
-		
-		$city = $this->pi_getFFvalue($piFlexForm, "city", "default");
-		empty($city) ? $city = $conf['city']:null;
-		
-		$state = $this->pi_getFFvalue($piFlexForm, "state", "default");
-		empty($state) ? $state = $conf['state']:null;
-		
-		$zip = $this->pi_getFFvalue($piFlexForm, "zip", "default");
-		empty($zip) ? $zip = $conf['zip']:null;
-		
-		$country = $this->pi_getFFvalue($piFlexForm, "country", "default");
-		empty($country) ? $country = $conf['country']:null;
-		
 		$apiKey = $this->pi_getFFvalue($piFlexForm, "apiKey", "mapConfig");
 		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
 
@@ -108,6 +87,15 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 
+		// get this from flexform only. If empty, we check the TS, see below.
+		$street = $this->pi_getFFvalue($piFlexForm, "street", "default");
+		$city = $this->pi_getFFvalue($piFlexForm, "city", "default");
+		$state = $this->pi_getFFvalue($piFlexForm, "state", "default");
+		$zip = $this->pi_getFFvalue($piFlexForm, "zip", "default");
+		$country = $this->pi_getFFvalue($piFlexForm, "country", "default");
+		$title = $this->pi_getFFvalue($piFlexForm, "title", "default");
+		$description = $this->pi_getFFvalue($piFlexForm, "description", "default");
+
 		/* Create the map class and add markers to the map */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className = t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
@@ -126,18 +114,48 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		
-		// put all the data into an array
-		$data['city'] = $city;
-		$data['state'] = $state;
-		$data['street'] = $street;
-		$data['zip'] = $zip;
-		$data['country'] = $country;
-		$data['title'] = '<h1>'.$title.'</h1>';
 		
-		if(empty($description)) $description = $this->makeDescription($data);
+		// determine if an address has been set through flexforms. If not, process TS		
+		if(empty($zip) && empty($state) && empty($city)) {
+			
+			// loop through markers
+			foreach($conf['markers.'] as $marker) {
+				
+				// just modify the marker title and wrap it in h1 tags
+				$marker['title'] = '<h1>'. $marker['title']  .'</h1>';
+				
+				// determine if address was entered by string or separated
+				if(array_key_exists('address', $marker)) {
+					
+					// add address by string
+					$map->addMarkerByString($marker['address'], $marker['title'], $marker['description']);
+
+				} else {
+					// if there is no description set in that part of TS, make one as defined in other
+					// places
+					if(empty($marker['description'])) $marker['description'] = $this->makeDescription($marker);
+
+					// add the marker to the map
+					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'], 
+											 $marker['zip'], $marker['country'], $marker['title'], 
+											 $marker['description']);				
+				}
+			}
+		} else {		
+			// put all the data into an array
+			$data['city'] = $city;
+			$data['state'] = $state;
+			$data['street'] = $street;
+			$data['zip'] = $zip;
+			$data['country'] = $country;
+			$data['title'] = '<h1>'.$title.'</h1>';
 		
-		// add the marker to the map
-		$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);
+			if(empty($description)) $description = $this->makeDescription($data);
+		
+			// add the marker to the map
+			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);			
+		}
+
 		
 		// draw the map
 		$content = $map->drawMap();
