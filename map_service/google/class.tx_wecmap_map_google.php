@@ -340,10 +340,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * 
 	 * @access	private	
 	 * @return	none
-	 * @todo	Move centering code to main map object.
  	 */
 	function autoCenterAndZoom() {	
 		
+		/* Get center and lat/long spans from parent object */
 		$latLongData = $this->getLatLongData();
 		
 		$lat = $latLongData['lat']; /* Center latitude */
@@ -353,18 +353,19 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	
 		//$pixelsPerLatDegree = pow(2, 17-$zoom);
 		//$pixelsPerLongDegree = pow(2,17 - $zoom) *  0.77162458338772;
-		$wZoom = log($this->width, 2) +  log($longSpan, 2);
-		$hZoom = log($this->height, 2) + log($latSpan, 2);
-
-		$zoom = ceil(($wZoom > $hZoom) ? $wZoom : $hZoom);
+		$wZoom = log($this->width, 2) - log($longSpan, 2);
+		$hZoom = log($this->height, 2) - log($latSpan, 2);
 		
-		/* Don't zoom in too much */
+		/* Pick the lower of the zoom levels since we'd rather show too much */
+		$zoom = floor(($wZoom < $hZoom) ? $wZoom : $hZoom);
+		
+		/* Don't zoom in too far if we only have a single marker.*/
 		if ($zoom < 2) {
 			$zoom = 2;
 		}
-	
+		
 		$this->setCenter($lat, $long);
-		$this->setZoom(17 - $zoom);
+		$this->setZoom($zoom);
 	}
 	
 	/**
