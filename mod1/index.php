@@ -309,7 +309,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				break;
 		}
 		
-		/* @todo	Localize! */
 		$content[] = '<p style="margin-bottom:15px;">';
 		$content[] = $LANG->getLL('apiInstructions');
 		$content[] = '</p>';
