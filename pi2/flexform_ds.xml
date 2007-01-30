@@ -101,7 +101,12 @@
 										<numIndex index="0">LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conLargeMapZ</numIndex>
 										<numIndex index="1">zoomonly</numIndex>
 									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.php:tt_content.pi_flexform.conNone</numIndex>
+										<numIndex index="1">none</numIndex>
+									</numIndex>
 								</items>
+								<default>3</default>
 							</config>
 						</TCEforms>
 					</mapControlSize>

@@ -37,6 +37,7 @@ $LOCAL_LANG = Array (
 
 		'tt_content.pi_flexform.controlsTitle' => 'Map Controls',
 		'tt_content.pi_flexform.conType' => 'Show Map Type',
+		'tt_content.pi_flexform.conNone' => 'None',
 		'tt_content.pi_flexform.conScale' => 'Show Scale',	
 		'tt_content.pi_flexform.conOverview' => 'Show Overview Map',
 		'tt_content.pi_flexform.conLargeMap' => 'Size of Map Controls',

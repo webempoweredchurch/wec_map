@@ -81,7 +81,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		empty($pid) ? $pid = $conf['pid']:null;
 
 		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
-		empty($mapControlSize) ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
+		(empty($mapControlSize) || $mapControlSize == 'none') ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
 		
 		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
 		empty($overviewMap) ? $overviewMap = $conf['controls.']['showOverviewMap']:null;
