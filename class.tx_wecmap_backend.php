@@ -50,7 +50,6 @@ class tx_wecmap_backend {
 	 * @param	array	Array with information about the current field.
 	 * @param	object	Parent object.  Instance of t3lib_tceforms.
 	 * @return	string	HTML output of current geocoding status and editing form.
-	 * @todo	Add ability for custom address fields, similar to drawMap.
 	 */
 	function checkGeocodeStatus($PA, &$fobj) {
 		// if geocoding status is disabled, return
@@ -74,7 +73,6 @@ class tx_wecmap_backend {
 	 * @param	array	Array with information about the current FlexForm.
 	 * @param	object	Parent object.  Instance of t3lib_tceforms.
 	 * @return	string	HTML output of current geocoding status and editing form.
-	 * @todo	Add ability for custom address fields, similar to drawMap.
 	 * @todo	Does our method of digging into FlexForms mess up localization?
 	 */
 	function checkGeocodeStatusFF($PA, &$fobj) {
@@ -261,8 +259,21 @@ class tx_wecmap_backend {
 	 * @return	mixed	The value of the specified key.
 	 */
 	function getExtConf($key) {
+		/* Make an instance of the Typoscript parser */
+		require_once(PATH_t3lib.'class.t3lib_tsparser.php');
+		$tsParser = t3lib_div::makeInstance('t3lib_TSparser');
+		
+		/* Unserialize the TYPO3_CONF_VARS and extract the value using the parser */
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-		return $extConf[$key];
+		$valueArray = $tsParser->getVal($key, $extConf);
+		
+		if (is_array($valueArray)) {
+			$returnValue = $valueArray[0];
+		} else {
+			$returnValue = '';
+		}
+	
+		return $returnValue;
 	}
 	
 }

@@ -37,7 +37,8 @@ if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 			'exclude' => 1,		
 			'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_maplabel',		
 			'config' => array (
-				'type' => 'user',
+				'type' => 'passthrough',
+				'form_type' => 'user',
 				'userFunc' => 'tx_wecmap_backend->drawMap',
 				'params' => array (
 					'addressFields' => array (
@@ -65,7 +66,8 @@ if(tx_wecmap_backend::getExtConf('geocodingStatus')) {
 			'exclude' => 1,
 			'label' => 'LLL:EXT:wec_map/locallang_db.php:berecord_geocodelabel',
 			'config' => array(
-				'type' => 'user',
+				'type' => 'passthrough',
+				'form_type' => 'user',
 				'userFunc' => 'tx_wecmap_backend->checkGeocodeStatus',
 				'params' => array (
 					'addressFields' => array (

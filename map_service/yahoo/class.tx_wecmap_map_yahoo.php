@@ -26,22 +26,16 @@
 *
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
-/**
- * Plugin 'Map' for the 'wec_map' extension.
- *
- * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
- */
-
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
 
 /**
- * Main class for the wec_map extension.  This class sits between the various 
- * frontend plugins and address lookup service to render map data.
- * 
+ * Map implementation for the Yahoo Map mapping service. 
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
+ * @todo	Create this class!
  */
 class tx_wecmap_map_yahoo extends tx_wecmap_map {
 	var $key = 'webempoweredchurch';

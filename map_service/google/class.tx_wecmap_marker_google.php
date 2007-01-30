@@ -26,18 +26,12 @@
 *
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
-/**
- * Plugin 'Map' for the 'wec_map' extension.
- *
- * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
- */
 
-define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
-require_once(PATH_tslib.'class.tslib_pibase.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_marker.php');
+
 
 /**
- * Main class for the wec_map extension.  This class sits between the various 
- * frontend plugins and address lookup service to render map data.
+ * Marker implementation for the Google Maps mapping service.
  * 
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
@@ -54,6 +48,19 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	var $color;
 	var $strokeColor;
 	
+	/**
+	 * Constructor for the Google Maps marker class.
+	 *
+	 * @access	public
+	 * @param	integer		Index within the overall array of markers.
+	 * @param	float		Latitude of the marker location.
+	 * @param	float		Longitude of the marker location.
+	 * @param	string		Title of the marker.
+	 * @param	string		Description of the marker.
+	 * @param	string		Unused for Google Maps.
+	 * @param	string		Unused for Google Maps.
+	 * @return	none
+	 */
 	function tx_wecmap_marker_google($index, $latitude, $longitude, $title, $description, $color='0xFF0000', $strokeColor='0xFFFFFF') {
 		$this->index = $index;
 		
@@ -66,11 +73,25 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$this->longitude = $longitude;
 	}
 	
+	
+	/**
+	 * Creates the Javascript to add a marker to the page.
+	 * 
+	 * @access public
+	 * @return	string	The Javascript to add a marker to the page.
+	 */
 	function writeJS() {
 		return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, "'.$this->title.$this->description.'")';
 		
 	}
 	
+	/**
+	 * Converts newlines to <br/> tags.
+	 *
+	 * @access	private
+	 * @param	string		The input string to filtered.
+	 * @return	string		The converted string.
+	 */
 	function filterNL2BR($input) {
 		$order  = array("\r\n", "\n", "\r");
 		$replace = '<br />';			
@@ -82,8 +103,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_marker.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_marker.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/map_service/google/class.tx_wecmap_marker_google.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/map_service/google/class.tx_wecmap_marker_google.php']);
 }
 
 

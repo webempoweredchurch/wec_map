@@ -89,9 +89,40 @@ class tx_wecmap_map {
 	 * Stub for the autoCenterAndZoom function.  Individual map services should
 	 * implement this method to perform their own centering and zooming based
 	 * on map attributes.
-	 * @todo	We should be able to generically autoCenter, but not zoom.
 	 */
 	function autoCenterAndZoom(){}
+	
+	/**
+	 * Calculates the center and lat/long spans from the current markers.
+	 *
+	 * @access	private
+	 * @return	array		Array of lat/long center and spans.  Array keys
+	 *						are lat, long, latSpan, and longSpan.
+	 */
+	function getLatLongData() {
+		$latlong = $this->getLatLongBounds();
+		
+		$minLat = $latlong['minLat'];
+		$maxLat = $latlong['maxLat'];
+		$minLong = $latlong['minLong'];
+		$maxLong = $latlong['maxLong'];
+		
+		/* Calculate the span of the lat/long boundaries */
+		$latSpan = $maxLat-$minLat;
+		$longSpan = $maxLong-$minLong;
+		
+		/* Calculate center lat/long based on boundary markers */
+		$lat = ($minLat + $maxLat) / 2;
+		$long = ($minLong + $maxLong) / 2;
+		
+		return array(
+			'lat' => $lat, 
+			'long' => $long,
+			'latSpan' => $latSpan,
+			'longSpan' => $longSpan,
+		);
+		
+	}
 		
 	
 	/*

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for Google Maps mapping service.</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="error_noApiKey">
+				<![CDATA[
+				No Maps API key has been set for the wec_map extension. Please make sure
+				that you have set an API key either in the Extension Manager, or via TypoScript or 
+				Flexform. If you don\'t have an API key yet, you may obtain one free of charge from
+				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.
+				]]>
+			</label>
+			<label index="error_nothingToDisplay">
+				There doesn't seem to be anything to display. Make sure the map is
+				configured correctly and there are users or markers set.
+			</label>
+		</languageKey>
+	</data>
+</T3locallang>

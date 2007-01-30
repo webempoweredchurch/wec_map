@@ -26,19 +26,13 @@
 *
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
-/**
- * Plugin 'Map' for the 'wec_map' extension.
- *
- * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
- */
-
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
-require_once('class.tx_wecmap_marker_google.php');
+require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_marker_google.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
 
 /**
- * Main class for the wec_map extension.  This class sits between the various 
- * frontend plugins and address lookup service to render map data.
+ * Map implementation for the Google Maps mapping service.
  * 
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
@@ -58,8 +52,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	
 	var $markerClassName = 'tx_wecmap_marker_google';
 	
-	/* 
+	/** 
 	 * Class constructor.  Creates javscript array.
+	 * @access	public
 	 * @param	string		The Google Maps API Key
 	 * @param	string		The latitude for the center point on the map.
 	 * @param 	string		The longitude for the center point on the map.
@@ -72,8 +67,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		if(!$key) {
 			// get key from configuration
-			$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-			$this->key=$conf['apiKey.']['google'];
+			$this->key = tx_wecmap_backend::getExtConf('apiKey.google');			
 		} else {
 			$this->key = $key;			
 		}
@@ -92,9 +86,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}	
 	
 	/**
-	 * Enables controls for Google Maps, for example zoom level slider or mini map.
+	 * Enables controls for Google Maps, for example zoom level slider or mini 
+	 * map. Valid controls are largeMap, smallMap, scale, smallZoom, 
+	 * overviewMap, and mapType.
 	 *
-	 * @return void
+	 * @access	public
+	 * @param	string	The name of the control to add.
+	 * @return	none
+	 *
 	 **/
 	function addControl($name) {
 		switch ($name)
@@ -127,13 +126,31 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 	}
 	
-	function drawMap() {
+	/**
+	 * Main function to draw the map.  Outputs all the necessary HTML and
+	 * Javascript to draw the map in the frontend or backend.
+	 *
+	 * @access	public
+	 * @return	string	HTML and Javascript markup to draw the map.
+	 */
+	function drawMap() {		
 		
-		$ttd = $this->hasThingsToDisplay();
-		$hasKey = $this->hasAPIKey();
+		/* Initialize locallang.  If we're in the backend context, we're fine.
+		   If we're in the frontend, then we need to manually set it up. */
+		if(TYPO3_MODE == 'BE') {
+			global $LANG;
+		} else {
+			require_once(PATH_typo3.'sysext/lang/lang.php');
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init($GLOBALS['TSFE']->config['config']['language']);
+		}
+		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 		
+		$hasKey = $this->hasKey();
+		$hasThingsToDisplay = $this->hasThingsToDisplay();
+				
 		// make sure we have markers to display and an API key
-		if ($ttd && $hasKey) { 						
+		if ($hasThingsToDisplay && $hasKey) { 						
 			
 			if(!isset($this->lat) or !isset($this->long)) {
 				$this->autoCenterAndZoom();
@@ -182,22 +199,40 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
 		} else if (!$hasKey) {
-			$error = '<span>No Maps API key has been set for the wec_map extension. Please make sure
-				that you have set an API key either in the Extension Manager, or via TypoScript or 
-				Flexform. If you don\'t have an API key yet, you may obtain one free of charge from
-				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.</span>';
+			/**
+			 * @todo	Re-enable this line when locallang processing works.
+			 */
+			$error = '<span>'.$LANG->getLL('error_noApiKey').'</span>';
 			return $error;
-		} else if (!$ttd) {
-			$error = '<span>There doesn\'t seem to be anything to display. Make sure the map is
-				configured correctly and there are users or markers set.</span>';
+		} else if (!$hasThingsToDisplay) {
+			/**
+			 * @todo	Re-enable this line when locallang processing works.
+			 */
+			$error = '<span>'.$LANG->getLL('error_nothingToDisplay').'</span>';
 			return $error;
 		}
 	}
 	
+	
+	/**
+	 * Creates the overall map div.
+	 * 
+	 * @access	private
+	 * @param	string		ID of the div tag.
+	 * @param	integer		Width of the map in pixels.
+	 * @param	integer		Height of the map in pixels.
+	 * @return	string		The HTML for the map div tag.
+	 */
 	function mapDiv($id, $width, $height) {
 		return '<div id="'.$id.'" style="width:'.$width.'px; height:'.$height.'px;"></div>';
 	}
 	
+	/**
+	 * Creates the marker creation function in Javascript.
+	 * 
+	 * @access	private
+	 * @return	string		The Javascript code for the marker creation function.
+	 */
 	function js_createMarker() {
 		return 'function createMarker(point, icon, text) {
 					var marker = new GMarker(point, icon);
@@ -208,32 +243,86 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				}';
 	}
 	
+	/**
+	 * Creates the beginning of the drawMap function in Javascript.
+	 *
+	 * @access	private
+	 * @return	string	The beginning of the drawMap function in Javascript.
+	 */
 	function js_drawMapStart() {
 		return 'function drawMap() {						
 					if (GBrowserIsCompatible()) {';
 	}
 	
+	/**
+	 * Creates the end of the drawMap function in Javascript.
+	 *
+	 * @access	private
+	 * @return	string	The end of the drawMap function in Javascript.
+	 */
 	function js_drawMapEnd() {
 		return '} }';
 	}
 	
+	/**
+	 * Creates the Google Maps Javascript object.
+	 * @access	private
+	 * @param	string		Name of the div that this map is attached to.
+							Will also become the name of the map.
+	 * @return	string		Javascript for the Google Maps object.
+	 */
 	function js_newGMap2($name) {
 		return 'var '.$name.' = new GMap2(document.getElementById("'.$name.'"));';
 	}	
 	
+	/**
+	 * Creates the Marker Manager Javascript object.
+	 *
+	 * @access	private
+	 * @param	string		Name of the marker manager.
+	 * @param	string		Name of the map this marker manager applies to.
+	 * @return	string		Javascript for the marker manager object.
+	 */
 	function js_newGMarkerManager($mgrName, $map) {
 		return 'var ' . $mgrName . ' = new GMarkerManager(' . $map . ');';	
 	}	
 	
+	/**
+	 * Creates the map's center point in Javascript.
+	 *
+	 * @access	private
+	 * @param	string		Name of the map to center.
+	 * @param	float		Center latitude.
+	 * @param	float		Center longitude.
+	 * @param	integer		Initial zoom level.
+	 * @return	string		Javascript to center and zoom the specified map.
+	 */
 	function js_setCenter($name, $lat, $long, $zoom) {
 		return $name.'.setCenter(new GLatLng('.$lat.', '.$long.'), '.$zoom.');';
 	}
 	
+	
+	/**
+	 * Creates Javascript to add map controls.
+	 *
+	 * @access	private
+	 * @param	string		Name of the map.
+	 * @param	string		Name of the control.
+	 * @param	string		Javascript to add a control to the map.
+	 */
 	function js_addControl($name, $control) {
 		return $name.'.addControl('.$control.');';
 	}
 	
+	/**
+	 * Creates Javascript to define marker icons.
+	 * 
+	 * @access	private
+	 * @return	string		Javascript definitions for marker icons.
+	 * @todo	Add support for custom icons.
+	 */
 	function js_icon() {
+		/* If we're in the backend, get an absolute path.  Frontend can use a relative path. */
 		if (TYPO3_MODE=='BE')	{
 			$path = t3lib_div::getIndpEnv('TYPO3_SITE_URL').t3lib_extMgm::siteRelPath('wec_map');
 		} else {
@@ -251,46 +340,40 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 
 
-	/*
- 	 * Sets the center and zoom values for the current map dynamically, based
- 	 * on the markers to be displayed on the map.
- 	 *
- 	 * @return	void		No return value needed.  Changes made to object model.
+	/**
+	 * Sets the center and zoom values for the current map dynamically, based
+	 * on the markers to be displayed on the map.
+	 * 
+	 * @access	private	
+	 * @return	none
+	 * @todo	Move centering code to main map object.
  	 */
 	function autoCenterAndZoom() {	
-		$latlong = $this->getLatLongBounds();
-
-		$minLat = $latlong['minLat'];
-		$maxLat = $latlong['maxLat'];
-		$minLong = $latlong['minLong'];
-		$maxLong = $latlong['maxLong'];
 		
-		/* Calculate the span of the lat/long boundaries */
-		$latSpan = $maxLat-$minLat;
-		$longSpan = $maxLong-$minLong;
+		$latLongData = $this->getLatLongData();
 		
-		/* Calculate center lat/long based on boundary markers */
-		$lat = ($minLat + $maxLat) / 2;
-		$long = ($minLong + $maxLong) / 2;
+		$lat = $latLongData['lat']; /* Center latitude */
+		$long = $latLongData['long']; /* Center longitude */
+		$latSpan = $latLongData['latSpan']; /* Total latitude the map covers */
+		$longSpan = $latLongData['longSpan']; /* Total longitude the map covers */
 	
 		//$pixelsPerLatDegree = pow(2, 17-$zoom);
 		//$pixelsPerLongDegree = pow(2,17 - $zoom) *  0.77162458338772;
-		$wZoom = 17 - log($this->width, 2) +  log($longSpan, 2);
-		$hZoom = 17 - log($this->height, 2) + log($latSpan, 2);
+		$wZoom = log($this->width, 2) +  log($longSpan, 2);
+		$hZoom = log($this->height, 2) + log($latSpan, 2);
 
 		$zoom = ceil(($wZoom > $hZoom) ? $wZoom : $hZoom);
-
+		
+		/* Don't zoom in too much */
 		if ($zoom < 2) {
 			$zoom = 2;
 		}
 	
 		$this->setCenter($lat, $long);
-		
-		
 		$this->setZoom(17 - $zoom);
 	}
 	
-	/*
+	/**
      * Checks if a map has markers or a 
      * specific center.Otherwise, we have nothing 
      * to draw.
@@ -320,7 +403,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 *
 	 * @return boolean
 	 **/
-	function hasAPIKey() {
+	function hasKey() {
 		if($this->key) {
             return true;
         } else {

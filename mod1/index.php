@@ -329,10 +329,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return		string		The Google Maps API key.
 	 */
 	function getApiKey() {
-		global $TYPO3_CONF_VARS;
 		
-		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$this->extKey]);
-		$apiKey = $extConf['apiKey.']['google'];
+		require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
+		$apiKey = tx_wecmap_backend::getExtConf('apiKey.google');			
 		
 		return $apiKey;
 	}
