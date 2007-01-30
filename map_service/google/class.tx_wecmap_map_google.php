@@ -360,8 +360,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$zoom = floor(($wZoom < $hZoom) ? $wZoom : $hZoom);
 		
 		/* Don't zoom in too far if we only have a single marker.*/
-		if ($zoom < 2) {
-			$zoom = 2;
+		if ($zoom > 15) {
+			$zoom = 15;
 		}
 		
 		$this->setCenter($lat, $long);
