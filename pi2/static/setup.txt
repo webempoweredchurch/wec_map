@@ -1,4 +1,14 @@
 plugin.tx_wecmap_pi2 {
+
+	apiKey = 
+	height = 500
+	width = 500
+	controls.mapControlSize = 
+	controls.showOverviewMap = 
+	controls.showMapType = 
+	controls.showScale = 
+	userGroups =
+	pid = 
 	
 	marker {
 		title = TEXT

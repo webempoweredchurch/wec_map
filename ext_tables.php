@@ -26,9 +26,9 @@ t3lib_extMgm::addPlugin(Array('LLL:EXT:wec_map/locallang_db.php:tt_content.list_
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi1', 'FILE:EXT:wec_map/pi1/flexform_ds.xml');
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi2', 'FILE:EXT:wec_map/pi2/flexform_ds.xml');
 
-/* @todo	Add static TS template for Simple Map */
-//t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","Simple Map");
-t3lib_extMgm::addStaticFile($_EXTKEY,"static/fe_user_map/","Frontend User Map");
+/* Add static TS template for plugins */
+t3lib_extMgm::addStaticFile($_EXTKEY,"pi2/static/","Frontend User Map");
+t3lib_extMgm::addStaticFile($_EXTKEY,"pi1/static/","Simple Map");
 
 /* If we want to show a map in frontend user records, add it to the TCA */
 if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
