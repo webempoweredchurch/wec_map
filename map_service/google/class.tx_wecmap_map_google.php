@@ -199,15 +199,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
 		} else if (!$hasKey) {
-			/**
-			 * @todo	Re-enable this line when locallang processing works.
-			 */
 			$error = '<span>'.$LANG->getLL('error_noApiKey').'</span>';
 			return $error;
 		} else if (!$hasThingsToDisplay) {
-			/**
-			 * @todo	Re-enable this line when locallang processing works.
-			 */
 			$error = '<span>'.$LANG->getLL('error_nothingToDisplay').'</span>';
 			return $error;
 		}
