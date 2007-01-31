@@ -148,9 +148,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
-				
+		$hasHeightWidth = $this->hasHeightWidth();
+		
 		// make sure we have markers to display and an API key
-		if ($hasThingsToDisplay && $hasKey) { 						
+		if ($hasThingsToDisplay && $hasKey && $hasHeightWidth) { 						
 			
 			if(!isset($this->lat) or !isset($this->long)) {
 				$this->autoCenterAndZoom();
@@ -199,10 +200,13 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
 		} else if (!$hasKey) {
-			$error = '<span>'.$LANG->getLL('error_noApiKey').'</span>';
+			$error = '<p>'.$LANG->getLL('error_noApiKey').'</p>';
 			return $error;
 		} else if (!$hasThingsToDisplay) {
-			$error = '<span>'.$LANG->getLL('error_nothingToDisplay').'</span>';
+			$error = '<p>'.$LANG->getLL('error_nothingToDisplay').'</p>';
+			return $error;
+		} else if (!$hasHeightWidth) {
+			$error = '<p>'.$LANG->getLL('error_noHeightWidth').'</p>';
 			return $error;
 		}
 	}
@@ -402,6 +406,19 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if($this->key) {
             return true;
         } else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Checks whether the map has a height and width set.
+	 *
+	 * @return boolean
+	 **/
+	function hasHeightWidth() {
+		if(!empty($this->width) && !empty($this->height)) {
+			return true;
+		} else {
 			return false;
 		}
 	}

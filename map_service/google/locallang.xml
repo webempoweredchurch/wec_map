@@ -18,6 +18,10 @@
 				There doesn't seem to be anything to display. Make sure the map is
 				configured correctly and there are users or markers set.
 			</label>
+			<label index="error_noHeightWidth">
+				The map didn't have a height or width set. Make sure that height and width
+				are set correctly in either the Flexform or via TypoScript.
+			</label>
 		</languageKey>
 	</data>
 </T3locallang>
