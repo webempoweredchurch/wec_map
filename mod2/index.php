@@ -270,7 +270,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$countries[] = $row['country'];
 					
 					// add a little info so users know what to do
-					$title = 'Info';
+					$title = '<h1>Info</h1>';
 					$description = 'Zoom in to see more users from this country: ' . $row['country'];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -285,7 +285,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$cities[] = $row['city'];
 					
 					// add a little info so users know what to do
-					$title = 'Info';
+					$title = '<h1>Info</h1>';
 					$description = 'Zoom in to see more users from this area.';
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
