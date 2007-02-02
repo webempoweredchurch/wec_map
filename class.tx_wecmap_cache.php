@@ -53,33 +53,39 @@ class tx_wecmap_cache {
 	 */
 	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
 
-		/* Look up the address in the cache table. */	
-		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
-		
-		/* Didn't find a cached match */	
-		if (is_null($latlong)) {
-			/* Intiate service chain to find lat/long */
-			$serviceChain='';
-			while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
-				$serviceChain.=','.$lookupObj->getServiceKey();
-				$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);				
-				
-				/* If we found a match, quit. Otherwise proceed to next best service */
-				if($latlong) {
-					break;
-				}
-			}
-			
-			/* Insert the lat/long into the cache.  */
-			tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $latlong['lat'], $latlong['long']);
-		}
-		
-		/* Return the lat/long, either from cache table for from fresh lookup */
-		if ($latlong['lat'] == 0 and $latlong['long'] == 0){
-			return null;
+		/* If we have enough address information, try to geocode. If not, return null. */
+		if(tx_wecmap_cache::isEmptyAddress($street, $city, $state, $zip, $country)) {
+			$latlong = null;
 		} else {
-			return $latlong;
+			/* Look up the address in the cache table. */	
+			$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
+		
+			/* Didn't find a cached match */	
+			if (is_null($latlong)) {
+				/* Intiate service chain to find lat/long */
+				$serviceChain='';
+				while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
+					$serviceChain.=','.$lookupObj->getServiceKey();
+					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);				
+				
+					/* If we found a match, quit. Otherwise proceed to next best service */
+					if($latlong) {
+						break;
+					}
+				}
+			
+				/* Insert the lat/long into the cache.  */
+				tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $latlong['lat'], $latlong['long']);
+			}
+		
+			/* Return the lat/long, either from cache table for from fresh lookup */
+			if ($latlong['lat'] == 0 and $latlong['long'] == 0){
+				$latlong = null;
+			} 
 		}
+		
+		return $latlong;
+		
 	}
 	
 	
@@ -226,6 +232,27 @@ class tx_wecmap_cache {
 	function hash($street, $city, $state, $zip, $country) {
 		$address_string = $street.' '.$city.' '.$state.' '.$zip.' '.$country;
 		return md5($address_string);
+	}
+	
+	/**
+	 *  Checks if the minimum amount of address data is available before
+	 *  geocoding.
+	 *
+	 * @param	string		The street address.
+	 * @param	string		The city name.
+	 * @param	string		The state name.
+	 * @param	string		This ZIP code.
+	 * @param	string		The country name.
+	 * @return	string		True if an address is empty. False otherwise.
+	 */
+	function isEmptyAddress($street, $city, $state, $zip, $country) {
+		if($street == '' and $city == '' and $state == '' and $zip == '' and $country == '') {
+			$isEmptyAddress = true;
+		} else {
+			$isEmptyAddress = false;
+		}
+		
+		return $isEmptyAddress;
 	}
 }
 
