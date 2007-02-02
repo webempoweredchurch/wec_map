@@ -161,7 +161,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$countries[] = $row[$countryfield];
 					
 					// add a little info so users know what to do
-					$title = 'Info';
+					$title = $this->makeTitle(array('name' => 'Info'));
 					$description = 'Zoom in to see more users from this country: ' . $row[$countryfield];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -176,7 +176,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$cities[] = $row['city'];
 					
 					// add a little info so users know what to do
-					$title = 'Info';
+					$title = $this->makeTitle(array('name' => 'Info'));
 					$count = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)', 'fe_users', 'city="'. $row['city'] .'"');
 					$count = $count[0]['count(*)'];
 					
