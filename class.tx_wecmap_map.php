@@ -51,31 +51,10 @@ class tx_wecmap_map {
 	var $key;
 	
 	/** 
-	 * Class constructor.  Creates javscript array.
-	 * @param	string		The API Key for the map.
-	 * @param	string		The width of the map.
-	 * @param	string		The height of the map.
-	 * @param	string		The latitude for the center point on the map.
-	 * @param 	string		The longitude for the center point on the map.
-	 * @param	string		The initial zoom level of the map.
-	 * @todo	Is our default constructor even used?
+	 * Class constructor stub.  Override in the map_service classes. Look there for
+	 * examples.
 	 */
-	function tx_wecmap_map($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
-		$this->js = array();
-		$this->markers = array();
-		$this->key = $key;
-
-		$this->width = $width;
-		$this->height = $height;
-		
-		if ($lat != '' || $long != '') {
-			$this->setCenter($lat, $long);
-		}
-		if ($zoom != '') {
-			$this->setZoom($zoom);
-		}
-		
-	}
+	function tx_wecmap_map() {}
 	
 	/**
 	 * Stub for the drawMap function.  Individual map services should implement
@@ -275,7 +254,6 @@ class tx_wecmap_map {
 	/**
 	 * Returns the classname of the marker class.
 	 * @return	string	The name of the marker class.
-	 * @todo	Is this actually needed or can we use a built in PHP function?
 	 */
 	function getMarkerClassName() {
 		return $this->markerClassName;
