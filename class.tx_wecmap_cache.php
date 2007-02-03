@@ -53,6 +53,23 @@ class tx_wecmap_cache {
 	 */
 	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
 
+		// pseudo normalize data: first letter uppercase.
+		// @todo: get rid of this once we implement normalization properly
+		$street = ucwords($street);
+		$city 	= ucwords($city);
+		$state 	= ucwords($state);
+		
+		// some zip codes contain letters, so just upper case them all
+		$zip 	= strtoupper($zip);
+		
+		// if length of country string is 3 or less, it's probably an abbreviation;
+		// make it all upper case then
+		if(strlen($country) < 4) {
+			$country = strtoupper($country);
+		} else {
+			$country= ucwords($country);			
+		}
+
 		/* If we have enough address information, try to geocode. If not, return null. */
 		if(tx_wecmap_cache::isEmptyAddress($street, $city, $state, $zip, $country)) {
 			$latlong = null;
