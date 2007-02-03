@@ -87,7 +87,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	
 	function buildURL($name, $value){
 		if($value) {
-			return $name."=".str_replace(' ', '+', $value)."&";
+			return $name.'='.str_replace(' ', '+', $value).'&';
 		}
 	}
 	

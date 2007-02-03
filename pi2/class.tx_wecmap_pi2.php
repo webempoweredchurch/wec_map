@@ -65,39 +65,39 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 		
 		// get config from flexform or TS. Flexforms take precedence.
-		$apiKey = $this->pi_getFFvalue($piFlexForm, "apiKey", "default");
+		$apiKey = $this->pi_getFFvalue($piFlexForm, 'apiKey', 'default');
 		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
 
-		$width = $this->pi_getFFvalue($piFlexForm, "mapWidth", "default");
+		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'default');
 		empty($width) ? $width = $conf['width']:null;
 		
-		$height = $this->pi_getFFvalue($piFlexForm, "mapHeight", "default");
+		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'default');
 		empty($height) ? $height = $conf['height']:null;
 		
-		$userGroups = $this->pi_getFFvalue($piFlexForm, "userGroups", "default");
+		$userGroups = $this->pi_getFFvalue($piFlexForm, 'userGroups', 'default');
 		empty($userGroups) ? $userGroups = $conf['userGroups']:null;
 
-		$pid = $this->pi_getFFvalue($piFlexForm, "pid", "default");
+		$pid = $this->pi_getFFvalue($piFlexForm, 'pid', 'default');
 		empty($pid) ? $pid = $conf['pid']:null;
 
-		$mapControlSize = $this->pi_getFFvalue($piFlexForm, "mapControlSize", "mapControls");
+		$mapControlSize = $this->pi_getFFvalue($piFlexForm, 'mapControlSize', 'mapControls');
 		(empty($mapControlSize) || $mapControlSize == 'none') ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
 		
-		$overviewMap = $this->pi_getFFvalue($piFlexForm, "overviewMap", "mapControls");
+		$overviewMap = $this->pi_getFFvalue($piFlexForm, 'overviewMap', 'mapControls');
 		empty($overviewMap) ? $overviewMap = $conf['controls.']['showOverviewMap']:null;
 				
-		$mapType = $this->pi_getFFvalue($piFlexForm, "mapType", "mapControls");
+		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
 				
-		$scale = $this->pi_getFFvalue($piFlexForm, "scale", "mapControls");
+		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 		
-		$private = $this->pi_getFFvalue($piFlexForm, "privacy", "default");
+		$private = $this->pi_getFFvalue($piFlexForm, 'privacy', 'default');
 		empty($private) ? $private = $conf['private']:null;
 
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
+		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className($apiKey, $width, $height);
 		
 		// evaluate map controls based on configuration
@@ -116,12 +116,12 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		// if a user group was set, make sure only those users from that group
 		// will be selected in the query
 		if($userGroups) {
-			$where .= "usergroup IN (".$userGroups.")";
+			$where .= 'usergroup IN ('.$userGroups.')';
 		}
 		
 		// if a storage folder pid was specified, filter by that
 		if($pid) {
-			$where .= " pid IN (". $pid .")";
+			$where .= ' pid IN ('. $pid .')';
 		}
 		
 		// filter out records that shouldn't be shown, e.g. deleted, hidden
@@ -135,7 +135,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$where .= $filter;
 
 		/* Select all frontend users */		
-		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery("*", "fe_users", $where);
+		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', $where);
 		
 		// create country and zip code array to keep track of which country and state we already added to the map.
 		// the point is to create only one marker per country on a higher zoom level to not

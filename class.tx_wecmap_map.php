@@ -165,7 +165,7 @@ class tx_wecmap_map {
 			$minLat = $minLat - 0.001;
 		}
 		
-		return array("maxLat" => $maxLat, "maxLong" => $maxLong, "minLat" => $minLat, "minLong" => $minLong);
+		return array('maxLat' => $maxLat, 'maxLong' => $maxLong, 'minLat' => $minLat, 'minLong' => $minLong);
 	}
 	
 	/**
@@ -186,7 +186,7 @@ class tx_wecmap_map {
 	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
 
 		/* Geocode the address */
-		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
  
 		/* Create a marker at the specified latitude and longitdue */
@@ -244,7 +244,7 @@ class tx_wecmap_map {
 		$country = $address[3];
 		
 		/* Geocode the address */
-		$lookupTable = t3lib_div::makeInstance("tx_wecmap_cache");
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
  
 		/* Create a marker at the specified latitude and longitdue */

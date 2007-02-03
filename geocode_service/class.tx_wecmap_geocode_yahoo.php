@@ -58,7 +58,7 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 	 */
 	function lookup($street, $city, $state, $zip, $country)	{
 		
-		if (!($country === "USA" or $country === "US" or $country === "")) {
+		if (!($country === "USA" or $country === "US" or $country === '')) {
 			$zip = null;
 			$state = null;
 		}
@@ -89,7 +89,7 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 	
 	function buildURL($name, $value){
 		if($value) {
-			return $name."=".str_replace(' ', '+', $value)."&";
+			return $name.'='.str_replace(' ', '+', $value).'&';
 		}
 	}
 	

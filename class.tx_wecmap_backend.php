@@ -162,17 +162,17 @@ class tx_wecmap_backend {
 	 */
 	function drawMap($PA, $fobj) {
 
-		$width = "400";
-		$height = "400";
+		$width = '400';
+		$height = '400';
 		
 		$street = tx_wecmap_backend::getFieldValue('street', $PA);
         $city = tx_wecmap_backend::getFieldValue('city', $PA);
         $state = tx_wecmap_backend::getFieldValue('state', $PA);
         $zip = tx_wecmap_backend::getFieldValue('zip', $PA);
         $country = tx_wecmap_backend::getFieldValue('country', $PA);
-		$description = $street."<br />".$city.", ".$state." ".$zip."<br />".$country;
+		$description = $street.'<br />'.$city.', '.$state.' '.$zip.'<br />'.$country;
 		
-		$className=t3lib_div::makeInstanceClassName("tx_wecmap_map_google");
+		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className($apiKey, $width, $height);
 		$map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $description);
 

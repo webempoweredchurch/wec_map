@@ -61,7 +61,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	string		The initial zoom level of the map.
 	 */
 	function tx_wecmap_map_google($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
-		$this->prefixId = "tx_wecmap_map_google";
+		$this->prefixId = 'tx_wecmap_map_google';
 		$this->js = array();
 		$this->markers = array();
 		
@@ -99,27 +99,27 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		switch ($name)
 		{
 			case 'largeMap':
-				$this->controls[] .= $this->js_addControl('map', "new GLargeMapControl()");
+				$this->controls[] .= $this->js_addControl('map', 'new GLargeMapControl()');
 				break;
 			
 			case 'smallMap':
-				$this->controls[] .= $this->js_addControl('map', "new GSmallMapControl()");
+				$this->controls[] .= $this->js_addControl('map', 'new GSmallMapControl()');
 				break;
 			
 			case 'scale':
-				$this->controls[] .= $this->js_addControl('map', "new GScaleControl()");
+				$this->controls[] .= $this->js_addControl('map', 'new GScaleControl()');
 				break;
 			
 			case 'smallZoom':
-				$this->controls[] .= $this->js_addControl('map', "new GSmallZoomControl()");
+				$this->controls[] .= $this->js_addControl('map', 'new GSmallZoomControl()');
 				break;
 
 			case 'overviewMap':
-				$this->controls[] .= $this->js_addControl('map', "new GOverviewMapControl()");
+				$this->controls[] .= $this->js_addControl('map', 'new GOverviewMapControl()');
 				break;
 					
 			case 'mapType':
-				$this->controls[] .= $this->js_addControl('map', "new GMapTypeControl()");
+				$this->controls[] .= $this->js_addControl('map', 'new GMapTypeControl()');
 				break;
 			default:
 				break;
@@ -159,8 +159,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
 			if(TYPO3_MODE == 'FE') {
-				$GLOBALS["TSFE"]->JSeventFuncCalls["onload"][$this->prefixId]="drawMap();";	
-				$GLOBALS["TSFE"]->JSeventFuncCalls["onunload"][$this->prefixId]="GUnload();";	
+				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId]='drawMap();';	
+				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';	
 				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
