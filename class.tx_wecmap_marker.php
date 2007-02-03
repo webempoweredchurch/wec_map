@@ -34,7 +34,6 @@
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
- * @todo	Is this class even used or do we go directly to the google marker class?
  */
 class tx_wecmap_marker {
 	var $index;
@@ -47,17 +46,7 @@ class tx_wecmap_marker {
 	var $color;
 	var $strokeColor;
 
-	function tx_wecmap_marker($index, $latitude, $longitude, $title, $description, $color='0xFF0000', $strokeColor='0xFFFFFF') {
-		$this->index = $index;
-		
-		$this->title = $title;
-		$this->description = $description;
-		$this->color = $color;
-		$this->strokeColor = $strokeColor;
-		
-		$this->latitude = $latitude;
-		$this->longitude = $longitude;
-	}
+	function tx_wecmap_marker() {}
 	
 	function getIndex() {
 		return $this->index;
