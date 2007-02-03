@@ -107,7 +107,7 @@ class tx_wecmap_backend {
 
 		// if there is no info about the user, return different status
 		if(!$city) {
-			return 'Cannot determine latitude and longitude.  Please enter an address and save.';
+			return $LANG->getLL('geocodeNoAddress');
 		}
 		
 		/* Grab the lat and long there were posted */

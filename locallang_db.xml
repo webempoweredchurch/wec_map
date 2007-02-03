@@ -17,6 +17,7 @@
             <label index="geocodeFailed">Geocoding failed.</label>
             <label index="geocodeNotPerformed">Geocoding has not been performed for this address.</label>
             <label index="geocodeSuccessful">Geocoding successful!</label>
+			<label index="geocodeNoAddress">Cannot determine latitude and longitude.  Please enter an address and save.</label>
             <label index="latitude">Latitude</label>
             <label index="longitude">Longitude</label>
             <label index="tt_content.pi_flexform.title">Title</label>
