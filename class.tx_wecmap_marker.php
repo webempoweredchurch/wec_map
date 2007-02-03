@@ -46,32 +46,73 @@ class tx_wecmap_marker {
 	var $color;
 	var $strokeColor;
 
+	/**
+	 * Constructor stub. See map_service classes for more details on the marker
+	 * constructor.
+	 *
+	 * @return void
+	 **/
 	function tx_wecmap_marker() {}
 	
+	/**
+	 * Getter for internal index for this marker.
+	 *
+	 * @return integer index of the marker
+	 **/
 	function getIndex() {
 		return $this->index;
 	}
 	
+	/**
+	 * Getter for the marker title.
+	 *
+	 * @return string title of the marker
+	 **/
 	function getTitle() {
 		return $this->title;
 	}
 	
+	/**
+	 * Getter for marker description
+	 *
+	 * @return string description of the marker
+	 **/
 	function getDescription() {
 		return $this->description;
 	}
 	
+	/**
+	 * Getter for marker color
+	 *
+	 * @return string marker color
+	 **/
 	function getColor() {
 		return $this->color;
 	}
 	
+	/**
+	 * Getter for the marker stroke color
+	 *
+	 * @return string marker stroke color
+	 **/
 	function getStrokeColor() {
 		return $this->strokeColor;
 	}
 	
+	/**
+	 * Getter for the latitude
+	 *
+	 * @return float latitude
+	 **/
 	function getLatitude() {
 		return $this->latitude;
 	}
 	
+	/**
+	 * Getter for the longitude
+	 *
+	 * @return float longitude
+	 **/
 	function getLongitude() {
 		return $this->longitude;
 	}
