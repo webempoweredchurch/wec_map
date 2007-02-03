@@ -9,19 +9,10 @@
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
-            <label index="list_mode_1">Mode 1</label>
-            <label index="list_mode_2">Mode 2</label>
-            <label index="list_mode_3">Mode 3</label>
-            <label index="back">Back</label>
-            <label index="submit_button_label">Click here to submit value</label>
             <label index="pi1_title">Simple Map</label>
             <label index="pi1_plus_wiz_description">Adds a simple map with one marker.</label>
         </languageKey>
         <languageKey index="dk" type="array">
-            <label index="list_mode_1">Visning 1</label>
-            <label index="list_mode_2">Visning 2</label>
-            <label index="list_mode_3">Visning 3</label>
-            <label index="back">Tilbage</label>
         </languageKey>
         <languageKey index="de" type="array">
         </languageKey>

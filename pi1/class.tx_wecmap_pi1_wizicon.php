@@ -47,7 +47,7 @@ class tx_wecmap_pi1_wizicon {
         return $wizardItems;
     }
     function includeLocalLang()    {
-        include(t3lib_extMgm::extPath('wec_map').'pi1/locallang.php');
+        include(t3lib_extMgm::extPath('wec_map').'pi1/locallang.xml');
         return $LOCAL_LANG;
     }
 }
