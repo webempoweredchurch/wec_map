@@ -165,7 +165,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$description = 'Zoom in to see more users from this country: ' . $row[$countryfield];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 0,2);
 				}
 
 				
@@ -195,7 +195,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					}
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 3,$maxzoom);
+					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 3,$maxzoom);
 				}
 				
 				// make title and description
