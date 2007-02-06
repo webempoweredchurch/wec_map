@@ -9,8 +9,8 @@
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
-            <label index="pi2_title">FE User Map</label>
-            <label index="pi2_plus_wiz_description">Adds a map displaying all FE Users.</label>
+            <label index="pi2_title">WEC Frontend User Map</label>
+            <label index="pi2_plus_wiz_description">Adds a map to display frontend users. This map can display all users or only certain frontend groups.</label>
         </languageKey>
         <languageKey index="dk" type="array">
         </languageKey>

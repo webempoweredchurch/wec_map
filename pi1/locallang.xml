@@ -9,8 +9,8 @@
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
-            <label index="pi1_title">Simple Map</label>
-            <label index="pi1_plus_wiz_description">Adds a simple map with one marker.</label>
+            <label index="pi1_title">WEC Simple Map</label>
+            <label index="pi1_plus_wiz_description">Adds a simple map displaying one location at the center.</label>
         </languageKey>
         <languageKey index="dk" type="array">
         </languageKey>
