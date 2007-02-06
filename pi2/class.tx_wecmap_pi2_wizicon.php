@@ -47,7 +47,8 @@ class tx_wecmap_pi2_wizicon {
         return $wizardItems;
     }
     function includeLocalLang()    {
-        include(t3lib_extMgm::extPath('wec_map').'pi2/locallang.xml');
+        $llFile = t3lib_extMgm::extPath('wec_map').'pi2/locallang.xml';
+		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
         return $LOCAL_LANG;
     }
 }
