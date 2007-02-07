@@ -73,16 +73,39 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 		$latlong = array();
 		$csv = explode(',', $csv);
 		
-		
-		if($csv[0] == 200) {
-			$latlong['lat'] = $csv[2];
-			$latlong['long'] = $csv[3];
-
-			return $latlong;
-		} else {
-			return null;
+		switch($csv[0]) {
+			case 200:
+				/*
+				 * Geocoding worked!
+				 * 200:  OK
+				 */
+				$latlong['lat'] = $csv[2];
+				$latlong['long'] = $csv[3];
+				break;
+			case 500:
+			case 610:
+				/*
+				 * Geocoder can't run at all, so disable this service and
+				 * try the other geocoders instead.
+				 * 500: Undefined error.  Geocoding may be blocked.
+				 * 610: Bad API Key.
+				 */
+				$this->deactivateService();
+				$latlong = null;
+				break;
+			default:
+				/* 
+				 * Something is wrong with this address. Might work for other
+				 * addresses though.
+				 * 601: No address to geocode.
+				 * 602: Unknown address.
+				 * 603: Can't geocode for contractual reasons.
+				 */
+				$latlong = null;
+				break;
 		}
 		
+		return $latlong;
 	}
 	
 	function buildURL($name, $value){
