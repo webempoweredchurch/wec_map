@@ -161,7 +161,6 @@ class tx_wecmap_backend {
 	 * @return		string		HTML to display the map within a backend record.
 	 */
 	function drawMap($PA, $fobj) {
-
 		$width = '400';
 		$height = '400';
 		
@@ -197,6 +196,10 @@ class tx_wecmap_backend {
 	 * @return	string	The specified portion of the address.
 	 */
 	function getFieldValue($key, $PA) {
+		global $TCA;
+		$table = $PA['table'];
+		$ctrlAddressFields = $TCA[$table]['ctrl']['EXT']['wec_map']['addressFields'];
+		
         $row = $PA['row'];
         $addressFields = $PA['fieldConf']['config']['params']['addressFields'];
 		
@@ -204,8 +207,13 @@ class tx_wecmap_backend {
         if(isset($addressFields[$key])) {
             $fieldName = $addressFields[$key];
         } else {
-			/* Otherwise, use the default name */
-            $fieldName = $key;
+			/* If the ctrl section of the TCA has a name, use it */
+			if(isset($ctrlAddressFields[$key])) {
+				$fieldName = $ctrlAddressFields[$key];
+			} else {	
+				/* Otherwise, use the default name */
+            	$fieldName = $key;
+			}
         }
 		
 		/* If the source data has a value for the address field, grab it */

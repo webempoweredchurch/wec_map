@@ -30,6 +30,19 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi2', 'FILE:EXT:wec_map/pi2/flexform
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi2/static/','WEC Frontend User Map');
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','WEC Simple Map');
 
+/* Define the address related fields for a frontend user*/
+t3lib_div::loadTCA('fe_users');
+$TCA['fe_users']['ctrl']['EXT']['wec_map'] = array (
+	'isMappable' => 1,
+	'addressFields' => array (
+		'street' => 'address',
+		'city' => 'city',
+		'state' => 'zone',
+		'zip' => 'zip',
+		'country' => 'static_info_country',
+	),
+);
+
 /* If we want to show a map in frontend user records, add it to the TCA */
 if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 	$mapTCA = array (
@@ -40,24 +53,15 @@ if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 				'type' => 'passthrough',
 				'form_type' => 'user',
 				'userFunc' => 'tx_wecmap_backend->drawMap',
-				'params' => array (
-					'addressFields' => array (
-						'street' => 'address',
-						'city' => 'city',
-						'state' => 'zone',
-						'zip' => 'zip',
-						'country' => 'static_info_country',
-					),
-				),
 			),
 		),
 	);
 		
-	t3lib_div::loadTCA('fe_users');
 	t3lib_extMgm::addTCAcolumns('fe_users', $mapTCA, 1);
 	$TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_map';
 	t3lib_extMgm::addToAllTCAtypes('fe_users', 'tx_wecmap_map');
 }
+
 
 /* If we want to show the geocoding status in frontend user records, add it to the TCA */
 if(tx_wecmap_backend::getExtConf('geocodingStatus')) {
@@ -69,23 +73,13 @@ if(tx_wecmap_backend::getExtConf('geocodingStatus')) {
 				'type' => 'passthrough',
 				'form_type' => 'user',
 				'userFunc' => 'tx_wecmap_backend->checkGeocodeStatus',
-				'params' => array (
-					'addressFields' => array (
-						'street' => 'address',
-						'city' => 'city',
-						'state' => 'zone',
-						'zip' => 'zip',
-						'country' => 'static_info_country',
-					),
-				),
 			),
 		),
 	);
 	
-	t3lib_div::loadTCA('fe_users');
 	t3lib_extMgm::addTCAcolumns('fe_users', $geocodeTCA, 1);
 	$TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_geocode';
-	t3lib_extMgm::addToAllTCAtypes('fe_users', 'tx_wecmap_geocode');
+	t3lib_extMgm::addToAllTCAtypes('fe_users', 'tx_wecmap_geocode');	
 }
 
 ?>
