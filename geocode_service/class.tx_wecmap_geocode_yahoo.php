@@ -74,7 +74,14 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 		$xml = t3lib_div::getURL($url);
 		
 		if(TYPO3_DLOG) {
-			$address = $address.', '.$city.' '.$state.' '.$zip.' '.$country;
+			$addressArray = array(
+				'street' => $street,
+				'city' => $city,
+				'state' => $state,
+				'zip' => $zip,
+				'country' => $country,
+			);
+			$addressString = $street.', '.$city.' '.$state.' '.$zip.' '.$country;
 		}
 
 		if($xml !== false) {
@@ -85,10 +92,10 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 			$latlong['long'] = $xml['Result']['Longitude'];
 		}
 		if (is_null($xml['Result']['Latitude']) or is_null($xml['Result']['Longitude'])) {
-			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo! geocode failed for '.$address, 'wec_map', 2);
+			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo! geocode failed for '.$addressString, 'wec_map', 2, $addressArray);
 			return null;
 		} else {
-			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo! geocode succeeded for '.$address, 'wec_map', -1);		
+			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo! geocode succeeded for '.$addressString, 'wec_map', -1, $addressArray);		
 			return $latlong;
 		}
 	}
