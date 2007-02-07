@@ -7,11 +7,13 @@ class tx_wecmap_batchgeocode {
 	var $tables;
 	var $geocodedAddresses;
 	var $geocodeLimit;
+	var $processedAddresses;
 	
 	function tx_wecmap_batchgeocode() {
 		$this->tables = array();
 		$this->geocodedAddresses = 0;
-		$this->geocodeLimit = 2;
+		$this->processedAddresses = 0;
+		$this->geocodeLimit = 20;
 	}
 	
 	function addTable($table) {
@@ -61,6 +63,9 @@ class tx_wecmap_batchgeocode {
 		$zip = $row[$addressFields['zip']];
 		$country = $row[$addressFields['country']];
 		
+		// increment total count
+		$this->processedAddresses++;
+		
 		tx_wecmap_cache::lookup($street, $city, $state, $zip, $country, '', false, $this);		
 	}
 	
@@ -74,6 +79,14 @@ class tx_wecmap_batchgeocode {
 		} else {
 			return false;
 		}
+	}
+	
+	function processedAddresses() {
+		return $this->processedAddresses;
+	}
+	
+	function geocodedAddresses() {
+		return $this->geocodedAddresses;
 	}
 	
 }
