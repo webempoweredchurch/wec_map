@@ -73,12 +73,24 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 		$latlong = array();
 		$csv = explode(',', $csv);
 		
+		if(TYPO3_DLOG) {
+			$addressArray = array(
+				'street' => $street,
+				'city' => $city,
+				'state' => $state,
+				'zip' => $zip,
+				'country' => $country,
+			);
+			$addressString = $street.' '.$city.', '.$state.' '.$zip.', '.$country;
+		}
+		
 		switch($csv[0]) {
 			case 200:
 				/*
 				 * Geocoding worked!
 				 * 200:  OK
 				 */
+				if (TYPO3_DLOG) t3lib_div::devLog('Google geocode succeeded for '.$addressString, 'wec_map', -1, $addressArray);
 				$latlong['lat'] = $csv[2];
 				$latlong['long'] = $csv[3];
 				break;
@@ -90,6 +102,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				 * 500: Undefined error.  Geocoding may be blocked.
 				 * 610: Bad API Key.
 				 */
+				if (TYPO3_DLOG) t3lib_div::devLog('Google geocode failed with error '.$csv[0].' for '.$addressString.'. Disabling.', 'wec_map', 3, $addressArray);
 				$this->deactivateService();
 				$latlong = null;
 				break;
@@ -101,6 +114,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				 * 602: Unknown address.
 				 * 603: Can't geocode for contractual reasons.
 				 */
+				if (TYPO3_DLOG) t3lib_div::devLog('Google geocode failed with error '.$csv[0]. ' for '.$addressString, 'wec_map', 2, $addressArray);
 				$latlong = null;
 				break;
 		}
@@ -112,8 +126,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 		if($value) {
 			return $name.'='.str_replace(' ', '+', $value).'&';
 		}
-	}
-	
+	}	
 }
 
 

@@ -66,9 +66,14 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 		$latlong = array();
 		if($xml != "couldn't find this address! sorry") {
 			$xml = t3lib_div::xml2array($xml);
-		
+			
 			$latlong['lat'] = $xml['geo:Point']['geo:lat'];
 			$latlong['long'] = $xml['geo:Point']['geo:long'];
+			
+			if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us geocode succeeded for '.$address, 'wec_map', -1);
+		} else {
+			if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us geocode failed for '.$address, 'wec_map', 2);
+			$latlong = null;
 		}
 		
 		return $latlong;
