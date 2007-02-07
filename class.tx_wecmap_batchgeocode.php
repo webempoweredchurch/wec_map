@@ -5,7 +5,7 @@ require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 class tx_wecmap_batchgeocode {
 	
 	var $tables;
-	var $geocodedAddress;
+	var $geocodedAddresses;
 	var $geocodeLimit;
 	
 	function tx_wecmap_batchgeocode() {
@@ -30,7 +30,7 @@ class tx_wecmap_batchgeocode {
 	
 	function geocode() {
 		foreach($this->tables as $table) {		
-			if($this->geocodedAddresses >= $this->geocodeLimit) {
+			if($this->stopGeocoding()) {
 				return;
 			} else {			
 				$this->geocodeTable($table);
@@ -46,11 +46,10 @@ class tx_wecmap_batchgeocode {
 		$result = $TYPO3_DB->exec_SELECTquery('*', $table, "");
 		while($row = $TYPO3_DB->sql_fetch_assoc($result)) {
 			
-			if($this->geocodedAddresses >= $this->geocodeLimit) {
+			if($this->stopGeocoding()) {
 				return;
 			} else {
 				$this->geocodeRecord($row, $addressFields);
-				
 			}
 		}		
 	}
@@ -69,11 +68,14 @@ class tx_wecmap_batchgeocode {
 		$this->geocodedAddresses++;
 	}
 	
+	function stopGeocoding() {		
+		if($this->geocodedAddresses >= $this->geocodeLimit) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 }
-
-// Make instance:
-$SOBE = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
-$SOBE->addAllTables();
-$SOBE->geocode();
 
 ?>
