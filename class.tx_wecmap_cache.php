@@ -51,7 +51,7 @@ class tx_wecmap_cache {
 	 * @param	boolean		Force a new lookup for address.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
-	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
+	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false, &$pObj) {
 
 		// pseudo normalize data: first letter uppercase.
 		// @todo: get rid of this once we implement normalization properly
@@ -83,8 +83,12 @@ class tx_wecmap_cache {
 				$serviceChain='';
 				while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
 					$serviceChain.=','.$lookupObj->getServiceKey();
-					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);				
-				
+					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);
+					
+					if(method_exists($pObj, 'callback_lookupThroughGeocodeService')) {
+						$pObj->callback_lookupThroughGeocodeService();				
+					}
+					
 					/* If we found a match, quit. Otherwise proceed to next best service */
 					if($latlong) {
 						break;

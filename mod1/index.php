@@ -84,6 +84,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			'function' => array (
 				'1' => $LANG->getLL('function1'),
 				'2' => $LANG->getLL('function2'),
+				'3' => $LANG->getLL('function3'),
 			)
 		);
 		parent::menuConfig();
@@ -180,7 +181,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			case 2:
 				$this->content.=$this->apiKeyAdmin();
 			break;
-
+			case 3:
+				$this->content.=$this->batchGeocode();
+			break;
 		}
 	}
 
@@ -358,8 +361,39 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		t3lib_extMgm::removeCacheFiles();
 	}
-}
+	
+	function batchGeocode() {
+		global $TCA, $LANG;
+		$content = array();
+		
+		$cmd = t3lib_div::_GP('cmd');
+		switch($cmd) {
+			case 'batchGeocode' :
+			 	require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
+				$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
+				$batchGeocode->addAllTables();
+				$batchGeocode->geocode();
+				break;
+		}
+		
+		
+		$content[] = '<h1>Tables with Address Data</h1>';
+		$content[] = '<form action="" method="POST">';
+		foreach($TCA as $tableName => $tableContents) {
+			if($tableContents['ctrl']['EXT']['wec_map']['isMappable']) {
+				$title = $LANG->sL($tableContents['ctrl']['title']);
+				$content[] = '<input type="checkbox">'.$title.'</input>';
+			}
+		}
+		
+		$content[] = '<input type="hidden" name="cmd" value="batchGeocode" />';
+		$content[] = '<input type="submit" value="Start Geocoding" />';
+		$content[] = '</form>';
+		
+		return implode(chr(10), $content);
+	}
 
+}
 
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/mod1/index.php'])	{
