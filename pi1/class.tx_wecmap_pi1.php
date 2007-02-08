@@ -125,12 +125,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 				if(array_key_exists('address', $marker)) {
 
 					$title = $this->makeTitle($marker);
-					$description = $this->makeDescription(array('description'=> $description));
+					$description = $this->makeDescription(array('description'=> $marker['description']));
 					$address = $this->wrapAddressString($marker['address']);
-					$description = $description . $address;
+					$description = $description.$address;
 					
 					// add address by string
-					$map->addMarkerByString($marker['address'], $title, $marker['description']);
+					$map->addMarkerByString($marker['address'], $title, $description);
 
 				} else {
 
@@ -197,7 +197,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 	function wrapAddressString($address) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->stdWrap($address, $this->conf['marker.']['address.'] );
+		$output = $local_cObj->stdWrap($address, $this->conf['marker.']['address.'] );		
 		return $output;
 	}
 }
