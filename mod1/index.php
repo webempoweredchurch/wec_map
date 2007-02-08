@@ -374,16 +374,17 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$totalAddresses = $batchGeocode->recordCount();
 		$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
 		
-		$content[] = '<h1>Batch Geocode</h1>';
+		$content[] = '<h3>Batch Geocode</h3>';
 		
-		/*
+		$content[] = '<p>Address information is available in these tables:<p>';
+		$content[] = '<ul>';
 		foreach($TCA as $tableName => $tableContents) {
 			if($tableContents['ctrl']['EXT']['wec_map']['isMappable']) {
 				$title = $LANG->sL($tableContents['ctrl']['title']);
-				$content[] = '<input type="checkbox">'.$title.'</input>';
+				$content[] = '<li>'.$title.'</li>';
 			}
 		}
-		*/
+		$content[] = '</ul>';
 		
 		$content[] = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>';
 		$content[] = '<script type="text/javascript">
@@ -391,6 +392,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 							var updater;
 							
 							$(\'startGeocoding\').disable();
+							$(\'status\').setStyle({display: \'block\'});
 														
 							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\',
 							{
@@ -401,7 +403,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 						}
 						</script>';
 							
-		$content[] = '<div id="status" style="margin-bottom: 20px;">';
+		$content[] = '<div id="status" style="margin-bottom: 5px; display:none;">';
 		$content[] = '<div id="bar" style="width:300px; height:20px; border:1px solid black">
 						<div id="progress" style="width:'.$progressBarWidth.'%; height:20px; background-color:red"></div>
 					</div>
