@@ -121,24 +121,29 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
 				
-				// just modify the marker title and wrap it in h1 tags
-				$marker['title'] = '<h1>'. $marker['title']  .'</h1>';
-				
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
+
+					$title = $this->makeTitle($marker);
+					$description = $this->makeDescription(array('description'=> $description));
+					$address = $this->wrapAddressString($marker['address']);
+					$description = $description . $address;
 					
 					// add address by string
-					$map->addMarkerByString($marker['address'], $marker['title'], $marker['description']);
+					$map->addMarkerByString($marker['address'], $title, $marker['description']);
 
 				} else {
-					// if there is no description set in that part of TS, make one as defined in other
-					// places
-					if(empty($marker['description'])) $marker['description'] = $this->makeDescription($marker);
 
+					$title = $this->makeTitle($marker);
+					$address = $this->makeAddress($marker);
+					$description = $this->makeDescription($marker);
+
+					$description = $description . $address;
+					
 					// add the marker to the map
 					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'], 
-											 $marker['zip'], $marker['country'], $marker['title'], 
-											 $marker['description']);				
+											 $marker['zip'], $marker['country'], $title, 
+											 $description);				
 				}
 			}
 		} else {		
@@ -148,10 +153,15 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$data['street'] = $street;
 			$data['zip'] = $zip;
 			$data['country'] = $country;
-			$data['title'] = '<h1>'.$title.'</h1>';
-		
-			if(empty($description)) $description = $this->makeDescription($data);
-		
+			$data['title'] = $title;
+			$data['description'] = $description;
+
+			$title = $this->makeTitle($data);
+			$address = $this->makeAddress($data);
+			$description = $this->makeDescription($data);
+			
+			$description = $description . $address;
+			
 			// add the marker to the map
 			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);			
 		}
@@ -167,6 +177,27 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
 		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
+		return $output;
+	}
+	
+	function makeAddress($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['address'], $this->conf['marker.']['address.'] );
+		return $output;
+	}
+	
+	function makeTitle($row) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
+		return $output;
+	}
+
+	function wrapAddressString($address) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		$local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->stdWrap($address, $this->conf['marker.']['address.'] );
 		return $output;
 	}
 }
