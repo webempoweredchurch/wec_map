@@ -394,12 +394,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 							$(\'startGeocoding\').disable();
 							$(\'status\').setStyle({display: \'block\'});
 														
-							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\',
-							{
-								method: \'get\',
-								frequency: 5,
-								decay: 10,
-				  			});
+							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\', { method: \'get\', frequency: 5, decay: 10 });
 						}
 						</script>';
 							
