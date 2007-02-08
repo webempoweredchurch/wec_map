@@ -366,29 +366,50 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		global $TCA, $LANG;
 		$content = array();
 		
-		$cmd = t3lib_div::_GP('cmd');
-		switch($cmd) {
-			case 'batchGeocode' :
-			 	require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
-				$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
-				$batchGeocode->addAllTables();
-				$batchGeocode->geocode();
-				break;
-		}
+	 	require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
+		$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
+		$batchGeocode->addAllTables();
 		
+		$processedAddresses = $batchGeocode->processedAddresses();
+		$totalAddresses = $batchGeocode->recordCount();
+		$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
 		
-		$content[] = '<h1>Tables with Address Data</h1>';
-		$content[] = '<form action="" method="POST">';
+		$content[] = '<h1>Batch Geocode</h1>';
+		
+		/*
 		foreach($TCA as $tableName => $tableContents) {
 			if($tableContents['ctrl']['EXT']['wec_map']['isMappable']) {
 				$title = $LANG->sL($tableContents['ctrl']['title']);
 				$content[] = '<input type="checkbox">'.$title.'</input>';
 			}
 		}
+		*/
 		
-		$content[] = '<input type="hidden" name="cmd" value="batchGeocode" />';
-		$content[] = '<input type="submit" value="Start Geocoding" />';
-		$content[] = '</form>';
+		$content[] = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>';
+		$content[] = '<script type="text/javascript">
+						function startGeocode() {
+							var updater;
+							
+							$(\'startGeocoding\').disable();
+														
+							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\',
+							{
+								method: \'get\',
+								frequency: 5,
+								decay: 10,
+				  			});
+						}
+						</script>';
+							
+		$content[] = '<div id="status" style="margin-bottom: 20px;">';
+		$content[] = '<div id="bar" style="width:300px; height:20px; border:1px solid black">
+						<div id="progress" style="width:'.$progressBarWidth.'%; height:20px; background-color:red"></div>
+					</div>
+					<p>Processed '.$processedAddresses.' records of '.$totalAddresses.'</p>';
+					
+		$content[] = '</div>';
+		
+		$content[] = '<input id="startGeocoding" type="submit" value="Start Geocoding" onclick="startGeocode(); return false;"/>';
 		
 		return implode(chr(10), $content);
 	}

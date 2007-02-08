@@ -10,10 +10,10 @@ class tx_wecmap_batchgeocode {
 	var $processedAddresses;
 	
 	function tx_wecmap_batchgeocode() {
-		$this->tables = array();
+		$this->tables = array();	
 		$this->geocodedAddresses = 0;
 		$this->processedAddresses = 0;
-		$this->geocodeLimit = 20;
+		$this->geocodeLimit = 10;
 	}
 	
 	function addTable($table) {
@@ -89,6 +89,19 @@ class tx_wecmap_batchgeocode {
 		return $this->geocodedAddresses;
 	}
 	
+	function recordCount() {
+		global $TYPO3_DB;
+		
+		$recordCount = 0;
+		
+		foreach($this->tables as $table) {		
+			$result = $TYPO3_DB->exec_SELECTquery('COUNT(*)', $table, "");
+			$row = $TYPO3_DB->sql_fetch_assoc($result);
+			$recordCount += $row['COUNT(*)'];
+		}
+		
+		return $recordCount;
+	}
 }
 
 ?>
