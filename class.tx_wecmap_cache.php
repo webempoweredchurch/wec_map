@@ -37,6 +37,11 @@
  * @subpackage tx_wecmap
  */
 class tx_wecmap_cache {
+	
+	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
+		$fakeObject = null;
+		return tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, $key, $forceLookup, $fakeObject);
+	}
 
 	/**
 	 * Looks up the latitude and longitude of a specified address. Cache tables
@@ -51,7 +56,7 @@ class tx_wecmap_cache {
 	 * @param	boolean		Force a new lookup for address.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
-	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false, &$pObj=null) {
+	function lookupWithCallback($street, $city, $state, $zip, $country, $key='', $forceLookup=false, &$pObj) {
 
 		// pseudo normalize data: first letter uppercase.
 		// @todo: get rid of this once we implement normalization properly
