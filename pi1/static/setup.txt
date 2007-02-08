@@ -24,14 +24,18 @@ plugin.tx_wecmap_pi1 {
 
 			20 = TEXT
 			20.field = city
-			20.wrap = |, 
+			20.wrap = |,&nbsp;
 
 			30 = TEXT
-			30.field = zone
+			30.field = state
 			30.wrap = | &nbsp;
 
 			40 = TEXT
 			40.field = zip
+			40.wrap = | <br/>
+			
+			50 = TEXT
+			50.field = country
 		}
 		address.wrap = <p>|</p>
 	}
