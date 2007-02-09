@@ -83,8 +83,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$this->MOD_MENU = array (
 			'function' => array (
 				'1' => $LANG->getLL('function1'),
-				'2' => $LANG->getLL('function2'),
-				'3' => $LANG->getLL('function3'),
+				'2' => $LANG->getLL('function3'),
+				'3' => $LANG->getLL('function2'),
 			)
 		);
 		parent::menuConfig();
@@ -179,10 +179,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				$this->content.=$this->geocodeAdmin();
 			break;
 			case 2:
-				$this->content.=$this->apiKeyAdmin();
+				$this->content.=$this->batchGeocode();
 			break;
 			case 3:
-				$this->content.=$this->batchGeocode();
+				$this->content.=$this->apiKeyAdmin();
 			break;
 		}
 	}
