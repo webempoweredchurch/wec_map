@@ -57,10 +57,21 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 	 * @return	array		Array containing latitude and longitude.  If lookup failed, empty array is returned.
 	 */
 	function lookup($street, $city, $state, $zip, $country)	{
-		
-		if (!($country === "USA" or $country === "US" or $country === '')) {
-			$zip = null;
-			$state = null;
+				
+		switch($country) {
+			case 'USA':
+			case 'US':
+			case 'U.S.':
+			case 'U.S.A.':
+			case 'United States':
+			case 'United States of America':
+				/* Keep it all if its the US. */
+				break;
+			default:
+				$street = null;
+				$zip = null;
+				$state = null;
+				break;
 		}
 
 		$url = 'http://api.local.yahoo.com/MapsService/V1/geocode?'.

@@ -58,7 +58,23 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 	 * @param	string	The ZIP code.
 	 * @return	array		Array containing latitude and longitude.  If lookup failed, empty array is returned.
 	 */
-	function lookup($street, $city, $state, $zip, $country)	{		
+	function lookup($street, $city, $state, $zip, $country)	{
+		
+		switch($country) {
+			case 'USA':
+			case 'US':
+			case 'U.S.':
+			case 'U.S.A.':
+			case 'United States':
+			case 'United States of America':
+				/* Keep it all if its the US. */
+				break;
+			default:
+				return null;
+				break;
+		}
+		
+				
 		$address = $street.', '.$city.', '.$state.' '.$zip;
 		$address = str_replace(' ', '%20', $address);
 
