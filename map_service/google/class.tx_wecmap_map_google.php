@@ -195,7 +195,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			if(TYPO3_MODE == 'FE') {
 				$manualCall = null;
 			} else {
-				$manualCall = '<script type="text/javascript">setTimeout("drawMap()",1);</script>';
+				$manualCall = '<script type="text/javascript">setTimeout("drawMap()",500);</script>';
 			}
 		
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
