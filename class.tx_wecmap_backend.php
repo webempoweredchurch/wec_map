@@ -240,23 +240,28 @@ class tx_wecmap_backend {
 	function getFieldValueFromFF($key, $PA) {
 		$addressFields = $PA['fieldConf']['config']['params']['addressFields'];
 		
-		$flexForm = t3lib_div::xml2array($PA['row']['pi_flexform']);
-		$flexForm = $flexForm['data']['default']['lDEF'];
+		$flexForm = t3lib_div::xml2array($PA['row']['pi_flexform']);		
+		if(is_array($flexForm)) {
+			$flexForm = $flexForm['data']['default']['lDEF'];
+			
+			/* If the address mapping array has a map for this address, use it */
+			if(isset($addressFields[$key])) {
+				$fieldName = $addressFields[$key];
+			} else {
+				$fieldName = $key;
+			}
 		
-		/* If the address mapping array has a map for this address, use it */
-		if(isset($addressFields[$key])) {
-			$fieldName = $addressFields[$key];
-		} else {
-			$fieldName = $key;
-		}
 		
-		
-		/* If the source data has a value for the addres field, grab it */
-		if (isset($flexForm[$fieldName]['vDEF'])) {
-			$value = $flexForm[$fieldName]['vDEF'];
+			/* If the source data has a value for the addres field, grab it */
+			if (isset($flexForm[$fieldName]['vDEF'])) {
+				$value = $flexForm[$fieldName]['vDEF'];
+			} else {
+				$value = '';
+			}
 		} else {
 			$value = '';
 		}
+		
         return $value;
 	}
 	
