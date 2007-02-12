@@ -262,19 +262,26 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 			/* Only try to add marker if there's a city */
 			if($row['city'] != '') {
-
+				
+				// determine which country field to use, country or static_info_country
+				if(empty($row['static_info_country'])) {
+					$countryfield = 'country';
+				} else {
+					$countryfield = 'static_info_country';
+				}
+				
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row['country'], $countries) && !empty($row['country'])  && !empty($row['zip'])  && !empty($row['city'])) {
+				if(!in_array($row[$countryfield], $countries) && !empty($row[$countryfield])  && !empty($row['zip'])  && !empty($row['city'])) {
 
 					// add this country to the array
-					$countries[] = $row['country'];
+					$countries[] = $row[$countryfield];
 					
 					// add a little info so users know what to do
 					$title = '<h1>Info</h1>';
-					$description = 'Zoom in to see more users from this country: ' . $row['country'];
+					$description = 'Zoom in to see more users from this country: ' . $row[$countryfield];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row['country'], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 0,2);
 				}
 
 				
@@ -289,20 +296,20 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$description = 'Zoom in to see more users from this area.';
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row['country'], $title, $description, 3,7);
+					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 3,7);
 				}
 				
 				// make title and description
 				$title = $this->makeTitle($row);
-				$description = $this->makeDescription($row);
+				$description = $this->makeDescription($row, $countryfield);
 				
 				
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
 				// if private was checked, don't use address to geocode
 				if($private) {
-					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
 				} else {
-					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row['static_info_country'], $title, $description, 8);
+					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
 				}
 			}
 		}
@@ -320,10 +327,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		return '<h1>'.$title.'</h1>';
 	}
 	
-	function makeDescription($row) {
+	function makeDescription($row, $countryfield='country') {
 		$output = $row['address'].'<br />';
 		$output .= $row['city'] . ', '.$row['zone']. ' '.$row['zip'];
-		$output .= '<br />'.$row['country'].'<br />';
+		$output .= '<br />'.$row[$countryfield].'<br />';
 		$output .= $this->returnEditLink($row['uid'], 'Edit User Record');
 
 		return $output;
