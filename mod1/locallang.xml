@@ -32,6 +32,24 @@
 			<label index="googleMapsApiKey">Google Maps API Key</label>
 			<label index="submit">Submit</label>
 			
+			<label index="batchGeocode">Batch Geocode</label>
+			<label index="batchInstructions">
+				The batch geocoder is used to quickly calculate the latitude and
+				longitude for a large number of addresses.  Without batch geocoding,
+				this does not occur until the address is accessed, either from the
+				frontend of the backend.  This can significantly increase page
+				loading time when many addresses are displayed so the batch geocoder
+				can be used to avoid this problem.
+			</label>
+			<label index="batchTables">
+				The following tables contain address related data.  When you begin
+				the batch geocoding process, all records in these tables will
+				be geocoded.
+			</label>
+			<label index="startGeocoding">Start Geocoding</label>
+			<label index="processedStart">Processed</label>
+			<label index="processedMid">records of</label>
 		</languageKey>
+		
 	</data>
 </T3locallang>

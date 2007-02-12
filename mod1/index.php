@@ -362,21 +362,31 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		t3lib_extMgm::removeCacheFiles();
 	}
 	
+	/**
+	 * Submodule for the batch geocoder.
+	 *
+	 * @return		string		HTML output.
+	 */
 	function batchGeocode() {
 		global $TCA, $LANG;
 		$content = array();
 		
 	 	require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
-		$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
+		$batchGeocodeClass = t3lib_div::makeInstanceClassname('tx_wecmap_batchgeocode');
+		
+		/* Set the geocoding limit to 1 so that we only get the count, rather than actually geocoding addresses */
+		$batchGeocode = new $batchGeocodeClass(1);
 		$batchGeocode->addAllTables();
+		$batchGeocode->geocode();
 		
 		$processedAddresses = $batchGeocode->processedAddresses();
 		$totalAddresses = $batchGeocode->recordCount();
 		$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
 		
-		$content[] = '<h3>Batch Geocode</h3>';
+		$content[] = '<h3>'.$LANG->getLL('batchGeocode').'</h3>';
+		$content[] = '<p>'.$LANG->getLL('batchInstructions').'</p>';
 		
-		$content[] = '<p>Address information is available in these tables:<p>';
+		$content[] = '<p style="margin-top:1em;">'.$LANG->getLL('batchTables').'</p>';
 		$content[] = '<ul>';
 		foreach($TCA as $tableName => $tableContents) {
 			if($tableContents['ctrl']['EXT']['wec_map']['isMappable']) {
@@ -397,20 +407,13 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\', { method: \'get\', frequency: 5, decay: 10 });
 						}
 						</script>';
-							
-		$content[] = '<div id="status" style="margin-bottom: 5px; display:none;">';
-		$content[] = '<div id="bar" style="width:300px; height:20px; border:1px solid black">
-						<div id="progress" style="width:'.$progressBarWidth.'%; height:20px; background-color:red"></div>
-					</div>
-					<p>Processed '.$processedAddresses.' records of '.$totalAddresses.'</p>';
-					
-		$content[] = '</div>';
 		
-		$content[] = '<input id="startGeocoding" type="submit" value="Start Geocoding" onclick="startGeocode(); return false;"/>';
+		require_once(t3lib_extMgm::extPath('wec_map').'mod1/class.tx_wecmap_batchgeocode_util.php');					
+		$content[] = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses, false);		
+		$content[] = '<input id="startGeocoding" type="submit" value="'.$LANG->getLL('startGeocoding').'" onclick="startGeocode(); return false;"/>';
 		
 		return implode(chr(10), $content);
 	}
-
 }
 
 

@@ -31,28 +31,23 @@
 define('TYPO3_MOD_PATH', '../typo3conf/ext/wec_map/mod1/');
 $BACK_PATH='../../../../typo3/';
 require($BACK_PATH. 'init.php');
+require_once(t3lib_extMgm::extPath('wec_map').'mod1/class.tx_wecmap_batchgeocode_util.php');
 
 // create an instance of our batch geocode class
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
-$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
+$batchGeocodeClass = t3lib_div::makeInstanceClassname('tx_wecmap_batchgeocode');
+$batchGeocode = new $batchGeocodeClass();
 
 // add all tables to check which ones need geocoding and do it
 $batchGeocode->addAllTables();
 $batchGeocode->geocode();
-
-// some testing output for jeff to work with
-// echo 'Geocoded addresses: ' .$batchGeocode->geocodedAddresses() . '<br />';
-// echo 'Processed addresses: ' .$batchGeocode->processedAddresses();
 
 $processedAddresses = $batchGeocode->processedAddresses();
 $totalAddresses = $batchGeocode->recordCount();
 
 $progressBarWidth = round($processedAddresses / $totalAddresses * 100);
 
-$content = '<div id="bar" style="width:300px; height:20px; border:1px solid black">
-				<div id="progress" style="width:'.$progressBarWidth.'%; height:20px; background-color:red"></div>
-			</div>
-			<p>Processed '.$processedAddresses.' records of '.$totalAddresses.'</p>';
+$content = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses);		
 
 echo $content;
 ?>
