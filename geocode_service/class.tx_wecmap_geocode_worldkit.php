@@ -26,7 +26,7 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 /**
- * Service 'Yahoo! Maps Address Lookup' for the 'wec_map' extension.
+ * Service 'WorldKit City Lookup' for the 'wec_map' extension.
  *
  * @author	Web-Empowered Church Team <map@webempoweredchurch.org>
  */
@@ -35,7 +35,7 @@
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
 
 /**
- * Service providing lat/long lookup via the Yahoo! Maps web service.  
+ * Service providing lat/long lookup via the WorldKit City Lookup web service.  
  *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
