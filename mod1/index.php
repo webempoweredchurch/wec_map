@@ -381,7 +381,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		$processedAddresses = $batchGeocode->processedAddresses();
 		$totalAddresses = $batchGeocode->recordCount();
-		$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
 		
 		$content[] = '<h3>'.$LANG->getLL('batchGeocode').'</h3>';
 		$content[] = '<p>'.$LANG->getLL('batchInstructions').'</p>';

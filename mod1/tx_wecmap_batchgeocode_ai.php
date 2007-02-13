@@ -45,8 +45,6 @@ $batchGeocode->geocode();
 $processedAddresses = $batchGeocode->processedAddresses();
 $totalAddresses = $batchGeocode->recordCount();
 
-$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
-
 $content = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses);		
 
 echo $content;
