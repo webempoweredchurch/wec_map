@@ -49,6 +49,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $js;
 	var $key;
 	var $controls;
+	var $type;
 	
 	var $markerClassName = 'tx_wecmap_marker_google';
 	
@@ -127,6 +128,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 	
 	/**
+	 * Sets the initial map type.  Valid defaults from Google are...
+	 *   G_NORMAL_MAP: This is the normal street map type.
+	 *   G_SATELLITE_MAP: This map type shows Google Earth satellite images.
+	 *   G_HYBRID_MAP: This map type shows transparent street maps over Google Earth satellite images.
+	 */
+	function setType($type) {
+		$this->type = $type;
+	}
+	
+	/**
 	 * Main function to draw the map.  Outputs all the necessary HTML and
 	 * Javascript to draw the map in the frontend or backend.
 	 *
@@ -171,7 +182,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent[] = $this->js_createMarker();
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2('map');
-			$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom);
+			$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom, $this->type);
 			foreach( $this->controls as $control ) {
 				$jsContent[] = $control;
 			}
@@ -271,6 +282,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 */
 	function js_newGMap2($name) {
 		return 'var '.$name.' = new GMap2(document.getElementById("'.$name.'"));';
+	}
+	
+	function js_setMapType($name, $type) {
+		return $name.'.setMapType('.$type.');';
 	}	
 	
 	/**
@@ -295,8 +310,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	integer		Initial zoom level.
 	 * @return	string		Javascript to center and zoom the specified map.
 	 */
-	function js_setCenter($name, $lat, $long, $zoom) {
-		return $name.'.setCenter(new GLatLng('.$lat.', '.$long.'), '.$zoom.');';
+	function js_setCenter($name, $lat, $long, $zoom, $type) {
+		if($type) {
+			return $name.'.setCenter(new GLatLng('.$lat.', '.$long.'), '.$zoom.', '.$type.');';
+		} else {
+			return $name.'.setCenter(new GLatLng('.$lat.', '.$long.'), '.$zoom.');';
+		}
 	}
 	
 	
