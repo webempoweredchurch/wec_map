@@ -53,8 +53,8 @@ class tx_wecmap_pi2_wizicon {
     }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wecservant/pi2/class.tx_wecservant_pi2_wizicon.php'])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wecservant/pi2/class.tx_wecservant_pi2_wizicon.php']);
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/pi2/class.tx_wecmap_pi2_wizicon.php'])    {
+    include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/pi2/class.tx_wecmap_pi2_wizicon.php']);
 }
 
 ?>
