@@ -239,6 +239,12 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$width = 500;
 		$height = 500;
 		
+		$streetField = $this->getAddressField('street');
+		$cityField = $this->getAddressField('city');
+		$stateField = $this->getAddressField('state');
+		$zipField = $this->getAddressField('zip');
+		$countryField = $this->getAddressField('country');
+		
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className($apiKey, $width, $height);
@@ -261,55 +267,52 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
 
 			/* Only try to add marker if there's a city */
-			if($row['city'] != '') {
-				
-				// determine which country field to use, country or static_info_country
-				if(empty($row['static_info_country'])) {
-					$countryfield = 'country';
-				} else {
-					$countryfield = 'static_info_country';
-				}
+			if($row[$cityField] != '') {
 				
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row[$countryfield], $countries) && !empty($row[$countryfield])  && !empty($row['zip'])  && !empty($row['city'])) {
+				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])  && !empty($row[$zipField])  && !empty($row[$cityField])) {
 
 					// add this country to the array
-					$countries[] = $row[$countryfield];
+					$countries[] = $row[$countryField];
 					
 					// add a little info so users know what to do
+					/* @todo		Localize! */
 					$title = '<h1>Info</h1>';
-					$description = 'Zoom in to see more users from this country: ' . $row[$countryfield];
+					$description = 'Zoom in to see more users from this country: ' . $row[$countryField];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 0,2);
+					/* @todo		Why are we excluding state? */
+					$map->addMarkerByAddress(null, $row[$cityField], null, $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
 
 				
 				// if we haven't added a marker for this zip code yet, do so.
-				if(!in_array($row['city'], $cities) && !empty($row['city']) && !empty($row['zip'])) {
+				if(!in_array($row[$cityField], $cities) && !empty($cityField) && !empty($row[$zipField])) {
 					
 					// add this country to the array
-					$cities[] = $row['city'];
+					$cities[] = $row[$cityField];
 					
 					// add a little info so users know what to do
+					/* @todo		Localize! */
 					$title = '<h1>Info</h1>';
 					$description = 'Zoom in to see more users from this area.';
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], null, $row['zip'], $row[$countryfield], $title, $description, 3,7);
+					/* @todo		Why are we excluding state? */
+					$map->addMarkerByAddress(null, $row[$cityField], null, $row[$zipField], $row[$countryField], $title, $description, 3,7);
 				}
 				
 				// make title and description
 				$title = $this->makeTitle($row);
-				$description = $this->makeDescription($row, $countryfield);
+				$description = $this->makeDescription($row, $countryField);
 				
 				
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
 				// if private was checked, don't use address to geocode
 				if($private) {
-					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
 				} else {
-					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
+					$map->addMarkerByAddress($row[$addressField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
 				}
 			}
 		}
@@ -327,6 +330,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		return '<h1>'.$title.'</h1>';
 	}
 	
+	/* @todo	Update this to honor all TCA-defined fields */
 	function makeDescription($row, $countryfield='country') {
 		$output = $row['address'].'<br />';
 		$output .= $row['city'] . ', '.$row['zone']. ' '.$row['zip'];
@@ -346,7 +350,22 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$out .= '<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit me" border="0" alt="" />';
 		$out .= '</a>';
 		return $out;
+	}
+	
+	/**
+	 * Gets the address mapping from the TCA.
+	 *
+	 * @param		string		Name of the field to retrieve the mapping for.
+	 * @return		name		Name of the field containing address data.
+	 */
+	function getAddressField($field) {	
+		$fieldName = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'][$field];
+		if($fieldName == '') {
+			$fieldName = $field;
 		}
+		
+		return $fieldName;
+	}
 }
 
 

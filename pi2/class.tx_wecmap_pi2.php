@@ -112,6 +112,13 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		
+		
+		$streetField = $this->getAddressField('street');
+		$cityField = $this->getAddressField('city');
+		$stateField = $this->getAddressField('state');
+		$zipField = $this->getAddressField('zip');
+		$countryField = $this->getAddressField('country');
+		
 		$where = null;
 		// if a user group was set, make sure only those users from that group
 		// will be selected in the query
@@ -145,57 +152,50 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
 
 			/* Only try to add marker if there's a city */
-			if($row['city'] != '') {
-
-				// determine which country field to use, country or static_info_country
-				if(empty($row['static_info_country'])) {
-					$countryfield = 'country';
-				} else {
-					$countryfield = 'static_info_country';
-				}
+			if($row[$cityField] != '') {
 			
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row[$countryfield], $countries) && !empty($row[$countryfield])  && !empty($row['zip'])  && !empty($row['city'])) {
+				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])  && !empty($row[$zipField])  && !empty($row[$cityField])) {
 
 					// add this country to the array
-					$countries[] = $row[$countryfield];
+					$countries[] = $row[$countryField];
 					
 					// add a little info so users know what to do
 					$title = $this->makeTitle(array('name' => 'Info'));
-					$description = 'Zoom in to see more users from this country: ' . $row[$countryfield];
+					$description = 'Zoom in to see more users from this country: ' . $row[$countryField];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
 
 				
 				// if we haven't added a marker for this zip code yet, do so.
-				if(!in_array($row['city'], $cities) && !empty($row['city']) && !empty($row['zip'])) {
+				if(!in_array($row[$cityField], $cities) && !empty($row[$cityField]) && !empty($row[$zipField])) {
 					
 					// add this country to the array
-					$cities[] = $row['city'];
+					$cities[] = $row[$cityField];
 					
 					// add a little info so users know what to do
 					$title = $this->makeTitle(array('name' => 'Info'));
-					$count = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)', 'fe_users', 'city="'. $row['city'] .'"');
+					$count = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)', 'fe_users', $cityField.'="'. $row[$cityField] .'"');
 					$count = $count[0]['count(*)'];
 					
 					// extra processing if private is turned on
 					if($private) {
 						$maxzoom = 17;
 						if($count == 1) {
-							$description = 'There is '. $count .' user in '. $row['city'] .'.';
+							$description = 'There is '. $count .' user in '. $row[$cityField] .'.';
 						} else {
-							$description = 'There are '. $count .' users in '. $row['city'] .'.';							
+							$description = 'There are '. $count .' users in '. $row[$cityField] .'.';							
 						}
 
 					} else {
 						$maxzoom = 7;
-						$description = 'Zoom in to see more users in ' . $row['city'] . '.';
+						$description = 'Zoom in to see more users in ' . $row[$cityField] . '.';
 					}
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 3,$maxzoom);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,$maxzoom);
 				}
 				
 				// make title and description
@@ -205,7 +205,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$map->addMarkerByAddress($row['address'], $row['city'], $row['zone'], $row['zip'], $row[$countryfield], $title, $description, 8);
+					$map->addMarkerByAddress($row[$addressField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
 				}
 			}
 
@@ -227,6 +227,27 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$local_cObj->start($row, 'fe_users' );
 		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
 		return $output;
+	}
+	
+	
+	/**
+	 * Gets the address mapping from the TCA.
+	 *
+	 * @param		string		Name of the field to retrieve the mapping for.
+	 * @return		name		Name of the field containing address data.
+	 */
+	function getAddressField($field) {
+		if(!$this->loadedTCA) {
+			t3lib_div::loadTCA('fe_users');
+			$this->loadedTCA = true;
+		}
+		
+		$fieldName = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'][$field];
+		if($fieldName == '') {
+			$fieldName = $field;
+		}
+		
+		return $fieldName;
 	}
 }
 

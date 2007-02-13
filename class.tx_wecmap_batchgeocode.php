@@ -105,9 +105,15 @@ class tx_wecmap_batchgeocode {
 	 * @return		none
 	 */
 	function geocodeTable($table) {
-		global $TCA, $TYPO3_DB;
+		global $TYPO3_DB;
 		
-		$addressFields = $TCA[$table]['ctrl']['EXT']['wec_map']['addressFields'];
+		$addressFields = array(
+			'street' => $this->getAddressField($table, 'street'),
+			'city' => $this->getAddressField($table, 'city'),
+			'state' => $this->getAddressField($table, 'state'),
+			'zip' => $this->getAddressField($table, 'zip'),
+			'country' => $this->getAddressField($table, 'country'),
+		);
 		
 		$result = $TYPO3_DB->exec_SELECTquery('*', $table, "");
 		while($row = $TYPO3_DB->sql_fetch_assoc($result)) {
@@ -204,6 +210,22 @@ class tx_wecmap_batchgeocode {
 		}
 		
 		return $recordCount;
+	}
+	
+	/**
+	 * Gets the address mapping from the TCA.
+	 *
+	 * @param		string		Name of the table to look for the mapping in.
+	 * @param		string		Name of the field to retrieve the mapping for.
+	 * @return		name		Name of the field containing address data.
+	 */
+	function getAddressField($table, $field) {		
+		$fieldName = $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map']['addressFields'][$field];
+		if($fieldName == '') {
+			$fieldName = $field;
+		}
+		
+		return $fieldName;
 	}
 }
 
