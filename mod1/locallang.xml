@@ -37,7 +37,7 @@
 				The batch geocoder is used to quickly calculate the latitude and
 				longitude for a large number of addresses.  Without batch geocoding,
 				this does not occur until the address is accessed, either from the
-				frontend of the backend.  This can significantly increase page
+				frontend or the backend.  This can significantly increase page
 				loading time when many addresses are displayed so the batch geocoder
 				can be used to avoid this problem.
 			</label>
