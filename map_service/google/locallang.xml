@@ -10,7 +10,7 @@
 				<![CDATA[
 				No Maps API key has been set for the wec_map extension. Please make sure
 				that you have set an API key either in the Extension Manager, or via TypoScript or 
-				Flexform. If you don\'t have an API key yet, you may obtain one free of charge from
+				Flexform. If you don't have an API key yet, you may obtain one free of charge from
 				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.
 				]]>
 			</label>
