@@ -1,0 +1,10 @@
+02/13/07 15:24:40 ckoehler [190]
+	* trunk/wec_map/mod1/locallang.xml (modified)
+	Fix typo in Batch Geocoder
+
+02/13/07 15:21:47 jeff [189]
+	* trunk/wec_map/mod1/class.tx_wecmap_batchgeocode_util.php (modified)
+	* trunk/wec_map/mod1/index.php (modified)
+	* trunk/wec_map/mod1/tx_wecmap_batchgeocode_ai.php (modified)
+	Removed short open tag for PHP in response to ticket #45.  
+	Moved progress bar width calculation to util class.
