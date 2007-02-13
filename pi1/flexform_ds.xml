@@ -190,6 +190,29 @@
 							</config>
 						</TCEforms>
 					</mapType>
+					
+					<initialMapType>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.initialMapType</label>
+							<config>
+								<type>radio</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeNormal</numIndex>
+										<numIndex index="1">G_NORMAL_MAP</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeSatellite</numIndex>
+										<numIndex index="1">G_SATELLITE_MAP</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeHybrid</numIndex>
+										<numIndex index="1">G_HYBRID_MAP</numIndex>
+									</numIndex>
+								</items>
+							</config>
+						</TCEforms>						
+					</initialMapType>
 				</el>
 			</ROOT>
 		</mapControls>
