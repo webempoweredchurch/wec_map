@@ -84,8 +84,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
 		
-		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapControls');
-		empty($initialMapType) ? $initialMapType = $conf['controls.']['initialMapType']:null;
+		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapConfig');
+		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
 				
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;

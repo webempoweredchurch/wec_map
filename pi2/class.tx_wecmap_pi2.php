@@ -89,8 +89,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
 		
-		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapControls');
-		empty($initialMapType) ? $initialMapType = $conf['controls.']['initialMapType']:null;
+		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'default');
+		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
 				
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
@@ -154,7 +154,15 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$countries = array();
 		$cities = array();
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
-
+			
+			// add check for country and use different field if empty
+			// @TODO: make this smarter with TCA or something
+			if(empty($row[$countryField]) && $countryField == 'static_info_country') {
+				$countryField = 'country';
+			} else if(empty($row[$countryField]) && $countryField == 'country') {
+				$countryField = 'static_info_country';				
+			}
+			
 			/* Only try to add marker if there's a city */
 			if($row[$cityField] != '') {
 			
@@ -165,9 +173,10 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$countries[] = $row[$countryField];
 					
 					// add a little info so users know what to do
+					// @TODO: localize
 					$title = $this->makeTitle(array('name' => 'Info'));
 					$description = 'Zoom in to see more users from this country: ' . $row[$countryField];
-					
+
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
