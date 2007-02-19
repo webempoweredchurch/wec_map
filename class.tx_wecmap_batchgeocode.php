@@ -115,7 +115,8 @@ class tx_wecmap_batchgeocode {
 			'country' => $this->getAddressField($table, 'country'),
 		);
 		
-		$result = $TYPO3_DB->exec_SELECTquery('*', $table, "");
+		$where = "1=1".t3lib_befunc::deleteClause($table);		
+		$result = $TYPO3_DB->exec_SELECTquery('*', $table, $where);
 		while($row = $TYPO3_DB->sql_fetch_assoc($result)) {
 			
 			if($this->stopGeocoding()) {
@@ -203,8 +204,9 @@ class tx_wecmap_batchgeocode {
 		
 		$recordCount = 0;
 		
-		foreach($this->tables as $table) {		
-			$result = $TYPO3_DB->exec_SELECTquery('COUNT(*)', $table, "");
+		foreach($this->tables as $table) {
+			$where = "1=1".t3lib_befunc::deleteClause($table);				
+			$result = $TYPO3_DB->exec_SELECTquery('COUNT(*)', $table, $where);
 			$row = $TYPO3_DB->sql_fetch_assoc($result);
 			$recordCount += $row['COUNT(*)'];
 		}
