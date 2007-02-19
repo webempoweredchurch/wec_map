@@ -282,7 +282,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					/* @todo		Why are we excluding state? */
-					$map->addMarkerByAddress(null, $row[$cityField], null, $row[$zipField], $row[$countryField], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
 
 				
@@ -299,7 +299,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					/* @todo		Why are we excluding state? */
-					$map->addMarkerByAddress(null, $row[$cityField], null, $row[$zipField], $row[$countryField], $title, $description, 3,7);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,7);
 				}
 				
 				// make title and description
@@ -312,7 +312,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				if($private) {
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
 				} else {
-					$map->addMarkerByAddress($row[$addressField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
 				}
 			}
 		}
