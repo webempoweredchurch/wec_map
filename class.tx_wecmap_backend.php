@@ -118,7 +118,7 @@ class tx_wecmap_backend {
 		$origlong = t3lib_div::_GP('original_long');
 		
 		/* If the new lat/long are empty, delete our cached entry */
-		if (empty($newlat) && empty($newlong)) {
+		if (empty($newlat) && empty($newlong) && !empty($origlat) && !empty($origlong)) {
 			tx_wecmap_cache::delete($street, $city, $state, $zip, $country);
 		}
 
