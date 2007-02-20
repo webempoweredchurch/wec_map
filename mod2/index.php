@@ -281,7 +281,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$description = 'Zoom in to see more users from this country: ' . $row[$countryField];
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					/* @todo		Why are we excluding state? */
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
 
@@ -298,7 +297,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$description = 'Zoom in to see more users from this area.';
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					/* @todo		Why are we excluding state? */
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,7);
 				}
 				
