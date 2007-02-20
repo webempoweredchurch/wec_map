@@ -10,6 +10,11 @@
 			<label index="function1">Map</label>
 			<label index="function2">Settings</label>
 			<label index="function3">Function #3</label>
+			<label index="editrecord">Edit User Record</label>
+			<label index="country_zoominfo_desc">Zoom in to see more users from %s</label>
+			<label index="country_zoominfo_title">Info</label>
+			<label index="area_zoominfo_desc">Zoom in to see more users from this area.</label>
+			<label index="area_zoominfo_title">Info</label>
 		</languageKey>
 	</data>
 </T3locallang>

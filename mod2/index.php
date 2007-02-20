@@ -235,6 +235,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return String
 	 **/
 	function showMap() {
+		global $LANG;
 		/* Create the Map object */
 		$width = 500;
 		$height = 500;
@@ -266,6 +267,14 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$cities = array();
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
 
+			// add check for country and use different field if empty
+			// @TODO: make this smarter with TCA or something
+			if(empty($row[$countryField]) && $countryField == 'static_info_country') {
+				$countryField = 'country';
+			} else if(empty($row[$countryField]) && $countryField == 'country') {
+				$countryField = 'static_info_country';				
+			}
+			
 			/* Only try to add marker if there's a city */
 			if($row[$cityField] != '') {
 				
@@ -276,10 +285,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$countries[] = $row[$countryField];
 					
 					// add a little info so users know what to do
-					/* @todo		Localize! */
-					$title = '<h1>Info</h1>';
-					$description = 'Zoom in to see more users from this country: ' . $row[$countryField];
-					
+					$title = '<h1>' .$LANG->getLL('country_zoominfo_title').'</h1>';
+					$description = sprintf($LANG->getLL('country_zoominfo_desc'), $row[$countryField]);
+
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
@@ -292,9 +300,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$cities[] = $row[$cityField];
 					
 					// add a little info so users know what to do
-					/* @todo		Localize! */
-					$title = '<h1>Info</h1>';
-					$description = 'Zoom in to see more users from this area.';
+					$title = '<h1>' .$LANG->getLL('area_zoominfo_title').'</h1>';
+					$description = $LANG->getLL('area_zoominfo_desc');
 					
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,7);
@@ -330,10 +337,11 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	
 	/* @todo	Update this to honor all TCA-defined fields */
 	function makeDescription($row, $countryfield='country') {
+		global $LANG;
 		$output = $row['address'].'<br />';
 		$output .= $row['city'] . ', '.$row['zone']. ' '.$row['zip'];
 		$output .= '<br />'.$row[$countryfield].'<br />';
-		$output .= $this->returnEditLink($row['uid'], 'Edit User Record');
+		$output .= $this->returnEditLink($row['uid'], $LANG->getLL('editrecord'));
 
 		return $output;
 	}

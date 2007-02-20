@@ -118,7 +118,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		
-		
 		// determine if an address has been set through flexforms. If not, process TS		
 		if(empty($zip) && empty($state) && empty($city)) {
 			

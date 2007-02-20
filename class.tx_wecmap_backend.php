@@ -129,7 +129,7 @@ class tx_wecmap_backend {
 			return $LANG->getLL('geocodeNoAddress');
 		}
 		
-		/* Grab the lat and long there were posted */
+		/* Grab the lat and long that were posted */
 		$newlat = t3lib_div::_GP('lat');
 		$newlong = t3lib_div::_GP('long');
 		

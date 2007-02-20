@@ -171,11 +171,10 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 					// add this country to the array
 					$countries[] = $row[$countryField];
-					
+
 					// add a little info so users know what to do
-					// @TODO: localize
-					$title = $this->makeTitle(array('name' => 'Info'));
-					$description = 'Zoom in to see more users from this country: ' . $row[$countryField];
+					$title = $this->makeTitle(array('name' => $this->pi_getLL('country_zoominfo_title')));
+					$description = sprintf($this->pi_getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
@@ -197,14 +196,14 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					if($private) {
 						$maxzoom = 17;
 						if($count == 1) {
-							$description = 'There is '. $count .' user in '. $row[$cityField] .'.';
+							$description = sprintf($this->pi_getLL('citycount_si'),$row[$cityField]);
 						} else {
-							$description = 'There are '. $count .' users in '. $row[$cityField] .'.';							
+							$description = sprintf($this->pi_getLL('citycount_pl'),$count, $row[$cityField]);
 						}
 
 					} else {
 						$maxzoom = 7;
-						$description = 'Zoom in to see more users in ' . $row[$cityField] . '.';
+						$description = sprintf($this->pi_getLL('city_zoominfo_desc'), $row[$cityField]);
 					}
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
