@@ -42,6 +42,27 @@ require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecma
  */
 class tx_wecmap_backend {
 	
+	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$this) {
+		global $TCA;
+		$isMappable = $TCA[$table]['ctrl']['EXT']['wec_map']['isMappable'];
+	
+		if($isMappable) {
+			/* Get the names of the fields from the TCA */
+			$streetField = tx_wecmap_backend::getFieldNameFromTable('street', $table);
+			$cityField = tx_wecmap_backend::getFieldNameFromTable('city', $table);
+			$stateField = tx_wecmap_backend::getFieldNameFromTable('state', $table);
+			$zipField = tx_wecmap_backend::getFieldNameFromTable('zip', $table);
+			$countryField = tx_wecmap_backend::getFieldNameFromTable('country', $table);
+			
+			/* Get the row that we're saving */
+			$row = t3lib_befunc::getRecord($table, $id);
+			
+			/* @todo	Eliminate double save */
+			tx_wecmap_backend::drawGeocodeStatus($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField]);
+		}
+		
+	}
+	
 	/**
 	 * Checks the geocoding status for the current record.  This function is
 	 * mainly responsible for taking backend record data and handing it to
@@ -103,8 +124,6 @@ class tx_wecmap_backend {
 		global $LANG;
 		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 		
-		$row = $address;
-
 		// if there is no info about the user, return different status
 		if(!$city) {
 			return $LANG->getLL('geocodeNoAddress');
@@ -116,16 +135,13 @@ class tx_wecmap_backend {
 		
 		$origlat = t3lib_div::_GP('original_lat');
 		$origlong = t3lib_div::_GP('original_long');
-		
+				
 		/* If the new lat/long are empty, delete our cached entry */
 		if (empty($newlat) && empty($newlong) && !empty($origlat) && !empty($origlong)) {
 			tx_wecmap_cache::delete($street, $city, $state, $zip, $country);
 		}
 
-		/* If the lat/long changed, then insert a new entry into the cache */
-		/* @todo	Need to think through the logic here.  Shouldn't we update?
-					I'm not sure how that changes when an address changes too
-					though. */
+		/* If the lat/long changed, then insert a new entry into the cache or update it. */
 		if((($newlat != $origlat) or ($newlong != $origlong)) and (!empty($newlat) && !empty($newlong))) {
 			tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $newlat, $newlong);
 		}
@@ -194,6 +210,7 @@ class tx_wecmap_backend {
 	 * @param	string	The portion of the address we're trying to map.
 	 * @param	array	Array of field related data.
 	 * @return	string	The specified portion of the address.
+	 * @todo			Refactor this to use getFieldNameForTable().
 	 */
 	function getFieldValue($key, $PA) {
 		global $TCA;
@@ -264,6 +281,31 @@ class tx_wecmap_backend {
 		
         return $value;
 	}
+	
+	/**
+	 * Checks the TCA for address mapping rules and returns the field name.  
+	 * If a mapping rule is defined, this tells us what field contains address 
+	 * related information.  If no rules are defined, we pick default fields 
+	 * to use.
+	 *
+	 * @param	string	The portion of the address we're trying to map.
+	 * @param	string	The name of the table that we're trying to map.
+	 * @return	string	The specified portion of the address.
+	 */
+	function getFieldNameFromTable($key, $table) {
+		global $TCA;
+		$ctrlAddressFields = $TCA[$table]['ctrl']['EXT']['wec_map']['addressFields'];
+		
+		/* If the ctrl section of the TCA has a name, use it */
+		if(isset($ctrlAddressFields[$key])) {
+			$fieldName = $ctrlAddressFields[$key];
+		} else {	
+			/* Otherwise, use the default name */
+           	$fieldName = $key;
+		}
+
+        return $fieldName;
+    }
 	
 	/**
 	 * Gets extConf from TYPO3_CONF_VARS and returns the specified key.

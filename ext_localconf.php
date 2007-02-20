@@ -5,6 +5,9 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi1/class.tx_wecmap_pi1.php','_pi1','list_type',1);
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi2/class.tx_wecmap_pi2.php','_pi2','list_type',1);
 
+$GLOBALS ['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processDatamapClass'][] = 'EXT:wec_map/class.tx_wecmap_backend.php:tx_wecmap_backend';
+
+
 /* Add the Geocoder.us geocoding service. */
 t3lib_extMgm::addService($_EXTKEY,'geocode','tx_wecmap_geocode_geocoder',
 	array(
