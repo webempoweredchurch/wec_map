@@ -131,7 +131,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		}
 		
 		// if a storage folder pid was specified, filter by that
-		if($pid) {
+		if($pid && $userGroups) {
+			$where .= ' AND pid IN ('. $pid .')';
+		} else {
 			$where .= ' pid IN ('. $pid .')';
 		}
 		
