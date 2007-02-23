@@ -222,7 +222,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		}
 
 		// Select rows:
-		$displayRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*','tx_wecmap_cache','');
+		$displayRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*','tx_wecmap_cache','', 'address');
 
 		foreach($displayRows as $row) {				
 			// Add icon/title and ID:
@@ -257,17 +257,18 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 		// Create header:
 		$cells = array();
-		$cells[] = '<td colspan="2">&nbsp;</td>';
-		$cells[] = '<td>'.$LANG->getLL('address').'</td>';
-		$cells[] = '<td>'.$LANG->getLL('latitude').'</td>';
-		$cells[] = '<td>'.$LANG->getLL('longitude').'</td>';
-		$cells[] = '<td>&nbsp;</td>';
+		$cells[] = '<th>&nbsp;</th>';
+		$cells[] = '<th>&nbsp;</th>';
+		$cells[] = '<th>'.$LANG->getLL('address').'</th>';
+		$cells[] = '<th>'.$LANG->getLL('latitude').'</th>';
+		$cells[] = '<th>'.$LANG->getLL('longitude').'</th>';
+		$cells[] = '<th>&nbsp;</th>';
 		
 		$output = '
-			<tr class="bgColor5 tableheader">
+			<thead class="bgColor5 tableheader"><tr>
 				'.implode('
 				',$cells).'
-			</tr>'.$output;
+			</tr></thead>'.$output;
 
 			// Compile final table and return:
 		
@@ -279,14 +280,21 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteCache').'" alt="'.$LANG->getLL('deleteCache').'" />'.
 			'</a>'.
 		'<br/>'.
-		'<table border="0" cellspacing="1" cellpadding="3" id="tx-wecmap-cache" class="lrPadding c-list">'.$output.'</table>';
+		'<table border="0" cellspacing="1" cellpadding="3" id="tx-wecmap-cache" class="sortable">'.$output.'</table>';
 		
 		
 		if ($cmd == 'edit') {
 			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';
 		}
-
-		return $output;
+		
+		$js = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>'.chr(10).
+			  '<script type="text/javascript" src="../contrib/tablesort/fastinit.js"></script>'.chr(10).
+			  '<script type="text/javascript" src="../contrib/tablesort/tablesort.js"></script>'.chr(10).
+			  '<script type="text/javascript">
+				SortableTable.setup({ rowEvenClass : \'bgColor-20\', rowOddClass : \'bgColor-10\'})
+				
+			  </script>';
+		return $js.chr(10).$output;
 	}
 
 	/*
