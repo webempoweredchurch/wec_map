@@ -109,7 +109,7 @@ class tx_wecmap_cache {
 				$latlong = null;
 			} 
 		}
-		
+		print_r($latlong);
 		return $latlong;
 		
 	}
