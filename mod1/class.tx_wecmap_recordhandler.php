@@ -169,7 +169,7 @@ class tx_wecmap_recordhandler {
 				}
 				
 				function resetSearch() {
-					$(\'recordSearchbox\').clear();
+					$(\'recordSearchbox\').value = "Filter records...";
 					$(\'resetSearchboxButton\').update();
 					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
 					addresses.each(function(address) { address.parentNode.show()});
