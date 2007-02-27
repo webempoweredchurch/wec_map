@@ -163,9 +163,12 @@ class tx_wecmap_recordhandler {
 				function filter() {
 					var sword = $F(\'recordSearchbox\');
 					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
-					var result = addresses.select(function(n, sword) { return n.innerHTML == sword});
+					var result = addresses.reject(function(n, sword) { return n.innerHTML == sword});
 					// alert(sword);
-					alert(result);
+					if(sword == "Edmond") {
+						alert(result);						
+					}
+
 					
 				}
 				
@@ -215,9 +218,8 @@ class tx_wecmap_recordhandler {
 				}
 				
 				function saveRecord(id) {
-					var long = $(id).getElementsByClassName(\'longForm\');
-					var longValue = $F(long[0]);
-
+					var longEl = $(id).getElementsByClassName("longForm");
+					var longValue = $F(longEl[0]);
 					var lat = $(id).getElementsByClassName(\'latForm\');
 					var latValue = $F(lat[0]);
 
@@ -227,13 +229,13 @@ class tx_wecmap_recordhandler {
 				          {method: \'get\', parameters: pars, onComplete:unEdit(id,longValue,latValue)});
 				}
 				
-				function unEdit(id, long, lat) {
+				function unEdit(id, longVal, lat) {
 					var longitudes = $(id).getElementsByClassName(\'longitude\');
 					var latitudes = $(id).getElementsByClassName(\'latitude\');
 					var longitude = longitudes[0];
 					var latitude = latitudes[0];
 					$(id).getElementsByClassName(\'recordEditButtons\')[0].update(\'\');
-					longitude.update(long);
+					longitude.update(longVal);
 					latitude.update(lat);
 				}
 				
