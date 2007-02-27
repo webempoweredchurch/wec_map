@@ -216,7 +216,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		$limit = $this->getPageLimit($page, $itemsPerPage);
 
-		$output = $recordHandler->displayTable($page);
+		$output = $recordHandler->displaySearch();
+		$output .= $recordHandler->displayTable($page);
 		
 		if ($cmd == 'edit') {
 			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';

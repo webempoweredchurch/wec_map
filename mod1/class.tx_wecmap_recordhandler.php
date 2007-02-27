@@ -128,6 +128,16 @@ class tx_wecmap_recordhandler {
 	}
 	
 	/**
+	 * Shows a search box to filter cache records
+	 *
+	 * @return String
+	 **/
+	function displaySearch() {
+		$content = '<div><input id="recordSearchbox" type="text" value="Filter records..." size="20" onfocus="clearSearchbox()" onkeyup="filter()"/></div>';
+		return $content;
+	}
+	
+	/**
 	 * Returns the JS functions for our AJAX stuff
 	 *
 	 * @return String
@@ -141,6 +151,28 @@ class tx_wecmap_recordhandler {
 
 			  </script>'.chr(10).
 			'<script>
+			
+				// -------------------------
+				// 		search functions
+				// -------------------------
+
+				function clearSearchbox() {
+					$(\'recordSearchbox\').clear();
+				}
+			
+				function filter() {
+					var sword = $F(\'recordSearchbox\');
+					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
+					var result = addresses.select(function(n, sword) { return n.innerHTML == sword});
+					// alert(sword);
+					alert(result);
+					
+				}
+				
+				// -------------------------
+				// record handling functions
+				// -------------------------
+				
 				function deleteAll() {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteAll\';
