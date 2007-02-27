@@ -77,8 +77,8 @@ class tx_wecmap_recordhandler {
 
 			// Add icon/title and ID:
 			$cells = array();
-			$cells[] = '<td class="editButton"><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['address_hash']).'" onclick="editRecord(\''. $row['address_hash'] .'\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
-			$cells[] = '<td class="deleteButton"><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['address_hash']).'" onclick="deleteRecord(\''. $row['address_hash'] .'\'); return false;")"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
+			$cells[] = '<td class="editButton"><a href="#" onclick="editRecord(\''. $row['address_hash'] .'\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
+			$cells[] = '<td class="deleteButton"><a href="#" onclick="deleteRecord(\''. $row['address_hash'] .'\'); return false;")"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
 			
 			$cells[] = '<td class="address">'.$row['address'].'</td>';
 				
@@ -292,7 +292,7 @@ class tx_wecmap_recordhandler {
 		global $LANG;
 		$content = $LANG->getLL('totalCachedAddresses') .
 			': <strong><span id="recordCount">'.$this->count.'</span></strong> '.
-			'<a href="'.$this->linkSelf('&cmd=delete&uid=all').'" onclick="deleteAll(); return false;">'.
+			'<a href="#" onclick="deleteAll(); return false;">'.
 			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteCache').'" alt="'.$LANG->getLL('deleteCache').'" />'.
 			'</a>';
 		

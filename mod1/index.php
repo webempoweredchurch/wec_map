@@ -214,23 +214,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$page = intval(t3lib_div::_GP('page'));
 		if(empty($page)) $page = 1;
 		
-		switch($cmd) {
-			case 'update' : 
-				tx_wecmap_cache::updateByUID($uid, $latitude, $longitude);
-				unset($cmd);
-				unset($uid);
-				break;
-			case 'delete' :
-				if ($uid=="all") {
-					tx_wecmap_cache::deleteAll();
-				} else {
-					tx_wecmap_cache::deleteByUID($uid);
-				}
-				unset($cmd);
-				unset($uid);
-				break;
-		}
-		
 		$limit = $this->getPageLimit($page, $itemsPerPage);
 
 		$output = $recordHandler->displayTable($page);
