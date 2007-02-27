@@ -133,7 +133,7 @@ class tx_wecmap_recordhandler {
 	 * @return String
 	 **/
 	function displaySearch() {
-		$content = '<div><input id="recordSearchbox" type="text" value="Filter records..." size="20" onblur="resetSearchbox()" onfocus="clearSearchbox()" onkeyup="filter()"/></div>';
+		$content = '<div><input id="recordSearchbox" type="text" value="Filter records..." size="20" onblur="resetSearchbox()" onfocus="clearSearchbox()" onkeyup="filter()"/><span id="resetSearchboxButton"></span></div>';
 		return $content;
 	}
 	
@@ -167,15 +167,21 @@ class tx_wecmap_recordhandler {
 						$(\'recordSearchbox\').clear();
 					}
 				}
-			
+				
+				function resetSearch() {
+					$(\'recordSearchbox\').clear();
+					$(\'resetSearchboxButton\').update();
+					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
+					addresses.each(function(address) { address.parentNode.show()});
+				}
+				
 				function filter() {
+					$(\'resetSearchboxButton\').update("<a href=\"#\" onclick=\"resetSearch(); return false;\">&nbsp;Clear</a>");
 					sword = $F(\'recordSearchbox\');
-					// if(sword.length >= 3) {
-						var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
-						result = addresses.partition(function(n) {return (n.innerHTML.indexOf(sword) != -1)});
-					// }
+					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
+					result = addresses.partition(function(n) {return (n.innerHTML.indexOf(sword) != -1)});
 					result[0].each(function(address) { address.parentNode.show()});
-					result[1].each(function(address) { address.parentNode.hide()});					
+					result[1].each(function(address) { address.parentNode.hide()});
 				}
 				
 				// -------------------------
