@@ -45,7 +45,6 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 require_once('../class.tx_wecmap_cache.php');
 
 
-
 /**
  * Module 'WEC Map Admin' for the 'wec_map' extension.
  *
@@ -198,8 +197,15 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return	string		HTML for the information table.
 	 */
 	function geocodeAdmin()	{
+	
+		$count 	= $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('COUNT(*)', 'tx_wecmap_cache','');
+		$count = $count[0]['COUNT(*)'];
+	
+		require_once('class.tx_wecmap_recordhandler.php');
+		$recordhandlerClass = t3lib_div::makeInstanceClassname('tx_wecmap_recordhandler');
+		$recordHandler = new $recordhandlerClass($count);
+		
 		global $LANG;
-		$itemsPerPage = 75;
 		
 		$uid = t3lib_div::_GP('uid');
 		$latitude = t3lib_div::_GP('latitude');
@@ -224,88 +230,17 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				unset($uid);
 				break;
 		}
-
+		
 		$limit = $this->getPageLimit($page, $itemsPerPage);
 
-		// Select rows:
-		$displayRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*','tx_wecmap_cache','', 'address', '', $limit);
-		$count 	= $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('COUNT(*)', 'tx_wecmap_cache','');
-		$count = $count[0]['COUNT(*)'];
-		
-		$pager = $this->makePagination($page, $count, $itemsPerPage);
-
-		foreach($displayRows as $row) {				
-			// Add icon/title and ID:
-			$cells = array();
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=edit&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
-			$cells[] = '<td><a href="'.$this->linkSelf('&cmd=delete&uid='.$row['address_hash']).'"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
-			
-			$cells[] = '<td>'.$row['address'].'</td>';
-				
-			if ($row['address_hash'] == $uid && $cmd = 'edit') {
-				$cells[] = '<td><input name="latitude" value="'.$row['latitude'].'" size="8"/></td>';
-				$cells[] = '<td><input name="longitude" value="'.$row['longitude'].'" size="8"/></td>';
-				$cells[] = '<td><input type="submit" value="'.$LANG->getLL('updateAddress').'" /></td>';
-			} else {
-				$cells[] = '<td>'.$row['latitude'].'</td>';
-				$cells[] = '<td>'.$row['longitude'].'</td>';
-				$cells[] = '<td>&nbsp;</td>';
-			}
-										
-			// Compile Row:
-			$output.= '
-				<tr class="bgColor'.($cc%2 ? '-20':'-10').'">
-					'.implode('
-					',$cells).'
-				</tr>';
-			$cc++;
-
-			$countDisplayed++;
-		}
-
-		list($count_allInTable) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*) AS count','tx_wecmap_cache','');
-
-		// Create header:
-		$cells = array();
-		$cells[] = '<th>&nbsp;</th>';
-		$cells[] = '<th>&nbsp;</th>';
-		$cells[] = '<th>'.$LANG->getLL('address').'</th>';
-		$cells[] = '<th>'.$LANG->getLL('latitude').'</th>';
-		$cells[] = '<th>'.$LANG->getLL('longitude').'</th>';
-		$cells[] = '<th>&nbsp;</th>';
-		
-		$output = '
-			<thead class="bgColor5 tableheader"><tr>
-				'.implode('
-				',$cells).'
-			</tr></thead>'.$output;
-
-			// Compile final table and return:
-		
-		$output = '
-		<br/>
-		<br/>
-		'.$LANG->getLL('totalCachedAddresses').': <b>'.$count_allInTable['count'].'</b> '.
-			'<a href="'.$this->linkSelf('&cmd=delete&uid=all').'">'.
-			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteCache').'" alt="'.$LANG->getLL('deleteCache').'" />'.
-			'</a>'.
-		"<br />".
-		$pager.
-		'<br/>'.
-		'<table border="0" cellspacing="1" cellpadding="3" id="tx-wecmap-cache" class="sortable">'.$output.'</table>'.
-		$pager;
+		$output = $recordHandler->displayTable($page);
 		
 		if ($cmd == 'edit') {
 			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';
 		}
 		
-		$js = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>'.chr(10).
-			  '<script type="text/javascript" src="../contrib/tablesort/fastinit.js"></script>'.chr(10).
-			  '<script type="text/javascript" src="../contrib/tablesort/tablesort.js"></script>'.chr(10).
-			  '<script type="text/javascript">
-				SortableTable.setup({ rowEvenClass : \'bgColor-20\', rowOddClass : \'bgColor-10\'})
-				
-			  </script>';
+		$js = $recordHandler->getJS();
+	
 		return $js.chr(10).$output;
 	}
 
