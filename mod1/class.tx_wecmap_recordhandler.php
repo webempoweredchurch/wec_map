@@ -179,9 +179,35 @@ class tx_wecmap_recordhandler {
 					$(\'resetSearchboxButton\').update("<a href=\"#\" onclick=\"resetSearch(); return false;\">&nbsp;Clear</a>");
 					sword = $F(\'recordSearchbox\');
 					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
-					result = addresses.partition(function(n) {return (n.innerHTML.indexOf(sword) != -1)});
+					result = addresses.partition(function(n) {return matches(n, sword)});
+					// updateCount(result[0].size());
 					result[0].each(function(address) { address.parentNode.show()});
 					result[1].each(function(address) { address.parentNode.hide()});
+				}
+				
+				function matches(element, sword) {
+					var array = sword.split(" ");
+					retValue = true;
+					array.each(function(swordPart) {
+						if(element.innerHTML.toLowerCase().indexOf(swordPart.toLowerCase()) == -1) {
+							retValue = false;
+							throw $break;
+						};
+					}
+					);
+					if(retValue === false ) {
+						return false;
+					} else {
+						return true;						
+					}
+
+				}
+				
+				function updateCount(count) {
+					var countEl = $(\'recordCount\');
+					var number = countEl.innerHTML;
+					$(\'recordCount\').update();
+					$(\'recordCount\').update(count+\'/\'+number);
 				}
 				
 				// -------------------------
