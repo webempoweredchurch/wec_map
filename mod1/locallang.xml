@@ -12,8 +12,9 @@
 			<label index="function3">Batch Geocode</label>
 			<label index="editAddress">Edit address</label>
 			<label index="deleteAddress">Delete address</label>
-			<label index="updateAddress">Update</label>
-			
+			<label index="updateAddress">Update address</label>
+			<label index="cancelUpdate">Cancel Update</label>
+						
 			<label index="address">Address</label>
 			<label index="latitude">Latitude</label>
 			<label index="longitude">Longitude</label>

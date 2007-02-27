@@ -77,20 +77,14 @@ class tx_wecmap_recordhandler {
 
 			// Add icon/title and ID:
 			$cells = array();
-			$cells[] = '<td class="editButton"><a href="#" onclick="editRecord(\''. $row['address_hash'] .'\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
-			$cells[] = '<td class="deleteButton"><a href="#" onclick="deleteRecord(\''. $row['address_hash'] .'\'); return false;")"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
 			
 			$cells[] = '<td class="address">'.$row['address'].'</td>';
 				
-			if ($row['address_hash'] == $uid && $cmd = 'edit') {
-				$cells[] = '<td><input name="latitude" value="'.$row['latitude'].'" size="8"/></td>';
-				$cells[] = '<td><input name="longitude" value="'.$row['longitude'].'" size="8"/></td>';
-				$cells[] = '<td><input type="submit" value="'.$LANG->getLL('updateAddress').'" /></td>';
-			} else {
-				$cells[] = '<td class="latitude">'.$row['latitude'].'</td>';
-				$cells[] = '<td class="longitude">'.$row['longitude'].'</td>';
-				$cells[] = '<td class="recordEditButtons"></td>';
-			}
+			$cells[] = '<td class="latitude">'.$row['latitude'].'</td>';
+			$cells[] = '<td class="longitude">'.$row['longitude'].'</td>';
+			
+			$cells[] = '<td class="editButton"><a href="#" onclick="editRecord(\''. $row['address_hash'] .'\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
+			$cells[] = '<td class="deleteButton"><a href="#" onclick="deleteRecord(\''. $row['address_hash'] .'\'); return false;")"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
 										
 			// Compile Row:
 			$output.= '
@@ -105,12 +99,10 @@ class tx_wecmap_recordhandler {
 
 		// Create header:
 		$headerCells = array();
-		$headerCells[] = '<th>&nbsp;</th>';
-		$headerCells[] = '<th>&nbsp;</th>';
 		$headerCells[] = '<th>'.$LANG->getLL('address').'</th>';
 		$headerCells[] = '<th>'.$LANG->getLL('latitude').'</th>';
 		$headerCells[] = '<th>'.$LANG->getLL('longitude').'</th>';
-		$headerCells[] = '<th>&nbsp;</th>';
+		$headerCells[] = '<th colspan="2">Actions</th>';
 		
 		$output = '
 			<thead class="bgColor5 tableheader"><tr>
@@ -144,6 +136,7 @@ class tx_wecmap_recordhandler {
 	 * @return String
 	 **/
 	function getJS() {
+		global $LANG;
 		$js = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>'.chr(10).
 			  '<script type="text/javascript" src="../contrib/tablesort/fastinit.js"></script>'.chr(10).
 			  '<script type="text/javascript" src="../contrib/tablesort/tablesort.js"></script>'.chr(10).
@@ -219,14 +212,14 @@ class tx_wecmap_recordhandler {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteAll\';
 				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
-				          {method: \'get\', parameters: pars, onComplete:clearTable});
+				          {method: \'post\', parameters: pars, onComplete:clearTable});
 				}
 
 				function deleteRecord(id) {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteSingle&record=\'+id;
 				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
-				          {method: \'get\', parameters: pars, onComplete:clearRow(id)});
+				          {method: \'post\', parameters: pars, onComplete:clearRow(id)});
 				}
 				
 				function editRecord(id) {
@@ -234,10 +227,10 @@ class tx_wecmap_recordhandler {
 					var latitudes = $(id).getElementsByClassName(\'latitude\');
 					var longitude = longitudes[0];
 					var latitude = latitudes[0];
-					var links = getLinks(id, latitude.innerHTML, longitude.innerHTML);
-					latitude.update(\'<input class="latForm" type="text" size="10" value="\'+latitude.innerHTML+\'"/>\');
-					longitude.update(\'<input class="longForm" type="text" size="10" value="\'+longitude.innerHTML+\'"/>\');
-					var buttonElement = $(id).getElementsByClassName(\'recordEditButtons\');
+					var links = getSaveCancelLinks(id, latitude.innerHTML, longitude.innerHTML);
+					latitude.update(\'<input class="latForm" type="text" size="11" value="\'+latitude.innerHTML+\'"/>\');
+					longitude.update(\'<input class="longForm" type="text" size="11" value="\'+longitude.innerHTML+\'"/>\');
+					var buttonElement = $(id).getElementsByClassName(\'editButton\');
 					buttonElement[0].update(links);
 				}
 				
@@ -265,7 +258,7 @@ class tx_wecmap_recordhandler {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=saveRecord&record=\'+id+\'&latitude=\'+latValue+\'&longitude=\'+longValue;
 				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
-				          {method: \'get\', parameters: pars, onComplete:unEdit(id,longValue,latValue)});
+				          {method: \'post\', parameters: pars, onComplete:unEdit(id,longValue,latValue)});
 				}
 				
 				function unEdit(id, longVal, lat) {
@@ -273,13 +266,18 @@ class tx_wecmap_recordhandler {
 					var latitudes = $(id).getElementsByClassName(\'latitude\');
 					var longitude = longitudes[0];
 					var latitude = latitudes[0];
-					$(id).getElementsByClassName(\'recordEditButtons\')[0].update(\'\');
+					$(id).getElementsByClassName(\'editButton\')[0].update(getEditLink(id));
 					longitude.update(longVal);
 					latitude.update(lat);
 				}
 				
-				function getLinks(id, oldLat, oldLong) {
-					var link = \'<a href="#" onclick="saveRecord(\\\'\'+id+\'\\\'); return false;">Save</a>&nbsp;<a href="#" onclick="unEdit(\\\'\'+id+\'\\\',\\\'\'+oldLong+\'\\\', \\\'\'+oldLat+\'\\\'); return false;">Cancel</a>\';
+				function getSaveCancelLinks(id, oldLat, oldLong) {
+					var link = \'<a href="#" onclick="saveRecord(\\\'\'+id+\'\\\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/savedok.gif','width="11" height="12"').' title="'.$LANG->getLL('updateAddress').'" alt="'.$LANG->getLL('updateAddress').'" /></a><a href="#" onclick="unEdit(\\\'\'+id+\'\\\',\\\'\'+oldLong+\'\\\', \\\'\'+oldLat+\'\\\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/closedok.gif','width="11" height="12"').' title="'.$LANG->getLL('cancelUpdate').'" alt="'.$LANG->getLL('cancelUpdate').'" /></a>\';
+					return link;
+				}
+				
+				function getEditLink(id) {
+					var link = \'<a href="#" onclick="editRecord(\'+id+\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a>\';
 					return link;
 				}
 				
@@ -311,7 +309,7 @@ class tx_wecmap_recordhandler {
 					var number = count.innerHTML;
 					var pars = \'?cmd=updatePagination&page=\'+page+\'&itemsPerPage='. $this->itemsPerPage .'&count=\'+number;
 				    var myAjax = new Ajax.Updater(\'pagination\', \'tx_wecmap_recordhandler_ai.php\', 
-				          {method: \'get\', parameters: pars});
+				          {method: \'post\', parameters: pars});
 				}
 			</script>';
 		
