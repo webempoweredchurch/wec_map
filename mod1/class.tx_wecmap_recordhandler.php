@@ -133,7 +133,7 @@ class tx_wecmap_recordhandler {
 	 * @return String
 	 **/
 	function displaySearch() {
-		$content = '<div><input id="recordSearchbox" type="text" value="Filter records..." size="20" onfocus="clearSearchbox()" onkeyup="filter()"/></div>';
+		$content = '<div><input id="recordSearchbox" type="text" value="Filter records..." size="20" onblur="resetSearchbox()" onfocus="clearSearchbox()" onkeyup="filter()"/></div>';
 		return $content;
 	}
 	
@@ -156,20 +156,26 @@ class tx_wecmap_recordhandler {
 				// 		search functions
 				// -------------------------
 
+				function resetSearchbox() {
+					if($F(\'recordSearchbox\') == "") {
+						$(\'recordSearchbox\').value = "Filter records...";
+					}	
+				}
+				
 				function clearSearchbox() {
-					$(\'recordSearchbox\').clear();
+					if($F(\'recordSearchbox\') == "Filter records...") {
+						$(\'recordSearchbox\').clear();
+					}
 				}
 			
 				function filter() {
-					var sword = $F(\'recordSearchbox\');
-					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
-					var result = addresses.reject(function(n, sword) { return n.innerHTML == sword});
-					// alert(sword);
-					if(sword == "Edmond") {
-						alert(result);						
-					}
-
-					
+					sword = $F(\'recordSearchbox\');
+					// if(sword.length >= 3) {
+						var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
+						result = addresses.partition(function(n) {return (n.innerHTML.indexOf(sword) != -1)});
+					// }
+					result[0].each(function(address) { address.parentNode.show()});
+					result[1].each(function(address) { address.parentNode.hide()});					
 				}
 				
 				// -------------------------
