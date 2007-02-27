@@ -133,7 +133,8 @@ class tx_wecmap_recordhandler {
 	 * @return String
 	 **/
 	function displaySearch() {
-		$content = '<div><input id="recordSearchbox" type="text" value="Filter records..." size="20" onblur="resetSearchbox()" onfocus="clearSearchbox()" onkeyup="filter()"/><span id="resetSearchboxButton"></span></div>';
+		global $LANG;
+		$content = '<div><input id="recordSearchbox" type="text" value="'.$LANG->getLL('searchFilter').'" size="20" onblur="resetSearchbox()" onfocus="clearSearchbox()" onkeyup="filter()"/><span id="resetSearchboxButton"></span></div>';
 		return $content;
 	}
 	

@@ -49,6 +49,7 @@
 			<label index="startGeocoding">Start Geocoding</label>
 			<label index="processedStart">Processed</label>
 			<label index="processedMid">records of</label>
+			<label index="searchFilter">Filter records...</label>
 		</languageKey>
 		
 	</data>
