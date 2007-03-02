@@ -144,7 +144,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$description = $this->makeDescription($marker);
 
 					$description = $description . $address;
-						
+					
+					// add the marker to the map
+					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'], 
+											 $marker['zip'], $marker['country'], $title, 
+											 $description);	
  					// add the marker to the map
 					// $map->addMarkerByAddressWithTabs($marker['street'], $marker['city'], $marker['state'], 
 					// 						 $marker['zip'], $marker['country'], array("info", "info2"), array($title, "test"), 
