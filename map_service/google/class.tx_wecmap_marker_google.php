@@ -229,7 +229,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 
 			if(TYPO3_MODE == 'FE') {
 				$feuser_id = $GLOBALS['TSFE']->fe_user->user['uid'];
-				$feuser_id = 3;
+
 				if(!empty($feuser_id)) {
 					$table = 'fe_users';
 					$streetField = tx_wecmap_backend::getFieldNameFromTable('street', $table);
