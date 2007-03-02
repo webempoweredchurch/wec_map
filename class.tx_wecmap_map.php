@@ -217,7 +217,8 @@ class tx_wecmap_map {
 											  $latlong['lat'], 
 											  $latlong['long'], 
 											  $title, 
-											  $description);
+											  $description,
+											  $this->prefillAddress);
 		}
 	}
 	

@@ -50,6 +50,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $key;
 	var $controls;
 	var $type;
+	var $directions;
+	var $prefillAddress;
 	
 	var $markerClassName = 'tx_wecmap_marker_google';
 	
@@ -74,7 +76,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 
 		$this->controls = array();
-
+		$this->directions = false;
+		$this->prefillAddress = false;
 		$this->width = $width;
 		$this->height = $height;
 		
@@ -173,13 +176,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId]='drawMap();';	
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';	
 				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="typo3conf/ext/wec_map/contrib/prototype/prototype.js" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+				$htmlContent .= '<script src="typo3conf/ext/wec_map/contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 		
 			$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
 			$jsContent = array();
 			$jsContent[] = $this->js_createMarker();
+			$jsContent[] = $this->js_createMarkerWithTabs();
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2('map');
 			$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom, $this->type);
@@ -188,17 +194,24 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 			$jsContent[] = $this->js_icon();
 			$jsContent[] = $this->js_newGMarkerManager('mgr', 'map');
-			$jsContent[] = 'var markers;';
+			$jsContent[] = 'var markers = [];';
+			$jsContent[] = 'var index = 0;';
 			foreach($this->markers as $key => $markers) {
-				$jsContent[] = 'markers = null;'; 
-				$jsContent[] = 'markers = [];'; 
+				$jsContent[] = 'markers[index] = [];';
 				$key = explode(':',$key);
 				foreach( $markers as $marker ) {
-					$jsContent[] = 'markers.push('. $marker->writeJS() .');';
+					if($this->directions) {
+						$jsContent[] = 'markers[index].push('. $marker->writeJSwithDirections() .');';
+					} else {
+						$jsContent[] = 'markers[index].push('. $marker->writeJS() .');';						
+					}
+
 				}
-				$jsContent[] = 'mgr.addMarkers(markers, ' . $key[0] . ', ' . $key[1] . ');';
+				$jsContent[] = 'mgr.addMarkers(markers[index], ' . $key[0] . ', ' . $key[1] . ');';
+				$jsContent[] = 'index++;';
 			}
 
+			$jsContent[] = 'markers = markers.flatten();';
 			$jsContent[] = 'mgr.refresh();';
 			$jsContent[] = $this->js_drawMapEnd();
 		
@@ -222,6 +235,59 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 	}
 	
+	/**
+	 * Adds an address to the currently list of markers rendered on the map. Support tabs.
+	 *
+	 * @param	string		The street address.
+	 * @param	string		The city name.
+	 * @param	string		The state or province.
+	 * @param	string		The ZIP code.
+	 * @param	string		The country name.
+	 * @param 	array 		Array of tab labels. Need to be kept short.
+	 * @param	array		Array of titles for the marker popup.
+	 * @param	array		Array of descriptions to be displayed in the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
+	 */
+	function addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+		/* Geocode the address */
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
+ 
+		/* Create a marker at the specified latitude and longitdue */
+		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);	
+	}
+	
+	/**
+	 * Adds a lat/long to the currently list of markers rendered on the map.
+	 *
+	 * @param	float		The latitude.
+	 * @param	float		The longitude.
+	 * @param	string		The title for the marker popup.
+	 * @param	string		The description to be displayed in the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
+	 */
+	function addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {		
+		$latlong = array();
+		$latlong['lat'] = $lat;
+		$latlong['long'] = $long;
+		
+		if($latlong['lat']!='' && $latlong['long']!='') {
+			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
+			$this->markers[$minzoom.':'.$maxzoom][] = new $classname(count($this->markers), 
+											  $latlong['lat'], 
+											  $latlong['long'], 
+											  $title, 
+											  $description,
+											  $this->prefillAddress,
+											  $tabLabels);
+		}
+	}
 	
 	/**
 	 * Creates the overall map div.
@@ -243,13 +309,31 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		The Javascript code for the marker creation function.
 	 */
 	function js_createMarker() {
-		return 'function createMarker(point, icon, text) {
-					var marker = new GMarker(point, icon);
-					if(text){
-						GEvent.addListener(marker, "click", function() { marker.openInfoWindowHtml(text); });
-					}
-					return marker;
-				}';
+		return 
+		'function createMarker(point, icon, text) {
+			var marker = new GMarker(point, icon);
+			if(text){
+				GEvent.addListener(marker, "click", function() { marker.openInfoWindowHtml(text); });
+			}
+			return marker;
+		}';
+	}
+	
+	/**
+	 * Creates the marker creation function with tabs in Javascript
+	 *
+	 * @return string	The JS code for the marker creation function with tabs.
+	 **/
+	function js_createMarkerWithTabs() {
+		return 
+		'function createMarkerWithTabs(point, icon, title, text) {
+			var marker = new GMarker(point, icon);
+			var tabs = [];
+			for (var i=0; i < text.length; i++) {
+				tabs.push(new GInfoWindowTab(title[i], text[i]));
+			};
+			GEvent.addListener(marker, "click", function() { marker.openInfoWindowTabsHtml(tabs); });			return marker;
+		}';
 	}
 	
 	/**
@@ -440,6 +524,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Enables directions
+	 *
+	 * @return void
+	 **/
+	function enableDirections($prefillAddress = false) {
+		$this->prefillAddress = $prefillAddress;
+		$this->directions = true;
 	}
 }
 

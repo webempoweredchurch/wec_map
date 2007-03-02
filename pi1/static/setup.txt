@@ -52,6 +52,5 @@ plugin.tx_wecmap_pi1 {
 	markers.2 {
 		title =
 		description =
-		address =
 	}
 }

@@ -118,9 +118,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		
+		$map->enableDirections(true);
+		
 		// determine if an address has been set through flexforms. If not, process TS		
 		if(empty($zip) && empty($state) && empty($city)) {
-			
+
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
 				
@@ -142,11 +144,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$description = $this->makeDescription($marker);
 
 					$description = $description . $address;
-					
-					// add the marker to the map
-					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'], 
-											 $marker['zip'], $marker['country'], $title, 
-											 $description);				
+						
+ 					// add the marker to the map
+					// $map->addMarkerByAddressWithTabs($marker['street'], $marker['city'], $marker['state'], 
+					// 						 $marker['zip'], $marker['country'], array("info", "info2"), array($title, "test"), 
+					// 						 array($description, "Test"));
 				}
 			}
 		} else {		
