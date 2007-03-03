@@ -90,6 +90,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 
+		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'mapConfig');
+		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
+		
+		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'mapConfig');
+		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
+
 		// get this from flexform only. If empty, we check the TS, see below.
 		$street = $this->pi_getFFvalue($piFlexForm, 'street', 'default');
 		$city = $this->pi_getFFvalue($piFlexForm, 'city', 'default');
@@ -118,7 +124,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		
-		$map->enableDirections(true);
+		// check whether to show the directions tab and/or prefill addresses
+		if($showDirs && $prefillAddress) $map->enableDirections(true);
+		if($showDirs && !$prefillAddress) $map->enableDirections();
 		
 		// determine if an address has been set through flexforms. If not, process TS		
 		if(empty($zip) && empty($state) && empty($city)) {
@@ -149,10 +157,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'], 
 											 $marker['zip'], $marker['country'], $title, 
 											 $description);	
- 					// add the marker to the map
-					// $map->addMarkerByAddressWithTabs($marker['street'], $marker['city'], $marker['state'], 
-					// 						 $marker['zip'], $marker['country'], array("info", "info2"), array($title, "test"), 
-					// 						 array($description, "Test"));
 				}
 			}
 		} else {		

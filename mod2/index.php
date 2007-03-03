@@ -256,6 +256,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$map->addControl('scale');
 		$map->addControl('overviewMap');
 		$map->addControl('mapType');
+		$map->enableDirections();
 		
 		/* Select all frontend users */		
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', '');

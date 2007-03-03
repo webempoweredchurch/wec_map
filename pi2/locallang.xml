@@ -13,7 +13,7 @@
             <label index="pi2_plus_wiz_description">Adds a map to display frontend users. This map can display all users or only certain frontend groups.</label>
 			<label index="country_zoominfo_desc">Zoom in to see more users from %s</label>
 			<label index="country_zoominfo_title">Info</label>
-			<label index="city_zoominfo_desc">Zoom in to see more users from %s:</label>
+			<label index="city_zoominfo_desc">Zoom in to see more users from %s</label>
 			<label index="citycount_si">There is 1 user in %s.</label>
 			<label index="citycount_pl">There are %u users in %s.</label>
         </languageKey>

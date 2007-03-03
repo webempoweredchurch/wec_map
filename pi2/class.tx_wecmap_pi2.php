@@ -98,6 +98,12 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$private = $this->pi_getFFvalue($piFlexForm, 'privacy', 'default');
 		empty($private) ? $private = $conf['private']:null;
 
+		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'default');
+		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
+		
+		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');
+		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
+		
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
@@ -116,6 +122,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		
+		// check whether to show the directions tab and/or prefill addresses
+		if($showDirs && $prefillAddress && !$private) $map->enableDirections(true);
+		if($showDirs && !$prefillAddress && !$private) $map->enableDirections();
 		
 		$streetField = $this->getAddressField('street');
 		$cityField = $this->getAddressField('city');

@@ -101,7 +101,7 @@
 							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.apiKey</label>
 							<config>
 								<type>input</type>
-								<size>50</size>
+								<size>40</size>
 							</config>
 						</TCEforms>
 					</apiKey>
@@ -148,7 +148,22 @@
 							</config>
 						</TCEforms>						
 					</initialMapType>
-					
+					<showDirections>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showDirs</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showDirections>
+					<prefillAddress>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.prefillAddress</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</prefillAddress>
 				</el>
 			</ROOT>
 		</mapConfig>
