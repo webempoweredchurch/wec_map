@@ -392,7 +392,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * Creates the Google Maps Javascript object.
 	 * @access	private
 	 * @param	string		Name of the div that this map is attached to.
-							Will also become the name of the map.
+	 *						Will also become the name of the map.
 	 * @return	string		Javascript for the Google Maps object.
 	 */
 	function js_newGMap2($name) {

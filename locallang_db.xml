@@ -20,6 +20,12 @@
 			<label index="geocodeNoAddress">Cannot determine latitude and longitude.  Please enter an address and save.</label>
             <label index="latitude">Latitude</label>
             <label index="longitude">Longitude</label>
+            <label index="directions">Directions</label>
+            <label index="info">Info</label>
+            <label index="location">Location</label>
+			<label index="getDirections">Get Directions</label>
+			<label index="fromHereTo">From here to:</label>
+			<label index="toHereFrom">To here from:</label>
             <label index="tt_content.pi_flexform.title">Title</label>
             <label index="tt_content.pi_flexform.description">Description</label>
             <label index="tt_content.pi_flexform.street">Street Address</label>

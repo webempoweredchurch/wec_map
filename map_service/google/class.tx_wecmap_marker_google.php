@@ -65,6 +65,9 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return	none
 	 */
 	function tx_wecmap_marker_google($index, $latitude, $longitude, $title, $description, $prefillAddress = false, $tabLabels=null, $color='0xFF0000', $strokeColor='0xFFFFFF') {
+		global $LANG;
+		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
+		
 		$this->index = $index;
 		$this->tabLabels = $tabLabels;
 		$this->prefillAddress = $prefillAddress;
@@ -142,6 +145,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return void
 	 **/
 	function writeJSwithDirections() {
+		global $LANG;
+		
 		if(is_array($this->tabLabels) && !empty($this->tabLabels)) {
 			$titleArray = '[';
 			$first = true;
@@ -154,7 +159,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 				}
 				$first = false;
 			}
-			$titleArray .= ', "Directions"]';
+			$titleArray .= ', "'. $LANG->getLL('directions') .'"]';
 			
 			$textArray = '[';
 			$first = true;
@@ -171,7 +176,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 					
 			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, '. $titleArray .' ,'. $textArray .')';				
 		} else {			
-			$titleArray = '["Info", "Directions"]';
+			$titleArray = '["'. $LANG->getLL('info') .'", "'. $LANG->getLL('directions') .'"]';
 
 			$textArray = '["'.$this->title.$this->description.'", "'. $this->getDirectionsHTML(). '"]';
 
@@ -185,18 +190,20 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return string	HTML for to-directions
 	 **/
 	function getDirectionsHTML() {
+		global $LANG;
+		
 		if(is_array($this->title)) {
 			$title = strip_tags($this->title[0]);
 		} else {
 			$title = strip_tags($this->title);
 		}
 		
-		$html = '<h1>Location</h1><div>'. $title .'</div>';
-		$html .= '<h2>Get Directions</h2><div>';
+		$html = '<h1>'. $LANG->getLL('location') .'</h1><div>'. $title .'</div>';
+		$html .= '<h2>'. $LANG->getLL('getDirections') .'</h2><div>';
 		$html .= $this->stripNL(
 			sprintf(addslashes('<form enctype="application/x-www-form-urlencoded" method="GET" target="_new" action="http://maps.google.com/maps">
 			<input type="hidden" name="saddr" value="%f, %f (%s)" />
-			<label for="tx-wecmap-directions">From here to:</label><input type="text" name="daddr" value="%s" id="tx-wecmap-directions" />
+			<label for="tx-wecmap-directions">'. $LANG->getLL('fromHereTo') .'</label><input type="text" name="daddr" value="%s" id="tx-wecmap-directions" />
 			<input type="submit" name="submit" value="Go" /></form>'),
 			$this->latitude, 
 			$this->longitude, 
@@ -207,7 +214,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$html .= $this->stripNL(
 			sprintf(addslashes('<form enctype="application/x-www-form-urlencoded" method="GET" target="_new" action="http://maps.google.com/maps">
 			<input type="hidden" name="daddr" value="%f, %f (%s)" />
-			<label for="tx-wecmap-directions">To here from:</label><input type="text" name="saddr" value="%s" id="tx-wecmap-directions" />
+			<label for="tx-wecmap-directions">'. $LANG->getLL('toHereFrom') .'</label><input type="text" name="saddr" value="%s" id="tx-wecmap-directions" />
 			<input type="submit" name="submit" value="Go" /></form>'), 
 			$this->latitude, 
 			$this->longitude, 
