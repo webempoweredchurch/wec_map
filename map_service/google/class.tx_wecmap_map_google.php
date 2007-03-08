@@ -261,6 +261,37 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 	
 	/**
+	 * Adds an address string to the current list of markers rendered on the map.
+	 *
+	 * @param	string		The full address string.
+	 * @param	array 		Array of strings to be used as labels on the tabs
+	 * @param	array		The titles for the tabs of the marker popup.
+	 * @param	array		The descriptions to be displayed in the tabs of the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
+	 **/
+	function addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+		
+		// first split the string into it's components. It doesn't need to be perfect, it's just
+		// put together on the other end anyway
+		$address = explode(',', $string);
+
+		$street = $address[0];
+		$city = $address[1];
+		$state = $address[2];
+		$country = $address[3];
+		
+		/* Geocode the address */
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
+ 
+		/* Create a marker at the specified latitude and longitdue */
+		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+	}
+	
+	/**
 	 * Adds a lat/long to the currently list of markers rendered on the map.
 	 *
 	 * @param	float		The latitude.
