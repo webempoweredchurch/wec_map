@@ -65,9 +65,14 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return	none
 	 */
 	function tx_wecmap_marker_google($index, $latitude, $longitude, $title, $description, $prefillAddress = false, $tabLabels=null, $color='0xFF0000', $strokeColor='0xFFFFFF') {
-		global $LANG;
-		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 		
+		global $LANG;
+		if(!is_object($LANG)) {
+			require_once(t3lib_extMgm::extPath('lang').'lang.php');
+			$LANG = t3lib_div::makeInstance('language');
+			$LANG->init($BE_USER->uc['lang']);
+		}
+
 		$this->index = $index;
 		$this->tabLabels = $tabLabels;
 		$this->prefillAddress = $prefillAddress;
