@@ -228,7 +228,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$map->addMarkerByAddress($row[$addressField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
 				}
 			}
 
