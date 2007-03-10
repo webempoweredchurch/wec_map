@@ -72,7 +72,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init($BE_USER->uc['lang']);
 		}
-
+		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
+		
 		$this->index = $index;
 		$this->tabLabels = $tabLabels;
 		$this->prefillAddress = $prefillAddress;
