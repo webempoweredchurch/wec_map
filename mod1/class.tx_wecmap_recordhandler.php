@@ -100,8 +100,8 @@ class tx_wecmap_recordhandler {
 		// Create header:
 		$headerCells = array();
 		$headerCells[] = '<th>'.$LANG->getLL('address').'</th>';
-		$headerCells[] = '<th>'.$LANG->getLL('latitude').'</th>';
-		$headerCells[] = '<th>'.$LANG->getLL('longitude').'</th>';
+		$headerCells[] = '<th style="width: 100px;">'.$LANG->getLL('latitude').'</th>';
+		$headerCells[] = '<th style="width: 100px;">'.$LANG->getLL('longitude').'</th>';
 		$headerCells[] = '<th colspan="2">Actions</th>';
 		
 		$output = '
@@ -228,8 +228,8 @@ class tx_wecmap_recordhandler {
 					var longitude = longitudes[0];
 					var latitude = latitudes[0];
 					var links = getSaveCancelLinks(id, latitude.innerHTML, longitude.innerHTML);
-					latitude.update(\'<input class="latForm" type="text" size="11" value="\'+latitude.innerHTML+\'"/>\');
-					longitude.update(\'<input class="longForm" type="text" size="11" value="\'+longitude.innerHTML+\'"/>\');
+					latitude.update(\'<input class="latForm" type="text" size="17" value="\'+latitude.innerHTML+\'"/>\');
+					longitude.update(\'<input class="longForm" type="text" size="17" value="\'+longitude.innerHTML+\'"/>\');
 					var buttonElement = $(id).getElementsByClassName(\'editButton\');
 					buttonElement[0].update(links);
 				}
@@ -254,7 +254,8 @@ class tx_wecmap_recordhandler {
 					var longValue = $F(longEl[0]);
 					var lat = $(id).getElementsByClassName(\'latForm\');
 					var latValue = $F(lat[0]);
-
+					$(id).getElementsByClassName(\'editButton\')[0].update(\'<img src="../images/aai.gif" />\');
+					
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=saveRecord&record=\'+id+\'&latitude=\'+latValue+\'&longitude=\'+longValue;
 				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
@@ -277,7 +278,7 @@ class tx_wecmap_recordhandler {
 				}
 				
 				function getEditLink(id) {
-					var link = \'<a href="#" onclick="editRecord(\'+id+\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a>\';
+					var link = \'<a href="#" onclick="editRecord(\\\'\'+id+\'\\\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a>\';
 					return link;
 				}
 				

@@ -183,7 +183,7 @@ class tx_wecmap_map {
 	 * @return	none
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
+	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
