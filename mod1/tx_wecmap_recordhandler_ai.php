@@ -1,10 +1,9 @@
 <?php
-// include all the necessary TYPO3 files
-define('TYPO3_MOD_PATH', '../typo3conf/ext/wec_map/mod1/');
-$BACK_PATH='../../../../typo3/';
+require_once('conf.php'); // Get back path and TYPO3 mod path
 require_once($BACK_PATH. 'init.php');
 require_once('../class.tx_wecmap_cache.php');
 require_once('class.tx_wecmap_recordhandler.php');
+
 $cmd = htmlspecialchars(t3lib_div::_GP('cmd'));
 $uid  = htmlspecialchars(t3lib_div::_GP('record'));
 $page = htmlspecialchars(t3lib_div::_GP('page'));

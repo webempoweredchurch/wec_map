@@ -176,10 +176,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId]='drawMap();';	
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';	
 				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
-				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="typo3conf/ext/wec_map/contrib/prototype/prototype.js" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
-				$htmlContent .= '<script src="../contrib/prototype/prototype.js" type="text/javascript"></script>';
+				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 		
 			$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
