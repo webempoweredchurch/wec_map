@@ -46,6 +46,7 @@ class tx_wecmap_map {
 	var $markers;
 	var $width;
 	var $height;
+	var $mapName;
 				
 	var $js;
 	var $key;
@@ -114,7 +115,6 @@ class tx_wecmap_map {
 	function setCenter($lat, $long) {
 		$this->lat  = $lat;
 		$this->long = $long;
-		$this->zoom = $zoom;
 	}
 	
 	/**
@@ -213,12 +213,14 @@ class tx_wecmap_map {
 		
 		if($latlong['lat']!='' && $latlong['long']!='') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$this->markers[$minzoom.':'.$maxzoom][] = new $classname(count($this->markers), 
+			$marker =  new $classname(count($this->markers), 
 											  $latlong['lat'], 
 											  $latlong['long'], 
 											  $title, 
 											  $description,
 											  $this->prefillAddress);
+			$marker->setMapName($this->mapName);
+			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
 		}
 	}
 	

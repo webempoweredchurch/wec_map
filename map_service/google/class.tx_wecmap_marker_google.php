@@ -138,9 +138,9 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			}
 			$textArray .= ']';
 					
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, '. $titleArray .' ,'. $textArray .')';
+			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
 		} else {
-			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, "'.$this->title.$this->description.'")';	
+			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', "'.$this->title.$this->description.'")';	
 		}
 
 	}
@@ -180,13 +180,13 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			}
 			$textArray .= ', "'. $this->getDirectionsHTML() .'"]';
 					
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, '. $titleArray .' ,'. $textArray .')';				
+			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';				
 		} else {			
 			$titleArray = '["'. $LANG->getLL('info') .'", "'. $LANG->getLL('directions') .'"]';
 
 			$textArray = '["'.$this->title.$this->description.'", "'. $this->getDirectionsHTML(). '"]';
 
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon, '. $titleArray .' ,'. $textArray .')';
+			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
 		}
 	}
 	

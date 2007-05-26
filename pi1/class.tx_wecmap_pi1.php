@@ -59,7 +59,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		
+
 		/* Initialize the Flexform and pull the data into a new object */
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
@@ -95,6 +95,15 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'mapConfig');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
+		
+		$centerLat = $conf['centerLat'];
+		
+		$centerLong = $conf['centerLong'];
+		
+		$zoomLevel = $conf['zoomLevel'];
+		
+		$mapName = $conf['mapName'];
+		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 
 		// get this from flexform only. If empty, we check the TS, see below.
 		$street = $this->pi_getFFvalue($piFlexForm, 'street', 'default');
@@ -108,7 +117,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		/* Create the map class and add markers to the map */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className = t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height);	
+		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);	
 
 		// evaluate config to see which map controls we need to show
 		if($mapControlSize == 'large') {
@@ -178,7 +187,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			// add the marker to the map
 			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);			
 		}
-
 		
 		// draw the map
 		$content = $map->drawMap();

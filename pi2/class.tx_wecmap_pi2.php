@@ -59,7 +59,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		
+
 		/* Initialize the Flexform and pull the data into a new object */
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
@@ -104,10 +104,19 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
 		
+		$centerLat = $conf['centerLat'];
+		
+		$centerLong = $conf['centerLong'];
+		
+		$zoomLevel = $conf['zoomLevel'];
+		
+		$mapName = $conf['mapName'];
+		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
+		
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height);
+		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 		
 		// evaluate map controls based on configuration
 		if($mapControlSize == 'large') {
@@ -232,7 +241,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				}
 			}
 
-		}		
+		}
 
 		/* Draw the map */
 		return $this->pi_wrapInBaseClass($map->drawMap());

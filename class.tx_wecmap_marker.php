@@ -45,6 +45,7 @@ class tx_wecmap_marker {
 	var $description;
 	var $color;
 	var $strokeColor;
+	var $mapName;
 
 	/**
 	 * Constructor stub. See map_service classes for more details on the marker
@@ -115,6 +116,15 @@ class tx_wecmap_marker {
 	 **/
 	function getLongitude() {
 		return $this->longitude;
+	}
+	
+	/**
+	 * Setter for map name this marker is a part of
+	 *
+	 * @return void
+	 **/
+	function setMapName($mapName) {
+		$this->mapName = $mapName;
 	}
 }
 

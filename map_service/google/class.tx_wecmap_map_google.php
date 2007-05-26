@@ -45,6 +45,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $markers;
 	var $width;
 	var $height;
+	var $mapName;
 				
 	var $js;
 	var $key;
@@ -63,7 +64,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param 	string		The longitude for the center point on the map.
 	 * @param	string		The initial zoom level of the map.
 	 */
-	function tx_wecmap_map_google($key, $width=250, $height=250, $lat='', $long='', $zoom='') {
+	function tx_wecmap_map_google($key, $width=250, $height=250, $lat='', $long='', $zoom='', $mapName='') {
 		$this->prefixId = 'tx_wecmap_map_google';
 		$this->js = array();
 		$this->markers = array();
@@ -81,12 +82,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->width = $width;
 		$this->height = $height;
 		
-		if ($lat != '' || $long != '') {
+		if (($lat != '' && $lat != null) || ($long != '' && $long != null)) {
 			$this->setCenter($lat, $long);
 		}
-		if ($zoom != '') {
+
+		if ($zoom != '' && $zoom != null) {
 			$this->setZoom($zoom);
 		}
+		
+		if(empty($mapName)) $mapName = 'map'.rand();
+		$this->mapName = $mapName;
 	}	
 	
 	/**
@@ -103,27 +108,27 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		switch ($name)
 		{
 			case 'largeMap':
-				$this->controls[] .= $this->js_addControl('map', 'new GLargeMapControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GLargeMapControl()');
 				break;
 			
 			case 'smallMap':
-				$this->controls[] .= $this->js_addControl('map', 'new GSmallMapControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GSmallMapControl()');
 				break;
 			
 			case 'scale':
-				$this->controls[] .= $this->js_addControl('map', 'new GScaleControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GScaleControl()');
 				break;
 			
 			case 'smallZoom':
-				$this->controls[] .= $this->js_addControl('map', 'new GSmallZoomControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GSmallZoomControl()');
 				break;
 
 			case 'overviewMap':
-				$this->controls[] .= $this->js_addControl('map', 'new GOverviewMapControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GOverviewMapControl()');
 				break;
 					
 			case 'mapType':
-				$this->controls[] .= $this->js_addControl('map', 'new GMapTypeControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GMapTypeControl()');
 				break;
 			default:
 				break;
@@ -173,7 +178,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
 			if(TYPO3_MODE == 'FE') {
-				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId]='drawMap();';	
+				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';	
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';	
 				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
@@ -182,44 +187,44 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 		
-			$htmlContent .= $this->mapDiv('map', $this->width, $this->height);
+			$htmlContent .= $this->mapDiv($this->mapName, $this->width, $this->height);
 			$jsContent = array();
 			$jsContent[] = $this->js_createMarker();
 			$jsContent[] = $this->js_createMarkerWithTabs();
 			$jsContent[] = $this->js_drawMapStart();
-			$jsContent[] = $this->js_newGMap2('map');
-			$jsContent[] = $this->js_setCenter('map', $this->lat, $this->long, $this->zoom, $this->type);
+			$jsContent[] = $this->js_newGMap2($this->mapName);
+			$jsContent[] = $this->js_setCenter($this->mapName, $this->lat, $this->long, $this->zoom, $this->type);
 			foreach( $this->controls as $control ) {
 				$jsContent[] = $control;
 			}
 			$jsContent[] = $this->js_icon();
-			$jsContent[] = $this->js_newGMarkerManager('mgr', 'map');
-			$jsContent[] = 'var markers = [];';
-			$jsContent[] = 'var index = 0;';
+			$jsContent[] = $this->js_newGMarkerManager('mgr_'.$this->mapName, $this->mapName);
+			$jsContent[] = 'var markers_'. $this->mapName .' = [];';
+			$jsContent[] = 'var index_'. $this->mapName .' = 0;';
 			foreach($this->markers as $key => $markers) {
-				$jsContent[] = 'markers[index] = [];';
+				$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'] = [];';
 				$key = explode(':',$key);
 				foreach( $markers as $marker ) {
 					if($this->directions) {
-						$jsContent[] = 'markers[index].push('. $marker->writeJSwithDirections() .');';
+						$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'].push('. $marker->writeJSwithDirections() .');';
 					} else {
-						$jsContent[] = 'markers[index].push('. $marker->writeJS() .');';						
+						$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'].push('. $marker->writeJS() .');';						
 					}
 
 				}
-				$jsContent[] = 'mgr.addMarkers(markers[index], ' . $key[0] . ', ' . $key[1] . ');';
-				$jsContent[] = 'index++;';
+				$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'[index_'. $this->mapName .'], ' . $key[0] . ', ' . $key[1] . ');';
+				$jsContent[] = 'index_'. $this->mapName .'++;';
 			}
 
-			$jsContent[] = 'markers = markers.flatten();';
-			$jsContent[] = 'mgr.refresh();';
+			$jsContent[] = 'markers_'. $this->mapName .' = markers_'. $this->mapName .'.flatten();';
+			$jsContent[] = 'mgr_'. $this->mapName .'.refresh();';
 			$jsContent[] = $this->js_drawMapEnd();
 		
 			// there is no onload() in the BE, so we need to call drawMap() manually.
 			if(TYPO3_MODE == 'FE') {
 				$manualCall = null;
 			} else {
-				$manualCall = '<script type="text/javascript">setTimeout("drawMap()",500);</script>';
+				$manualCall = '<script type="text/javascript">setTimeout("drawMap_'. $this->mapName .'()",500);</script>';
 			}
 		
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
@@ -330,7 +335,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		The HTML for the map div tag.
 	 */
 	function mapDiv($id, $width, $height) {
-		return '<div id="'.$id.'" style="width:'.$width.'px; height:'.$height.'px;"></div>';
+		return '<div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
 	}
 	
 	/**
@@ -374,7 +379,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string	The beginning of the drawMap function in Javascript.
 	 */
 	function js_drawMapStart() {
-		return 'function drawMap() {						
+		return 'function drawMap_'. $this->mapName .'() {						
 					if (GBrowserIsCompatible()) {';
 	}
 	
@@ -461,13 +466,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$path = t3lib_extMgm::siteRelPath('wec_map');
 		}
 
-		return 'var icon = new GIcon();
-				icon.image = "'.$path.'images/mm_20_red.png";
-				icon.shadow = "'.$path.'images/mm_20_shadow.png";
-				icon.iconSize = new GSize(12, 20);
-				icon.shadowSize = new GSize(22, 20);
-				icon.iconAnchor = new GPoint(6, 20);
-				icon.infoWindowAnchor = new GPoint(5, 1);';
+		return '
+		var icon_'. $this->mapName .' = new GIcon();
+		icon_'. $this->mapName .'.image = "'.$path.'images/mm_20_red.png";
+		icon_'. $this->mapName .'.shadow = "'.$path.'images/mm_20_shadow.png";
+		icon_'. $this->mapName .'.iconSize = new GSize(12, 20);
+		icon_'. $this->mapName .'.shadowSize = new GSize(22, 20);
+		icon_'. $this->mapName .'.iconAnchor = new GPoint(6, 20);
+		icon_'. $this->mapName .'.infoWindowAnchor = new GPoint(5, 1);';
 				
 	}
 
