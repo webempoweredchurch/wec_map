@@ -182,9 +182,9 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 					
 			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';				
 		} else {			
-			$titleArray = '["'. $LANG->getLL('info') .'", "'. $LANG->getLL('directions') .'"]';
+			$titleArray = '[\''. $LANG->getLL('info') .'\', \''. $LANG->getLL('directions') .'\']';
 
-			$textArray = '["'.$this->title.$this->description.'", "'. $this->getDirectionsHTML(). '"]';
+			$textArray = '[\''.$this->title.$this->description.'\', \''. $this->getDirectionsHTML(). '\']';
 
 			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
 		}
