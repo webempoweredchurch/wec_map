@@ -7,6 +7,11 @@ plugin.tx_wecmap_pi1 {
 	controls.showMapType = 
 	controls.showScale = 
 
+	zoomLevel = 
+	centerLat = 
+	centerLong = 
+	mapName =
+	
 	marker {
 		title = TEXT
 		title.field = title

@@ -10,6 +10,11 @@ plugin.tx_wecmap_pi2 {
 	userGroups =
 	pid = 
 	
+	zoomLevel = 
+	centerLat = 
+	centerLong = 
+	mapName =
+	
 	marker {
 		title = TEXT
 		title.field = name
