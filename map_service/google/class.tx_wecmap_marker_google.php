@@ -207,10 +207,10 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$html = '<h1>'. $LANG->getLL('location') .'</h1><div>'. $title .'</div>';
 		$html .= '<h2>'. $LANG->getLL('getDirections') .'</h2><div>';
 		$html .= $this->stripNL(
-			sprintf(addslashes('<form enctype="application/x-www-form-urlencoded" method="GET" target="_new" action="http://maps.google.com/maps">
-			<input type="hidden" name="saddr" value="%f, %f (%s)" />
-			<label for="tx-wecmap-directions">'. $LANG->getLL('fromHereTo') .'</label><input type="text" name="daddr" value="%s" id="tx-wecmap-directions" />
-			<input type="submit" name="submit" value="Go" /></form>'),
+			sprintf('<form onsubmit="setDirections(\\\'%f %f\\\', document.getElementById(\\\'tx-wecmap-directions-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;" action="#" >
+			<input type="hidden" name="saddr" value="%s" />
+			<label for="tx-wecmap-directions-'. $this->mapName .'">'. $LANG->getLL('fromHereTo') .'</label><input type="text" name="daddr" value="%s" id="tx-wecmap-directions-'. $this->mapName .'" />
+			<input type="submit" name="submit" value="Go" /></form>',
 			$this->latitude, 
 			$this->longitude, 
 			$title,
@@ -218,10 +218,10 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			)
 		);
 		$html .= $this->stripNL(
-			sprintf(addslashes('<form enctype="application/x-www-form-urlencoded" method="GET" target="_new" action="http://maps.google.com/maps">
-			<input type="hidden" name="daddr" value="%f, %f (%s)" />
-			<label for="tx-wecmap-directions">'. $LANG->getLL('toHereFrom') .'</label><input type="text" name="saddr" value="%s" id="tx-wecmap-directions" />
-			<input type="submit" name="submit" value="Go" /></form>'), 
+			sprintf('<form action="#" onsubmit="setDirections(\\\'%f %f\\\', document.getElementById(\\\'tx-wecmap-directions-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;">
+			<input type="hidden" name="daddr" value="%s" />
+			<label for="tx-wecmap-directions-'. $this->mapName .'">'. $LANG->getLL('toHereFrom') .'</label><input type="text" name="saddr" value="%s" id="tx-wecmap-directions-'. $this->mapName .'" />
+			<input type="submit" name="submit" value="Go" /></form>', 
 			$this->latitude, 
 			$this->longitude, 
 			$title,

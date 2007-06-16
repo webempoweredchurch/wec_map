@@ -54,6 +54,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $directions;
 	var $prefillAddress;
 	
+	var $lang;
+	
 	var $markerClassName = 'tx_wecmap_marker_google';
 	
 	/** 
@@ -92,6 +94,19 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		if(empty($mapName)) $mapName = 'map'.rand();
 		$this->mapName = $mapName;
+
+		
+		if(TYPO3_MODE == 'BE') {
+			global $LANG;
+			if($LANG->lang == 'default') {
+				$this->lang = 'en';
+			} else {
+				$this->lang = $LANG->lang;
+			}			
+		} else {
+			$this->lang = $GLOBALS['TSFE']->config['config']['language'];
+			if(empty($this->lang)) $this->lang = 'en';
+		}
 	}	
 	
 	/**
@@ -164,7 +179,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 		}
 		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
-		
+
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();
@@ -180,10 +195,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			if(TYPO3_MODE == 'FE') {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';	
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';	
-				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$GLOBALS['TSFE']->additionalHeaderData[] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
 			} else {
-				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
+				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 		
@@ -191,8 +206,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent = array();
 			$jsContent[] = $this->js_createMarker();
 			$jsContent[] = $this->js_createMarkerWithTabs();
+			$jsContent[] = $this->js_setDirections();
+			$jsContent[] = $this->js_errorHandler();
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2($this->mapName);
+			$jsContent[] = $this->js_newGDirections();
 			$jsContent[] = $this->js_setCenter($this->mapName, $this->lat, $this->long, $this->zoom, $this->type);
 			foreach( $this->controls as $control ) {
 				$jsContent[] = $control;
@@ -335,7 +353,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		The HTML for the map div tag.
 	 */
 	function mapDiv($id, $width, $height) {
-		return '<div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
+		return '<div id="directions-'. $this->mapName .'"></div><div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
 	}
 	
 	/**
@@ -353,6 +371,18 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 			return marker;
 		}';
+	}
+	
+	/**
+	 * Creates the function that will set directions
+	 *
+	 * @access private
+	 * @return String	JS function
+	 **/
+	function js_setDirections() {
+		return 'function setDirections(fromAddress, toAddress, mapName) {
+	      window["gdir_"+mapName].load("from: " + fromAddress + " to: " + toAddress, {locale: "'. $this->lang .'"});
+	    }';
 	}
 	
 	/**
@@ -397,11 +427,52 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * Creates the Google Maps Javascript object.
 	 * @access	private
 	 * @param	string		Name of the div that this map is attached to.
-	 *						Will also become the name of the map.
 	 * @return	string		Javascript for the Google Maps object.
 	 */
 	function js_newGMap2($name) {
 		return 'var '.$name.' = new GMap2(document.getElementById("'.$name.'"));';
+	}
+	
+	/**
+	 * Creates the Google Directions Javascript object.
+	 *
+	 * @access	private
+	 * @param	string		Name of the map object that the direction overlay will be shown on.
+	 * @return	string		Javascript for the Google Directions object.
+	 */
+	function js_newGDirections() {
+		return 'gdir_'. $this->mapName .' = new GDirections('. $this->mapName .', document.getElementById("directions-'. $this->mapName .'"));'.
+		'GEvent.addListener(gdir_'. $this->mapName .', "error", handleErrors_'. $this->mapName .');';
+	}
+	
+	/**
+	 * Error handler js function
+	 *
+	 * @return string 	Javascript
+	 **/
+	function js_errorHandler() {
+		$c = 
+			'function handleErrors_'. $this->mapName .'() {
+				   if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_UNKNOWN_ADDRESS)
+				     alert("No corresponding geographic location could be found for one of the specified addresses. This may be due to the fact that the address is relatively new, or it may be incorrect.\nError code: " + gdir_'. $this->mapName .'.getStatus().code);
+				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_SERVER_ERROR)
+				     alert("A geocoding or directions request could not be successfully processed, yet the exact reason for the failure is not known.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+
+				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_MISSING_QUERY)
+				     alert("The HTTP q parameter was either missing or had no value. For geocoder requests, this means that an empty address was specified as input. For directions requests, this means that no query was specified in the input.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+
+				   else if (gdir_'. $this->mapName .'.getStatus().code == 603)
+				    alert("The geocode for the given address or the route for the given directions query cannot be returned due to legal or contractual reasons.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+
+				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_KEY)
+				     alert("The given key is either invalid or does not match the domain for which it was given. \n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+
+				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_REQUEST)
+				     alert("A directions request could not be successfully parsed.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+
+				   else alert("An unknown error occurred. "+gdir_'. $this->mapName .'.getStatus().code);
+			}';
+		return $c;
 	}
 	
 	function js_setMapType($name, $type) {
