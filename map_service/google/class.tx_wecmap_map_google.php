@@ -353,7 +353,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		The HTML for the map div tag.
 	 */
 	function mapDiv($id, $width, $height) {
-		return '<div id="directions-'. $this->mapName .'"></div><div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
+		return '<div class="tx-wecmap-directions" id="directions-'. $this->mapName .'"></div><div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
 	}
 	
 	/**
@@ -380,8 +380,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return String	JS function
 	 **/
 	function js_setDirections() {
-		return 'function setDirections(fromAddress, toAddress, mapName) {
+		return 'function setDirections_'. $this->mapName .'(fromAddress, toAddress, mapName) {
 	      window["gdir_"+mapName].load("from: " + fromAddress + " to: " + toAddress, {locale: "'. $this->lang .'"});
+			'. $this->mapName .'.closeInfoWindow();
 	    }';
 	}
 	
@@ -409,8 +410,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string	The beginning of the drawMap function in Javascript.
 	 */
 	function js_drawMapStart() {
-		return 'function drawMap_'. $this->mapName .'() {						
-					if (GBrowserIsCompatible()) {';
+		return 
+		'var '.$this->mapName.';'.chr(10).
+		'function drawMap_'. $this->mapName .'() {						
+			if (GBrowserIsCompatible()) {';
 	}
 	
 	/**
@@ -430,7 +433,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		Javascript for the Google Maps object.
 	 */
 	function js_newGMap2($name) {
-		return 'var '.$name.' = new GMap2(document.getElementById("'.$name.'"));';
+		return $name.' = new GMap2(document.getElementById("'.$name.'"));';
 	}
 	
 	/**
