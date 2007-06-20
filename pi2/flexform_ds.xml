@@ -76,6 +76,15 @@
 							</config>
 						</TCEforms>
 					</showDirections>
+					<showWrittenDirections>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showWrittenDirs</label>
+							<!-- <displayCond>FIELD:showDirections:REQ:true</displayCond> -->
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showWrittenDirections>
 					<prefillAddress>
 						<TCEforms>
 							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.prefillAddress</label>

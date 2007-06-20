@@ -92,7 +92,10 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'mapConfig');
 		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
-		
+
+		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'mapConfig');
+		empty($showWrittenDirs) ? $showWrittenDirs = $conf['showWrittenDirections']:null;
+				
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'mapConfig');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
 		
@@ -133,9 +136,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		
-		// check whether to show the directions tab and/or prefill addresses
-		if($showDirs && $prefillAddress) $map->enableDirections(true);
-		if($showDirs && !$prefillAddress) $map->enableDirections();
+		// check whether to show the directions tab and/or prefill addresses and/or written directions
+		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
+		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
+		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
+		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
 		
 		// determine if an address has been set through flexforms. If not, process TS		
 		if(empty($zip) && empty($state) && empty($city)) {
@@ -188,9 +193,13 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);			
 		}
 		
+
 		// draw the map
 		$content = $map->drawMap();
 		
+		// add directions div if applicable
+		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
+
 		return $this->pi_wrapInBaseClass($content);
 	}
 	

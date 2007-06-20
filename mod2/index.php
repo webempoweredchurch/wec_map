@@ -79,7 +79,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$this->MOD_MENU = Array (
 			'function' => Array (
 				'1' => $LANG->getLL('function1'),
-				// '2' => $LANG->getLL('function2'),
+				'2' => $LANG->getLL('function2'),
 			)
 		);
 		parent::menuConfig();
@@ -194,39 +194,92 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 **/
 	function mapSettings() {
 		
-		// unserialize configuration so we can work with it
-		$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-		
-		echo '<pre>';
-		print_r($_POST);
-		echo '</pre>';
+		if(t3lib_div::_GP('tx-wecmap-mod1-submit')) {
+			// echo '<pre>';
+			// print_r($_POST);
+			// echo '</pre>';
 
-		$scale = t3lib_div::_GP('tx-wecmap-mod1-scale');		
-		if($scale == 'on') {
-			$scale = 1;
-		} else {
-			$scale = 0;
+			$scale = t3lib_div::_GP('tx-wecmap-mod1-scale');
+			
+			if($scale == 'on') {
+				$scale = 1;
+			} else {
+				$scale = 0;
+			}
+			
+			$minimap = t3lib_div::_GP('tx-wecmap-mod1-minimap');
+			
+			if($minimap == 'on') {
+				$minimap = 1;
+			} else {
+				$minimap = 0;
+			}
+			
+			$maptype = t3lib_div::_GP('tx-wecmap-mod1-maptype');
+			
+			if($maptype == 'on') {
+				$maptype = 1;
+			} else {
+				$maptype = 0;
+			}
+			
+			// build data array
+			$data = array('scale' => $scale, 'minimap' => $minimap, 'maptype' => $maptype);
+			
+			// save to user config
+			$GLOBALS['BE_USER']->pushModuleData('tools_txwecmapM2', $data);
 		}
-
-		$conf['mod1']['scale'] = $scale;
 		
+		// get module config
+		$conf = $GLOBALS['BE_USER']->getModuleData('tools_txwecmapM2');
+		
+		// t3lib_div::debug($conf);
+		
+		// get config options
+		$scale = $conf['scale'];
+		$minimap = $conf['minimap'];
+		$maptype = $conf['maptype'];
+	
 		$form = array();
 		$form[] = '<form method="POST">';
-		$form[] = '<label for="tx-wecmap-mod1-scale">Show Scale</label>';
+		$form[] = '<table>';
+
+		// scale option
+		$form[] = '<tr>';
+		$form[] = '<td><label for="tx-wecmap-mod1-scale">Show Scale:</label></td>';
 		if($scale) {
-			$form[] = '<input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" checked="checked"/>';
+			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" checked="checked"/></td>';
 		} else {
-			$form[] = '<input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" />';	
+			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" /></td>';
 		}
+		$form[] = '</tr><tr>';
+		
+		// minimap option
+		$form[] = '<tr>';
+		$form[] = '<td><label for="tx-wecmap-mod1-minimap">Show Minimap:</label></td>';
+		if($minimap) {
+			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-minimap" id="tx-wecmap-mod1-minimap" checked="checked"/></td>';
+		} else {
+			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-minimap" id="tx-wecmap-mod1-minimap" /></td>';
+		}
+		$form[] = '</tr>';
+		
+		// maptype option
+		$form[] = '<tr>';
+		$form[] = '<td><label for="tx-wecmap-mod1-maptype">Show maptype:</label></td>';
+		if($maptype) {
+			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-maptype" id="tx-wecmap-mod1-maptype" checked="checked"/></td>';
+		} else {
+			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-maptype" id="tx-wecmap-mod1-maptype" /></td>';
+		}
+		$form[] = '</tr>';
+				
+		$form[] = '</table>';
 		$form[] = '<input type="submit" name="tx-wecmap-mod1-submit" id="tx-wecmap-mod1-submit" value="Save" />';
 		$form[] = '</form>';
-		echo '<pre>';
-		print_r($conf);
-		echo '</pre>';
-		$sconf = serialize($conf);
-		$GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map'] = $sconf;
+
 		
-		return implode('', $form);
+		return implode(chr(10), $form);
 	}
 
 	/**
@@ -239,6 +292,14 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		/* Create the Map object */
 		$width = 500;
 		$height = 500;
+		$conf = $GLOBALS['BE_USER']->getModuleData('tools_txwecmapM2');
+		
+		// t3lib_div::debug($GLOBALS['BE_USER']->uc['moduleData']['tools_txwecmapM2']);
+		
+		// get options
+		$scale = $conf['scale'];
+		$minimap = $conf['minimap'];
+		$maptype = $conf['maptype'];
 		
 		$streetField = $this->getAddressField('street');
 		$cityField = $this->getAddressField('city');
@@ -252,10 +313,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 		// evaluate map controls based on configuration
 		$map->addControl('largeMap');	
-
-		$map->addControl('scale');
-		$map->addControl('overviewMap');
-		$map->addControl('mapType');
+		
+		if($scale) $map->addControl('scale');
+		if($minimap) $map->addControl('overviewMap');
+		if($maptype) $map->addControl('mapType');
 		$map->enableDirections(false, 'directions');
 		
 		/* Select all frontend users */		

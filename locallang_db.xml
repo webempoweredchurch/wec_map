@@ -53,7 +53,8 @@
 			<label index="tt_content.pi_flexform.typeNormal">Normal</label>
 			<label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
 			<label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
-			<label index="tt_content.pi_flexform.showDirs">Show Directions Tab</label>		
+			<label index="tt_content.pi_flexform.showDirs">Show Directions Tab</label>
+			<label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
 			<label index="tt_content.pi_flexform.prefillAddress">Prefill Address from User Info</label>
 
         </languageKey>

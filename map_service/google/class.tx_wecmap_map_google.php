@@ -53,6 +53,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $type;
 	var $directions;
 	var $prefillAddress;
+	var $directionsDivID;
 	
 	var $lang;
 	
@@ -80,6 +81,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		$this->controls = array();
 		$this->directions = false;
+		$this->directionsDivID = null;
 		$this->prefillAddress = false;
 		$this->width = $width;
 		$this->height = $height;
@@ -444,8 +446,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		Javascript for the Google Directions object.
 	 */
 	function js_newGDirections() {
-		return 'gdir_'. $this->mapName .' = new GDirections('. $this->mapName .', document.getElementById("directions-'. $this->mapName .'"));'.
-		'GEvent.addListener(gdir_'. $this->mapName .', "error", handleErrors_'. $this->mapName .');';
+		if($this->directionsDivID == null) {
+			return 'gdir_'. $this->mapName .' = new GDirections('. $this->mapName .');'.
+			'GEvent.addListener(gdir_'. $this->mapName .', "error", handleErrors_'. $this->mapName .');';			
+		} else {
+			return 'gdir_'. $this->mapName .' = new GDirections('. $this->mapName .', document.getElementById("'. $this->directionsDivID .'"));'.
+			'GEvent.addListener(gdir_'. $this->mapName .', "error", handleErrors_'. $this->mapName .');';
+		}
+
 	}
 	
 	/**
@@ -603,7 +611,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
             $validCenter = true;
         }
         
-        /* If we have an API key along with markers or a center point, its valid */
+		// If we have an API key along with markers or a center point, it's valid 
         if($validMarkers or $validCenter) {
             $valid = true;
         }
@@ -640,11 +648,15 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	/**
 	 * Enables directions
 	 *
+	 * @param boolean	Whether or not to prefill the currently logged in FE user's address already
+	 * @param string	The id of the container that will show the written directions
+	 * 
 	 * @return void
 	 **/
-	function enableDirections($prefillAddress = false) {
+	function enableDirections($prefillAddress = false, $divID = null) {
 		$this->prefillAddress = $prefillAddress;
 		$this->directions = true;
+		$this->directionsDivID = $divID;
 	}
 }
 
