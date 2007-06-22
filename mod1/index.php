@@ -234,20 +234,51 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 */
 	function apiKeyAdmin() {
 		global $TYPO3_CONF_VARS, $LANG;
-	
+		
+		$allDomains = $this->getAllDomains();
+		
 		$cmd = t3lib_div::_GP('cmd');
-		$newKey = t3lib_div::_GP('key');
+		
 		switch($cmd) {
-			case 'setkey' : 
-				$this->saveApiKey($newKey);
-				$apiKey = $newKey;
+			case 'setkey' :
 				
-				unset($cmd);
-				unset($newKey);
+				// transform the POST array to our needs.
+				// we then get a simple array in the form:
+				// array('domain1', 'domain2', 'key1', 'key2'), etc.
+				$post = $_POST;
+				unset($post['cmd']);
+				unset($post['SET']);
+				ksort($post);
+				$post = array_values($post);
+
+				// prepare the two arrays we need in the loop
+				$extconfArray = array();
+				$returnArray = array();
+				
+				// get total number of domain->key pairs
+				$number = count($post)/2;
+				
+				// loop through all the pairs
+				for ( $i=0; $i < $number; $i++ ) {
+					
+					// if there is no key, we don't want to save it in extconf
+					if(!empty($post[$i+$number])) $extconfArray[$post[$i]] = $post[$i+$number];
+					
+					// if there is no domain, we don't add it; there will be a blank form added
+					// further down anyway.
+					if(!empty($post[$i])) $returnArray[$post[$i]] = $post[$i+$number];
+				}
+
+				// save the domain->key pairs only if it's not empty
+				if(!empty($extconfArray)) $this->saveApiKey($extconfArray);
+				
+				// sort the array and reverse it so we show filled out records first, empty ones last
+				asort($returnArray);
+				$allDomains = array_reverse($returnArray);
+
 				break;
 				
 			default :
-				$apiKey = $this->getApiKey();
 				break;
 		}
 		
@@ -257,8 +288,25 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		$content[] = '<form action="" method="POST">';
 		$content[] = '<input name="cmd" type="hidden" value="setkey" />';
-		$content[] = '<label for="key">'.$LANG->getLL('googleMapsApiKey').'</label>';
-		$content[] = '<input style="width: 50em;" name="key" value="'.$apiKey.'" />';
+		
+		$index = 0;
+		foreach( $allDomains as $key => $value ) {
+			$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
+			$content[] = '<div style="width: 12em;"><label for="domain_'. $index .'">Domain:</label></div>';
+			$content[] = '<div><input style="width: 12em;" name="domain_'. $index .'" value="'.$key.'" /></div>';
+			$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').'</label></div>';
+			$content[] = '<div><input style="width: 50em;" name="key_'. $index .'" value="'.$value.'" /></div>';
+			$content[] = '</div>';
+			$index++;
+		}
+		
+		$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
+		$content[] = '<div style="width: 12em;"><label for="domain_'. $index .'">Domain:</label></div>';
+		$content[] = '<div><input style="width: 12em;" name="domain_'. $index .'" value="" /></div>';
+		$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').'</label></div>';
+		$content[] = '<div><input style="width: 50em;" name="key_'. $index .'" value="" /></div>';
+		$content[] = '</div>';
+
 		$content[] = '<input type="submit" value="'.$LANG->getLL('submit').'"/>';
 		$content[] = '</form>';
 		
@@ -267,14 +315,14 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	
 	/*
 	 * Looks up the API key in extConf within localconf.php
-	 * @return		string		The Google Maps API key.
+	 * @return		array		The Google Maps API keys.
 	 */
-	function getApiKey() {
+	function getApiKeys() {
 		
 		require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
-		$apiKey = tx_wecmap_backend::getExtConf('apiKey.google');			
+		$apiKeys = tx_wecmap_backend::getExtConf('apiKey.google');
 		
-		return $apiKey;
+		return $apiKeys;
 	}
 	
 	/*
@@ -282,23 +330,106 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @param		string		The new Google Maps API Key.
 	 * @return		none
 	 */	
-	function saveApiKey($apiKey) {
+	function saveApiKey($dataArray) {
 		global $TYPO3_CONF_VARS;
-		
+
 		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$this->extKey]);
-		$extConf['apiKey.']['google'] = $apiKey;
-		
+		$extConf['apiKey.']['google'] = $dataArray;
+
 		// Instance of install tool
 		$instObj = t3lib_div::makeInstance('t3lib_install');
-		$instObj->allowUpdateLocalConf =1;
+		$instObj->allowUpdateLocalConf = 1;
 		$instObj->updateIdentity = $this->extKey;
-
+		
 		// Get lines from localconf file
 		$lines = $instObj->writeToLocalconf_control();
+		// t3lib_div::debug($lines, 'lines');
 		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$this->extKey.'\']', serialize($extConf));
 		$instObj->writeToLocalconf_control($lines);
-		
+
 		t3lib_extMgm::removeCacheFiles();
+	}
+	
+	/**
+	 * Returns an assoc array with domains as key and api key as value
+	 *
+	 * @return array
+	 **/
+	function getAllDomains() {
+		// get domain records
+		$where = 'hidden=0';
+		$domainRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('domainName', 'sys_domain', $where);
+		
+		$newArray = array();
+		foreach( $domainRecords as $key => $value ) {
+			$newArray[$value['domainName']] = '';
+		}
+		$domainRecords = $newArray;
+
+		// get domains entries from extconf
+		$extconfDomains = $this->getApiKeys();
+
+		// get domain from the current http request
+		$requestDomain = t3lib_div::getIndpEnv('HTTP_HOST');
+		$requestDomain = array($requestDomain => '');
+
+		// Now combine all the records we got into one array with the domain as key and the api key as value
+		return $this->combineAndSort($domainRecords, $extconfDomains, $requestDomain);
+	}
+	/**
+	 * combine all the arrays, making each key unique and preferring the one that has a value,
+	 * then sort so that all empty values are last
+	 *
+	 * @return array
+	 **/
+	function combineAndSort($a1, $a2, $a3) {
+		if(!is_array($a1)) $a1 = array();
+		if(!is_array($a2)) $a2 = array();
+		if(!is_array($a3)) $a3 = array();		
+
+		// combine the first and the second
+		$temp1 = array();
+		foreach( $a1 as $key => $value ) {
+			// if there is the same key in array2, check the values
+			if(array_key_exists($key, $a2)) {
+				
+				// if a2 doesn't have a value, use a1's value
+				if(empty($a2[$key])) {
+					$temp1[$key] = $value;
+				} else {
+					$temp1[$key] = $a2[$key];
+				}
+			} else {
+				$temp1[$key] = $value;
+			}
+		}
+
+		$temp2 = array_merge($a2, $temp1);
+
+		// combine the temp and the third
+		$temp3 = array();
+		foreach( $temp2 as $key => $value ) {
+			// if there is the same key in array2, check the values
+			if(array_key_exists($key, $a3)) {
+				
+				// if a3 doesn't have a value, use a1's value
+				if(empty($a3[$key])) {
+					$temp3[$key] = $value;
+				} else {
+					$temp3[$key] = $a3[$key];
+				}
+			} else {
+				$temp3[$key] = $value;
+			}
+		}
+				
+		// merge the third into the second
+		$temp4 = array_merge($a3, $temp3);
+		
+		// sort by value, reverse, and return
+		asort($temp4);
+		
+		return array_reverse($temp4);
 	}
 	
 	/**

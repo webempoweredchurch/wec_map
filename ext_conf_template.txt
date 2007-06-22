@@ -1,5 +1,3 @@
-# cat=basic; type=string; label=Google Maps API key
-apiKey.google = 
 # cat=basic; type=boolean; label=Enable map in FE user records
 feUserRecordMap = 0
 # cat=basic; type=boolean; label=Enable Geocoding Status

@@ -322,7 +322,7 @@ class tx_wecmap_backend {
 		/* Unserialize the TYPO3_CONF_VARS and extract the value using the parser */
 		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
 		$valueArray = $tsParser->getVal($key, $extConf);
-		
+
 		if (is_array($valueArray)) {
 			$returnValue = $valueArray[0];
 		} else {
