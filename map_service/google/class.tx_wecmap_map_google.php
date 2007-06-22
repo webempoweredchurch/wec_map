@@ -74,7 +74,31 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		if(!$key) {
 			// get key from configuration
-			$this->key = tx_wecmap_backend::getExtConf('apiKey.google');			
+			$keyConfig = tx_wecmap_backend::getExtConf('apiKey.google');
+			
+			// get current domain
+			$domain = t3lib_div::getIndpEnv('HTTP_HOST');
+			
+			// loop through all the domain->key pairs we got to find the right one
+			$found = false;
+			foreach( $keyConfig as $key => $value ) {
+				if($domain == $key) {
+					$found = true;
+					$this->key = $value;
+				}
+			}
+			
+			// if we didn't get an exact match, check for partials and guess
+			if(!$found) {
+				foreach( $keyConfig as $key => $value ) {
+
+					if(strpos($domain, $key) !== false) {
+						$found = true;
+						$this->key = $value;
+					}
+				}
+			}
+
 		} else {
 			$this->key = $key;			
 		}
