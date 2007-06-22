@@ -195,9 +195,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function mapSettings() {
 		
 		if(t3lib_div::_GP('tx-wecmap-mod1-submit')) {
-			// echo '<pre>';
-			// print_r($_POST);
-			// echo '</pre>';
 
 			$scale = t3lib_div::_GP('tx-wecmap-mod1-scale');
 			
@@ -223,8 +220,10 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				$maptype = 0;
 			}
 			
+			$mapcontrolsize = t3lib_div::_GP('tx-wecmap-mod1-mapcontrolsize');
+			
 			// build data array
-			$data = array('scale' => $scale, 'minimap' => $minimap, 'maptype' => $maptype);
+			$data = array('scale' => $scale, 'minimap' => $minimap, 'maptype' => $maptype, 'mapcontrolsize' => $mapcontrolsize);
 			
 			// save to user config
 			$GLOBALS['BE_USER']->pushModuleData('tools_txwecmapM2', $data);
@@ -239,6 +238,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$scale = $conf['scale'];
 		$minimap = $conf['minimap'];
 		$maptype = $conf['maptype'];
+		$mapcontrolsize = $conf['mapcontrolsize'];
 	
 		$form = array();
 		$form[] = '<form method="POST">';
@@ -266,14 +266,49 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		// maptype option
 		$form[] = '<tr>';
-		$form[] = '<td><label for="tx-wecmap-mod1-maptype">Show maptype:</label></td>';
+		$form[] = '<td><label for="tx-wecmap-mod1-maptype">Show Maptype:</label></td>';
 		if($maptype) {
 			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-maptype" id="tx-wecmap-mod1-maptype" checked="checked"/></td>';
 		} else {
 			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-maptype" id="tx-wecmap-mod1-maptype" /></td>';
 		}
 		$form[] = '</tr>';
-				
+		
+		$form[] = '<tr>';
+		$form[] = '<td style="vertical-align: top;">Map Control Size:</td>';
+		$form[] = '<td>';
+		if($mapcontrolsize == 'large') {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="large" checked="checked" id="mapcontrolsize_0" />';			
+		} else {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="large" id="mapcontrolsize_0" />';
+		}
+		$form[] = '<label for="mapcontrolsize_0">Large</label><br />';
+		
+		if($mapcontrolsize == 'small') {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="small" checked="checked" id="mapcontrolsize_1" />';			
+		} else {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="small" id="mapcontrolsize_1" />';			
+		}
+		$form[] = '<label for="mapcontrolsize_1">Small</label><br />';
+		
+		if($mapcontrolsize == 'zoomonly') {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="zoomonly" checked="checked" id="mapcontrolsize_2" />';	
+		} else {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="zoomonly" id="mapcontrolsize_2" />';
+		}
+		$form[] = '<label for="mapcontrolsize_2">Zoom only</label><br />';
+		
+		if($mapcontrolsize == 'none' || empty($mapcontrolsize)) {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="none" checked="checked" id="mapcontrolsize_3" />';			
+		} else {
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="none" id="mapcontrolsize_3" />';	
+		}
+
+		$form[] = '<label for="mapcontrolsize_3">None</label>';
+		$form[] = '</td>';
+		$form[] = '</tr>';
+		
+		
 		$form[] = '</table>';
 		$form[] = '<input type="submit" name="tx-wecmap-mod1-submit" id="tx-wecmap-mod1-submit" value="Save" />';
 		$form[] = '</form>';
@@ -300,6 +335,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$scale = $conf['scale'];
 		$minimap = $conf['minimap'];
 		$maptype = $conf['maptype'];
+		$mapcontrolsize = $conf['mapcontrolsize'];
 		
 		$streetField = $this->getAddressField('street');
 		$cityField = $this->getAddressField('city');
@@ -312,7 +348,23 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$map = new $className($apiKey, $width, $height);
 
 		// evaluate map controls based on configuration
-		$map->addControl('largeMap');	
+		switch ($mapcontrolsize) {
+			case 'large':
+				$map->addControl('largeMap');
+				break;
+			
+			case 'small':
+				$map->addControl('smallMap');
+				break;
+			
+			case 'zoomonly':
+				$map->addControl('smallZoom');
+				break;
+			default:
+				// do nothing
+				break;
+		}
+
 		
 		if($scale) $map->addControl('scale');
 		if($minimap) $map->addControl('overviewMap');
