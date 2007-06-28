@@ -90,6 +90,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 
+		$showInfoOnLoad = $this->pi_getFFvalue($piFlexForm, 'showInfoOnLoad', 'mapConfig');
+		empty($showInfoOnLoad) ? $showInfoOnLoad = $conf['showInfoOnLoad']:null;
+		
 		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'mapConfig');
 		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
 
@@ -141,6 +144,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
 		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
 		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
+		
+		// see if we need to open the marker bubble on load
+		if($showInfoOnLoad) $map->showInfoOnLoad();
 		
 		// determine if an address has been set through flexforms. If not, process TS		
 		if(empty($zip) && empty($state) && empty($city)) {

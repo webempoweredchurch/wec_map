@@ -54,6 +54,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $directions;
 	var $prefillAddress;
 	var $directionsDivID;
+	var $showInfoOnLoad;
 	
 	var $lang;
 	
@@ -107,6 +108,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->directions = false;
 		$this->directionsDivID = null;
 		$this->prefillAddress = false;
+		$this->showInfoOnLoad = false;
 		$this->width = $width;
 		$this->height = $height;
 		
@@ -262,6 +264,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 			$jsContent[] = 'markers_'. $this->mapName .' = markers_'. $this->mapName .'.flatten();';
 			$jsContent[] = 'mgr_'. $this->mapName .'.refresh();';
+			$jsContent[] = $this->js_initialOpenInfoWindow();
 			$jsContent[] = $this->js_drawMapEnd();
 		
 			// there is no onload() in the BE, so we need to call drawMap() manually.
@@ -304,7 +307,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
- 
+
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);	
 	}
@@ -583,6 +586,39 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				
 	}
 
+	/**
+	 * Write the javascript to open the info window if there is only one marker
+	 *
+	 * @return string 	javascript
+	 **/
+	function js_initialOpenInfoWindow() {
+		$markers = reset($this->markers);
+
+		if(count($markers) == 1 && $this->showInfoOnLoad) {
+
+			$marker = $markers[0];
+
+			$arrays = $marker->buildTitleAndDescriptionArrays($this->directions);
+			$title = $arrays[0];
+			$text = $arrays[1];			
+
+			if($marker->hasTabs()) {
+
+				
+				$content = 'var text = '. $text .';
+				var title = '. $title .';
+				var tabs = [];
+				for (var i=0; i < text.length; i++) {
+					tabs.push(new GInfoWindowTab(title[i], text[i]));
+				};
+				markers_'.$this->mapName.'[0].openInfoWindowTabsHtml(tabs);';
+				return $content;
+			} else {
+				return 'markers_'.$this->mapName.'[0].openInfoWindowHtml("'. $title.$text .'")';
+			}
+
+		}
+	}
 
 	/**
 	 * Sets the center and zoom values for the current map dynamically, based
@@ -681,6 +717,15 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->prefillAddress = $prefillAddress;
 		$this->directions = true;
 		$this->directionsDivID = $divID;
+	}
+	
+	/**
+	 * Makes the marker info bubble show on load if there is only one marker on the map
+	 *
+	 * @return void
+	 **/
+	function showInfoOnLoad() {
+		$this->showInfoOnLoad = true;
 	}
 }
 

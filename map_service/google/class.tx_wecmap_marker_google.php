@@ -48,6 +48,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	var $color;
 	var $strokeColor;
 	var $prefillAddress;
+	var $hasTabs;
 	
 	/**
 	 * Constructor for the Google Maps marker class.
@@ -77,6 +78,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$this->index = $index;
 		$this->tabLabels = $tabLabels;
 		$this->prefillAddress = $prefillAddress;
+		$this->hasTabs = false;
 		
 		if(is_array($title)) {
 			$this->title = array();
@@ -111,83 +113,33 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return	string	The Javascript to add a marker to the page.
 	 */
 	function writeJS() {
-		if(is_array($this->tabLabels) && !empty($this->tabLabels)) {
-			$titleArray = '[';
-			$first = true;
-			foreach( $this->tabLabels as $value ) {
-				$value = strip_tags($value);
-				if($first) {
-					$titleArray .= '"'. $value .'"';
-				} else {
-					$titleArray .= ', "'. $value .'"';
-				}
-				$first = false;
-			}
-			$titleArray .= ']';
-			
-			$textArray = '[';
-			$first = true;
-
-			for($i = 0; $i < count($this->title); $i++) {
-				if($first) {
-					$textArray .= '"'. $this->title[$i].$this->description[$i] .'"';
-				} else {
-					$textArray .= ', "'. $this->title[$i].$this->description[$i] .'"';
-				}
-				$first = false;
-			}
-			$textArray .= ']';
-					
+		$arrays = $this->buildTitleAndDescriptionArrays(false);
+		$titleArray = $arrays[0];
+		$textArray = $arrays[1];
+		
+		if(is_array($titleArray)) {
+			$this->hasTabs = true;
 			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
 		} else {
-			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', "'.$this->title.$this->description.'")';	
+			$this->hasTabs = false;
+			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', "'.$titleArray.$textArray.'")';	
 		}
 
 	}
 	
 	/**
-	 * undocumented function
+	 * Creates the Javascript to add a marker with directions to the page.
 	 *
-	 * @return void
+	 * @return string 	the javascript to add the marker
 	 **/
 	function writeJSwithDirections() {
-		global $LANG;
+
+		$arrays = $this->buildTitleAndDescriptionArrays(true);
+		$titleArray = $arrays[0];
+		$textArray = $arrays[1];
 		
-		if(is_array($this->tabLabels) && !empty($this->tabLabels)) {
-			$titleArray = '[';
-			$first = true;
-			foreach( $this->tabLabels as $value ) {
-				$value = strip_tags($value);
-				if($first) {
-					$titleArray .= '"'. $value .'"';
-				} else {
-					$titleArray .= ', "'. $value .'"';
-				}
-				$first = false;
-			}
-			$titleArray .= ', "'. $LANG->getLL('directions') .'"]';
-			
-			$textArray = '[';
-			$first = true;
-
-			for($i = 0; $i < count($this->title); $i++) {
-				if($first) {
-					$textArray .= '"'. $this->title[$i].$this->description[$i] .'"';
-				} else {
-					$textArray .= ', "'. $this->title[$i].$this->description[$i] .'"';
-				}
-				$first = false;
-			}
-			$textArray .= ', "'. $this->getDirectionsHTML() .'"]';
-					
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';				
-		} else {			
-			$titleArray = '[\''. $LANG->getLL('info') .'\', \''. $LANG->getLL('directions') .'\']';
-
-			$textArray = '[\''.$this->title.$this->description.'\', \''. $this->getDirectionsHTML(). '\']';
-
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
-		}
+		$this->hasTabs = true;
+		return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
 	}
 	
 	/**
@@ -264,6 +216,69 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	}
 	
 	/**
+	 * undocumented function
+	 * 
+	 * @param  boolean	determines whether we want directions or not
+	 * @return mixed 	either an array with title and description js arrays or an array with title and description js string
+	 **/
+	function buildTitleAndDescriptionArrays($directions) {
+		global $LANG;
+		
+		if(is_array($this->tabLabels) && !empty($this->tabLabels)) {
+			$titleArray = '[';
+			$first = true;
+			foreach( $this->tabLabels as $value ) {
+				$value = strip_tags($value);
+				if($first) {
+					$titleArray .= '"'. $value .'"';
+				} else {
+					$titleArray .= ', "'. $value .'"';
+				}
+				$first = false;
+			}
+			
+			if($directions) {
+				$titleArray .= ', "'. $LANG->getLL('directions') .'"]';				
+			} else {
+				$titleArray .= ']';
+			}
+
+			
+			$textArray = '[';
+			$first = true;
+
+			for($i = 0; $i < count($this->title); $i++) {
+				if($first) {
+					$textArray .= '"'. $this->title[$i].$this->description[$i] .'"';
+				} else {
+					$textArray .= ', "'. $this->title[$i].$this->description[$i] .'"';
+				}
+				$first = false;
+			}
+			
+			if($directions) {
+				$textArray .= ', "'. $this->getDirectionsHTML() .'"]';				
+			} else {
+				$textArray .= ']';
+			}
+		} else {
+			
+			if($directions) {
+				$titleArray = '[\''. $LANG->getLL('info') .'\', \''. $LANG->getLL('directions') .'\']';
+
+				$textArray = '[\''.$this->title.$this->description.'\', \''. $this->getDirectionsHTML(). '\']';	
+				
+			} else {
+				$titleArray = $this->title;
+				$textArray = $this->description;
+			}
+		}
+		
+		return array($titleArray, $textArray);
+
+	}
+	
+	/**
 	 * Converts newlines to <br/> tags.
 	 *
 	 * @access	private
@@ -291,6 +306,15 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$newstr = str_replace($order, $replace, $input);
 		
 		return $newstr;
+	}
+	
+	/**
+	 * Getter for hasTabs variable
+	 *
+	 * @return boolean
+	 **/
+	function hasTabs() {
+		return $this->hasTabs;
 	}
 }
 

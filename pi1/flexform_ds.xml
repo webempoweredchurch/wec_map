@@ -148,6 +148,14 @@
 							</config>
 						</TCEforms>						
 					</initialMapType>
+					<showInfoOnLoad>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showInfoOnLoad</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showInfoOnLoad>
 					<showDirections>
 						<TCEforms>
 							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showDirs</label>
