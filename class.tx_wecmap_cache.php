@@ -86,6 +86,28 @@ class tx_wecmap_cache {
 			if (is_null($latlong)) {
 				/* Intiate service chain to find lat/long */
 				$serviceChain='';
+				
+				// to somehow normalize the data we get, we will check for country codes like DEU that the geocoder
+				// doesn't understand and look up a real country name from static_info_countries
+				// 1. check if static_info_tables is available
+				if (t3lib_extmgm::isLoaded('static_info_tables')) {
+					
+					// 2. check the length of the country and do lookup only if it's 2 or 3 characters
+					$length = strlen($country);
+					if($length == 2) {
+						
+						// try to find a country with that two character code
+						$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_2="'.$country.'"');
+						$newCountry = $rows[0]['cn_short_en'];
+						if(!empty($newCountry)) $country = $newCountry;
+					} else if ($length == 3) {
+						// try to find a country with that two character code
+						$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_3="'.$country.'"');
+						$newCountry = $rows[0]['cn_short_en'];
+						if(!empty($newCountry)) $country = $newCountry;
+					}
+				}
+				
 				while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
 					$serviceChain.=','.$lookupObj->getServiceKey();
 					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);
