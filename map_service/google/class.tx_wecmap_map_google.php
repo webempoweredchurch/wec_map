@@ -595,28 +595,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$markers = reset($this->markers);
 
 		if(count($markers) == 1 && $this->showInfoOnLoad) {
-
-			$marker = $markers[0];
-
-			$arrays = $marker->buildTitleAndDescriptionArrays($this->directions);
-			$title = $arrays[0];
-			$text = $arrays[1];			
-
-			if($marker->hasTabs()) {
-
-				
-				$content = 'var text = '. $text .';
-				var title = '. $title .';
-				var tabs = [];
-				for (var i=0; i < text.length; i++) {
-					tabs.push(new GInfoWindowTab(title[i], text[i]));
-				};
-				markers_'.$this->mapName.'[0].openInfoWindowTabsHtml(tabs);';
-				return $content;
-			} else {
-				return 'markers_'.$this->mapName.'[0].openInfoWindowHtml("'. $title.$text .'")';
-			}
-
+			$content = 'GEvent.trigger(markers_'. $this->mapName .'[0], "click");';
+			return $content;
 		}
 	}
 
