@@ -255,6 +255,57 @@ class tx_wecmap_map {
 	}
 	
 	/**
+	 * Adds a marker by getting the address info from the TCA
+	 *
+	 * @param	string		The db table that contains the mappable records
+	 * @param	integer		The uid of the record to be mapped
+	 * @param	string		The title for the marker popup.
+	 * @param	string		The description to be displayed in the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
+	 **/
+	function addMarkerByTCA($table, $uid, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
+		
+		$uid = intval($uid);
+		
+		// first get the mappable info from the TCA
+		t3lib_div::loadTCA($table);
+		$tca = $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map'];
+
+		if(!$tca) return false;
+		if(!$tca['isMappable']) return false;
+		
+		$addressFields = $tca['addressFields'];
+		$streetfield = $addressFields['street'];
+		$cityfield = $addressFields['city'];
+		$statefield = $addressFields['state'];
+		$zipfield = $addressFields['zip'];
+		$countryfield = $addressFields['country'];
+		
+		// get address from db for this record
+		$record = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($streetfield. ', ' .$cityfield. ', ' .$statefield. ', ' .$zipfield. ', ' .$countryfield, $table, 'uid='.$uid);
+		$record = $record[0];
+		
+		$street = $record[$streetfield];
+		$city 	= $record[$cityfield];
+		$state 	= $record[$statefield];
+		$zip	= $record[$zipfield];
+		$country= $record[$countryfield];
+		
+		/* Geocode the address */
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
+ 
+		/* Create a marker at the specified latitude and longitdue */
+		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
+	}
+	
+	
+	
+	
+	/**
 	 * Returns the classname of the marker class.
 	 * @return	string	The name of the marker class.
 	 */

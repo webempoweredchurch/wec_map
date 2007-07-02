@@ -344,6 +344,54 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 	
 	/**
+	 * Adds a marker from TCA info with tabs
+	 *
+	 * @param	string		The table name
+	 * @param 	integer		The uid of the record to be mapped
+	 * @param	array 		Array of strings to be used as labels on the tabs
+	 * @param	array		The titles for the tabs of the marker popup.
+	 * @param	array		The descriptions to be displayed in the tabs of the marker popup.
+	 * @param	integer		Minimum zoom level for marker to appear.
+	 * @param	integer		Maximum zoom level for marker to appear.
+	 * @return	none
+	 **/
+	function addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+		
+		$uid = intval($uid);
+		
+		// first get the mappable info from the TCA
+		t3lib_div::loadTCA($table);
+		$tca = $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map'];
+
+		if(!$tca) return false;
+		if(!$tca['isMappable']) return false;
+		
+		$addressFields = $tca['addressFields'];
+		$streetfield = $addressFields['street'];
+		$cityfield = $addressFields['city'];
+		$statefield = $addressFields['state'];
+		$zipfield = $addressFields['zip'];
+		$countryfield = $addressFields['country'];
+		
+		// get address from db for this record
+		$record = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($streetfield. ', ' .$cityfield. ', ' .$statefield. ', ' .$zipfield. ', ' .$countryfield, $table, 'uid='.$uid);
+		$record = $record[0];
+		
+		$street = $record[$streetfield];
+		$city 	= $record[$cityfield];
+		$state 	= $record[$statefield];
+		$zip	= $record[$zipfield];
+		$country= $record[$countryfield];
+		
+		/* Geocode the address */
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
+ 
+		/* Create a marker at the specified latitude and longitdue */
+		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+	}
+	
+	/**
 	 * Adds a lat/long to the currently list of markers rendered on the map.
 	 *
 	 * @param	float		The latitude.
