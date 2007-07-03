@@ -290,26 +290,53 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content[] = '<input name="cmd" type="hidden" value="setkey" />';
 		
 		$index = 0;
+		
+		// get number of entries that have a key
+		$tempDomains = $allDomains;
+		foreach( $tempDomains as $key => $value) {
+			if(empty($value)) unset($tempDomains[$key]);
+		}
+		$number = count($tempDomains);
+		
 		foreach( $allDomains as $key => $value ) {
+			
+			// show the first summary text above all the already saved domains
+			if($number != 0 && $index == 0) {
+				$content[] = '<h1>Existing Domains</h1>';
+				$content[] = '<p style="margin-bottom:15px;">';
+				$content[] = $LANG->getLL('alreadySavedDomains');
+				$content[] = '</p>';
+			} else if ($number == $index) {
+				$content[] = '<h1>Suggested Domains</h1>';
+				$content[] = '<p style="margin-bottom:15px;">';
+				$content[] = $LANG->getLL('suggestedDomains');
+				$content[] = '</p>';
+			}
+			
+			if($index < $number) {
+				$deleteButton = '<input type="submit" value="Delete Domain" onclick="document.getElementById(\'key_'. $index .'\').value = \'\';" />';	
+			} else {
+				$deleteButton = null;
+			}
+			
 			$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
-			$content[] = '<div style="width: 12em;"><label for="domain_'. $index .'">Domain:</label></div>';
-			$content[] = '<div><input style="width: 12em;" name="domain_'. $index .'" value="'.$key.'" /></div>';
-			$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').'</label></div>';
-			$content[] = '<div><input style="width: 50em;" name="key_'. $index .'" value="'.$value.'" /></div>';
+			$content[] = '<div style="width: 25em;">Domain: <strong>'. $key .'</strong> '. $deleteButton .'</div>';
+			$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
+			$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="'.$value.'" /></div>';
+			$content[] = '<input type="hidden" name="domain_'.$index.'" value="'. $key .'">';
 			$content[] = '</div>';
 			$index++;
 		}
 		
 		$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
-		$content[] = '<div style="width: 12em;"><label for="domain_'. $index .'">Domain:</label></div>';
-		$content[] = '<div><input style="width: 12em;" name="domain_'. $index .'" value="" /></div>';
-		$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').'</label></div>';
-		$content[] = '<div><input style="width: 50em;" name="key_'. $index .'" value="" /></div>';
+		$content[] = '<div style="width: 25em;"><label for="domain_'. $index .'">Domain: </label><input style="width: 12em;" name="domain_'. $index .'" value="" /></div>';
+		$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
+		$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="" /></div>';
 		$content[] = '</div>';
 
 		$content[] = '<input type="submit" value="'.$LANG->getLL('submit').'"/>';
 		$content[] = '</form>';
-		
+
 		return implode(chr(10), $content);
 	}
 	

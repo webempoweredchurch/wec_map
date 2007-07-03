@@ -21,7 +21,16 @@
 			
 			<label index="totalCachedAddresses">Total cached addresses</label>
 			<label index="deleteCache">Delete all cached addresses!</label>
-			
+			<label index="alreadySavedDomains">
+				<![CDATA[
+				The Domains and API keys below have already been saved and are being used.
+				]]>
+			</label>
+			<label index="suggestedDomains">
+				<![CDATA[
+				Below is a suggested list of domains that you may want to add API keys for.
+				]]>
+			</label>
 			<label index="apiInstructions">
 				<![CDATA[
 				In order to use the WEC Map extension you must have a Google 
