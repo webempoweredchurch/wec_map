@@ -236,7 +236,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		global $TYPO3_CONF_VARS, $LANG;
 		
 		$allDomains = $this->getAllDomains();
-		
+
 		$cmd = t3lib_div::_GP('cmd');
 		
 		switch($cmd) {
@@ -257,21 +257,32 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				
 				// get total number of domain->key pairs
 				$number = count($post)/2;
-				
+
 				// loop through all the pairs
 				for ( $i=0; $i < $number; $i++ ) {
 					
-					// if there is no key, we don't want to save it in extconf
-					if(!empty($post[$i+$number])) $extconfArray[$post[$i]] = $post[$i+$number];
+					// get the domain and key
+					$curKey = $post[$i+$number];
+					$curDomain = $post[$i];
 					
-					// if there is no domain, we don't add it; there will be a blank form added
-					// further down anyway.
-					if(!empty($post[$i])) $returnArray[$post[$i]] = $post[$i+$number];
+					// if there is no key, we don't want to save it in extconf
+					if(!empty($curKey)) $extconfArray[$curDomain] = $curKey;
+					
+					// get all but manually added domains
+					$domains1 = $this->getRequestDomain();
+					$domains2 = $this->getDomainRecords();
+					$domains = array_keys(array_merge($domains1, $domains2));
+					
+					// if there is no domain, or we want to delete a domain, we won't return it.
+					// we also make sure not to recommend domains that were just deleted but manually added before
+					if(!empty($curDomain) && !(!empty($allDomains[$curDomain]) && empty($curKey) && !in_array($curDomain, $domains))) $returnArray[$curDomain] = $curKey;
+					
+
 				}
 
-				// save the domain->key pairs only if it's not empty
-				if(!empty($extconfArray)) $this->saveApiKey($extconfArray);
-				
+				// save the domain->key pairs, even if empty
+				$this->saveApiKey($extconfArray);
+
 				// sort the array and reverse it so we show filled out records first, empty ones last
 				asort($returnArray);
 				$allDomains = array_reverse($returnArray);
@@ -328,7 +339,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$index++;
 		}
 		
-		$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
+		$content[] = '<div id="adddomainbutton" style="margin-bottom: 15px;"><a href="#" onclick="document.getElementById(\'blank-domain\').style.display = \'block\'; remove = document.getElementById(\'adddomainbutton\'); remove.parentNode.removeChild(remove);">Manually add a new API key for domain</a></div>';
+		$content[] = '<div class="domain-item" id="blank-domain" style="margin-bottom: 15px; display: none;">';
 		$content[] = '<div style="width: 25em;"><label for="domain_'. $index .'">Domain: </label><input style="width: 12em;" name="domain_'. $index .'" value="" /></div>';
 		$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
 		$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="" /></div>';
@@ -383,26 +395,49 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return array
 	 **/
 	function getAllDomains() {
-		// get domain records
-		$where = 'hidden=0';
-		$domainRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('domainName', 'sys_domain', $where);
 		
-		$newArray = array();
-		foreach( $domainRecords as $key => $value ) {
-			$newArray[$value['domainName']] = '';
-		}
-		$domainRecords = $newArray;
+		$domainRecords = $this->getDomainRecords();
 
 		// get domains entries from extconf
 		$extconfDomains = $this->getApiKeys();
 
 		// get domain from the current http request
-		$requestDomain = t3lib_div::getIndpEnv('HTTP_HOST');
-		$requestDomain = array($requestDomain => '');
+		$requestDomain = $this->getRequestDomain();
 
 		// Now combine all the records we got into one array with the domain as key and the api key as value
 		return $this->combineAndSort($domainRecords, $extconfDomains, $requestDomain);
 	}
+	
+	/**
+	 * Returns an assoc array with domain record domains as keys and api key as value
+	 *
+	 * @return array
+	 **/
+	function getDomainRecords() {
+		
+		// get domain records
+		$domainRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('domainName', 'sys_domain', 'hidden=0');
+		
+		$newArray = array();
+		foreach( $domainRecords as $key => $value ) {
+			$newArray[$value['domainName']] = '';
+		}
+		
+		return $newArray;
+	}
+	
+	/**
+	 * Returns the domain of the current http request
+	 *
+	 * @return array
+	 **/
+	function getRequestDomain() {
+		// get domain from the current http request
+		$requestDomain = t3lib_div::getIndpEnv('HTTP_HOST');
+
+		return array($requestDomain => '');
+	}
+	
 	/**
 	 * combine all the arrays, making each key unique and preferring the one that has a value,
 	 * then sort so that all empty values are last
