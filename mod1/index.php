@@ -331,8 +331,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			}
 			
 			$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
-			$content[] = '<div style="width: 25em;">Domain: <strong>'. $key .'</strong> '. $deleteButton .'</div>';
-			$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
+			$content[] = '<div style="width: 25em;"><strong>'. $key .'</strong> '. $deleteButton .'</div>';
+			$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
 			$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="'.$value.'" /></div>';
 			$content[] = '<input type="hidden" name="domain_'.$index.'" value="'. $key .'">';
 			$content[] = '</div>';
@@ -341,8 +341,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		$content[] = '<div id="adddomainbutton" style="margin-bottom: 15px;"><a href="#" onclick="document.getElementById(\'blank-domain\').style.display = \'block\'; document.getElementById(\'adddomainbutton\').style.display = \'none\'; ">Manually add a new API key for domain</a></div>';
 		$content[] = '<div class="domain-item" id="blank-domain" style="margin-bottom: 15px; display: none;">';
-		$content[] = '<div style="width: 35em;"><label for="domain_'. $index .'">Domain: </label><input style="width: 12em;" name="domain_'. $index .'" value="" /> <input type="submit" value="Delete Domain" onclick="document.getElementById(\'key_'. $index .'\').value = \'\'; document.getElementById(\'blank-domain\').style.display =\'none\'; document.getElementById(\'adddomainbutton\').style.display = \'block\'; return false;" /></div>';
-		$content[] = '<div><for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
+		$content[] = '<div style="width: 35em;"><label style="display: none;" for="domain_'. $index .'">Domain: </label><input style="width: 12em;" name="domain_'. $index .'" value="Enter domain...." onfocus="this.value=\'\';"/> <input type="submit" value="Delete Domain" onclick="document.getElementById(\'key_'. $index .'\').value = \'\'; document.getElementById(\'blank-domain\').style.display =\'none\'; document.getElementById(\'adddomainbutton\').style.display = \'block\'; return false;" /></div>';
+		$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
 		$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="" /></div>';
 		$content[] = '</div>';
 
