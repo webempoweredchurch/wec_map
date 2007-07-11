@@ -299,6 +299,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		}
 		
 		$content = array();
+		$content[] = '<style type="text/css" media="screen">input {border: none;}</style>';
 		$content[] = '<p style="margin-bottom:15px;">';
 		$content[] = $LANG->getLL('apiInstructions');
 		$content[] = '</p>';
