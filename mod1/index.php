@@ -207,17 +207,13 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		
 		global $LANG;
 		
-		$uid = t3lib_div::_GP('uid');
-		$latitude = t3lib_div::_GP('latitude');
+		$uid       = t3lib_div::_GP('uid');
+		$latitude  = t3lib_div::_GP('latitude');
 		$longitude = t3lib_div::_GP('longitude');
-		$cmd = t3lib_div::_GP('cmd');
-		$page = intval(t3lib_div::_GP('page'));
-		if(empty($page)) $page = 1;
-		
-		$limit = $this->getPageLimit($page, $itemsPerPage);
+		$cmd       = t3lib_div::_GP('cmd');
 
-		$output = $recordHandler->displaySearch();
-		$output .= $recordHandler->displayTable($page);
+		$output   = $recordHandler->displaySearch();
+		$output  .= $recordHandler->displayTable();
 		
 		if ($cmd == 'edit') {
 			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';
@@ -551,56 +547,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content[] = '<input id="startGeocoding" type="submit" value="'.$LANG->getLL('startGeocoding').'" onclick="startGeocode(); return false;"/>';
 		
 		return implode(chr(10), $content);
-	}
-	
-	/**
-	 * Displays the pagination
-	 *
-	 * @return String
-	 **/
-	function makePagination($page, $count, $itemsPerPage) {
-		$pages = ceil($count/$itemsPerPage);
-		$content = array();
-		
-		if($page !== 1) {
-			$content[] = '<a href="?page='. ($page-1) .'">Previous</a>';	
-		} else {
-			$content[] = '<span style="color: grey;">Previous</span>';	
-		} 
-		
-		for ( $i=0; $i < $pages; $i++ ) { 
-			if($page == ($i+1)) {
-				$content[] = '<span style="color: grey;">'.($i+1).'</span>';
-			} else {
-				$content[] = '<a href="?page='. ($i+1) .'">'. ($i+1) .'</a>';				
-			}
-		}
-		
-		if($page !== $pages) {
-			$content[] = '<a href="?page='. ($page+1) .'">Next</a>';	
-		} else {
-			$content[] = '<span style="color: grey;">Next</span>';	
-		}
-		
-		return implode(' ', $content);
-		
-	}
-	
-	/**
-	 * Get record limits for SQL query
-	 *
-	 * @return String
-	 **/
-	function getPageLimit($page, $itemsPerPage) {
-		if($page == 1) {
-			$start = 0;
-			$end = $itemsPerPage;
-		} else {
-			$start = ($page-1)*$itemsPerPage;
-			$end = $page*$itemsPerPage;
-		}
-		
-		return $start.','.$end;
 	}
 }
 

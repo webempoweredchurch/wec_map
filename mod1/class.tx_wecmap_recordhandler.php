@@ -56,7 +56,7 @@ class tx_wecmap_recordhandler {
 	 *
 	 * @return String
 	 **/
-	function displayTable($page) {
+	function displayTable() {
 		
 		if($this->count == 0) {
 			$content = $this->getTotalCountHeader(0).'<br />';
@@ -65,13 +65,10 @@ class tx_wecmap_recordhandler {
 		}
 		
 		global $LANG;
-		
-		// $limit = $this->getPageLimit($page, $this->itemsPerPage);
+
 		$limit = null;
 		// Select rows:
 		$displayRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*','tx_wecmap_cache','', 'address', 'address', $limit);
-		
-		// $pager = $this->makePagination($page);
 
 		foreach($displayRows as $row) {				
 
@@ -318,43 +315,6 @@ class tx_wecmap_recordhandler {
 	}
 	
 	/**
-	 * Displays the pagination
-	 *
-	 * @return String
-	 **/
-	function makePagination($page) {
-		$pages = ceil($this->count/$this->itemsPerPage);
-		if($pages == 1) return null;
-		
-		$content = array();
-		$content[] = '<div id="pagination">';
-		
-		if($page !== 1) {
-			$content[] = '<a href="?page='. ($page-1) .'">Previous</a>';	
-		} else {
-			$content[] = '<span style="color: grey;">Previous</span>';	
-		} 
-		
-		for ( $i=0; $i < $pages; $i++ ) { 
-			if($page == ($i+1)) {
-				$content[] = '<span style="color: grey;">'.($i+1).'</span>';
-			} else {
-				$content[] = '<a href="?page='. ($i+1) .'">'. ($i+1) .'</a>';				
-			}
-		}
-		
-		if($page !== $pages) {
-			$content[] = '<a href="?page='. ($page+1) .'">Next</a>';	
-		} else {
-			$content[] = '<span style="color: grey;">Next</span>';	
-		}
-		
-		$content[] = '</div>';
-		return implode(' ', $content);
-		
-	}
-	
-	/**
 	 * Returns the header part that allows to delete all records and shows the
 	 * total number of records
 	 *
@@ -369,23 +329,6 @@ class tx_wecmap_recordhandler {
 			'</a>';
 		
 		return $content;
-	}
-	
-	/**
-	 * Get record limits for SQL query
-	 *
-	 * @return String
-	 **/
-	function getPageLimit($page, $itemsPerPage) {
-		if($page == 1) {
-			$start = 0;
-			$end = $itemsPerPage;
-		} else {
-			$start = ($page-1)*$itemsPerPage;
-			$end = $page*$itemsPerPage;
-		}
-		
-		return $start.','.$end;
 	}
 	
 	function linkSelf($addParams)	{
