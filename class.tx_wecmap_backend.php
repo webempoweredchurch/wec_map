@@ -101,11 +101,12 @@ class tx_wecmap_backend {
 		// if geocoding status is disabled, return
 		if(!tx_wecmap_backend::getExtConf('geocodingStatus')) return;
 		
-		$street = tx_wecmap_backend::getFieldValueFromFF('street', $PA);
-        $city = tx_wecmap_backend::getFieldValueFromFF('city', $PA);
-        $state = tx_wecmap_backend::getFieldValueFromFF('state', $PA);
-        $zip = tx_wecmap_backend::getFieldValueFromFF('zip', $PA);
+		$street  = tx_wecmap_backend::getFieldValueFromFF('street', $PA);
+        $city    = tx_wecmap_backend::getFieldValueFromFF('city', $PA);
+        $state   = tx_wecmap_backend::getFieldValueFromFF('state', $PA);
+        $zip     = tx_wecmap_backend::getFieldValueFromFF('zip', $PA);
         $country = tx_wecmap_backend::getFieldValueFromFF('country', $PA);
+
 		
 		return tx_wecmap_backend::drawGeocodeStatus($street, $city, $state, $zip, $country);
 	}

@@ -112,12 +112,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 
 		// get this from flexform only. If empty, we check the TS, see below.
-		$street = $this->pi_getFFvalue($piFlexForm, 'street', 'default');
-		$city = $this->pi_getFFvalue($piFlexForm, 'city', 'default');
-		$state = $this->pi_getFFvalue($piFlexForm, 'state', 'default');
-		$zip = $this->pi_getFFvalue($piFlexForm, 'zip', 'default');
-		$country = $this->pi_getFFvalue($piFlexForm, 'country', 'default');
-		$title = $this->pi_getFFvalue($piFlexForm, 'title', 'default');
+		$street      = $this->pi_getFFvalue($piFlexForm, 'street', 'default');
+		$city        = $this->pi_getFFvalue($piFlexForm, 'city', 'default');
+		$state       = $this->pi_getFFvalue($piFlexForm, 'state', 'default');
+		$zip         = $this->pi_getFFvalue($piFlexForm, 'zip', 'default');
+		$country     = $this->pi_getFFvalue($piFlexForm, 'country', 'default');
+		$title       = $this->pi_getFFvalue($piFlexForm, 'title', 'default');
 		$description = $this->pi_getFFvalue($piFlexForm, 'description', 'default');
 
 		/* Create the map class and add markers to the map */
