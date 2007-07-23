@@ -80,7 +80,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		} else {
 			$this->key = $key;			
 		}
-t3lib_div::debug("got key");
+
 		$this->controls = array();
 		$this->directions = false;
 		$this->directionsDivID = null;

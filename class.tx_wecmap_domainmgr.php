@@ -82,7 +82,7 @@ class tx_wecmap_domainmgr {
 	
 	function checkForOldConfig() {
 		global $TYPO3_CONF_VARS;
-t3lib_div::debug("start domain mgr");
+
 		$keyConfig = tx_wecmap_backend::getExtConf('apiKey.google');
 		if(is_array($keyConfig)) return false;
 
