@@ -47,7 +47,7 @@ class tx_wecmap_domainmgr {
 		
 		// check to see if this is an update from the old config schema and convert to the new
 		$isOld = $this->checkForOldConfig();
-		
+
 		// get key from configuration
 		$keyConfig = tx_wecmap_backend::getExtConf('apiKey.google');
 		
@@ -168,8 +168,6 @@ class tx_wecmap_domainmgr {
 		// t3lib_div::debug($lines, 'lines');
 		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$this->extKey.'\']', serialize($extConf));
 		$instObj->writeToLocalconf_control($lines);
-
-		t3lib_extMgm::removeCacheFiles();
 	}
 	
 	/**
