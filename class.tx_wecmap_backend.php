@@ -42,18 +42,19 @@ require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecma
  */
 class tx_wecmap_backend {
 	
-	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$this) {
+	function processDatamap_postProcessFieldArray($status, $table, $id, &$fieldArray, &$reference) {
 		global $TCA;
 		$isMappable = $TCA[$table]['ctrl']['EXT']['wec_map']['isMappable'];
 	
 		if($isMappable) {
 			/* Get the names of the fields from the TCA */
-			$streetField = tx_wecmap_backend::getFieldNameFromTable('street', $table);
-			$cityField = tx_wecmap_backend::getFieldNameFromTable('city', $table);
-			$stateField = tx_wecmap_backend::getFieldNameFromTable('state', $table);
-			$zipField = tx_wecmap_backend::getFieldNameFromTable('zip', $table);
+			$streetField  = tx_wecmap_backend::getFieldNameFromTable('street', $table);
+			$cityField    = tx_wecmap_backend::getFieldNameFromTable('city', $table);
+			$stateField   = tx_wecmap_backend::getFieldNameFromTable('state', $table);
+			$zipField     = tx_wecmap_backend::getFieldNameFromTable('zip', $table);
 			$countryField = tx_wecmap_backend::getFieldNameFromTable('country', $table);
 			
+
 			/* Get the row that we're saving */
 			$row = t3lib_befunc::getRecord($table, $id);
 			
