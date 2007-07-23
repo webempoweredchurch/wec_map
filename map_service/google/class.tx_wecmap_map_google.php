@@ -30,6 +30,7 @@
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
 require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_marker_google.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
 
 /**
  * Map implementation for the Google Maps mapping service.
@@ -74,36 +75,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->markers = array();
 		
 		if(!$key) {
-			// get key from configuration
-			$keyConfig = tx_wecmap_backend::getExtConf('apiKey.google');
-			
-			// get current domain
-			$domain = t3lib_div::getIndpEnv('HTTP_HOST');
-			
-			// loop through all the domain->key pairs we got to find the right one
-			$found = false;
-			foreach( $keyConfig as $key => $value ) {
-				if($domain == $key) {
-					$found = true;
-					$this->key = $value;
-				}
-			}
-			
-			// if we didn't get an exact match, check for partials and guess
-			if(!$found) {
-				foreach( $keyConfig as $key => $value ) {
-
-					if(strpos($domain, $key) !== false) {
-						$found = true;
-						$this->key = $value;
-					}
-				}
-			}
-
+			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
+			$this->key = $domainmgr->getKey();
 		} else {
 			$this->key = $key;			
 		}
-
+t3lib_div::debug("got key");
 		$this->controls = array();
 		$this->directions = false;
 		$this->directionsDivID = null;

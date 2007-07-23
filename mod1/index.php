@@ -43,6 +43,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 	// DEFAULT initialization of a module [END]
 	
 require_once('../class.tx_wecmap_cache.php');
+require_once('../class.tx_wecmap_domainmgr.php');
 
 
 /**
@@ -231,10 +232,11 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function apiKeyAdmin() {
 		global $TYPO3_CONF_VARS, $LANG;
 		
+		$domainmgrClass = t3lib_div::makeInstanceClassname('tx_wecmap_domainmgr');
+		$domainmgr = new $domainmgrClass();
+		
 		$blankDomainValue = 'Enter domain....';
 		
-		$allDomains = $this->getAllDomains();
-
 		$cmd = t3lib_div::_GP('cmd');
 		
 		switch($cmd) {
@@ -252,45 +254,12 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				ksort($post);
 				$post = array_values($post);
 
-				// prepare the two arrays we need in the loop
-				$extconfArray = array();
-				$returnArray = array();
+				$allDomains = $domainmgr->processPost($post);
 				
-				// get total number of domain->key pairs
-				$number = count($post)/2;
-
-				// loop through all the pairs
-				for ( $i=0; $i < $number; $i++ ) {
-					
-					// get the domain and key
-					$curKey = $post[$i+$number];
-					$curDomain = $post[$i];
-					
-					// if there is no key, we don't want to save it in extconf
-					if(!empty($curKey)) $extconfArray[$curDomain] = $curKey;
-					
-					// get all but manually added domains
-					$domains1 = $this->getRequestDomain();
-					$domains2 = $this->getDomainRecords();
-					$domains = array_keys(array_merge($domains1, $domains2));
-					
-					// if there is no domain, or we want to delete a domain, we won't return it.
-					// we also make sure not to recommend domains that were just deleted but manually added before
-					if(!empty($curDomain) && !(!empty($allDomains[$curDomain]) && empty($curKey) && !in_array($curDomain, $domains))) $returnArray[$curDomain] = $curKey;
-					
-
-				}
-
-				// save the domain->key pairs, even if empty
-				$this->saveApiKey($extconfArray);
-
-				// sort the array and reverse it so we show filled out records first, empty ones last
-				asort($returnArray);
-				$allDomains = array_reverse($returnArray);
-
 				break;
 				
 			default :
+				$allDomains = $domainmgr->getAllDomains();
 				break;
 		}
 		
@@ -353,148 +322,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content[] = '</form>';
 
 		return implode(chr(10), $content);
-	}
-	
-	/*
-	 * Looks up the API key in extConf within localconf.php
-	 * @return		array		The Google Maps API keys.
-	 */
-	function getApiKeys() {
-		
-		require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
-		$apiKeys = tx_wecmap_backend::getExtConf('apiKey.google');
-		
-		return $apiKeys;
-	}
-	
-	/*
-	 * Saves the API key to extConf in localconf.php.
-	 * @param		string		The new Google Maps API Key.
-	 * @return		none
-	 */	
-	function saveApiKey($dataArray) {
-		global $TYPO3_CONF_VARS;
-
-		$extConf = unserialize($TYPO3_CONF_VARS['EXT']['extConf'][$this->extKey]);
-		$extConf['apiKey.']['google'] = $dataArray;
-
-		// Instance of install tool
-		$instObj = t3lib_div::makeInstance('t3lib_install');
-		$instObj->allowUpdateLocalConf = 1;
-		$instObj->updateIdentity = $this->extKey;
-		
-		// Get lines from localconf file
-		$lines = $instObj->writeToLocalconf_control();
-		// t3lib_div::debug($lines, 'lines');
-		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$this->extKey.'\']', serialize($extConf));
-		$instObj->writeToLocalconf_control($lines);
-
-		t3lib_extMgm::removeCacheFiles();
-	}
-	
-	/**
-	 * Returns an assoc array with domains as key and api key as value
-	 *
-	 * @return array
-	 **/
-	function getAllDomains() {
-		
-		$domainRecords = $this->getDomainRecords();
-
-		// get domains entries from extconf
-		$extconfDomains = $this->getApiKeys();
-
-		// get domain from the current http request
-		$requestDomain = $this->getRequestDomain();
-
-		// Now combine all the records we got into one array with the domain as key and the api key as value
-		return $this->combineAndSort($domainRecords, $extconfDomains, $requestDomain);
-	}
-	
-	/**
-	 * Returns an assoc array with domain record domains as keys and api key as value
-	 *
-	 * @return array
-	 **/
-	function getDomainRecords() {
-		
-		// get domain records
-		$domainRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('domainName', 'sys_domain', 'hidden=0');
-		
-		$newArray = array();
-		foreach( $domainRecords as $key => $value ) {
-			$newArray[$value['domainName']] = '';
-		}
-		
-		return $newArray;
-	}
-	
-	/**
-	 * Returns the domain of the current http request
-	 *
-	 * @return array
-	 **/
-	function getRequestDomain() {
-		// get domain from the current http request
-		$requestDomain = t3lib_div::getIndpEnv('HTTP_HOST');
-
-		return array($requestDomain => '');
-	}
-	
-	/**
-	 * combine all the arrays, making each key unique and preferring the one that has a value,
-	 * then sort so that all empty values are last
-	 *
-	 * @return array
-	 **/
-	function combineAndSort($a1, $a2, $a3) {
-		if(!is_array($a1)) $a1 = array();
-		if(!is_array($a2)) $a2 = array();
-		if(!is_array($a3)) $a3 = array();		
-
-		// combine the first and the second
-		$temp1 = array();
-		foreach( $a1 as $key => $value ) {
-			// if there is the same key in array2, check the values
-			if(array_key_exists($key, $a2)) {
-				
-				// if a2 doesn't have a value, use a1's value
-				if(empty($a2[$key])) {
-					$temp1[$key] = $value;
-				} else {
-					$temp1[$key] = $a2[$key];
-				}
-			} else {
-				$temp1[$key] = $value;
-			}
-		}
-
-		$temp2 = array_merge($a2, $temp1);
-
-		// combine the temp and the third
-		$temp3 = array();
-		foreach( $temp2 as $key => $value ) {
-			// if there is the same key in array2, check the values
-			if(array_key_exists($key, $a3)) {
-				
-				// if a3 doesn't have a value, use a1's value
-				if(empty($a3[$key])) {
-					$temp3[$key] = $value;
-				} else {
-					$temp3[$key] = $a3[$key];
-				}
-			} else {
-				$temp3[$key] = $value;
-			}
-		}
-				
-		// merge the third into the second
-		$temp4 = array_merge($a3, $temp3);
-		
-		// sort by value, reverse, and return
-		asort($temp4);
-		
-		return array_reverse($temp4);
 	}
 	
 	/**
