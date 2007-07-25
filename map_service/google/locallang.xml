@@ -8,7 +8,7 @@
 		<languageKey index="default" type="array">
 			<label index="error_noApiKey">
 				<![CDATA[
-				No Maps API key has been set for the wec_map extension. Please make sure
+				No Maps API key has been set for the wec_map extension on this domain. Please make sure
 				that you have set an API key either in the WEC Map Admin, or via TypoScript or 
 				Flexform. If you don't have an API key yet, you may obtain one free of charge from
 				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.
