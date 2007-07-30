@@ -28,7 +28,7 @@
 ***************************************************************/
 
 require_once('class.tx_wecmap_backend.php');
-
+require_once(PATH_t3lib.'class.t3lib_install.php');
 
 /**
  * Domain <=> API Key manager class for the WEC Map extension.  This class
