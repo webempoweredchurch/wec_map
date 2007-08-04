@@ -305,7 +305,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
 			$content[] = '<div style="width: 25em;"><strong>'. $key .'</strong> '. $deleteButton .'</div>';
 			$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
-			$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="'.$value.'" /></div>';
+			$content[] = '<div><input style="width: 58em;" id="key_'. $index .'" name="key_'. $index .'" value="'.$value.'" /></div>';
 			$content[] = '<input type="hidden" name="domain_'.$index.'" value="'. $key .'">';
 			$content[] = '</div>';
 			$index++;
@@ -315,7 +315,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content[] = '<div class="domain-item" id="blank-domain" style="margin-bottom: 15px; display: none;">';
 		$content[] = '<div style="width: 35em;"><label style="display: none;" for="domain_'. $index .'">Domain: </label><input style="width: 12em;" id="domain_'. $index .'" name="domain_'. $index .'" value="" onfocus="this.value=\'\';"/> <input type="image" '.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' onclick="document.getElementById(\'key_'. $index .'\').value = \'\'; document.getElementById(\'blank-domain\').style.display =\'none\'; document.getElementById(\'adddomainbutton\').style.display = \'block\'; return false;" /></div>';
 		$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
-		$content[] = '<div><input style="width: 58em;" name="key_'. $index .'" value="" /></div>';
+		$content[] = '<div><input style="width: 58em;" id="key_'. $index .'" name="key_'. $index .'" value="" /></div>';
 		$content[] = '</div>';
 
 		$content[] = '<input type="submit" value="'.$LANG->getLL('submit').'"/>';
