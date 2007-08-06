@@ -169,7 +169,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			)
 		);
 		$html .= $this->stripNL(
-			sprintf('<form action="#" onsubmit="setDirections_'. $this->mapName .'(\\\'%3$s @ %1$f %2$f\\\', document.getElementById(\\\'tx-wecmap-directions-from-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;">
+			sprintf('<form action="#" onsubmit="setDirections_'. $this->mapName .'(document.getElementById(\\\'tx-wecmap-directions-from-'. $this->mapName .'\\\').value, \\\'%3$s @ %1$f %2$f\\\', \\\''. $this->mapName .'\\\'); return false;">
 			<label for="tx-wecmap-directions-from-'. $this->mapName .'">'. $LANG->getLL('toHereFrom') .'</label><input type="text" name="saddr" value="%4$s" id="tx-wecmap-directions-from-'. $this->mapName .'" />
 			<input type="submit" name="submit" value="Go" /></form>', 
 			$this->latitude, 

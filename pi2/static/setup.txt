@@ -19,7 +19,7 @@ plugin.tx_wecmap_pi2 {
 		title = TEXT
 		title.field = name
 		title.wrap = <h1>|</h1>
-	
+
 		description = COA
 		description {
 			10 = COA
@@ -27,20 +27,20 @@ plugin.tx_wecmap_pi2 {
 				10 = TEXT
 				10.field = address
 				10.wrap = | <br/>
-	
+
 				20 = TEXT
 				20.field = city
 				20.wrap = |, 
-	
+
 				30 = TEXT
 				30.field = zone
 				30.wrap = | &nbsp;
-	
+
 				40 = TEXT
 				40.field = zip
 			}
 			10.wrap = <p>|</p>
-		
+	
 			20 = TEXT
 			20.field = phone
 			20.wrap = <p>|</p>
