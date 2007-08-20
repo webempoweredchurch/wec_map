@@ -15,6 +15,8 @@
         <languageKey index="dk" type="array">
         </languageKey>
         <languageKey index="de" type="array">
+	        <label index="pi1_title">WEC Einfache Karte</label>
+            <label index="pi1_plus_wiz_description">Fügt eine Karte hinzu, die nur einen Ort anzeigt.</label>
         </languageKey>
         <languageKey index="no" type="array">
         </languageKey>

@@ -57,8 +57,57 @@
 			<label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
 			<label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
 			<label index="tt_content.pi_flexform.prefillAddress">Prefill Address from User Info</label>
-
         </languageKey>
+		<languageKey index="de" type="array">
+			<label index="berecord_geocodelabel">Koordinaten</label>
+			<label index="berecord_maplabel">Karte</label>
+			<label index="directions">Wegbeschreibung</label>
+			<label index="fromHereTo">Von hier nach:</label>
+			<label index="geocodeFailed">Geocoding fehlgeschlagen.</label>
+			<label index="geocodeNoAddress">Kann die Längen- und Breitengrade nicht ermitteln. Bitte eine Adresse eintragen und speichern.</label>
+			<label index="geocodeNotPerformed">Geocoding wurde für diese Adresse noch nicht durchgeführt.</label>
+			<label index="geocodeSuccessful">Geocoding erfolgreich!</label>
+			<label index="getDirections">Zeige Wegbeschreibung</label>
+			<label index="info">Adresse</label>
+			<label index="latitude">Breitengrad</label>
+			<label index="location">Ausgangspunkt</label>
+			<label index="longitude">Längengrad</label>
+			<label index="toHereFrom">Nach hier von:</label>
+			<label index="tt_content.list_type_pi1">Einfache WEC Landkarte</label>
+			<label index="tt_content.list_type_pi2">WEC Frontend Benutzer Karte</label>
+			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
+			<label index="tt_content.pi_flexform.city">Ortschaft</label>
+			<label index="tt_content.pi_flexform.conLargeMap">Grösse der Navigationselemente</label>
+			<label index="tt_content.pi_flexform.conLargeMapL">Gross</label>
+			<label index="tt_content.pi_flexform.conLargeMapS">Klein</label>
+			<label index="tt_content.pi_flexform.conLargeMapZ">Nur Zoom</label>
+			<label index="tt_content.pi_flexform.conNone">Nichts</label>
+			<label index="tt_content.pi_flexform.conOverview">Übersichts Karte anzeigen</label>
+			<label index="tt_content.pi_flexform.conScale">Skala anzeigen</label>
+			<label index="tt_content.pi_flexform.conType">Kartentyp anzeigen</label>
+			<label index="tt_content.pi_flexform.controlsTitle">Kartenfunktionen</label>
+			<label index="tt_content.pi_flexform.coord">Koordinaten</label>
+			<label index="tt_content.pi_flexform.country">Land</label>
+			<label index="tt_content.pi_flexform.description">Beschreibung</label>
+			<label index="tt_content.pi_flexform.initialMapType">Kartentyp zu Begin</label>
+			<label index="tt_content.pi_flexform.mapHeight">Höhe (pixel)</label>
+			<label index="tt_content.pi_flexform.mapTitle">Kartendetails</label>
+			<label index="tt_content.pi_flexform.mapWidth">Breite (pixel)</label>
+			<label index="tt_content.pi_flexform.prefillAddress">Adresse aus den Benutzerinformationen übernehmen</label>
+			<label index="tt_content.pi_flexform.privacy">Sensitives Geocoding (ohne Adresse)</label>
+			<label index="tt_content.pi_flexform.sheet">Adresse</label>
+			<label index="tt_content.pi_flexform.showDirs">Zeige Registerkarte 'Wegbeschreibung'</label>
+			<label index="tt_content.pi_flexform.showInfoOnLoad">Informationsblase beim Laden anzeigen</label>
+			<label index="tt_content.pi_flexform.showWrittenDirs">Zeige Wegbeschreibung als Text</label>
+			<label index="tt_content.pi_flexform.state">Staat</label>
+			<label index="tt_content.pi_flexform.street">Strasse</label>
+			<label index="tt_content.pi_flexform.title">Titel</label>
+			<label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
+			<label index="tt_content.pi_flexform.typeNormal">Normal</label>
+			<label index="tt_content.pi_flexform.typeSatellite">Satellit</label>
+			<label index="tt_content.pi_flexform.userGroup">Nach FE Benutzergruppe filtern (standardmässig alle angezeigt)</label>
+			<label index="tt_content.pi_flexform.zip">PLZ</label>
+		</languageKey>
     </data>
     <orig_hash type="array">
         <languageKey index="default" type="array">

@@ -16,5 +16,16 @@
 			<label index="area_zoominfo_desc">Zoom in to see more users from this area.</label>
 			<label index="area_zoominfo_title">Info</label>
 		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="area_zoominfo_desc">Hinein zoomen um mehr Benutzer aus diesem Bereich zu sehen.</label>
+			<label index="area_zoominfo_title">Info</label>
+			<label index="country_zoominfo_desc">Hinein zoomen um mehr Benutzer von %s zu sehen.</label>
+			<label index="country_zoominfo_title">Info</label>
+			<label index="editrecord">Bearbeite Benutzereintrag</label>
+			<label index="function1">Karte</label>
+			<label index="function2">Einstellungen</label>
+			<label index="function3">Funktion #3</label>
+			<label index="title">FE Benutzer Karte</label>
+		</languageKey>
 	</data>
 </T3locallang>

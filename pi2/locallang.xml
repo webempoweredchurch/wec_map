@@ -19,8 +19,15 @@
         </languageKey>
         <languageKey index="dk" type="array">
         </languageKey>
-        <languageKey index="de" type="array">
-        </languageKey>
+		<languageKey index="de" type="array">
+			<label index="city_zoominfo_desc">Hinein zoomen um mehr Benutzer von %s zu sehen.</label>
+			<label index="citycount_pl">Es befinden sich %u Benutzer in %s.</label>
+			<label index="citycount_si">Es befindet sich 1 Benutzer in %s.</label>
+			<label index="country_zoominfo_desc">Hinein zoomen um mehr Benutzer von %s zu sehen.</label>
+			<label index="country_zoominfo_title">Info</label>
+			<label index="pi2_plus_wiz_description">Fügt eine Karte hinzu, um Frontend Benutzer anzuzeigen. Diese Karte kann alle Benutzer oder nur bestimmte Frontend Gruppen anzeigen.</label>
+			<label index="pi2_title">WEC Frontend Benutzer Karte</label>
+		</languageKey>
         <languageKey index="no" type="array">
         </languageKey>
         <languageKey index="it" type="array">

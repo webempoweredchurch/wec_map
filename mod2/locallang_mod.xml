@@ -9,5 +9,9 @@
 			<label index="mlang_tabs_tab">FE User Map</label>
 			<label index="mlang_labels_tabdescr">Shows FE users and allows to edit their records.</label>
 		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="mlang_labels_tabdescr">Zeigt die FE Benutzer und ermöglicht ihre Einträge zu bearbeiten</label>
+			<label index="mlang_tabs_tab">FE Benutzer Karte</label>
+		</languageKey>
 	</data>
 </T3locallang>
