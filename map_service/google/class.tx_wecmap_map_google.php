@@ -130,7 +130,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			case 'largeMap':
 				$this->controls[] .= $this->js_addControl($this->mapName, 'new GLargeMapControl()');
 				break;
-			
+
 			case 'smallMap':
 				$this->controls[] .= $this->js_addControl($this->mapName, 'new GSmallMapControl()');
 				break;
