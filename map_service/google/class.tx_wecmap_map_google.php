@@ -635,7 +635,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		/* Get center and lat/long spans from parent object */
 		$latLongData = $this->getLatLongData();
-		t3lib_div::debug($latLongData, 'latlong data');
+
 		$lat = $latLongData['lat']; /* Center latitude */
 		$long = $latLongData['long']; /* Center longitude */
 		$latSpan = $latLongData['latSpan']; /* Total latitude the map covers */
