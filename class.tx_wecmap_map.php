@@ -84,8 +84,7 @@ class tx_wecmap_map {
 		// if only center is given, do a different calculation
 		if(isset($this->lat) && isset($this->long) && !isset($this->zoom)) {
 			$latlong = $this->getFarthestPointFromCenter();
-			t3lib_div::debug($latlong);
-			
+
 			return array(
 				'lat' => $this->lat,
 				'long' => $this->long,
