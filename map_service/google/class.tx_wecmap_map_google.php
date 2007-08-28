@@ -192,9 +192,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		// make sure we have markers to display and an API key
 		if ($hasThingsToDisplay && $hasKey && $hasHeightWidth) { 						
 			
-			if(!isset($this->lat) or !isset($this->long)) {
-				$this->autoCenterAndZoom();
-			}
+			// auto center and zoom if necessary
+			$this->autoCenterAndZoom();
 		
 			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
 			if(TYPO3_MODE == 'FE') {
@@ -636,12 +635,30 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 		/* Get center and lat/long spans from parent object */
 		$latLongData = $this->getLatLongData();
-		
+		t3lib_div::debug($latLongData, 'latlong data');
 		$lat = $latLongData['lat']; /* Center latitude */
 		$long = $latLongData['long']; /* Center longitude */
 		$latSpan = $latLongData['latSpan']; /* Total latitude the map covers */
 		$longSpan = $latLongData['longSpan']; /* Total longitude the map covers */
+		
+		// process center
+		if(!isset($this->lat) or !isset($this->long)) {
+			$this->setCenter($lat, $long);	
+		}
+		
+		// process zoom
+		if(!isset($this->zoom) || $this->zoom == '') {
+			$this->setZoom($this->getAutoZoom($latSpan, $longSpan));		
+		}
+	}
 	
+	/**
+	 * Calculates the auto zoom
+	 *
+	 * @return int 	zoom level
+	 **/
+	function getAutoZoom($latSpan, $longSpan) {
+		
 		//$pixelsPerLatDegree = pow(2, 17-$zoom);
 		//$pixelsPerLongDegree = pow(2,17 - $zoom) *  0.77162458338772;
 		$wZoom = log($this->width, 2) - log($longSpan, 2);
@@ -655,8 +672,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$zoom = 15;
 		}
 		
-		$this->setCenter($lat, $long);
-		$this->setZoom($zoom);
+		return $zoom;		
 	}
 	
 	/**

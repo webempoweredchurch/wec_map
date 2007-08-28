@@ -80,30 +80,80 @@ class tx_wecmap_map {
 	 *						are lat, long, latSpan, and longSpan.
 	 */
 	function getLatLongData() {
-		$latlong = $this->getLatLongBounds();
+
+		// if only center is given, do a different calculation
+		if(isset($this->lat) && isset($this->long) && !isset($this->zoom)) {
+			$latlong = $this->getFarthestPointFromCenter();
+			t3lib_div::debug($latlong);
+			
+			return array(
+				'lat' => $this->lat,
+				'long' => $this->long,
+				'latSpan' => abs(($latlong[0]-$this->lat) * 2),
+				'longSpan' => abs(($latlong[1]-$this->long) * 2)
+			);
+			
+		} else {
 		
-		$minLat = $latlong['minLat'];
-		$maxLat = $latlong['maxLat'];
-		$minLong = $latlong['minLong'];
-		$maxLong = $latlong['maxLong'];
-		
-		/* Calculate the span of the lat/long boundaries */
-		$latSpan = $maxLat-$minLat;
-		$longSpan = $maxLong-$minLong;
-		
-		/* Calculate center lat/long based on boundary markers */
-		$lat = ($minLat + $maxLat) / 2;
-		$long = ($minLong + $maxLong) / 2;
-		
-		return array(
-			'lat' => $lat, 
-			'long' => $long,
-			'latSpan' => $latSpan,
-			'longSpan' => $longSpan,
-		);
-		
+			$latlong = $this->getLatLongBounds();
+
+			$minLat = $latlong['minLat'];
+			$maxLat = $latlong['maxLat'];
+			$minLong = $latlong['minLong'];
+			$maxLong = $latlong['maxLong'];
+			
+			/* Calculate the span of the lat/long boundaries */
+			$latSpan = $maxLat-$minLat;
+			$longSpan = $maxLong-$minLong;
+
+			/* Calculate center lat/long based on boundary markers */
+			$lat = ($minLat + $maxLat) / 2;
+			$long = ($minLong + $maxLong) / 2;
+
+			return array(
+				'lat' => $lat, 
+				'long' => $long,
+				'latSpan' => $latSpan,
+				'longSpan' => $longSpan,
+			);
+		}
 	}
+	
+	/**
+	 * Goes through all the markers and calculates the max distance from the center
+	 * to any one marker.
+	 *
+	 * @return array with lat long bounds
+	 **/
+	function getFarthestPointFromCenter() {
 		
+		$max_distance = 0;
+		
+		// find farthest away point
+		foreach($this->markers as $key => $markers) {			
+			foreach( $markers as $marker ) {
+				if($this->getDistanceBetweenPoints($marker->getLatitude(), $marker->getLongitude()) >= $max_distance) {
+					$max_distance = $this->getDistanceBetweenPoints($marker->getLatitude(), $marker->getLongitude());					
+					$max_lat = $marker->getLatitude();
+					$max_long = $marker->getLongitude();
+				}
+ 			}
+		}
+		
+		return array($max_lat, $max_long);
+	}
+	
+	/**
+	 * Calculate distance between two points, easy method
+	 *
+	 * @return distance 
+	 **/
+	function getDistanceBetweenPoints($lat, $long) {
+		$new_lat = $lat - $this->lat;
+		$new_long = $long - $this->long;
+		
+		return round(sqrt(pow($new_lat, 2)+pow($new_long,2)), 2);
+	}
 	
 	/*
 	 * Sets the center value for the current map to specified values.
