@@ -83,7 +83,7 @@ class tx_wecmap_map {
 
 		// if only center is given, do a different calculation
 		if(isset($this->lat) && isset($this->long) && !isset($this->zoom)) {
-			$latlong = $this->getFarthestPointFromCenter();
+			$latlong = $this->getFarthestLatLongFromCenter();
 
 			return array(
 				'lat' => $this->lat,
@@ -124,16 +124,21 @@ class tx_wecmap_map {
 	 *
 	 * @return array with lat long bounds
 	 **/
-	function getFarthestPointFromCenter() {
+	function getFarthestLatLongFromCenter() {
 		
-		$max_distance = 0;
-		
+		$max_long_distance = -360;
+		$max_lat_distance = -360;
+
 		// find farthest away point
 		foreach($this->markers as $key => $markers) {			
 			foreach( $markers as $marker ) {
-				if($this->getDistanceBetweenPoints($marker->getLatitude(), $marker->getLongitude()) >= $max_distance) {
-					$max_distance = $this->getDistanceBetweenPoints($marker->getLatitude(), $marker->getLongitude());					
+				if(($marker->getLatitude() - $this->lat) >= $max_lat_distance) {
+					$max_lat_distance = $marker->getLatitude() - $this->lat;
 					$max_lat = $marker->getLatitude();
+				}
+				
+				if (($marker->getLongitude() - $this->long) >= $max_long_distance) {
+					$max_long_distance = $marker->getLongitude() - $this->long;
 					$max_long = $marker->getLongitude();
 				}
  			}
@@ -141,19 +146,7 @@ class tx_wecmap_map {
 		
 		return array($max_lat, $max_long);
 	}
-	
-	/**
-	 * Calculate distance between two points, easy method
-	 *
-	 * @return distance 
-	 **/
-	function getDistanceBetweenPoints($lat, $long) {
-		$new_lat = $lat - $this->lat;
-		$new_long = $long - $this->long;
 		
-		return round(sqrt(pow($new_lat, 2)+pow($new_long,2)), 2);
-	}
-	
 	/*
 	 * Sets the center value for the current map to specified values.
 	 *
