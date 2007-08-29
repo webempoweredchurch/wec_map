@@ -529,6 +529,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_KEY)
 				     alert("The given key is either invalid or does not match the domain for which it was given. \n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
 
+				   else if (gdir_'. $this->mapName .'.getStatus().code == 	G_GEO_UNKNOWN_DIRECTIONS)
+				     alert("We could not compute directions between the addresses. This is usually because there is no route available between the two points, or because we do not have data for routing in that region. \n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_REQUEST)
 				     alert("A directions request could not be successfully parsed.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
 
