@@ -33,6 +33,7 @@
 
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
 
 /**
  * Service providing lat/long lookup via the Google Maps web service.  
@@ -59,9 +60,8 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	function lookup($street, $city, $state, $zip, $country, $key='')	{
 
 		if(!$key) {
-			// get key from configuration
-			$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-			$key=$conf['apiKey.']['google'];
+			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
+			$key = $domainmgr->getKey();
 		}
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
