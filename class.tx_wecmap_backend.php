@@ -126,6 +126,9 @@ class tx_wecmap_backend {
 		global $LANG;
 		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 		
+		/* Normalize the address before we try to insert it or anything like that */
+		tx_wecmap_cache::normalizeAddress($street, $city, $state, $zip, $country);
+		
 		// if there is no info about the user, return different status
 		if(!$city) {
 			return $LANG->getLL('geocodeNoAddress');

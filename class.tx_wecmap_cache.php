@@ -57,50 +57,14 @@ class tx_wecmap_cache {
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
 	function lookupWithCallback($street, $city, $state, $zip, $country, $key='', $forceLookup=false, &$pObj) {
-
-		// pseudo normalize data: first letter uppercase.
-		// @todo: get rid of this once we implement normalization properly
-		$street = ucwords($street);
-		$city 	= ucwords($city);
-		$state 	= ucwords($state);
 		
-		// some zip codes contain letters, so just upper case them all
-		$zip 	= strtoupper($zip);
-		
-		// if length of country string is 3 or less, it's probably an abbreviation;
-		// make it all upper case then
-		if(strlen($country) < 4) {
-			$country = strtoupper($country);
-		} else {
-			$country= ucwords($country);			
-		}
+		/* Do some basic normalization on the address */
+		tx_wecmap_cache::normalizeAddress($street, $city, $state, $zip, $country);
 
 		/* If we have enough address information, try to geocode. If not, return null. */
 		if(tx_wecmap_cache::isEmptyAddress($street, $city, $state, $zip, $country)) {
 			$latlong = null;
 		} else {
-			
-			// to somehow normalize the data we get, we will check for country codes like DEU that the geocoder
-			// doesn't understand and look up a real country name from static_info_countries
-			// 1. check if static_info_tables is available
-			if (t3lib_extmgm::isLoaded('static_info_tables')) {
-				
-				// 2. check the length of the country and do lookup only if it's 2 or 3 characters
-				$length = strlen($country);
-				if($length == 2) {
-					
-					// try to find a country with that two character code
-					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_2="'.$country.'"');
-					$newCountry = $rows[0]['cn_short_en'];
-					if(!empty($newCountry)) $country = $newCountry;
-				} else if ($length == 3) {
-					// try to find a country with that two character code
-					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_3="'.$country.'"');
-					$newCountry = $rows[0]['cn_short_en'];
-					if(!empty($newCountry)) $country = $newCountry;
-				}
-			}
-			
 			/* Look up the address in the cache table. */	
 			$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
 		
@@ -137,6 +101,62 @@ class tx_wecmap_cache {
 		
 	}
 	
+	
+	/**
+	 * Performs basic normalize on the address compontents.  Should be called
+	 * before any function searches cached data by address name or inserts 
+	 * values into the cache. All parameters are passed by reference and 
+	 * normalized.
+	 *
+	 * @param	string		The street address.
+	 * @param	string		The city name.
+	 * @param	string		The state name.
+	 * @param	string		This ZIP code.
+	 * @param	string		The country name.
+	 * @param	string		The optional API key to use in the lookup.
+	 * @return	none
+	 */
+	function normalizeAddress(&$street, &$city, &$state, &$zip, &$country) {
+		
+		// pseudo normalize data: first letter uppercase.
+		// @todo: get rid of this once we implement normalization properly
+		$street = ucwords($street);
+		$city 	= ucwords($city);
+		$state 	= ucwords($state);
+		
+		// some zip codes contain letters, so just upper case them all
+		$zip 	= strtoupper($zip);
+		
+		// if length of country string is 3 or less, it's probably an abbreviation;
+		// make it all upper case then
+		if(strlen($country) < 4) {
+			$country = strtoupper($country);
+		} else {
+			$country= ucwords($country);			
+		}
+		
+		// to somehow normalize the data we get, we will check for country codes like DEU that the geocoder
+		// doesn't understand and look up a real country name from static_info_countries
+		// 1. check if static_info_tables is available
+		if (t3lib_extmgm::isLoaded('static_info_tables')) {
+			
+			// 2. check the length of the country and do lookup only if it's 2 or 3 characters
+			$length = strlen($country);
+			if($length == 2) {
+				
+				// try to find a country with that two character code
+				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_2="'.$country.'"');
+				$newCountry = $rows[0]['cn_short_en'];
+				if(!empty($newCountry)) $country = $newCountry;
+			} else if ($length == 3) {
+				// try to find a country with that two character code
+				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_3="'.$country.'"');
+				$newCountry = $rows[0]['cn_short_en'];
+				if(!empty($newCountry)) $country = $newCountry;
+			}
+		}
+		
+	}	
 	
 	
 	/**
