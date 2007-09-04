@@ -516,26 +516,27 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$c = 
 			'function handleErrors_'. $this->mapName .'() {
 				   if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_UNKNOWN_ADDRESS)
-				     alert("No corresponding geographic location could be found for one of the specified addresses. This may be due to the fact that the address is relatively new, or it may be incorrect.\nError code: " + gdir_'. $this->mapName .'.getStatus().code);
+				     alert("' .$LANG->getLL('G_GEO_UNKNOWN_ADDRESS'). '" + gdir_'. $this->mapName .'.getStatus().code);
+
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_SERVER_ERROR)
-				     alert("A geocoding or directions request could not be successfully processed, yet the exact reason for the failure is not known.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+				     alert("' .$LANG->getLL('G_GEO_SERVER_ERROR'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_MISSING_QUERY)
-				     alert("The HTTP q parameter was either missing or had no value. For geocoder requests, this means that an empty address was specified as input. For directions requests, this means that no query was specified in the input.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+				     alert("' .$LANG->getLL('G_GEO_MISSING_QUERY'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
-				   else if (gdir_'. $this->mapName .'.getStatus().code == 603)
-				    alert("The geocode for the given address or the route for the given directions query cannot be returned due to legal or contractual reasons.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_UNAVAILABLE_ADDRESS)
+				    alert("' .$LANG->getLL('G_GEO_UNAVAILABLE_ADDRESS'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_KEY)
-				     alert("The given key is either invalid or does not match the domain for which it was given. \n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+				     alert("' .$LANG->getLL('G_GEO_BAD_KEY'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
 				   else if (gdir_'. $this->mapName .'.getStatus().code == 	G_GEO_UNKNOWN_DIRECTIONS)
-				     alert("We could not compute directions between the addresses. This is usually because there is no route available between the two points, or because we do not have data for routing in that region. \n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+				     alert("' .$LANG->getLL('G_GEO_UNKNOWN_DIRECTIONS'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_REQUEST)
-				     alert("A directions request could not be successfully parsed.\n Error code: " + gdir_'. $this->mapName .'.getStatus().code);
+				     alert("' .$LANG->getLL('G_GEO_BAD_REQUEST'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
-				   else alert("An unknown error occurred. "+gdir_'. $this->mapName .'.getStatus().code);
+				   else alert("' .$LANG->getLL('UKNOWN_ERROR'). '" + gdir_'. $this->mapName .'.getStatus().code);
 			}';
 		return $c;
 	}
