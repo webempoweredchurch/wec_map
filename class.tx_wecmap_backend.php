@@ -348,8 +348,6 @@ class tx_wecmap_backend {
 		}
 		global $LANG;
 		
-		$config['items'][] = Array('', '');
-
 		foreach( $GLOBALS['TCA'] as $table => $conf ) {
 			$isMappable = $conf['ctrl']['EXT']['wec_map']['isMappable'];
 			if($isMappable) {

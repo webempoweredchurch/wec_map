@@ -9,7 +9,7 @@
 				<el>
 					<tables>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.initialMapType</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.tables</label>
 							<config>
 								<type>select</type>
 								<renderMode>singleBox</renderMode>

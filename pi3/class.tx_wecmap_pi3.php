@@ -107,6 +107,10 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
 		
+		$tables = $this->pi_getFFvalue($piFlexForm, 'tables', 'default');
+		empty($tables) ? $tables = $conf['tables']:null;
+		if (!empty($tables)) $tables = explode(',', $tables);
+		
 		$centerLat = $conf['centerLat'];
 		
 		$centerLong = $conf['centerLong'];
@@ -140,10 +144,11 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
 		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
 		
-		$table = 'tt_address';
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, '');
-		foreach( $res as $key => $value ) {
-			$map->addMarkerByTCA($table, $value['uid'], 'Title', 'Description');
+		foreach( $tables as $table ) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, '');
+			foreach( $res as $key => $value ) {
+				$map->addMarkerByTCA($table, $value['uid'], 'Title', 'Description'.'I come from '.$table.' with UID '.$value['uid']);
+			}
 		}
 
 		$content = $map->drawMap();
