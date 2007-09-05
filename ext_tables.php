@@ -62,6 +62,20 @@ if(t3lib_extMgm::isLoaded('sr_feuser_register')) {
 	);
 }
 
+if(t3lib_extMgm::isLoaded('tt_address')) {
+	t3lib_div::loadTCA('tt_address');
+	$TCA['tt_address']['ctrl']['EXT']['wec_map'] = array (
+		'isMappable' => 1,
+		'addressFields' => array (
+			'street' => 'address',
+			'city' => 'city',
+			'state' => 'region',
+			'zip' => 'zip',
+			'country' => 'country',
+		),
+	);
+}
+
 /* If we want to show a map in frontend user records, add it to the TCA */
 if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 	$mapTCA = array (

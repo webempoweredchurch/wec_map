@@ -1,0 +1,253 @@
+<T3DataStructure>
+	<sheets>
+		<default>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.sheet</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<title>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.title</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</title>
+					
+					<description>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.description</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</description>
+					
+					<street>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.street</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</street>
+					
+					<city>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.city</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</city>
+					
+					<state>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.state</label>
+							<config>
+								<type>input</type>
+								<size>30</size>
+							</config>
+						</TCEforms>
+					</state>
+					
+					<zip>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.zip</label>
+							<config>
+								<type>input</type>
+								<size>10</size>
+							</config>
+						</TCEforms>
+					</zip>
+					
+					<country>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.country</label>
+							<config>
+								<type>input</type>
+								<size>20</size>
+							</config>
+						</TCEforms>
+					</country>
+					<coord>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.coord</label>
+							<config>
+								<type>user</type>
+								<userFunc>tx_wecmap_backend->checkGeocodeStatusFF</userFunc>
+							</config>
+						</TCEforms>
+					</coord>
+				</el>
+			</ROOT>
+		</default>
+		
+		<mapConfig>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapTitle</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<apiKey>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.apiKey</label>
+							<config>
+								<type>input</type>
+								<size>40</size>
+							</config>
+						</TCEforms>
+					</apiKey>
+						
+					<mapWidth>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapWidth</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</mapWidth>
+						
+					<mapHeight>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapHeight</label>
+							<config>
+								<type>input</type>
+								<size>5</size>
+							</config>
+						</TCEforms>
+					</mapHeight>
+					
+					<initialMapType>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.initialMapType</label>
+							<config>
+								<type>radio</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeNormal</numIndex>
+										<numIndex index="1">G_NORMAL_MAP</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeSatellite</numIndex>
+										<numIndex index="1">G_SATELLITE_MAP</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeHybrid</numIndex>
+										<numIndex index="1">G_HYBRID_MAP</numIndex>
+									</numIndex>
+								</items>
+							</config>
+						</TCEforms>						
+					</initialMapType>
+					<showInfoOnLoad>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showInfoOnLoad</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showInfoOnLoad>
+					<showDirections>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showDirs</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showDirections>
+					<showWrittenDirections>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.showWrittenDirs</label>
+							<!-- <displayCond>FIELD:showDirections:REQ:true</displayCond> -->
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</showWrittenDirections>
+					<prefillAddress>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.prefillAddress</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</prefillAddress>
+				</el>
+			</ROOT>
+		</mapConfig>
+		
+		<mapControls>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.controlsTitle</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<mapControlSize>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMap</label>
+							<config>
+								<type>radio</type>
+								<items type="array">
+									<numIndex index="0" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMapL</numIndex>
+										<numIndex index="1">large</numIndex>
+									</numIndex>
+									<numIndex index="1" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMapS</numIndex>
+										<numIndex index="1">small</numIndex>
+									</numIndex>
+									<numIndex index="2" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conLargeMapZ</numIndex>
+										<numIndex index="1">zoomonly</numIndex>
+									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conNone</numIndex>
+										<numIndex index="1">none</numIndex>
+									</numIndex>
+								</items>
+								<default>3</default>
+							</config>
+						</TCEforms>
+					</mapControlSize>
+						
+					<overviewMap>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conOverview</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</overviewMap>
+				
+					<scale>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conScale</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</scale>
+							
+					<mapType>
+						<TCEforms>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.conType</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</mapType>
+				</el>
+			</ROOT>
+		</mapControls>
+	</sheets>
+</T3DataStructure>
