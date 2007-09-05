@@ -337,6 +337,30 @@ class tx_wecmap_backend {
 		return $returnValue;
 	}
 	
+	/**
+	 * Returns a list of all mappable tables
+	 *
+	 * @return void
+	 **/
+	function getMappableTables($config=null) {
+		if(!isset($config)) {
+			$config = array();
+		}
+		global $LANG;
+		
+		$config['items'][] = Array('', '');
+
+		foreach( $GLOBALS['TCA'] as $table => $config ) {
+			$isMappable = $config['ctrl']['EXT']['wec_map']['isMappable'];
+			if($isMappable) {
+				$title = $LANG->sL($config['ctrl']['title']);
+				t3lib_div::debug($title, $table);
+				$config['items'][] = Array($title, $table);
+			}
+		}
+		return $config;
+	}
+	
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_backend.php'])	{

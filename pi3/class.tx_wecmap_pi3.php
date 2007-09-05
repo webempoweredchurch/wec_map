@@ -64,8 +64,94 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 		
-		$content = "Hello World";
+		// get config from flexform or TS. Flexforms take precedence.
+		$apiKey = $this->pi_getFFvalue($piFlexForm, 'apiKey', 'default');
+		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
+
+		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'default');
+		empty($width) ? $width = $conf['width']:null;
 		
+		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'default');
+		empty($height) ? $height = $conf['height']:null;
+		
+		$userGroups = $this->pi_getFFvalue($piFlexForm, 'userGroups', 'default');
+		empty($userGroups) ? $userGroups = $conf['userGroups']:null;
+
+		$pid = $this->pi_getFFvalue($piFlexForm, 'pid', 'default');
+		empty($pid) ? $pid = $conf['pid']:null;
+
+		$mapControlSize = $this->pi_getFFvalue($piFlexForm, 'mapControlSize', 'mapControls');
+		(empty($mapControlSize) || $mapControlSize == 'none') ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
+		
+		$overviewMap = $this->pi_getFFvalue($piFlexForm, 'overviewMap', 'mapControls');
+		empty($overviewMap) ? $overviewMap = $conf['controls.']['showOverviewMap']:null;
+				
+		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
+		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
+		
+		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'default');
+		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
+				
+		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
+		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
+		
+		$private = $this->pi_getFFvalue($piFlexForm, 'privacy', 'default');
+		empty($private) ? $private = $conf['private']:null;
+
+		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'default');
+		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
+		
+		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'mapConfig');
+		empty($showWrittenDirs) ? $showWrittenDirs = $conf['showWrittenDirections']:null;
+		
+		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');
+		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
+		
+		$centerLat = $conf['centerLat'];
+		
+		$centerLong = $conf['centerLong'];
+		
+		$zoomLevel = $conf['zoomLevel'];
+		
+		$mapName = $conf['mapName'];
+		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
+		
+		/* Create the Map object */
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
+		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
+		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+		
+		// evaluate map controls based on configuration
+		if($mapControlSize == 'large') {
+			$map->addControl('largeMap');	
+		} else if ($mapControlSize == 'small') {
+			$map->addControl('smallMap');	
+		} else if ($mapControlSize == 'zoomonly') {
+			$map->addControl('smallZoom');	
+		}
+		if($scale) $map->addControl('scale');
+		if($overviewMap) $map->addControl('overviewMap');
+		if($mapType) $map->addControl('mapType');
+		if($initialMapType) $map->setType($initialMapType);
+		
+		// check whether to show the directions tab and/or prefill addresses and/or written directions
+		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
+		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
+		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
+		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
+		
+		$table = 'tt_address';
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, '');
+		foreach( $res as $key => $value ) {
+			$map->addMarkerByTCA($table, $value['uid'], 'Title', 'Description');
+		}
+
+		$content = $map->drawMap();
+		
+		// add directions div if applicable
+		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
+		
+		/* Draw the map */
 		return $this->pi_wrapInBaseClass($content);
 	}
 	

@@ -32,6 +32,7 @@ t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi2', 'FILE:EXT:wec_map/pi2/flexform
 t3lib_extMgm::addPiFlexFormValue($_EXTKEY.'_pi3', 'FILE:EXT:wec_map/pi3/flexform_ds.xml');
 
 /* Add static TS template for plugins */
+t3lib_extMgm::addStaticFile($_EXTKEY,'pi3/static/','WEC Map Anything');
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi2/static/','WEC Frontend User Map');
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','WEC Simple Map');
 

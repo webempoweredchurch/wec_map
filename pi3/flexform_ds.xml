@@ -7,84 +7,15 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<title>
+					<tables>
 						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.title</label>
+							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.initialMapType</label>
 							<config>
-								<type>input</type>
-								<size>30</size>
+								<type>select</type>
+								<itemsProcFunc>tx_wecmap_backend->getMappableTables</itemsProcFunc>
 							</config>
-						</TCEforms>
-					</title>
-					
-					<description>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.description</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</description>
-					
-					<street>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.street</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</street>
-					
-					<city>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.city</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</city>
-					
-					<state>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.state</label>
-							<config>
-								<type>input</type>
-								<size>30</size>
-							</config>
-						</TCEforms>
-					</state>
-					
-					<zip>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.zip</label>
-							<config>
-								<type>input</type>
-								<size>10</size>
-							</config>
-						</TCEforms>
-					</zip>
-					
-					<country>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.country</label>
-							<config>
-								<type>input</type>
-								<size>20</size>
-							</config>
-						</TCEforms>
-					</country>
-					<coord>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.coord</label>
-							<config>
-								<type>user</type>
-								<userFunc>tx_wecmap_backend->checkGeocodeStatusFF</userFunc>
-							</config>
-						</TCEforms>
-					</coord>
+						</TCEforms>						
+					</tables>
 				</el>
 			</ROOT>
 		</default>
