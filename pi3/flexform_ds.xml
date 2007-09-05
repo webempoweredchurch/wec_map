@@ -13,7 +13,7 @@
 							<config>
 								<type>select</type>
 								<renderMode>singleBox</renderMode>
-								<maxItems>999</maxItems>
+								<maxitems>999</maxitems>
 								<size>5</size>
 								<multiple>1</multiple>
 								<itemsProcFunc>tx_wecmap_backend->getMappableTables</itemsProcFunc>
