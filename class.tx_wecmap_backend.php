@@ -350,11 +350,10 @@ class tx_wecmap_backend {
 		
 		$config['items'][] = Array('', '');
 
-		foreach( $GLOBALS['TCA'] as $table => $config ) {
-			$isMappable = $config['ctrl']['EXT']['wec_map']['isMappable'];
+		foreach( $GLOBALS['TCA'] as $table => $conf ) {
+			$isMappable = $conf['ctrl']['EXT']['wec_map']['isMappable'];
 			if($isMappable) {
-				$title = $LANG->sL($config['ctrl']['title']);
-				t3lib_div::debug($title, $table);
+				$title = $LANG->sL($conf['ctrl']['title']);
 				$config['items'][] = Array($title, $table);
 			}
 		}

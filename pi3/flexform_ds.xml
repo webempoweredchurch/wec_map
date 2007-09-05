@@ -12,6 +12,10 @@
 							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.initialMapType</label>
 							<config>
 								<type>select</type>
+								<renderMode>singleBox</renderMode>
+								<maxItems>999</maxItems>
+								<size>5</size>
+								<multiple>1</multiple>
 								<itemsProcFunc>tx_wecmap_backend->getMappableTables</itemsProcFunc>
 							</config>
 						</TCEforms>						
