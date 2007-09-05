@@ -120,6 +120,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 		
+		
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
@@ -144,8 +145,10 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
 		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
 		
+		if(!empty($pid)) $where = 'pid IN ('. $pid .')';
+		
 		foreach( $tables as $table ) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, '');
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, $where);
 			foreach( $res as $key => $value ) {
 				$map->addMarkerByTCA($table, $value['uid'], 'Title', 'Description'.'I come from '.$table.' with UID '.$value['uid']);
 			}
