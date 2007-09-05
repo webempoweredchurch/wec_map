@@ -406,7 +406,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		The HTML for the map div tag.
 	 */
 	function mapDiv($id, $width, $height) {
-		return '<div class="tx-wecmap-directions" id="directions-'. $this->mapName .'"></div><div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
+		return '<div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
 	}
 	
 	/**
