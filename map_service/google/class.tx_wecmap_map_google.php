@@ -513,6 +513,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return string 	Javascript
 	 **/
 	function js_errorHandler() {
+		global $LANG;
 		$c = 
 			'function handleErrors_'. $this->mapName .'() {
 				   if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_UNKNOWN_ADDRESS)
