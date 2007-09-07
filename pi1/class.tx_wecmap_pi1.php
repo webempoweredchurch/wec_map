@@ -35,6 +35,7 @@
 
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * Simple frontend plugin for displaying an address on a map.  
@@ -157,9 +158,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
 
-					$title = $this->makeTitle($marker);
-					$description = $this->makeDescription(array('description'=> $marker['description']));
-					$address = $this->wrapAddressString($marker['address']);
+					$title = tx_wecmap_shared::makeTitle($marker);
+					$description = tx_wecmap_shared::makeDescription(array('description'=> $marker['description']));
+					$address = tx_wecmap_shared::wrapAddressString($marker['address']);
 					$description = $description.$address;
 					
 					// add address by string
@@ -167,9 +168,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 				} else {
 
-					$title = $this->makeTitle($marker);
-					$address = $this->makeAddress($marker);
-					$description = $this->makeDescription($marker);
+					$title = tx_wecmap_shared::makeTitle($marker);
+					$address = tx_wecmap_shared::makeAddress($marker);
+					$description = tx_wecmap_shared::makeDescription($marker);
 
 					$description = $description . $address;
 					
@@ -189,9 +190,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$data['title'] = $title;
 			$data['description'] = $description;
 
-			$title = $this->makeTitle($data);
-			$address = $this->makeAddress($data);
-			$description = $this->makeDescription($data);
+			$title = tx_wecmap_shared::makeTitle($data);
+			$address = tx_wecmap_shared::makeAddress($data);
+			$description = tx_wecmap_shared::makeDescription($data);
 			
 			$description = $description . $address;
 			
@@ -207,34 +208,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
 
 		return $this->pi_wrapInBaseClass($content);
-	}
-	
-	function makeDescription($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
-		return $output;
-	}
-	
-	function makeAddress($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['address'], $this->conf['marker.']['address.'] );
-		return $output;
-	}
-	
-	function makeTitle($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
-		return $output;
-	}
-
-	function wrapAddressString($address) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->stdWrap($address, $this->conf['marker.']['address.'] );		
-		return $output;
 	}
 }
 

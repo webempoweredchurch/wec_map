@@ -34,7 +34,7 @@
 
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
-
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 /**
  * Frontend User Map plugin for displaying all frontend users on a map.  
  *
@@ -198,7 +198,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$countries[] = $row[$countryField];
 
 					// add a little info so users know what to do
-					$title = $this->makeTitle(array('name' => $this->pi_getLL('country_zoominfo_title')));
+					$title = tx_wecmap_shared::makeTitle(array('name' => $this->pi_getLL('country_zoominfo_title')));
 					$description = sprintf($this->pi_getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -213,7 +213,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$cities[] = $row[$cityField];
 					
 					// add a little info so users know what to do
-					$title = $this->makeTitle(array('name' => 'Info'));
+					$title = tx_wecmap_shared::makeTitle(array('name' => 'Info'));
 					$count = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)', 'fe_users', $cityField.'="'. $row[$cityField] .'"');
 					$count = $count[0]['count(*)'];
 					
@@ -236,8 +236,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				}
 				
 				// make title and description
-				$title = $this->makeTitle($row);
-				$description = $this->makeDescription($row);
+				$title = tx_wecmap_shared::makeTitle($row);
+				$description = tx_wecmap_shared::makeDescription($row);
 				
 				
 				// unless we are using privacy, add individual markers as well
@@ -256,21 +256,6 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		/* Draw the map */
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
-	function makeTitle($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
-		return $output;
-	}
-	
-	function makeDescription($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
-		return $output;
-	}
-	
 	
 	/**
 	 * Gets the address mapping from the TCA.
