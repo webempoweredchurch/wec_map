@@ -65,5 +65,18 @@ class tx_wecmap_shared {
 		return $output;
 	}
 	
+	function listQueryFromCSV($field, $values, $table, $mode = 'AND') {
+		$where = ' AND (';
+		$csv = t3lib_div::trimExplode(',', $values);
+		for ( $i=0; $i < count($csv); $i++ ) { 
+			if($i >= 1) {
+				$where .= ' '. $mode .' ';				
+			}
+			$where .= $GLOBALS['TYPO3_DB']->listQuery($field, $csv[$i], $table);
+		}
+		
+		return $where.')';
+	}
+	
 }
 ?>

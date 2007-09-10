@@ -145,30 +145,23 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$stateField = $this->getAddressField('state');
 		$zipField = $this->getAddressField('zip');
 		$countryField = $this->getAddressField('country');
-		
-		$where = null;
+
+		// start where clause
+		$where = '1=1';
+
 		// if a user group was set, make sure only those users from that group
 		// will be selected in the query
 		if($userGroups) {
-			$where .= 'usergroup IN ('.$userGroups.')';
+			$where .= tx_wecmap_shared::listQueryFromCSV('usergroup', $userGroups, 'fe_users');
 		}
-		
+
 		// if a storage folder pid was specified, filter by that
-		if($pid && $userGroups) {
-			$where .= ' AND pid IN ('. $pid .')';
-		} else {
-			$where .= ' pid IN ('. $pid .')';
+		if($pid) {
+			$where .= tx_wecmap_shared::listQueryFromCSV('pid', $pid, 'fe_users', 'OR');
 		}
 		
 		// filter out records that shouldn't be shown, e.g. deleted, hidden
-		$filter = $this->cObj->enableFields('fe_users');
-		
-		// if the where clause is empty, add something generic to not mess up the
-		// enableFields part.
-		if(empty($where)) {
-			$where = '1=1';
-		}
-		$where .= $filter;
+		$where .= $this->cObj->enableFields('fe_users');
 
 		/* Select all frontend users */		
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', $where);
