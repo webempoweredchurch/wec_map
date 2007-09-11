@@ -29,7 +29,7 @@
 ***************************************************************/
 
 class tx_wecmap_batchgeocode_util {
-	
+
 	/**
 	 * Static function for displaying the status bar and related text.
 	 *
@@ -40,34 +40,34 @@ class tx_wecmap_batchgeocode_util {
 	 */
 	function getStatusBar($processedAddresses, $totalAddresses, $visible=true) {
 		global $LANG, $BE_USER;
-		
+
 		$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
-		
+
 		if(!is_object($LANG)) {
 			require_once(t3lib_extMgm::extPath('lang').'lang.php');
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init($BE_USER->uc['lang']);
-		}		
+		}
 		$LANG->includeLLFile('EXT:wec_map/mod1/locallang.xml');
-			
+
 		$content = array();
 		if($visible) {
 			$content[] = '<div id="status" style="margin-bottom: 5px;">';
 		} else {
 			$content[] = '<div id="status" style="margin-bottom: 5px; display:none;">';
-		
+
 		}
-	
-		
+
+
 		$content[] = '<div id="bar" style="width:300px; height:20px; border:1px solid black">
 						<div id="progress" style="width:'.$progressBarWidth.'%; height:20px; background-color:red"></div>
 					</div>
 					<p>'.$LANG->getLL('processedStart').' '.$processedAddresses.' '.$LANG->getLL('processedMid').' '.$totalAddresses.'.</p>';
-				
+
 		$content[] = '</div>';
-	
+
 		return implode(chr(10), $content);
-	
+
 	}
 }
 

@@ -41,7 +41,7 @@ $LANG->includeLLFile('EXT:wec_map/mod1/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
-	
+
 require_once('../class.tx_wecmap_cache.php');
 require_once('../class.tx_wecmap_domainmgr.php');
 
@@ -173,7 +173,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	function moduleContent()	{
-		
+
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
 				$this->content.=$this->geocodeAdmin();
@@ -190,7 +190,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function linkSelf($addParams)	{
 		return htmlspecialchars('index.php?id='.$this->pObj->id.'&showLanguage='.rawurlencode(t3lib_div::_GP('showLanguage')).$addParams);
 	}
-	
+
 	/**
 	 * Rendering the encode-cache content
 	 *
@@ -198,16 +198,16 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return	string		HTML for the information table.
 	 */
 	function geocodeAdmin()	{
-	
+
 		$count 	= $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('COUNT(*)', 'tx_wecmap_cache','');
 		$count = $count[0]['COUNT(*)'];
-	
+
 		require_once('class.tx_wecmap_recordhandler.php');
 		$recordhandlerClass = t3lib_div::makeInstanceClassname('tx_wecmap_recordhandler');
 		$recordHandler = new $recordhandlerClass($count);
-		
+
 		global $LANG;
-		
+
 		$uid       = t3lib_div::_GP('uid');
 		$latitude  = t3lib_div::_GP('latitude');
 		$longitude = t3lib_div::_GP('longitude');
@@ -215,13 +215,13 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 		$output   = $recordHandler->displaySearch();
 		$output  .= $recordHandler->displayTable();
-		
+
 		if ($cmd == 'edit') {
 			$output = '<form action="" method="POST"><input name="cmd" type="hidden" value="update">'.$output.'</form>';
 		}
-		
+
 		$js = $recordHandler->getJS();
-	
+
 		return $js.chr(10).$output;
 	}
 
@@ -231,17 +231,17 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 */
 	function apiKeyAdmin() {
 		global $TYPO3_CONF_VARS, $LANG;
-		
+
 		$domainmgrClass = t3lib_div::makeInstanceClassname('tx_wecmap_domainmgr');
 		$domainmgr = new $domainmgrClass();
-		
+
 		$blankDomainValue = 'Enter domain....';
-		
+
 		$cmd = t3lib_div::_GP('cmd');
-		
+
 		switch($cmd) {
 			case 'setkey' :
-				
+
 				// transform the POST array to our needs.
 				// we then get a simple array in the form:
 				// array('domain1', 'domain2', 'key1', 'key2'), etc.
@@ -250,39 +250,39 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				unset($post['SET']);
 				unset($post['x']);
 				unset($post['y']);
-				
+
 				ksort($post);
 				$post = array_values($post);
 
 				$allDomains = $domainmgr->processPost($post);
-				
+
 				break;
-				
+
 			default :
 				$allDomains = $domainmgr->getAllDomains();
 				break;
 		}
-		
+
 		$content = array();
 		$content[] = '<style type="text/css" media="screen">input[type=image] {border: none; background: none;}</style>';
 		$content[] = '<p style="margin-bottom:15px;">';
 		$content[] = $LANG->getLL('apiInstructions');
 		$content[] = '</p>';
-		
+
 		$content[] = '<form action="" method="POST">';
 		$content[] = '<input name="cmd" type="hidden" value="setkey" />';
-		
+
 		$index = 0;
-		
+
 		// get number of entries that have a key
 		$tempDomains = $allDomains;
 		foreach( $tempDomains as $key => $value) {
 			if(empty($value)) unset($tempDomains[$key]);
 		}
 		$number = count($tempDomains);
-		
+
 		foreach( $allDomains as $key => $value ) {
-			
+
 			// show the first summary text above all the already saved domains
 			if($number != 0 && $index == 0) {
 				$content[] = '<h1>Existing Domains</h1>';
@@ -295,13 +295,13 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				$content[] = $LANG->getLL('suggestedDomains');
 				$content[] = '</p>';
 			}
-			
+
 			if($index < $number) {
-				$deleteButton = '<input type="image" '.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' onclick="document.getElementById(\'key_'. $index .'\').value = \'\';" />';	
+				$deleteButton = '<input type="image" '.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' onclick="document.getElementById(\'key_'. $index .'\').value = \'\';" />';
 			} else {
 				$deleteButton = null;
 			}
-			
+
 			$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
 			$content[] = '<div style="width: 25em;"><strong>'. $key .'</strong> '. $deleteButton .'</div>';
 			$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
@@ -310,7 +310,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$content[] = '</div>';
 			$index++;
 		}
-		
+
 		$content[] = '<div id="adddomainbutton" style="margin-bottom: 15px;"><a href="#" onclick="document.getElementById(\'blank-domain\').style.display = \'block\'; document.getElementById(\'adddomainbutton\').style.display = \'none\'; document.getElementById(\'domain_'.$index.'\').value=\''. $blankDomainValue .'\';">Manually add a new API key for domain</a></div>';
 		$content[] = '<div class="domain-item" id="blank-domain" style="margin-bottom: 15px; display: none;">';
 		$content[] = '<div style="width: 35em;"><label style="display: none;" for="domain_'. $index .'">Domain: </label><input style="width: 12em;" id="domain_'. $index .'" name="domain_'. $index .'" value="" onfocus="this.value=\'\';"/> <input type="image" '.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' onclick="document.getElementById(\'key_'. $index .'\').value = \'\'; document.getElementById(\'blank-domain\').style.display =\'none\'; document.getElementById(\'adddomainbutton\').style.display = \'block\'; return false;" /></div>';
@@ -323,7 +323,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 		return implode(chr(10), $content);
 	}
-	
+
 	/**
 	 * Submodule for the batch geocoder.
 	 *
@@ -332,21 +332,21 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function batchGeocode() {
 		global $TCA, $LANG;
 		$content = array();
-		
+
 	 	require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
 		$batchGeocodeClass = t3lib_div::makeInstanceClassname('tx_wecmap_batchgeocode');
-		
+
 		/* Set the geocoding limit to 1 so that we only get the count, rather than actually geocoding addresses */
 		$batchGeocode = new $batchGeocodeClass(1);
 		$batchGeocode->addAllTables();
 		$batchGeocode->geocode();
-		
+
 		$processedAddresses = $batchGeocode->processedAddresses();
 		$totalAddresses = $batchGeocode->recordCount();
-		
+
 		$content[] = '<h3>'.$LANG->getLL('batchGeocode').'</h3>';
 		$content[] = '<p>'.$LANG->getLL('batchInstructions').'</p>';
-		
+
 		$content[] = '<p style="margin-top:1em;">'.$LANG->getLL('batchTables').'</p>';
 		$content[] = '<ul>';
 		foreach($TCA as $tableName => $tableContents) {
@@ -356,23 +356,23 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			}
 		}
 		$content[] = '</ul>';
-		
+
 		$content[] = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>';
 		$content[] = '<script type="text/javascript">
 						function startGeocode() {
 							var updater;
-							
+
 							$(\'startGeocoding\').disable();
 							$(\'status\').setStyle({display: \'block\'});
-														
+
 							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\', { method: \'get\', frequency: 5, decay: 10 });
 						}
 						</script>';
-		
-		require_once(t3lib_extMgm::extPath('wec_map').'mod1/class.tx_wecmap_batchgeocode_util.php');					
-		$content[] = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses, false);		
+
+		require_once(t3lib_extMgm::extPath('wec_map').'mod1/class.tx_wecmap_batchgeocode_util.php');
+		$content[] = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses, false);
 		$content[] = '<input id="startGeocoding" type="submit" value="'.$LANG->getLL('startGeocoding').'" onclick="startGeocode(); return false;"/>';
-		
+
 		return implode(chr(10), $content);
 	}
 }

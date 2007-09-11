@@ -45,7 +45,7 @@ $batchGeocode->geocode();
 $processedAddresses = $batchGeocode->processedAddresses();
 $totalAddresses = $batchGeocode->recordCount();
 
-$content = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses);		
+$content = tx_wecmap_batchgeocode_util::getStatusBar($processedAddresses, $totalAddresses);
 
 echo $content;
 ?>

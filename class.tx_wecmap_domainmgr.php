@@ -33,30 +33,30 @@ require_once(PATH_t3lib.'class.t3lib_install.php');
 /**
  * Domain <=> API Key manager class for the WEC Map extension.  This class
  * provides user functions for handling domains and API keys
- * 
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */
 class tx_wecmap_domainmgr {
-	
+
 	var $extKey = 'wec_map';
-	
-	
+
+
 	function getKey($domain = null) {
-		
+
 		// check to see if this is an update from the old config schema and convert to the new
 		$isOld = $this->checkForOldConfig();
 
 		// get key from configuration
 		$keyConfig = tx_wecmap_backend::getExtConf('apiKey.google');
-		
+
 		// if we are using the old config, return the old key this time. It will be changed for next time.
 		if($isOld) return $keyConfig;
-		
+
 		// get current domain
 		if($domain == null)	$domain = t3lib_div::getIndpEnv('HTTP_HOST');
-		
+
 		// loop through all the domain->key pairs we have to find the right one
 		$found = false;
 		foreach( $keyConfig as $key => $value ) {
@@ -65,7 +65,7 @@ class tx_wecmap_domainmgr {
 				return $value;
 			}
 		}
-		
+
 		// if we didn't get an exact match, check for partials and guess
 		if(!$found) {
 			foreach( $keyConfig as $key => $value ) {
@@ -77,9 +77,9 @@ class tx_wecmap_domainmgr {
 			}
 		} else {
 			return null;
-		}	
+		}
 	}
-	
+
 	function checkForOldConfig() {
 		global $TYPO3_CONF_VARS;
 
@@ -89,31 +89,31 @@ class tx_wecmap_domainmgr {
 		$key = $keyConfig;
 		$domain = t3lib_div::getIndpEnv('HTTP_HOST');
 		$this->saveApiKey(array($domain => $key));
-		
+
 		return true;
 	}
-	
+
 	function processPost($post) {
-		
+
 		$allDomains = $this->getAllDomains();
-		
+
 		// prepare the two arrays we need in the loop
 		$extconfArray = array();
 		$returnArray = array();
-		
+
 		// get total number of domain->key pairs
 		$number = count($post)/2;
 
 		// loop through all the pairs
 		for ( $i=0; $i < $number; $i++ ) {
-			
+
 			// get the domain and key
 			$curKey = $post[$i+$number];
 			$curDomain = $post[$i];
-			
+
 			// if there is no key, we don't want to save it in extconf
 			if(!empty($curKey) && !empty($curDomain)) $extconfArray[$curDomain] = $curKey;
-			
+
 			// get all but manually added domains
 			$domains1 = $this->getRequestDomain();
 			$domains2 = $this->getDomainRecords();
@@ -122,7 +122,7 @@ class tx_wecmap_domainmgr {
 			// if there is no domain, or we want to delete a domain, we won't return it.
 			// we also make sure not to recommend domains that were just deleted but manually added before
 			if(!empty($curDomain) && !(!empty($allDomains[$curDomain]) && empty($curKey) && !in_array($curDomain, $domains))) $returnArray[$curDomain] = $curKey;
-			
+
 
 		}
 
@@ -131,27 +131,27 @@ class tx_wecmap_domainmgr {
 
 		// sort the array and reverse it so we show filled out records first, empty ones last
 		asort($returnArray);
-		
+
 		return array_reverse($returnArray);
 	}
-	
+
 	/*
 	 * Looks up the API key in extConf within localconf.php
 	 * @return		array		The Google Maps API keys.
 	 */
 	function getApiKeys() {
-		
+
 		require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
 		$apiKeys = tx_wecmap_backend::getExtConf('apiKey.google');
-		
+
 		return $apiKeys;
 	}
-	
+
 	/*
 	 * Saves the API key to extConf in localconf.php.
 	 * @param		string		The new Google Maps API Key.
 	 * @return		none
-	 */	
+	 */
 	function saveApiKey($dataArray) {
 		global $TYPO3_CONF_VARS;
 
@@ -162,21 +162,21 @@ class tx_wecmap_domainmgr {
 		$instObj = t3lib_div::makeInstance('t3lib_install');
 		$instObj->allowUpdateLocalConf = 1;
 		$instObj->updateIdentity = $this->extKey;
-		
+
 		// Get lines from localconf file
 		$lines = $instObj->writeToLocalconf_control();
 		// t3lib_div::debug($lines, 'lines');
 		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$this->extKey.'\']', serialize($extConf));
 		$instObj->writeToLocalconf_control($lines);
 	}
-	
+
 	/**
 	 * Returns an assoc array with domains as key and api key as value
 	 *
 	 * @return array
 	 **/
 	function getAllDomains() {
-		
+
 		$domainRecords = $this->getDomainRecords();
 
 		// get domains entries from extconf
@@ -188,25 +188,25 @@ class tx_wecmap_domainmgr {
 		// Now combine all the records we got into one array with the domain as key and the api key as value
 		return $this->combineAndSort($domainRecords, $extconfDomains, $requestDomain);
 	}
-	
+
 	/**
 	 * Returns an assoc array with domain record domains as keys and api key as value
 	 *
 	 * @return array
 	 **/
 	function getDomainRecords() {
-		
+
 		// get domain records
 		$domainRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('domainName', 'sys_domain', 'hidden=0');
-		
+
 		$newArray = array();
 		foreach( $domainRecords as $key => $value ) {
 			$newArray[$value['domainName']] = '';
 		}
-		
+
 		return $newArray;
 	}
-	
+
 	/**
 	 * Returns the domain of the current http request
 	 *
@@ -218,7 +218,7 @@ class tx_wecmap_domainmgr {
 
 		return array($requestDomain => '');
 	}
-	
+
 	/**
 	 * combine all the arrays, making each key unique and preferring the one that has a value,
 	 * then sort so that all empty values are last
@@ -228,14 +228,14 @@ class tx_wecmap_domainmgr {
 	function combineAndSort($a1, $a2, $a3) {
 		if(!is_array($a1)) $a1 = array();
 		if(!is_array($a2)) $a2 = array();
-		if(!is_array($a3)) $a3 = array();		
+		if(!is_array($a3)) $a3 = array();
 
 		// combine the first and the second
 		$temp1 = array();
 		foreach( $a1 as $key => $value ) {
 			// if there is the same key in array2, check the values
 			if(array_key_exists($key, $a2)) {
-				
+
 				// if a2 doesn't have a value, use a1's value
 				if(empty($a2[$key])) {
 					$temp1[$key] = $value;
@@ -254,7 +254,7 @@ class tx_wecmap_domainmgr {
 		foreach( $temp2 as $key => $value ) {
 			// if there is the same key in array2, check the values
 			if(array_key_exists($key, $a3)) {
-				
+
 				// if a3 doesn't have a value, use a1's value
 				if(empty($a3[$key])) {
 					$temp3[$key] = $value;
@@ -265,16 +265,16 @@ class tx_wecmap_domainmgr {
 				$temp3[$key] = $value;
 			}
 		}
-				
+
 		// merge the third into the second
 		$temp4 = array_merge($a3, $temp3);
-		
+
 		// sort by value, reverse, and return
 		asort($temp4);
-		
+
 		return array_reverse($temp4);
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/wec_map/class.tx_wecmap_domainmgr.php'])	{

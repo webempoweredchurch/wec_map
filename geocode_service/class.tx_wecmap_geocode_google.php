@@ -6,13 +6,13 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC) ministry of the
-* Foundation for Evangelism (http://evangelize.org). The WEC is developing 
-* TYPO3-based free software for churches around the world. Our desire 
+* Foundation for Evangelism (http://evangelize.org). The WEC is developing
+* TYPO3-based free software for churches around the world. Our desire
 * use the Internet to help offer new life through Jesus Christ. Please
 * see http://WebEmpoweredChurch.org/Jesus.
 *
-* You can redistribute this file and/or modify it under the terms of the 
-* GNU General Public License as published by the Free Software Foundation; 
+* You can redistribute this file and/or modify it under the terms of the
+* GNU General Public License as published by the Free Software Foundation;
 * either version 2 of the License, or (at your option) any later version.
 *
 * The GNU General Public License can be found at
@@ -36,7 +36,7 @@ require_once(PATH_t3lib.'class.t3lib_svbase.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
 
 /**
- * Service providing lat/long lookup via the Google Maps web service.  
+ * Service providing lat/long lookup via the Google Maps web service.
  *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
@@ -46,7 +46,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	var $prefixId = 'tx_wecmap_geocode_google';		// Same as class name
 	var $scriptRelPath = 'geocode_service/class.tx_wecmap_geocode_google.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
-	
+
 	/**
 	 * Performs an address lookup using the geocoder.us web service.
 	 *
@@ -72,7 +72,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 
 		$latlong = array();
 		$csv = explode(',', $csv);
-		
+
 		if(TYPO3_DLOG) {
 			$addressArray = array(
 				'street' => $street,
@@ -83,7 +83,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 			);
 			$addressString = $street.' '.$city.', '.$state.' '.$zip.', '.$country;
 		}
-		
+
 		switch($csv[0]) {
 			case 200:
 				/*
@@ -107,7 +107,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				$latlong = null;
 				break;
 			default:
-				/* 
+				/*
 				 * Something is wrong with this address. Might work for other
 				 * addresses though.
 				 * 601: No address to geocode.
@@ -118,15 +118,15 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				$latlong = null;
 				break;
 		}
-		
+
 		return $latlong;
 	}
-	
+
 	function buildURL($name, $value){
 		if($value) {
 			return $name.'='.str_replace(' ', '+', $value).'&';
 		}
-	}	
+	}
 }
 
 

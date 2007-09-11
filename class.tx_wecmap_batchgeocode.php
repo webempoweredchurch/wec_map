@@ -30,32 +30,32 @@
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 
 /**
- * Performs autmated geocoding for any address information. 
- * 
+ * Performs autmated geocoding for any address information.
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */
 class tx_wecmap_batchgeocode {
-	
+
 	var $tables;
 	var $geocodedAddresses;
 	var $geocodeLimit;
 	var $processedAddresses;
-	
-	
+
+
 	/**
 	 * Default constructor.
 	 *
 	 * @return		none
 	 */
 	function tx_wecmap_batchgeocode($limit=10) {
-		$this->tables = array();	
+		$this->tables = array();
 		$this->geocodedAddresses = 0;
 		$this->processedAddresses = 0;
 		$this->geocodeLimit = $limit;
 	}
-	
+
 	/**
 	 * Adds a specific tables to the list of tables that should be geocoded.
 	 *
@@ -65,8 +65,8 @@ class tx_wecmap_batchgeocode {
 	function addTable($table) {
 		$this->tables[] = $table;
 	}
-	
-	
+
+
 	/**
 	 * Traverses the TCA and adds all mappable tables to the list of tables that
 	 * should be geocoded.
@@ -75,29 +75,29 @@ class tx_wecmap_batchgeocode {
 	 */
 	function addAllTables() {
 		global $TCA;
-		
+
 		foreach($TCA as $tableName => $tableContents) {
 			if($tableContents['ctrl']['EXT']['wec_map']['isMappable']) {
 				$this->tables[] = $tableName;
 			}
 		}
 	}
-	
+
 	/**
 	 * Main function to initiate geocoding of all address-related tables.
 	 *
 	 * @return		none
 	 */
 	function geocode() {
-		foreach($this->tables as $table) {		
+		foreach($this->tables as $table) {
 			if($this->stopGeocoding()) {
 				return;
-			} else {			
+			} else {
 				$this->geocodeTable($table);
 			}
 		}
 	}
-	
+
 	/**
 	 * Performs geocoding on an individual table.
 	 *
@@ -106,7 +106,7 @@ class tx_wecmap_batchgeocode {
 	 */
 	function geocodeTable($table) {
 		global $TYPO3_DB;
-		
+
 		$addressFields = array(
 			'street' => $this->getAddressField($table, 'street'),
 			'city' => $this->getAddressField($table, 'city'),
@@ -114,20 +114,20 @@ class tx_wecmap_batchgeocode {
 			'zip' => $this->getAddressField($table, 'zip'),
 			'country' => $this->getAddressField($table, 'country'),
 		);
-		
-		$where = "1=1".t3lib_befunc::deleteClause($table);		
+
+		$where = "1=1".t3lib_befunc::deleteClause($table);
 		$result = $TYPO3_DB->exec_SELECTquery('*', $table, $where);
 		while($row = $TYPO3_DB->sql_fetch_assoc($result)) {
-			
+
 			if($this->stopGeocoding()) {
 				return;
 			} else {
 				$this->geocodeRecord($row, $addressFields);
 			}
-		}		
+		}
 	}
-	
-	
+
+
 	/**
 	 * Performs geocoding on an individual row.
 	 *
@@ -141,13 +141,13 @@ class tx_wecmap_batchgeocode {
 		$state = $row[$addressFields['state']];
 		$zip = $row[$addressFields['zip']];
 		$country = $row[$addressFields['country']];
-		
+
 		// increment total count
 		$this->processedAddresses++;
-		
-		tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, '', false, $this);		
+
+		tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, '', false, $this);
 	}
-	
+
 	/**
 	 * Callback function for tx_wecmap_cache::lookup().  Called when a lookup
 	 * is not cached and must use external geocoding services. Increments an
@@ -158,32 +158,32 @@ class tx_wecmap_batchgeocode {
 	function callback_lookupThroughGeocodeService() {
 		$this->geocodedAddresses++;
 	}
-	
-	
+
+
 	/**
 	 * Utility function to determine whether batch geocoding should be stopped.
 	 *
 	 * @return		boolean		True/false whethr batch geocoding should be stopped.
 	 */
-	function stopGeocoding() {		
+	function stopGeocoding() {
 		if($this->geocodedAddresses >= $this->geocodeLimit) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Getter function for the total number of addresses processed.
-	 * 
+	 *
 	 * @return		The total number of addresses processed.  This includes both
 	 *				cached and non-cached.
 	 */
 	function processedAddresses() {
 		return $this->processedAddresses;
 	}
-	
-	
+
+
 	/**
 	 * Getter function for the total number of addresses geocoded.
 	 *
@@ -193,7 +193,7 @@ class tx_wecmap_batchgeocode {
 	function geocodedAddresses() {
 		return $this->geocodedAddresses;
 	}
-	
+
 	/**
 	 * Cound of all records containing address-related data.
 	 *
@@ -201,19 +201,19 @@ class tx_wecmap_batchgeocode {
 	 */
 	function recordCount() {
 		global $TYPO3_DB;
-		
+
 		$recordCount = 0;
-		
+
 		foreach($this->tables as $table) {
-			$where = "1=1".t3lib_befunc::deleteClause($table);				
+			$where = "1=1".t3lib_befunc::deleteClause($table);
 			$result = $TYPO3_DB->exec_SELECTquery('COUNT(*)', $table, $where);
 			$row = $TYPO3_DB->sql_fetch_assoc($result);
 			$recordCount += $row['COUNT(*)'];
 		}
-		
+
 		return $recordCount;
 	}
-	
+
 	/**
 	 * Gets the address mapping from the TCA.
 	 *
@@ -221,12 +221,12 @@ class tx_wecmap_batchgeocode {
 	 * @param		string		Name of the field to retrieve the mapping for.
 	 * @return		name		Name of the field containing address data.
 	 */
-	function getAddressField($table, $field) {		
+	function getAddressField($table, $field) {
 		$fieldName = $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map']['addressFields'][$field];
 		if($fieldName == '') {
 			$fieldName = $field;
 		}
-		
+
 		return $fieldName;
 	}
 }

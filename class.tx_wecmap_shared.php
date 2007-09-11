@@ -30,27 +30,27 @@
 /**
  * General purpose class for the WEC Map extension.  This class
  * provides shared methods used by other classes
- * 
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */
 class tx_wecmap_shared {
-	
+
 	function makeDescription($row) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
 		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
 		return $output;
 	}
-	
+
 	function makeAddress($row) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
 		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['address'], $this->conf['marker.']['address.'] );
 		return $output;
 	}
-	
+
 	function makeTitle($row) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
@@ -61,22 +61,22 @@ class tx_wecmap_shared {
 	function wrapAddressString($address) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->stdWrap($address, $this->conf['marker.']['address.'] );		
+		$output = $local_cObj->stdWrap($address, $this->conf['marker.']['address.'] );
 		return $output;
 	}
-	
+
 	function listQueryFromCSV($field, $values, $table, $mode = 'AND') {
 		$where = ' AND (';
 		$csv = t3lib_div::trimExplode(',', $values);
-		for ( $i=0; $i < count($csv); $i++ ) { 
+		for ( $i=0; $i < count($csv); $i++ ) {
 			if($i >= 1) {
-				$where .= ' '. $mode .' ';				
+				$where .= ' '. $mode .' ';
 			}
 			$where .= $GLOBALS['TYPO3_DB']->listQuery($field, $csv[$i], $table);
 		}
-		
+
 		return $where.')';
 	}
-	
+
 }
 ?>

@@ -31,10 +31,10 @@ require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_marker.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 
 /**
- * Main class for the wec_map extension.  This class sits between the various 
+ * Main class for the wec_map extension.  This class sits between the various
  * frontend plugins and address lookup service to render map data.  All map
  * services implement this abstract class.
- * 
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
@@ -47,31 +47,31 @@ class tx_wecmap_map {
 	var $width;
 	var $height;
 	var $mapName;
-				
+
 	var $js;
 	var $key;
-	
-	/** 
+
+	/**
 	 * Class constructor stub.  Override in the map_service classes. Look there for
 	 * examples.
 	 */
 	function tx_wecmap_map() {}
-	
+
 	/**
 	 * Stub for the drawMap function.  Individual map services should implement
 	 * this method to output their own HTML and Javascript.
-	 * 
+	 *
 	 */
 	function drawMap() {}
-	
-	
+
+
 	/**
 	 * Stub for the autoCenterAndZoom function.  Individual map services should
 	 * implement this method to perform their own centering and zooming based
 	 * on map attributes.
 	 */
 	function autoCenterAndZoom(){}
-	
+
 	/**
 	 * Calculates the center and lat/long spans from the current markers.
 	 *
@@ -91,16 +91,16 @@ class tx_wecmap_map {
 				'latSpan' => abs(($latlong[0]-$this->lat) * 2),
 				'longSpan' => abs(($latlong[1]-$this->long) * 2)
 			);
-			
+
 		} else {
-		
+
 			$latlong = $this->getLatLongBounds();
 
 			$minLat = $latlong['minLat'];
 			$maxLat = $latlong['maxLat'];
 			$minLong = $latlong['minLong'];
 			$maxLong = $latlong['maxLong'];
-			
+
 			/* Calculate the span of the lat/long boundaries */
 			$latSpan = $maxLat-$minLat;
 			$longSpan = $maxLong-$minLong;
@@ -110,14 +110,14 @@ class tx_wecmap_map {
 			$long = ($minLong + $maxLong) / 2;
 
 			return array(
-				'lat' => $lat, 
+				'lat' => $lat,
 				'long' => $long,
 				'latSpan' => $latSpan,
 				'longSpan' => $longSpan,
 			);
 		}
 	}
-	
+
 	/**
 	 * Goes through all the markers and calculates the max distance from the center
 	 * to any one marker.
@@ -125,28 +125,28 @@ class tx_wecmap_map {
 	 * @return array with lat long bounds
 	 **/
 	function getFarthestLatLongFromCenter() {
-		
+
 		$max_long_distance = -360;
 		$max_lat_distance = -360;
 
 		// find farthest away point
-		foreach($this->markers as $key => $markers) {			
+		foreach($this->markers as $key => $markers) {
 			foreach( $markers as $marker ) {
 				if(($marker->getLatitude() - $this->lat) >= $max_lat_distance) {
 					$max_lat_distance = $marker->getLatitude() - $this->lat;
 					$max_lat = $marker->getLatitude();
 				}
-				
+
 				if (($marker->getLongitude() - $this->long) >= $max_long_distance) {
 					$max_long_distance = $marker->getLongitude() - $this->long;
 					$max_long = $marker->getLongitude();
 				}
  			}
 		}
-		
+
 		return array($max_lat, $max_long);
 	}
-		
+
 	/*
 	 * Sets the center value for the current map to specified values.
 	 *
@@ -158,7 +158,7 @@ class tx_wecmap_map {
 		$this->lat  = $lat;
 		$this->long = $long;
 	}
-	
+
 	/**
 	 * Sets the zoom value for the current map to specified values.
 	 *
@@ -168,7 +168,7 @@ class tx_wecmap_map {
 	function setZoom($zoom) {
 		$this->zoom = $zoom;
 	}
-	
+
 	/**
 	 * Calculates the bounds for the latitude and longitude based on the
 	 * defined markers.
@@ -180,18 +180,18 @@ class tx_wecmap_map {
 		$maxLat = -360;
 		$minLong = 360;
 		$maxLong = -360;
-		
-		/* Find min and max zoom lat and long */		
-		foreach($this->markers as $key => $markers) {			
+
+		/* Find min and max zoom lat and long */
+		foreach($this->markers as $key => $markers) {
 			foreach( $markers as $marker ) {
-				if ($marker->getLatitude() < $minLat) 
+				if ($marker->getLatitude() < $minLat)
 					$minLat = $marker->getLatitude();
-				if ($marker->getLatitude() > $maxLat) 
+				if ($marker->getLatitude() > $maxLat)
 					$maxLat = $marker->getLatitude();
 
-				if ($marker->getLongitude() < $minLong) 
+				if ($marker->getLongitude() < $minLong)
 					$minLong = $marker->getLongitude();
-				if ($marker->getLongitude() > $maxLong) 
+				if ($marker->getLongitude() > $maxLong)
 					$maxLong = $marker->getLongitude();
 			}
 		}
@@ -206,10 +206,10 @@ class tx_wecmap_map {
 			$maxLong = $maxLong + 0.001;
 			$minLat = $minLat - 0.001;
 		}
-		
+
 		return array('maxLat' => $maxLat, 'maxLong' => $maxLong, 'minLat' => $minLat, 'minLong' => $minLong);
 	}
-	
+
 	/**
 	 * Adds an address to the currently list of markers rendered on the map.
 	 *
@@ -232,10 +232,10 @@ class tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);	
+		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
-	
-	
+
+
 	/**
 	 * Adds a lat/long to the currently list of markers rendered on the map.
 	 *
@@ -248,24 +248,24 @@ class tx_wecmap_map {
 	 * @return	none
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17) {		
+	function addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
-		
+
 		if($latlong['lat']!='' && $latlong['long']!='') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$marker =  new $classname(count($this->markers), 
-											  $latlong['lat'], 
-											  $latlong['long'], 
-											  $title, 
+			$marker =  new $classname(count($this->markers),
+											  $latlong['lat'],
+											  $latlong['long'],
+											  $title,
 											  $description,
 											  $this->prefillAddress);
 			$marker->setMapName($this->mapName);
 			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
 		}
 	}
-	
+
 	/**
 	 * Adds an address string to the current list of markers rendered on the map.
 	 *
@@ -278,7 +278,7 @@ class tx_wecmap_map {
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
 	function addMarkerByString($string, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
-		
+
 		// first split the string into it's components. It doesn't need to be perfect, it's just
 		// put together on the other end anyway
 		$address = explode(',', $string);
@@ -287,15 +287,15 @@ class tx_wecmap_map {
 		$city = $address[1];
 		$state = $address[2];
 		$country = $address[3];
-		
+
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
- 
+
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
-	
+
 	/**
 	 * Adds a marker by getting the address info from the TCA
 	 *
@@ -309,44 +309,44 @@ class tx_wecmap_map {
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
 	function addMarkerByTCA($table, $uid, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
-		
+
 		$uid = intval($uid);
-		
+
 		// first get the mappable info from the TCA
 		t3lib_div::loadTCA($table);
 		$tca = $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map'];
 
 		if(!$tca) return false;
 		if(!$tca['isMappable']) return false;
-		
+
 		$addressFields = $tca['addressFields'];
 		$streetfield = $addressFields['street'];
 		$cityfield = $addressFields['city'];
 		$statefield = $addressFields['state'];
 		$zipfield = $addressFields['zip'];
 		$countryfield = $addressFields['country'];
-		
+
 		// get address from db for this record
 		$record = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($streetfield. ', ' .$cityfield. ', ' .$statefield. ', ' .$zipfield. ', ' .$countryfield, $table, 'uid='.$uid);
 		$record = $record[0];
-		
+
 		$street = $record[$streetfield];
 		$city 	= $record[$cityfield];
 		$state 	= $record[$statefield];
-		$zip	= $record[$zipfield];
+		$zip		= $record[$zipfield];
 		$country= $record[$countryfield];
-		
+
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
- 
+
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
-	
-	
-	
-	
+
+
+
+
 	/**
 	 * Returns the classname of the marker class.
 	 * @return	string	The name of the marker class.
@@ -354,7 +354,7 @@ class tx_wecmap_map {
 	function getMarkerClassName() {
 		return $this->markerClassName;
 	}
-	
+
 }
 
 

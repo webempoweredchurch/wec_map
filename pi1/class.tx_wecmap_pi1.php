@@ -38,7 +38,7 @@ require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
- * Simple frontend plugin for displaying an address on a map.  
+ * Simple frontend plugin for displaying an address on a map.
  *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
@@ -49,7 +49,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 	var $scriptRelPath = 'pi1/class.tx_wecmap_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
 	var $pi_checkCHash = TRUE;
-	
+
 	/**
 	 * Draws a Google map based on an address entered in a Flexform.
 	 * @param	array		Content array.
@@ -64,7 +64,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		/* Initialize the Flexform and pull the data into a new object */
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
-		
+
 		// get configuration from flexform or TS. Flexform values take
 		// precedence.
 		$apiKey = $this->pi_getFFvalue($piFlexForm, 'apiKey', 'mapConfig');
@@ -72,43 +72,43 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'mapConfig');
 		empty($width) ? $width = $conf['width']:null;
-		
+
 		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'mapConfig');
 		empty($height) ? $height = $conf['height']:null;
-		
+
 		$mapControlSize = $this->pi_getFFvalue($piFlexForm, 'mapControlSize', 'mapControls');
 		(empty($mapControlSize) || $mapControlSize == 'none') ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
 
 		$overviewMap = $this->pi_getFFvalue($piFlexForm, 'overviewMap', 'mapControls');
 		empty($overviewMap) ? $overviewMap = $conf['controls.']['showOverviewMap']:null;
-				
+
 		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
-		
+
 		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapConfig');
 		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
-				
+
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 
 		$showInfoOnLoad = $this->pi_getFFvalue($piFlexForm, 'showInfoOnLoad', 'mapConfig');
 		empty($showInfoOnLoad) ? $showInfoOnLoad = $conf['showInfoOnLoad']:null;
-		
+
 		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'mapConfig');
 		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
 
 		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'mapConfig');
 		empty($showWrittenDirs) ? $showWrittenDirs = $conf['showWrittenDirections']:null;
-				
+
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'mapConfig');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
-		
+
 		$centerLat = $conf['centerLat'];
-		
+
 		$centerLong = $conf['centerLong'];
-		
+
 		$zoomLevel = $conf['zoomLevel'];
-		
+
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 
@@ -124,37 +124,37 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		/* Create the map class and add markers to the map */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className = t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);	
+		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
 		// evaluate config to see which map controls we need to show
 		if($mapControlSize == 'large') {
-			$map->addControl('largeMap');	
+			$map->addControl('largeMap');
 		} else if ($mapControlSize == 'small') {
-			$map->addControl('smallMap');	
+			$map->addControl('smallMap');
 		} else if ($mapControlSize == 'zoomonly') {
-			$map->addControl('smallZoom');	
+			$map->addControl('smallZoom');
 		}
-		
+
 		if($scale) $map->addControl('scale');
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
-		
+
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
 		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
 		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
 		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
-		
+
 		// see if we need to open the marker bubble on load
 		if($showInfoOnLoad) $map->showInfoOnLoad();
-		
-		// determine if an address has been set through flexforms. If not, process TS		
+
+		// determine if an address has been set through flexforms. If not, process TS
 		if(empty($zip) && empty($state) && empty($city)) {
 
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
-				
+
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
 
@@ -162,7 +162,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$description = tx_wecmap_shared::makeDescription(array('description'=> $marker['description']));
 					$address = tx_wecmap_shared::wrapAddressString($marker['address']);
 					$description = $description.$address;
-					
+
 					// add address by string
 					$map->addMarkerByString($marker['address'], $title, $description);
 
@@ -173,14 +173,14 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$description = tx_wecmap_shared::makeDescription($marker);
 
 					$description = $description . $address;
-					
+
 					// add the marker to the map
-					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'], 
-											 $marker['zip'], $marker['country'], $title, 
-											 $description);	
+					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
+											 $marker['zip'], $marker['country'], $title,
+											 $description);
 				}
 			}
-		} else {		
+		} else {
 			// put all the data into an array
 			$data['city'] = $city;
 			$data['state'] = $state;
@@ -193,17 +193,17 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$title = tx_wecmap_shared::makeTitle($data);
 			$address = tx_wecmap_shared::makeAddress($data);
 			$description = tx_wecmap_shared::makeDescription($data);
-			
+
 			$description = $description . $address;
-			
+
 			// add the marker to the map
-			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);			
+			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);
 		}
-		
+
 
 		// draw the map
 		$content = $map->drawMap();
-		
+
 		// add directions div if applicable
 		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
 

@@ -29,10 +29,10 @@
 ***************************************************************/
 
 class tx_wecmap_recordhandler {
-	
+
 	var $itemsPerPage = 75;
 	var $count;
-	
+
 	/**
 	 * PHP4 constructor
 	 *
@@ -41,7 +41,7 @@ class tx_wecmap_recordhandler {
 	function tx_wecmap_recordhandler($count) {
 		$this->__construct($count);
 	}
-	
+
 	/**
 	 * PHP5 constructor
 	 *
@@ -50,39 +50,39 @@ class tx_wecmap_recordhandler {
 	function __construct($count) {
 		$this->count = $count;
 	}
-	
+
 	/**
 	 * Displays the table with cache records
 	 *
 	 * @return String
 	 **/
 	function displayTable() {
-		
+
 		if($this->count == 0) {
 			$content = $this->getTotalCountHeader(0).'<br />';
 			$content .= 'No Records Found.';
 			return $content;
 		}
-		
+
 		global $LANG;
 
 		$limit = null;
 		// Select rows:
 		$displayRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*','tx_wecmap_cache','', 'address', 'address', $limit);
 
-		foreach($displayRows as $row) {				
+		foreach($displayRows as $row) {
 
 			// Add icon/title and ID:
 			$cells = array();
-			
+
 			$cells[] = '<td class="address">'.$row['address'].'</td>';
-				
+
 			$cells[] = '<td class="latitude">'.$row['latitude'].'</td>';
 			$cells[] = '<td class="longitude">'.$row['longitude'].'</td>';
-			
+
 			$cells[] = '<td class="editButton"><a href="#" onclick="editRecord(\''. $row['address_hash'] .'\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a></td>';
 			$cells[] = '<td class="deleteButton"><a href="#" onclick="deleteRecord(\''. $row['address_hash'] .'\'); return false;")"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteAddress').'" alt="'.$LANG->getLL('deleteAddress').'" /></a></td>';
-										
+
 			// Compile Row:
 			$output.= '
 				<tr id="'. $row['address_hash'] .'" class="bgColor'.($cc%2 ? '-20':'-10').'">
@@ -100,22 +100,22 @@ class tx_wecmap_recordhandler {
 		$headerCells[] = '<th style="width: 100px;">'.$LANG->getLL('latitude').'</th>';
 		$headerCells[] = '<th style="width: 100px;">'.$LANG->getLL('longitude').'</th>';
 		$headerCells[] = '<th colspan="2">Actions</th>';
-		
+
 		$output = '
 			<thead class="bgColor5 tableheader"><tr>
 				'.implode('
 				',$headerCells).'
 			</tr></thead>'.$output;
-		
+
 		$output = $this->getTotalCountHeader($this->count).
 		'<br /><div id="recordTable">'.
 		// $pager.
 		'<br/>'.
 		'<table border="0" cellspacing="1" cellpadding="3" id="tx-wecmap-cache" class="sortable">'.$output.'</table></div>';
-		
+
 		return $output;
 	}
-	
+
 	/**
 	 * Shows a search box to filter cache records
 	 *
@@ -126,7 +126,7 @@ class tx_wecmap_recordhandler {
 		$content = '<div><input id="recordSearchbox" type="text" value="'.$LANG->getLL('searchFilter').'" size="20" onblur="resetSearchbox()" onfocus="clearSearchbox()" onkeyup="filter()"/><span id="resetSearchboxButton"></span></div>';
 		return $content;
 	}
-	
+
 	/**
 	 * Returns the JS functions for our AJAX stuff
 	 *
@@ -142,7 +142,7 @@ class tx_wecmap_recordhandler {
 
 			  </script>'.chr(10).
 			'<script>
-			
+
 				// -------------------------
 				// 		search functions
 				// -------------------------
@@ -150,22 +150,22 @@ class tx_wecmap_recordhandler {
 				function resetSearchbox() {
 					if($F(\'recordSearchbox\') == "") {
 						$(\'recordSearchbox\').value = "Filter records...";
-					}	
+					}
 				}
-				
+
 				function clearSearchbox() {
 					if($F(\'recordSearchbox\') == "Filter records...") {
 						$(\'recordSearchbox\').clear();
 					}
 				}
-				
+
 				function resetSearch() {
 					$(\'recordSearchbox\').value = "Filter records...";
 					$(\'resetSearchboxButton\').update();
 					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
 					addresses.each(function(address) { address.parentNode.show()});
 				}
-				
+
 				function filter() {
 					$(\'resetSearchboxButton\').update("<a href=\"#\" onclick=\"resetSearch(); return false;\">&nbsp;Clear</a>");
 					sword = $F(\'recordSearchbox\');
@@ -175,7 +175,7 @@ class tx_wecmap_recordhandler {
 					result[0].each(function(address) { address.parentNode.show()});
 					result[1].each(function(address) { address.parentNode.hide()});
 				}
-				
+
 				function matches(element, sword) {
 					var array = sword.split(" ");
 					retValue = true;
@@ -189,36 +189,36 @@ class tx_wecmap_recordhandler {
 					if(retValue === false ) {
 						return false;
 					} else {
-						return true;						
+						return true;
 					}
 
 				}
-				
+
 				function updateCount(count) {
 					var countEl = $(\'recordCount\');
 					var number = countEl.innerHTML;
 					$(\'recordCount\').update();
 					$(\'recordCount\').update(count+\'/\'+number);
 				}
-				
+
 				// -------------------------
 				// record handling functions
 				// -------------------------
-				
+
 				function deleteAll() {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteAll\';
-				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
+				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\',
 				          {method: \'post\', parameters: pars, onComplete:clearTable});
 				}
 
 				function deleteRecord(id) {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteSingle&record=\'+id;
-				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
+				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\',
 				          {method: \'post\', parameters: pars, onComplete:clearRow(id)});
 				}
-				
+
 				function editRecord(id) {
 					var longitudes = $(id).getElementsByClassName(\'longitude\');
 					var latitudes = $(id).getElementsByClassName(\'latitude\');
@@ -230,35 +230,35 @@ class tx_wecmap_recordhandler {
 					var buttonElement = $(id).getElementsByClassName(\'editButton\');
 					buttonElement[0].update(links);
 				}
-				
+
 				function refreshRows() {
 					var table = $(\'tx-wecmap-cache\');
 					var rows = SortableTable.getBodyRows(table);
 					rows.each(function(r,i) {
 						SortableTable.addRowClass(r,i);
 					});
-				}	
-				
+				}
+
 				function addRowClass(r,i) {
 					r = $(r)
 					r.removeClassName(SortableTable.options.rowEvenClass);
 					r.removeClassName(SortableTable.options.rowOddClass);
 					r.addClassName(((i+1)%2 == 0 ? SortableTable.options.rowEvenClass : SortableTable.options.rowOddClass));
 				}
-				
+
 				function saveRecord(id) {
 					var longEl = $(id).getElementsByClassName("longForm");
 					var longValue = $F(longEl[0]);
 					var lat = $(id).getElementsByClassName(\'latForm\');
 					var latValue = $F(lat[0]);
 					$(id).getElementsByClassName(\'editButton\')[0].update(\'<img src="../images/aai.gif" />\');
-					
+
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=saveRecord&record=\'+id+\'&latitude=\'+latValue+\'&longitude=\'+longValue;
-				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\', 
+				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\',
 				          {method: \'post\', parameters: pars, onComplete:unEdit(id,longValue,latValue)});
 				}
-				
+
 				function unEdit(id, longVal, lat) {
 					var longitudes = $(id).getElementsByClassName(\'longitude\');
 					var latitudes = $(id).getElementsByClassName(\'latitude\');
@@ -268,17 +268,17 @@ class tx_wecmap_recordhandler {
 					longitude.update(longVal);
 					latitude.update(lat);
 				}
-				
+
 				function getSaveCancelLinks(id, oldLat, oldLong) {
 					var link = \'<a href="#" onclick="saveRecord(\\\'\'+id+\'\\\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/savedok.gif','width="11" height="12"').' title="'.$LANG->getLL('updateAddress').'" alt="'.$LANG->getLL('updateAddress').'" /></a><a href="#" onclick="unEdit(\\\'\'+id+\'\\\',\\\'\'+oldLong+\'\\\', \\\'\'+oldLat+\'\\\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/closedok.gif','width="11" height="12"').' title="'.$LANG->getLL('cancelUpdate').'" alt="'.$LANG->getLL('cancelUpdate').'" /></a>\';
 					return link;
 				}
-				
+
 				function getEditLink(id) {
 					var link = \'<a href="#" onclick="editRecord(\\\'\'+id+\'\\\'); return false;"><img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="'.$LANG->getLL('editAddress').'" alt="'.$LANG->getLL('editAddress').'" /></a>\';
 					return link;
 				}
-				
+
 				function clearRow(id) {
 					$(id).remove();
 					var count = $(\'recordCount\');
@@ -301,19 +301,19 @@ class tx_wecmap_recordhandler {
 					var status = $(\'recordTable\');
 					status.update("No Records Found.");
 				}
-				
+
 				function updatePagination(page) {
 					var count = $(\'recordCount\');
 					var number = count.innerHTML;
 					var pars = \'?cmd=updatePagination&page=\'+page+\'&itemsPerPage='. $this->itemsPerPage .'&count=\'+number;
-				    var myAjax = new Ajax.Updater(\'pagination\', \'tx_wecmap_recordhandler_ai.php\', 
+				    var myAjax = new Ajax.Updater(\'pagination\', \'tx_wecmap_recordhandler_ai.php\',
 				          {method: \'post\', parameters: pars});
 				}
 			</script>';
-		
+
 		return $js;
 	}
-	
+
 	/**
 	 * Returns the header part that allows to delete all records and shows the
 	 * total number of records
@@ -327,10 +327,10 @@ class tx_wecmap_recordhandler {
 			'<a href="#" onclick="deleteAll(); return false;">'.
 			'<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' title="'.$LANG->getLL('deleteCache').'" alt="'.$LANG->getLL('deleteCache').'" />'.
 			'</a>';
-		
+
 		return $content;
 	}
-	
+
 	function linkSelf($addParams)	{
 		return htmlspecialchars('index.php?id='.$this->pObj->id.'&showLanguage='.rawurlencode(t3lib_div::_GP('showLanguage')).$addParams);
 	}

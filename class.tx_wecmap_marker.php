@@ -28,9 +28,9 @@
 ***************************************************************/
 
 /**
- * Main class for the wec_map extension.  This class sits between the various 
+ * Main class for the wec_map extension.  This class sits between the various
  * frontend plugins and address lookup service to render map data.
- * 
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
@@ -40,7 +40,7 @@ class tx_wecmap_marker {
 
 	var $latitude;
 	var $longitude;
-	
+
 	var $title;
 	var $description;
 	var $color;
@@ -54,7 +54,7 @@ class tx_wecmap_marker {
 	 * @return void
 	 **/
 	function tx_wecmap_marker() {}
-	
+
 	/**
 	 * Getter for internal index for this marker.
 	 *
@@ -63,7 +63,7 @@ class tx_wecmap_marker {
 	function getIndex() {
 		return $this->index;
 	}
-	
+
 	/**
 	 * Getter for the marker title.
 	 *
@@ -72,7 +72,7 @@ class tx_wecmap_marker {
 	function getTitle() {
 		return $this->title;
 	}
-	
+
 	/**
 	 * Getter for marker description
 	 *
@@ -81,7 +81,7 @@ class tx_wecmap_marker {
 	function getDescription() {
 		return $this->description;
 	}
-	
+
 	/**
 	 * Getter for marker color
 	 *
@@ -90,7 +90,7 @@ class tx_wecmap_marker {
 	function getColor() {
 		return $this->color;
 	}
-	
+
 	/**
 	 * Getter for the marker stroke color
 	 *
@@ -99,7 +99,7 @@ class tx_wecmap_marker {
 	function getStrokeColor() {
 		return $this->strokeColor;
 	}
-	
+
 	/**
 	 * Getter for the latitude
 	 *
@@ -108,7 +108,7 @@ class tx_wecmap_marker {
 	function getLatitude() {
 		return $this->latitude;
 	}
-	
+
 	/**
 	 * Getter for the longitude
 	 *
@@ -117,7 +117,7 @@ class tx_wecmap_marker {
 	function getLongitude() {
 		return $this->longitude;
 	}
-	
+
 	/**
 	 * Setter for map name this marker is a part of
 	 *

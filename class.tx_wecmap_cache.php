@@ -6,13 +6,13 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC) ministry of the
-* Foundation for Evangelism (http://evangelize.org). The WEC is developing 
-* TYPO3-based free software for churches around the world. Our desire 
+* Foundation for Evangelism (http://evangelize.org). The WEC is developing
+* TYPO3-based free software for churches around the world. Our desire
 * use the Internet to help offer new life through Jesus Christ. Please
 * see http://WebEmpoweredChurch.org/Jesus.
 *
-* You can redistribute this file and/or modify it under the terms of the 
-* GNU General Public License as published by the Free Software Foundation; 
+* You can redistribute this file and/or modify it under the terms of the
+* GNU General Public License as published by the Free Software Foundation;
 * either version 2 of the License, or (at your option) any later version.
 *
 * The GNU General Public License can be found at
@@ -30,14 +30,14 @@
  * Main address lookup class for the wec_map extension.  Looks up existing
  * values in cache tables or initiates service chain to perform a lookup.
  * Also provides basic administrative functions for managing entries in the
- * cache. 
+ * cache.
  *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
  */
 class tx_wecmap_cache {
-	
+
 	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
 		$fakeObject = null;
 		return tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, $key, $forceLookup, $fakeObject);
@@ -57,7 +57,7 @@ class tx_wecmap_cache {
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
 	function lookupWithCallback($street, $city, $state, $zip, $country, $key='', $forceLookup=false, &$pObj) {
-		
+
 		/* Do some basic normalization on the address */
 		tx_wecmap_cache::normalizeAddress($street, $city, $state, $zip, $country);
 
@@ -65,47 +65,47 @@ class tx_wecmap_cache {
 		if(tx_wecmap_cache::isEmptyAddress($street, $city, $state, $zip, $country)) {
 			$latlong = null;
 		} else {
-			/* Look up the address in the cache table. */	
+			/* Look up the address in the cache table. */
 			$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
-		
-			/* Didn't find a cached match */	
+
+			/* Didn't find a cached match */
 			if (is_null($latlong)) {
 				/* Intiate service chain to find lat/long */
 				$serviceChain='';
-				
+
 				while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
 					$serviceChain.=','.$lookupObj->getServiceKey();
 					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);
-					
+
 					if(method_exists($pObj, 'callback_lookupThroughGeocodeService')) {
-						$pObj->callback_lookupThroughGeocodeService();				
+						$pObj->callback_lookupThroughGeocodeService();
 					}
-					
+
 					/* If we found a match, quit. Otherwise proceed to next best service */
 					if($latlong) {
 						break;
 					}
 				}
-			
+
 				/* Insert the lat/long into the cache.  */
 				tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $latlong['lat'], $latlong['long']);
 			}
-		
+
 			/* Return the lat/long, either from cache table for from fresh lookup */
 			if ($latlong['lat'] == 0 and $latlong['long'] == 0){
 				$latlong = null;
-			} 
+			}
 		}
 
 		return $latlong;
-		
+
 	}
-	
-	
+
+
 	/**
 	 * Performs basic normalize on the address compontents.  Should be called
-	 * before any function searches cached data by address name or inserts 
-	 * values into the cache. All parameters are passed by reference and 
+	 * before any function searches cached data by address name or inserts
+	 * values into the cache. All parameters are passed by reference and
 	 * normalized.
 	 *
 	 * @param	string		The street address.
@@ -117,33 +117,33 @@ class tx_wecmap_cache {
 	 * @return	none
 	 */
 	function normalizeAddress(&$street, &$city, &$state, &$zip, &$country) {
-		
+
 		// pseudo normalize data: first letter uppercase.
 		// @todo: get rid of this once we implement normalization properly
 		$street = ucwords($street);
 		$city 	= ucwords($city);
 		$state 	= ucwords($state);
-		
+
 		// some zip codes contain letters, so just upper case them all
 		$zip 	= strtoupper($zip);
-		
+
 		// if length of country string is 3 or less, it's probably an abbreviation;
 		// make it all upper case then
 		if(strlen($country) < 4) {
 			$country = strtoupper($country);
 		} else {
-			$country= ucwords($country);			
+			$country= ucwords($country);
 		}
-		
+
 		// to somehow normalize the data we get, we will check for country codes like DEU that the geocoder
 		// doesn't understand and look up a real country name from static_info_countries
 		// 1. check if static_info_tables is available
 		if (t3lib_extmgm::isLoaded('static_info_tables')) {
-			
+
 			// 2. check the length of the country and do lookup only if it's 2 or 3 characters
 			$length = strlen($country);
 			if($length == 2) {
-				
+
 				// try to find a country with that two character code
 				$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('cn_short_en', 'static_countries', 'cn_iso_2="'.$country.'"');
 				$newCountry = $rows[0]['cn_short_en'];
@@ -155,12 +155,12 @@ class tx_wecmap_cache {
 				if(!empty($newCountry)) $country = $newCountry;
 			}
 		}
-		
-	}	
-	
-	
+
+	}
+
+
 	/**
-	 * Returns the current geocoding status.  Geocoding may be successfull, 
+	 * Returns the current geocoding status.  Geocoding may be successfull,
 	 * failed, or may not have been attempted.
 	 *
 	 * @param	string		The street address.
@@ -173,23 +173,23 @@ class tx_wecmap_cache {
 	function status($street, $city, $state, $zip, $country) {
 		/* Look up the address in the cache table */
 		$latlong = tx_wecmap_cache::find($street, $city, $state, $zip, $country);
-		
-		/* Found a cached match */	
+
+		/* Found a cached match */
 		if ($latlong) {
 			if($latlong['lat']==0 and $latlong['long']==0) {
 				$statusCode = -1; /* Previous lookup failed */
-			} else {			
+			} else {
 				$statusCode = 1; /* Previous lookup succeeded */
 			}
 		} else {
 			$statusCode = 0; /* Lookup has not been performed */
 		}
-		
+
 		return $statusCode;
 	}
-	
-	
-	
+
+
+
 	/**
 	 * Looks up the latitude and longitude of a specified address in the cache
 	 * table only.
@@ -201,7 +201,7 @@ class tx_wecmap_cache {
 	 * @param	string		The country name.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
-	function find($street, $city, $state, $zip, $country) {	
+	function find($street, $city, $state, $zip, $country) {
 		$hash = tx_wecmap_cache::hash($street, $city, $state, $zip, $country);
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_wecmap_cache', ' address_hash="'.$hash.'"');
 		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
@@ -210,8 +210,8 @@ class tx_wecmap_cache {
 			return null;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Inserts an address with a specified latitude and longitdue into the cache table.
 	 *
@@ -222,9 +222,9 @@ class tx_wecmap_cache {
 	 * @param	string		The country name.
 	 * @param	string		Latidude.
 	 * @param	string		Longitude.
-	 * @return	none		
+	 * @return	none
 	 */
-	function insert($street, $city, $state, $zip, $country, $lat, $long) {		
+	function insert($street, $city, $state, $zip, $country, $lat, $long) {
 		/* Check if value is already in DB */
 		if (tx_wecmap_cache::find($street,$city,$state,$zip,$country)) {
 			/* Update existing entry */
@@ -237,12 +237,12 @@ class tx_wecmap_cache {
 			$insertArray['address'] = $street.' '.$city.' '.$state.' '.$zip.' '.$country;
 			$insertArray['latitude'] = $lat;
 			$insertArray['longitude'] = $long;
-		
+
 			/* Write address to cache table */
 			$result = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_wecmap_cache', $insertArray);
-		}		
-	} 
-	
+		}
+	}
+
 	/**
 	 * Update a cached entry based on its address hash.
 	 *
@@ -255,7 +255,7 @@ class tx_wecmap_cache {
 		$latlong = array('latitude' => $lat, 'longitude' => $long);
 		$result = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_wecmap_cache', "address_hash='".$uid."'", $latlong);
 	}
-	
+
 	/**
 	 * Deletes a cached entry based on its address hash.
 	 *
@@ -264,16 +264,16 @@ class tx_wecmap_cache {
 	function deleteByUID($uid) {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_wecmap_cache', "address_hash='".$uid."'");
 	}
-	
+
 	/**
 	 * Deletes all cached entries.
-	 * 
+	 *
 	 * @return	none
 	 */
 	function deleteAll() {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_wecmap_cache','');
 	}
-	
+
 	/**
 	 * Deletes a specified address from the cache table.
 	 *
@@ -287,7 +287,7 @@ class tx_wecmap_cache {
 	function delete($street, $city, $state, $zip, $country) {
 		$result = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_wecmap_cache', "address_hash='".tx_wecmap_cache::hash($street, $city, $state, $zip, $country)."'");
 	}
-	
+
 	/**
 	 * Creates the address hash, which acts as a unique identifier for the cache table.
 	 *
@@ -302,7 +302,7 @@ class tx_wecmap_cache {
 		$address_string = $street.' '.$city.' '.$state.' '.$zip.' '.$country;
 		return md5($address_string);
 	}
-	
+
 	/**
 	 *  Checks if the minimum amount of address data is available before
 	 *  geocoding.
@@ -320,7 +320,7 @@ class tx_wecmap_cache {
 		} else {
 			$isEmptyAddress = false;
 		}
-		
+
 		return $isEmptyAddress;
 	}
 }

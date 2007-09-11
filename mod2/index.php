@@ -38,7 +38,7 @@ $LANG->includeLLFile('EXT:wec_map/mod2/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
-	
+
 require_once('../class.tx_wecmap_cache.php');
 
 
@@ -170,12 +170,12 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	 * @return	void
 	 */
 	function moduleContent()	{
-		
+
 		switch((string)$this->MOD_SETTINGS['function'])	{
 			case 1:
 				$this->content.=$this->showMap();
 			break;
-			
+
 			case 2:
 				$this->content .= $this->mapSettings();
 			break;
@@ -186,60 +186,60 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function linkSelf($addParams)	{
 		return htmlspecialchars('index.php?id='.$this->pObj->id.'&showLanguage='.rawurlencode(t3lib_div::_GP('showLanguage')).$addParams);
 	}
-	
+
 	/**
 	 * Show map settings
 	 *
 	 * @return String
 	 **/
 	function mapSettings() {
-		
+
 		if(t3lib_div::_GP('tx-wecmap-mod1-submit')) {
 
 			$scale = t3lib_div::_GP('tx-wecmap-mod1-scale');
-			
+
 			if($scale == 'on') {
 				$scale = 1;
 			} else {
 				$scale = 0;
 			}
-			
+
 			$minimap = t3lib_div::_GP('tx-wecmap-mod1-minimap');
-			
+
 			if($minimap == 'on') {
 				$minimap = 1;
 			} else {
 				$minimap = 0;
 			}
-			
+
 			$maptype = t3lib_div::_GP('tx-wecmap-mod1-maptype');
-			
+
 			if($maptype == 'on') {
 				$maptype = 1;
 			} else {
 				$maptype = 0;
 			}
-			
+
 			$mapcontrolsize = t3lib_div::_GP('tx-wecmap-mod1-mapcontrolsize');
-			
+
 			// build data array
 			$data = array('scale' => $scale, 'minimap' => $minimap, 'maptype' => $maptype, 'mapcontrolsize' => $mapcontrolsize);
-			
+
 			// save to user config
 			$GLOBALS['BE_USER']->pushModuleData('tools_txwecmapM2', $data);
 		}
-		
+
 		// get module config
 		$conf = $GLOBALS['BE_USER']->getModuleData('tools_txwecmapM2');
-		
+
 		// t3lib_div::debug($conf);
-		
+
 		// get config options
 		$scale = $conf['scale'];
 		$minimap = $conf['minimap'];
 		$maptype = $conf['maptype'];
 		$mapcontrolsize = $conf['mapcontrolsize'];
-	
+
 		$form = array();
 		$form[] = '<form method="POST">';
 		$form[] = '<table>';
@@ -253,7 +253,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" /></td>';
 		}
 		$form[] = '</tr><tr>';
-		
+
 		// minimap option
 		$form[] = '<tr>';
 		$form[] = '<td><label for="tx-wecmap-mod1-minimap">Show Minimap:</label></td>';
@@ -263,7 +263,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-minimap" id="tx-wecmap-mod1-minimap" /></td>';
 		}
 		$form[] = '</tr>';
-		
+
 		// maptype option
 		$form[] = '<tr>';
 		$form[] = '<td><label for="tx-wecmap-mod1-maptype">Show Maptype:</label></td>';
@@ -273,47 +273,47 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-maptype" id="tx-wecmap-mod1-maptype" /></td>';
 		}
 		$form[] = '</tr>';
-		
+
 		$form[] = '<tr>';
 		$form[] = '<td style="vertical-align: top;">Map Control Size:</td>';
 		$form[] = '<td>';
 		if($mapcontrolsize == 'large') {
-			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="large" checked="checked" id="mapcontrolsize_0" />';			
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="large" checked="checked" id="mapcontrolsize_0" />';
 		} else {
 			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="large" id="mapcontrolsize_0" />';
 		}
 		$form[] = '<label for="mapcontrolsize_0">Large</label><br />';
-		
+
 		if($mapcontrolsize == 'small') {
-			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="small" checked="checked" id="mapcontrolsize_1" />';			
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="small" checked="checked" id="mapcontrolsize_1" />';
 		} else {
-			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="small" id="mapcontrolsize_1" />';			
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="small" id="mapcontrolsize_1" />';
 		}
 		$form[] = '<label for="mapcontrolsize_1">Small</label><br />';
-		
+
 		if($mapcontrolsize == 'zoomonly') {
-			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="zoomonly" checked="checked" id="mapcontrolsize_2" />';	
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="zoomonly" checked="checked" id="mapcontrolsize_2" />';
 		} else {
 			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="zoomonly" id="mapcontrolsize_2" />';
 		}
 		$form[] = '<label for="mapcontrolsize_2">Zoom only</label><br />';
-		
+
 		if($mapcontrolsize == 'none' || empty($mapcontrolsize)) {
-			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="none" checked="checked" id="mapcontrolsize_3" />';			
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="none" checked="checked" id="mapcontrolsize_3" />';
 		} else {
-			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="none" id="mapcontrolsize_3" />';	
+			$form[] = '<input type="radio" class="radio" name="tx-wecmap-mod1-mapcontrolsize" value="none" id="mapcontrolsize_3" />';
 		}
 
 		$form[] = '<label for="mapcontrolsize_3">None</label>';
 		$form[] = '</td>';
 		$form[] = '</tr>';
-		
-		
+
+
 		$form[] = '</table>';
 		$form[] = '<input type="submit" name="tx-wecmap-mod1-submit" id="tx-wecmap-mod1-submit" value="Save" />';
 		$form[] = '</form>';
 
-		
+
 		return implode(chr(10), $form);
 	}
 
@@ -328,21 +328,21 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$width = 500;
 		$height = 500;
 		$conf = $GLOBALS['BE_USER']->getModuleData('tools_txwecmapM2');
-		
+
 		// t3lib_div::debug($GLOBALS['BE_USER']->uc['moduleData']['tools_txwecmapM2']);
-		
+
 		// get options
 		$scale = $conf['scale'];
 		$minimap = $conf['minimap'];
 		$maptype = $conf['maptype'];
 		$mapcontrolsize = $conf['mapcontrolsize'];
-		
+
 		$streetField = $this->getAddressField('street');
 		$cityField = $this->getAddressField('city');
 		$stateField = $this->getAddressField('state');
 		$zipField = $this->getAddressField('zip');
 		$countryField = $this->getAddressField('country');
-		
+
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className($apiKey, $width, $height);
@@ -352,11 +352,11 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			case 'large':
 				$map->addControl('largeMap');
 				break;
-			
+
 			case 'small':
 				$map->addControl('smallMap');
 				break;
-			
+
 			case 'zoomonly':
 				$map->addControl('smallZoom');
 				break;
@@ -365,13 +365,13 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				break;
 		}
 
-		
+
 		if($scale) $map->addControl('scale');
 		if($minimap) $map->addControl('overviewMap');
 		if($maptype) $map->addControl('mapType');
 		$map->enableDirections(false, 'directions');
-		
-		/* Select all frontend users */		
+
+		/* Select all frontend users */
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', '');
 
 		// create country and zip code array to keep track of which country and state we already added to the map.
@@ -386,18 +386,18 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			if(empty($row[$countryField]) && $countryField == 'static_info_country') {
 				$countryField = 'country';
 			} else if(empty($row[$countryField]) && $countryField == 'country') {
-				$countryField = 'static_info_country';				
+				$countryField = 'static_info_country';
 			}
-			
+
 			/* Only try to add marker if there's a city */
 			if($row[$cityField] != '') {
-				
+
 				// if we haven't added a marker for this country yet, do so.
 				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])  && !empty($row[$zipField])  && !empty($row[$cityField])) {
 
 					// add this country to the array
 					$countries[] = $row[$countryField];
-					
+
 					// add a little info so users know what to do
 					$title = '<h1>' .$LANG->getLL('country_zoominfo_title').'</h1>';
 					$description = sprintf($LANG->getLL('country_zoominfo_desc'), $row[$countryField]);
@@ -406,26 +406,26 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
 				}
 
-				
+
 				// if we haven't added a marker for this zip code yet, do so.
 				if(!in_array($row[$cityField], $cities) && !empty($cityField) && !empty($row[$zipField])) {
-					
+
 					// add this country to the array
 					$cities[] = $row[$cityField];
-					
+
 					// add a little info so users know what to do
 					$title = '<h1>' .$LANG->getLL('area_zoominfo_title').'</h1>';
 					$description = $LANG->getLL('area_zoominfo_desc');
-					
+
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,7);
 				}
-				
+
 				// make title and description
 				$title = tx_wecmap_shared::makeTitle($row);
 				$description = tx_wecmap_shared::makeDescription($row, $countryField);
-				
-				
+
+
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
 				// if private was checked, don't use address to geocode
 				if($private) {
@@ -435,12 +435,12 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				}
 			}
 		}
-		
+
 		$content = $map->drawMap();
 		$content .= '<div id="directions"></div>';
 		return $content;
 	}
-	
+
 	function returnEditLink($uid,$title) {
 		$tablename = 'fe_users';
 		$params = '&edit['.$tablename.']['.$uid.']=edit';
@@ -452,19 +452,19 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$out .= '</a>';
 		return $out;
 	}
-	
+
 	/**
 	 * Gets the address mapping from the TCA.
 	 *
 	 * @param		string		Name of the field to retrieve the mapping for.
 	 * @return		name		Name of the field containing address data.
 	 */
-	function getAddressField($field) {	
+	function getAddressField($field) {
 		$fieldName = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'][$field];
 		if($fieldName == '') {
 			$fieldName = $field;
 		}
-		
+
 		return $fieldName;
 	}
 }

@@ -13,7 +13,7 @@ $latitude = htmlspecialchars(t3lib_div::_GP('latitude'));
 $longitude = htmlspecialchars(t3lib_div::_GP('longitude'));
 
 if($cmd == 'deleteAll') {
-	tx_wecmap_cache::deleteAll();	
+	tx_wecmap_cache::deleteAll();
 } else if($cmd == 'deleteSingle') {
 	tx_wecmap_cache::deleteByUID($uid);
 } else if($cmd == 'updatePagination') {
@@ -32,29 +32,29 @@ function makePagination($page, $count, $itemsPerPage) {
 	$content = array();
 	$content[] = '<div id="pagination">';
 	if($pages == 1) return null;
-	
+
 	if($page !== 1) {
-		$content[] = '<a href="?page='. ($page-1) .'">Previous</a>';	
+		$content[] = '<a href="?page='. ($page-1) .'">Previous</a>';
 	} else {
-		$content[] = '<span style="color: grey;">Previous</span>';	
-	} 
-	
-	for ( $i=0; $i < $pages; $i++ ) { 
+		$content[] = '<span style="color: grey;">Previous</span>';
+	}
+
+	for ( $i=0; $i < $pages; $i++ ) {
 		if($page == ($i+1)) {
 			$content[] = '<span style="color: grey;">'.($i+1).'</span>';
 		} else {
-			$content[] = '<a href="?page='. ($i+1) .'">'. ($i+1) .'</a>';				
+			$content[] = '<a href="?page='. ($i+1) .'">'. ($i+1) .'</a>';
 		}
 	}
-	
+
 	if($page !== $pages) {
-		$content[] = '<a href="?page='. ($page+1) .'">Next</a>';	
+		$content[] = '<a href="?page='. ($page+1) .'">Next</a>';
 	} else {
-		$content[] = '<span style="color: grey;">Next</span>';	
+		$content[] = '<span style="color: grey;">Next</span>';
 	}
-	
+
 	$content[] = '</div>';
 	return implode(' ', $content);
-	
+
 }
 ?>
