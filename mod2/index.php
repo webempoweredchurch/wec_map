@@ -422,8 +422,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				}
 				
 				// make title and description
-				$title = $this->makeTitle($row);
-				$description = $this->makeDescription($row, $countryField);
+				$title = tx_wecmap_shared::makeTitle($row);
+				$description = tx_wecmap_shared::makeDescription($row, $countryField);
 				
 				
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
@@ -439,27 +439,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content = $map->drawMap();
 		$content .= '<div id="directions"></div>';
 		return $content;
-	}
-	
-	function makeTitle($row) {
-		if(empty($row['name'])) {
-			$title = $row['first_name'] . ' ' . $row['last_name'];			
-		} else {
-			$title = $row['name'];
-		}
-		
-		return '<h1>'.$title.'</h1>';
-	}
-	
-	/* @todo	Update this to honor all TCA-defined fields */
-	function makeDescription($row, $countryfield='country') {
-		global $LANG;
-		$output = $row['address'].'<br />';
-		$output .= $row['city'] . ', '.$row['zone']. ' '.$row['zip'];
-		$output .= '<br />'.$row[$countryfield].'<br />';
-		$output .= $this->returnEditLink($row['uid'], $LANG->getLL('editrecord'));
-
-		return $output;
 	}
 	
 	function returnEditLink($uid,$title) {
