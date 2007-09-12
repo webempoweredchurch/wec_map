@@ -77,6 +77,10 @@ class tx_wecmap_shared {
 
 		return $where.')';
 	}
+	
+	function linkToMarker(&$map, $name) {
+		return '<a href="#" style="display:block;" onclick="triggerMarker('.($map->markerCount() - 1).'); return false;">'.$name.'</a>';
+	}
 
 }
 ?>

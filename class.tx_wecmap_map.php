@@ -47,7 +47,7 @@ class tx_wecmap_map {
 	var $width;
 	var $height;
 	var $mapName;
-
+	var $markerCount = 0;
 	var $js;
 	var $key;
 
@@ -263,6 +263,7 @@ class tx_wecmap_map {
 											  $this->prefillAddress);
 			$marker->setMapName($this->mapName);
 			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
+			$this->markerCount++;
 		}
 	}
 
@@ -355,6 +356,10 @@ class tx_wecmap_map {
 		return $this->markerClassName;
 	}
 
+	
+	function markerCount() {
+		return $this->markerCount;
+	}
 }
 
 

@@ -49,6 +49,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 	var $scriptRelPath = 'pi1/class.tx_wecmap_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
 	var $pi_checkCHash = TRUE;
+	var $sidebarlinks = array();
 
 	/**
 	 * Draws a Google map based on an address entered in a Flexform.
@@ -152,6 +153,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		// determine if an address has been set through flexforms. If not, process TS
 		if(empty($zip) && empty($state) && empty($city)) {
 
+			$sidebar = '';
+			
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
 
@@ -165,7 +168,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 					// add address by string
 					$map->addMarkerByString($marker['address'], $title, $description);
-
+					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);
 				} else {
 
 					$title = tx_wecmap_shared::makeTitle($marker);
@@ -178,6 +181,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
 											 $description);
+					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);
+					
 				}
 			}
 		} else {
@@ -206,8 +211,19 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 		// add directions div if applicable
 		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
-
+		$content .= $this->sidebar();
 		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	function sidebar() {
+		$c = '<div class="sidebar" style="display:block;">';
+		foreach( $this->sidebarlinks as $link ) {
+			$c .= $link;
+		}
+
+		$c .= '</div>';
+		
+		return $c;
 	}
 }
 

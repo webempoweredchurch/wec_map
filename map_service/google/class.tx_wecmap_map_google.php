@@ -210,8 +210,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent = array();
 			$jsContent[] = $this->js_createMarker();
 			$jsContent[] = $this->js_createMarkerWithTabs();
+			$jsContent[] = $this->js_triggerMarker();
 			$jsContent[] = $this->js_setDirections();
 			$jsContent[] = $this->js_errorHandler();
+			$jsContent[] = 'var markers_'. $this->mapName .' = [];';
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2($this->mapName);
 			$jsContent[] = $this->js_newGDirections();
@@ -221,7 +223,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 			$jsContent[] = $this->js_icon();
 			$jsContent[] = $this->js_newGMarkerManager('mgr_'.$this->mapName, $this->mapName);
-			$jsContent[] = 'var markers_'. $this->mapName .' = [];';
 			$jsContent[] = 'var index_'. $this->mapName .' = 0;';
 			foreach($this->markers as $key => $markers) {
 				$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'] = [];';
@@ -393,6 +394,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 											  $description,
 											  $this->prefillAddress,
 											  $tabLabels);
+			$this->markerCount++;
 		}
 	}
 
@@ -547,6 +549,20 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 
 	/**
+	 * Adds teh triggerMarker function to the js
+	 *
+	 * @return String
+	 **/
+	function js_triggerMarker() {
+		$c = 
+		'function triggerMarker(id) {
+			'.$this->mapName.'.panTo(markers_'. $this->mapName .'[id].getPoint());
+			GEvent.trigger(markers_'. $this->mapName .'[id], \'click\');
+		}';
+		return $c;	
+	}
+	
+	/**
 	 * Creates the Marker Manager Javascript object.
 	 *
 	 * @access	private
@@ -604,8 +620,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$path = t3lib_extMgm::siteRelPath('wec_map');
 		}
 
-		return '
-		var icon_'. $this->mapName .' = new GIcon();
+		return
+		'var icon_'. $this->mapName .' = new GIcon();
 		icon_'. $this->mapName .'.image = "'.$path.'images/mm_20_red.png";
 		icon_'. $this->mapName .'.shadow = "'.$path.'images/mm_20_shadow.png";
 		icon_'. $this->mapName .'.iconSize = new GSize(12, 20);
