@@ -201,7 +201,7 @@ class tx_wecmap_backend {
 		$map->addControl('scale');
 		$map->addControl('mapType');
 		$map->enableDirections(true);
-
+ 
 		$content = $map->drawMap();
 
 		return $content;
