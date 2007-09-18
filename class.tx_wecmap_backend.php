@@ -184,7 +184,7 @@ class tx_wecmap_backend {
 	function drawMap($PA, $fobj) {
 		$width = '400';
 		$height = '400';
-
+ 
 		$street = tx_wecmap_backend::getFieldValue('street', $PA);
     $city = tx_wecmap_backend::getFieldValue('city', $PA);
     $state = tx_wecmap_backend::getFieldValue('state', $PA);
