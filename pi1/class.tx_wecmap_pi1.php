@@ -169,6 +169,18 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					// add address by string
 					$map->addMarkerByString($marker['address'], $title, $description);
 					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);
+				
+				// add address by lat and long only
+				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
+
+					$title = tx_wecmap_shared::makeTitle($marker);
+					$description = tx_wecmap_shared::makeDescription(array('description'=> $marker['description']));
+					$lat = $marker['lat'];
+					$long = $marker['long'];
+
+					// add the marker to the map
+					$map->addMarkerByLatLong($lat, $long, $title, $description);
+					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);					
 				} else {
 
 					$title = tx_wecmap_shared::makeTitle($marker);
