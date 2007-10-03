@@ -168,7 +168,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 					// add address by string
 					$map->addMarkerByString($marker['address'], $title, $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);
+					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);
 				
 				// add address by lat and long only
 				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
@@ -180,7 +180,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 					// add the marker to the map
 					$map->addMarkerByLatLong($lat, $long, $title, $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);					
+					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);				
 				} else {
 
 					$title = tx_wecmap_shared::makeTitle($marker);
@@ -193,7 +193,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
 											 $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::linkToMarker($map, $marker['title']);
+					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);
 					
 				}
 			}

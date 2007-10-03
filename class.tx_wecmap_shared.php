@@ -58,6 +58,13 @@ class tx_wecmap_shared {
 		return $output;
 	}
 
+	function makeSidebarLink($link) {
+		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
+		// $local_cObj->start($row, 'fe_users' );
+		$output = $local_cObj->cObjGetSingle($this->conf['sidebar'], $this->conf['sidebar.'] );
+		return $output;
+	}
+	
 	function wrapAddressString($address) {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($row, 'fe_users' );
@@ -77,10 +84,5 @@ class tx_wecmap_shared {
 
 		return $where.')';
 	}
-	
-	function linkToMarker(&$map, $name) {
-		return '<a href="#" style="display:block;" onclick="triggerMarker('.($map->markerCount() - 1).'); return false;">'.$name.'</a>';
-	}
-
 }
 ?>
