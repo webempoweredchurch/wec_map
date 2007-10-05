@@ -57,16 +57,11 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	 * @param	string	Optional API key for accessing third party geocoder.
 	 * @return	array		Array containing latitude and longitude.  If lookup failed, empty array is returned.
 	 */
-	function lookup($street, $city, $state, $zip, $country, $key='')	{
+	function lookup($street, $city, $state, $zip, $country)	{
 
-		if(!$key) {
-			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
-			$key = $domainmgr->getKey();
-		}
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
-				$this->buildURL('output', 'csv').
-				$this->buildURL('key', $key);
+				$this->buildURL('output', 'csv');
 
 		$csv = t3lib_div::getURL($url);
 
