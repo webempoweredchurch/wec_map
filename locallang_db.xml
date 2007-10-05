@@ -38,7 +38,6 @@
 			<label index="tt_content.pi_flexform.mapTitle">Map Details</label>
 			<label index="tt_content.pi_flexform.mapWidth">Width (pixels)</label>
 			<label index="tt_content.pi_flexform.mapHeight">Height (pixels)</label>
-			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
 			<label index="tt_content.pi_flexform.controlsTitle">Map Controls</label>
 			<label index="tt_content.pi_flexform.conType">Show Map Type</label>
 			<label index="tt_content.pi_flexform.conNone">None</label>
@@ -77,7 +76,6 @@
 			<label index="toHereFrom">Nach hier von:</label>
 			<label index="tt_content.list_type_pi1">Einfache WEC Landkarte</label>
 			<label index="tt_content.list_type_pi2">WEC Frontend Benutzer Karte</label>
-			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
 			<label index="tt_content.pi_flexform.city">Ortschaft</label>
 			<label index="tt_content.pi_flexform.conLargeMap">Grösse der Navigationselemente</label>
 			<label index="tt_content.pi_flexform.conLargeMapL">Gross</label>
@@ -134,7 +132,6 @@
             <label index="tt_content.pi_flexform.mapTitle" type="integer">6747234</label>
             <label index="tt_content.pi_flexform.mapWidth" type="integer">181225966</label>
             <label index="tt_content.pi_flexform.mapHeight" type="integer">113932431</label>
-            <label index="tt_content.pi_flexform.apiKey" type="integer">247013010</label>
             <label index="tt_content.pi_flexform.controlsTitle" type="integer">138144243</label>
             <label index="tt_content.pi_flexform.conType" type="integer">150739092</label>
             <label index="tt_content.pi_flexform.conNone" type="integer">112064895</label>

@@ -145,7 +145,7 @@ class tx_wecmap_batchgeocode {
 		// increment total count
 		$this->processedAddresses++;
 
-		tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, '', false, $this);
+		tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, false, $this);
 	}
 
 	/**

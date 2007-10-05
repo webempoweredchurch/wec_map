@@ -43,7 +43,6 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 	// DEFAULT initialization of a module [END]
 
 require_once('../class.tx_wecmap_cache.php');
-require_once('../class.tx_wecmap_domainmgr.php');
 
 
 /**
@@ -83,8 +82,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$this->MOD_MENU = array (
 			'function' => array (
 				'1' => $LANG->getLL('function1'),
-				'2' => $LANG->getLL('function3'),
-				'3' => $LANG->getLL('function2'),
+				'2' => $LANG->getLL('function2'),
 			)
 		);
 		parent::menuConfig();
@@ -181,9 +179,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			case 2:
 				$this->content.=$this->batchGeocode();
 			break;
-			case 3:
-				$this->content.=$this->apiKeyAdmin();
-			break;
 		}
 	}
 
@@ -223,105 +218,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$js = $recordHandler->getJS();
 
 		return $js.chr(10).$output;
-	}
-
-	/*
-	 * Admin module for setting Google Maps API Key.
-	 * @return		string		HTML output of the module.
-	 */
-	function apiKeyAdmin() {
-		global $TYPO3_CONF_VARS, $LANG;
-
-		$domainmgrClass = t3lib_div::makeInstanceClassname('tx_wecmap_domainmgr');
-		$domainmgr = new $domainmgrClass();
-
-		$blankDomainValue = 'Enter domain....';
-
-		$cmd = t3lib_div::_GP('cmd');
-
-		switch($cmd) {
-			case 'setkey' :
-
-				// transform the POST array to our needs.
-				// we then get a simple array in the form:
-				// array('domain1', 'domain2', 'key1', 'key2'), etc.
-				$post = $_POST;
-				unset($post['cmd']);
-				unset($post['SET']);
-				unset($post['x']);
-				unset($post['y']);
-
-				ksort($post);
-				$post = array_values($post);
-
-				$allDomains = $domainmgr->processPost($post);
-
-				break;
-
-			default :
-				$allDomains = $domainmgr->getAllDomains();
-				break;
-		}
-
-		$content = array();
-		$content[] = '<style type="text/css" media="screen">input[type=image] {border: none; background: none;}</style>';
-		$content[] = '<p style="margin-bottom:15px;">';
-		$content[] = $LANG->getLL('apiInstructions');
-		$content[] = '</p>';
-
-		$content[] = '<form action="" method="POST">';
-		$content[] = '<input name="cmd" type="hidden" value="setkey" />';
-
-		$index = 0;
-
-		// get number of entries that have a key
-		$tempDomains = $allDomains;
-		foreach( $tempDomains as $key => $value) {
-			if(empty($value)) unset($tempDomains[$key]);
-		}
-		$number = count($tempDomains);
-
-		foreach( $allDomains as $key => $value ) {
-
-			// show the first summary text above all the already saved domains
-			if($number != 0 && $index == 0) {
-				$content[] = '<h1>Existing Domains</h1>';
-				$content[] = '<p style="margin-bottom:15px;">';
-				$content[] = $LANG->getLL('alreadySavedDomains');
-				$content[] = '</p>';
-			} else if ($number == $index) {
-				$content[] = '<h1>Suggested Domains</h1>';
-				$content[] = '<p style="margin-bottom:15px;">';
-				$content[] = $LANG->getLL('suggestedDomains');
-				$content[] = '</p>';
-			}
-
-			if($index < $number) {
-				$deleteButton = '<input type="image" '.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' onclick="document.getElementById(\'key_'. $index .'\').value = \'\';" />';
-			} else {
-				$deleteButton = null;
-			}
-
-			$content[] = '<div class="domain-item" style="margin-bottom: 15px;">';
-			$content[] = '<div style="width: 25em;"><strong>'. $key .'</strong> '. $deleteButton .'</div>';
-			$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
-			$content[] = '<div><input style="width: 58em;" id="key_'. $index .'" name="key_'. $index .'" value="'.$value.'" /></div>';
-			$content[] = '<input type="hidden" name="domain_'.$index.'" value="'. $key .'">';
-			$content[] = '</div>';
-			$index++;
-		}
-
-		$content[] = '<div id="adddomainbutton" style="margin-bottom: 15px;"><a href="#" onclick="document.getElementById(\'blank-domain\').style.display = \'block\'; document.getElementById(\'adddomainbutton\').style.display = \'none\'; document.getElementById(\'domain_'.$index.'\').value=\''. $blankDomainValue .'\';">Manually add a new API key for domain</a></div>';
-		$content[] = '<div class="domain-item" id="blank-domain" style="margin-bottom: 15px; display: none;">';
-		$content[] = '<div style="width: 35em;"><label style="display: none;" for="domain_'. $index .'">Domain: </label><input style="width: 12em;" id="domain_'. $index .'" name="domain_'. $index .'" value="" onfocus="this.value=\'\';"/> <input type="image" '.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/garbage.gif','width="11" height="12"').' onclick="document.getElementById(\'key_'. $index .'\').value = \'\'; document.getElementById(\'blank-domain\').style.display =\'none\'; document.getElementById(\'adddomainbutton\').style.display = \'block\'; return false;" /></div>';
-		$content[] = '<div><label style="display: none;" for="key_'. $index .'">'.$LANG->getLL('googleMapsApiKey').': </label></div>';
-		$content[] = '<div><input style="width: 58em;" id="key_'. $index .'" name="key_'. $index .'" value="" /></div>';
-		$content[] = '</div>';
-
-		$content[] = '<input type="submit" value="'.$LANG->getLL('submit').'"/>';
-		$content[] = '</form>';
-
-		return implode(chr(10), $content);
 	}
 
 	/**

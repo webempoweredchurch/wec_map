@@ -33,7 +33,6 @@
 
 
 require_once(PATH_t3lib.'class.t3lib_svbase.php');
-require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
 
 /**
  * Service providing lat/long lookup via the Google Maps web service.
@@ -54,19 +53,13 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 	 * @param	string	The city name.
 	 * @param	string	The state name.
 	 * @param	string	The ZIP code.
-	 * @param	string	Optional API key for accessing third party geocoder.
 	 * @return	array		Array containing latitude and longitude.  If lookup failed, empty array is returned.
 	 */
-	function lookup($street, $city, $state, $zip, $country, $key='')	{
+	function lookup($street, $city, $state, $zip, $country)	{
 
-		if(!$key) {
-			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
-			$key = $domainmgr->getKey();
-		}
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
-				$this->buildURL('output', 'csv').
-				$this->buildURL('key', $key);
+				$this->buildURL('output', 'csv');
 
 		$csv = t3lib_div::getURL($url);
 
@@ -100,9 +93,16 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				 * Geocoder can't run at all, so disable this service and
 				 * try the other geocoders instead.
 				 * 500: Undefined error.  Geocoding may be blocked.
-				 * 610: Bad API Key.
 				 */
 				if (TYPO3_DLOG) t3lib_div::devLog('Google geocode failed with error '.$csv[0].' for '.$addressString.'. Disabling.', 'wec_map', 3, $addressArray);
+				$this->deactivateService();
+				$latlong = null;
+				break;
+			case 620:
+				/*
+				 * Exceeded 15K daily limit.
+				 */
+				if (TYPO3_DLOG) t3lib_div::devLog('Google geocode failed with error 620, exceeded 15K daily request limit. Disabling.', 'wec_map', 3, $addressArray);
 				$this->deactivateService();
 				$latlong = null;
 				break;

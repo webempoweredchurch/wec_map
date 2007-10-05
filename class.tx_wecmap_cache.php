@@ -38,9 +38,9 @@
  */
 class tx_wecmap_cache {
 
-	function lookup($street, $city, $state, $zip, $country, $key='', $forceLookup=false) {
+	function lookup($street, $city, $state, $zip, $country, $forceLookup=false) {
 		$fakeObject = null;
-		return tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, $key, $forceLookup, $fakeObject);
+		return tx_wecmap_cache::lookupWithCallback($street, $city, $state, $zip, $country, $forceLookup, $fakeObject);
 	}
 
 	/**
@@ -52,11 +52,10 @@ class tx_wecmap_cache {
 	 * @param	string		The state name.
 	 * @param	string		This ZIP code.
 	 * @param	string		The country name.
-	 * @param	string		The optional API key to use in the lookup.
 	 * @param	boolean		Force a new lookup for address.
 	 * @return	array		Lat/long array for specified address.  Null if lookup fails.
 	 */
-	function lookupWithCallback($street, $city, $state, $zip, $country, $key='', $forceLookup=false, &$pObj) {
+	function lookupWithCallback($street, $city, $state, $zip, $country, $forceLookup=false, &$pObj) {
 
 		/* Do some basic normalization on the address */
 		tx_wecmap_cache::normalizeAddress($street, $city, $state, $zip, $country);
@@ -75,7 +74,7 @@ class tx_wecmap_cache {
 
 				while (is_object($lookupObj = t3lib_div::makeInstanceService('geocode', '', $serviceChain))) {
 					$serviceChain.=','.$lookupObj->getServiceKey();
-					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country, $key);
+					$latlong = $lookupObj->lookup($street, $city, $state, $zip, $country);
 
 					if(method_exists($pObj, 'callback_lookupThroughGeocodeService')) {
 						$pObj->callback_lookupThroughGeocodeService();
@@ -113,7 +112,6 @@ class tx_wecmap_cache {
 	 * @param	string		The state name.
 	 * @param	string		This ZIP code.
 	 * @param	string		The country name.
-	 * @param	string		The optional API key to use in the lookup.
 	 * @return	none
 	 */
 	function normalizeAddress(&$street, &$city, &$state, &$zip, &$country) {

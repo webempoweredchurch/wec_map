@@ -40,7 +40,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 	// DEFAULT initialization of a module [END]
 
 require_once('../class.tx_wecmap_cache.php');
-
+require_once('../class.tx_wecmap_shared.php');
 
 
 /**
@@ -345,7 +345,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height);
+		$map = new $className($width, $height);
 
 		// evaluate map controls based on configuration
 		switch ($mapcontrolsize) {
