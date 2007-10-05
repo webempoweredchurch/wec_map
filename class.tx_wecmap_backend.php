@@ -193,7 +193,7 @@ class tx_wecmap_backend {
 		$description = $street.'<br />'.$city.', '.$state.' '.$zip.'<br />'.$country;
 
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($width, $height);
+		$map = new $className($apiKey, $width, $height);
 		$map->addMarkerByAddress($street, $city, $state, $zip, $country, '<h1>Address</h1>', $description);
 
 		// add some default controls to the map
@@ -316,25 +316,25 @@ class tx_wecmap_backend {
 	/**
 	 * Gets extConf from TYPO3_CONF_VARS and returns the specified key.
 	 *
-	 * @param    string    The key to look up in extConf.
-	 * @return    mixed    The value of the specified key.
+	 * @param	string	The key to look up in extConf.
+	 * @return	mixed	The value of the specified key.
 	 */
 	function getExtConf($key) {
-	    /* Make an instance of the Typoscript parser */
-	    require_once(PATH_t3lib.'class.t3lib_tsparser.php');
-	    $tsParser = t3lib_div::makeInstance('t3lib_TSparser');
+		/* Make an instance of the Typoscript parser */
+		require_once(PATH_t3lib.'class.t3lib_tsparser.php');
+		$tsParser = t3lib_div::makeInstance('t3lib_TSparser');
 
-	    /* Unserialize the TYPO3_CONF_VARS and extract the value using the parser */
-	    $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
-	    $valueArray = $tsParser->getVal($key, $extConf);
+		/* Unserialize the TYPO3_CONF_VARS and extract the value using the parser */
+		$extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['wec_map']);
+		$valueArray = $tsParser->getVal($key, $extConf);
 
-	    if (is_array($valueArray)) {
-	        $returnValue = $valueArray[0];
-	    } else {
-	        $returnValue = '';
-	    }
+		if (is_array($valueArray)) {
+			$returnValue = $valueArray[0];
+		} else {
+			$returnValue = '';
+		}
 
-	    return $returnValue;
+		return $returnValue;
 	}
 
 	/**

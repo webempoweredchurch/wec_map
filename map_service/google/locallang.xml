@@ -6,6 +6,14 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="error_noApiKey">
+				<![CDATA[
+				No Maps API key has been set for the wec_map extension on this domain. Please make sure
+				that you have set an API key either in the WEC Map Admin, or via TypoScript or 
+				Flexform. If you don't have an API key yet, you may obtain one free of charge from
+				<a href="http://www.google.com/apis/maps/signup.html">the Google Maps website</a>.
+				]]>
+			</label>
 			<label index="error_nothingToDisplay">
 				There doesn't seem to be anything to display. Make sure the map is
 				configured correctly and there are users or markers set.
@@ -19,6 +27,7 @@
 			<label index="G_GEO_SERVER_ERROR">A geocoding or directions request could not be successfully processed, yet the exact reason for the failure is not known.\n Error code: </label>
 			<label index="G_GEO_MISSING_QUERY">The HTTP q parameter was either missing or had no value. For geocoder requests, this means that an empty address was specified as input. For directions requests, this means that no query was specified in the input.\n Error code: </label>
 			<label index="G_GEO_UNAVAILABLE_ADDRESS">The geocode for the given address or the route for the given directions query cannot be returned due to legal or contractual reasons.\n Error code:  </label>
+			<label index="G_GEO_BAD_KEY">The given key is either invalid or does not match the domain for which it was given. \n Error code: </label>
 			<label index="G_GEO_UNKNOWN_DIRECTIONS">We could not compute directions between the addresses. This is usually because there is no route available between the two points, or because we do not have data for routing in that region. \n Error code: </label>
 			<label index="G_GEO_BAD_REQUEST">A directions request could not be successfully parsed.\n Error code: </label>
 			<label index="UKNOWN_ERROR">An unknown error occurred. Error code: </label>

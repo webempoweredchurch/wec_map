@@ -30,6 +30,7 @@
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
 require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_marker_google.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
 
 /**
  * Map implementation for the Google Maps mapping service.
@@ -48,6 +49,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $mapName;
 
 	var $js;
+	var $key;
 	var $controls;
 	var $type;
 	var $directions;
@@ -62,14 +64,22 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	/**
 	 * Class constructor.  Creates javscript array.
 	 * @access	public
+	 * @param	string		The Google Maps API Key
 	 * @param	string		The latitude for the center point on the map.
 	 * @param 	string		The longitude for the center point on the map.
 	 * @param	string		The initial zoom level of the map.
 	 */
-	function tx_wecmap_map_google($width=250, $height=250, $lat='', $long='', $zoom='', $mapName='') {
+	function tx_wecmap_map_google($key, $width=250, $height=250, $lat='', $long='', $zoom='', $mapName='') {
 		$this->prefixId = 'tx_wecmap_map_google';
 		$this->js = array();
 		$this->markers = array();
+
+		if(!$key) {
+			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
+			$this->key = $domainmgr->getKey();
+		} else {
+			$this->key = $key;
+		}
 
 		$this->controls = array();
 		$this->directions = false;
@@ -175,11 +185,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 
+		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();
 
-		// make sure we have markers to display
-		if ($hasThingsToDisplay && $hasHeightWidth) {
+		// make sure we have markers to display and an API key
+		if ($hasThingsToDisplay && $hasKey && $hasHeightWidth) {
 
 			// auto center and zoom if necessary
 			$this->autoCenterAndZoom();
@@ -188,10 +199,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			if(TYPO3_MODE == 'FE') {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v=2.x" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map_helpers'] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/helpers.js" type="text/javascript"></script>';
 			} else {
-				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2.x" type="text/javascript"></script>';
+				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 
@@ -241,6 +252,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
+		} else if (!$hasKey) {
+			$error = '<p>'.$LANG->getLL('error_noApiKey').'</p>';
+			return $error;
 		} else if (!$hasThingsToDisplay) {
 			$error = '<p>'.$LANG->getLL('error_nothingToDisplay').'</p>';
 			return $error;
@@ -269,7 +283,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	function addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
@@ -300,7 +314,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
@@ -348,7 +362,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
@@ -515,6 +529,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_UNAVAILABLE_ADDRESS)
 				    alert("' .$LANG->getLL('G_GEO_UNAVAILABLE_ADDRESS'). '" + gdir_'. $this->mapName .'.getStatus().code);
+
+				   else if (gdir_'. $this->mapName .'.getStatus().code == G_GEO_BAD_KEY)
+				     alert("' .$LANG->getLL('G_GEO_BAD_KEY'). '" + gdir_'. $this->mapName .'.getStatus().code);
 
 				   else if (gdir_'. $this->mapName .'.getStatus().code == 	G_GEO_UNKNOWN_DIRECTIONS)
 				     alert("' .$LANG->getLL('G_GEO_UNKNOWN_DIRECTIONS'). '" + gdir_'. $this->mapName .'.getStatus().code);
@@ -696,13 +713,26 @@ class tx_wecmap_map_google extends tx_wecmap_map {
             $validCenter = true;
         }
 
-		// If we have markers or a center point, it's valid
+		// If we have an API key along with markers or a center point, it's valid
         if($validMarkers or $validCenter) {
             $valid = true;
         }
 
         return $valid;
     }
+
+	/**
+	 * Checks if an API key has been entered and displays an error message instead of the map if not.
+	 *
+	 * @return boolean
+	 **/
+	function hasKey() {
+		if($this->key) {
+            return true;
+        } else {
+			return false;
+		}
+	}
 
 	/**
 	 * Checks whether the map has a height and width set.

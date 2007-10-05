@@ -49,6 +49,7 @@ class tx_wecmap_map {
 	var $mapName;
 	var $markerCount = 0;
 	var $js;
+	var $key;
 
 	/**
 	 * Class constructor stub.  Override in the map_service classes. Look there for
@@ -228,7 +229,7 @@ class tx_wecmap_map {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
@@ -290,7 +291,7 @@ class tx_wecmap_map {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
@@ -338,7 +339,7 @@ class tx_wecmap_map {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);

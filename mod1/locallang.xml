@@ -8,7 +8,8 @@
 		<languageKey index="default" type="array">
 			<label index="title">WEC Map Admin</label>
 			<label index="function1">Geocode Admin</label>
-			<label index="function2">Batch Geocode</label>
+			<label index="function2">API Key Settings</label>
+			<label index="function3">Batch Geocode</label>
 			<label index="editAddress">Edit address</label>
 			<label index="deleteAddress">Delete address</label>
 			<label index="updateAddress">Update address</label>
@@ -20,6 +21,25 @@
 			
 			<label index="totalCachedAddresses">Total cached addresses</label>
 			<label index="deleteCache">Delete all cached addresses!</label>
+			<label index="alreadySavedDomains">
+				<![CDATA[
+				The Domains and API keys below have already been saved and are being used.
+				]]>
+			</label>
+			<label index="suggestedDomains">
+				<![CDATA[
+				Below is a suggested list of domains that you may want to add API keys for.
+				]]>
+			</label>
+			<label index="apiInstructions">
+				<![CDATA[
+				In order to use the WEC Map extension you must have a Google 
+				Maps API Key. You can sign up for this key at
+				<a href="http://www.google.com/apis/maps/signup.html" target="_new">
+				http://www.google.com/apis/maps/signup.html</a>.
+				]]>
+			</label>
+			<label index="googleMapsApiKey">Google Maps API Key</label>
 			<label index="submit">Submit</label>
 			
 			<label index="batchGeocode">Batch Geocode</label>
@@ -43,6 +63,15 @@
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="address">Adresse</label>
+			<label index="alreadySavedDomains">Die untenstehenden Domains und API Schlüssel sind bereits gespeichert und werden verwendet.</label>
+			<label index="apiInstructions">
+				<![CDATA[
+				Um die WEC Karten Erweiterung benutzen zu können, wird ein Google Maps API Schlüssel
+				benötigt. Sie können sich zur Generierung des Schlüssels unter 
+				<a href="http://www.google.com/apis/maps/signup.html" target="_new">
+				http://www.google.com/apis/maps/signup.html</a> anmelden.
+				]]>
+			</label>
 			<label index="batchGeocode">Geocode Stapelverarbeitung</label>
 			<label index="batchInstructions">Die Geocode Stapelverarbeitung dient zum schnellen Berechnen von Längen- und Breitengraden einer grossen Anzahl Adressen. Ohne die Stapelverarbeitung werden die Koordinaten erst beim Abruf der Adresse berechnet, egal ob der Zugriff aus dem Backend oder Frontend geschieht. Dies kann die Zeit zum Abrufen einer Seite signifikant erhöhen, besonders wenn viele Adressen angezeigt werden. Die Geocode Stapelverarbeitung dient zum Umgehen dieses Problems.</label>
 			<label index="batchTables">Die folgenden Tabellen enthalten Adressdaten. Während der Geocode Stapelverarbeitung werden für alle Einträge in diesen Tabellen mittels Geocode die Koordinaten berechnet.</label>
@@ -51,7 +80,9 @@
 			<label index="deleteCache">Alle zwischengespeicherten Adressen löschen!</label>
 			<label index="editAddress">Adresse bearbeiten</label>
 			<label index="function1">Geocode Administrator</label>
-			<label index="function2">Geocode Stapelverarbeitung</label>
+			<label index="function2">API Schlüssel Einstellungen</label>
+			<label index="function3">Geocode Stapelverarbeitung</label>
+			<label index="googleMapsApiKey">Google Maps API KEY</label>
 			<label index="latitude">Breitengrade</label>
 			<label index="longitude">Längengrade</label>
 			<label index="processedMid">Einträge von</label>
@@ -59,6 +90,7 @@
 			<label index="searchFilter">Einträge filtern...</label>
 			<label index="startGeocoding">Geocoding starten</label>
 			<label index="submit">Absenden</label>
+			<label index="suggestedDomains">Untenstehend ist ein Liste von Domains, welchen sie API Schlüssel zuweisen können.</label>
 			<label index="title">WEC Karten Administrator</label>
 			<label index="totalCachedAddresses">Total zwischengespeicherte Adressen</label>
 			<label index="updateAddress">Adressen updaten</label>
