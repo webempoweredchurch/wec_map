@@ -283,7 +283,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	function addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
@@ -314,7 +314,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
@@ -344,12 +344,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(!$tca['isMappable']) return false;
 
 		$addressFields = $tca['addressFields'];
-		$streetfield   = $addressFields['street'];
-		$cityfield     = $addressFields['city'];
-		$statefield    = $addressFields['state'];
-		$zipfield      = $addressFields['zip'];
-		$countryfield  = $addressFields['country'];
-
+		$streetfield = $addressFields['street'];
+		$cityfield = $addressFields['city'];
+		$statefield = $addressFields['state'];
+		$zipfield = $addressFields['zip'];
+		$countryfield = $addressFields['country'];
 
 		// get address from db for this record
 		$record = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($streetfield. ', ' .$cityfield. ', ' .$statefield. ', ' .$zipfield. ', ' .$countryfield, $table, 'uid='.$uid);
@@ -358,12 +357,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$street = $record[$streetfield];
 		$city 	= $record[$cityfield];
 		$state 	= $record[$statefield];
-		$zip		= $record[$zipfield];
+		$zip	= $record[$zipfield];
 		$country= $record[$countryfield];
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
-		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country);
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
 		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
