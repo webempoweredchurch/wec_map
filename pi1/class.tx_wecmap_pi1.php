@@ -154,17 +154,14 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if(empty($zip) && empty($state) && empty($city)) {
 
 			$sidebar = '';
-			
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
 
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
 
-					$title = tx_wecmap_shared::makeTitle($marker);
-					$description = tx_wecmap_shared::makeDescription(array('description'=> $marker['description']));
-					$address = tx_wecmap_shared::wrapAddressString($marker['address']);
-					$description = $description.$address;
+					$title       = tx_wecmap_shared::makeTitle($marker);
+					$description = tx_wecmap_shared::makeDescription($marker);
 
 					// add address by string
 					$map->addMarkerByString($marker['address'], $title, $description);
@@ -173,21 +170,20 @@ class tx_wecmap_pi1 extends tslib_pibase {
 				// add address by lat and long only
 				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
 
-					$title = tx_wecmap_shared::makeTitle($marker);
+					$title       = tx_wecmap_shared::makeTitle($marker);
 					$description = tx_wecmap_shared::makeDescription(array('description'=> $marker['description']));
-					$lat = $marker['lat'];
-					$long = $marker['long'];
+					$lat         = $marker['lat'];
+					$long        = $marker['long'];
+
 
 					// add the marker to the map
 					$map->addMarkerByLatLong($lat, $long, $title, $description);
 					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);				
 				} else {
 
-					$title = tx_wecmap_shared::makeTitle($marker);
-					$address = tx_wecmap_shared::makeAddress($marker);
+					$title       = tx_wecmap_shared::makeTitle($marker);
 					$description = tx_wecmap_shared::makeDescription($marker);
 
-					$description = $description . $address;
 
 					// add the marker to the map
 					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
@@ -199,19 +195,18 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			}
 		} else {
 			// put all the data into an array
-			$data['city'] = $city;
-			$data['state'] = $state;
-			$data['street'] = $street;
-			$data['zip'] = $zip;
-			$data['country'] = $country;
-			$data['title'] = $title;
+			$data['city']        = $city;
+			$data['state']       = $state;
+			$data['street']      = $street;
+			$data['zip']         = $zip;
+			$data['country']     = $country;
+			$data['title']       = $title;
 			$data['description'] = $description;
 
-			$title = tx_wecmap_shared::makeTitle($data);
-			$address = tx_wecmap_shared::makeAddress($data);
+
+			$title       = tx_wecmap_shared::makeTitle($data);
 			$description = tx_wecmap_shared::makeDescription($data);
 
-			$description = $description . $address;
 
 			// add the marker to the map
 			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);
