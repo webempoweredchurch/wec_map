@@ -49,7 +49,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 	var $scriptRelPath = 'pi1/class.tx_wecmap_pi1.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
 	var $pi_checkCHash = TRUE;
-	var $sidebarlinks = array();
+	var $sidebarLinks = array();
 
 	/**
 	 * Draws a Google map based on an address entered in a Flexform.
@@ -161,10 +161,13 @@ class tx_wecmap_pi1 extends tslib_pibase {
 				if(array_key_exists('address', $marker)) {
 
 					$content = tx_wecmap_shared::render($marker, $conf['marker.']);
-
 					// add address by string
-					$map->addMarkerByString($marker['address'], '', $content);
-					$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
+					$markerObj = $map->addMarkerByString($marker['address'], '', $content);
+
+					// add js function call to marker data
+					$marker['onclickLink'] = $markerObj->getClickJS();
+					
+					$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 				
 				// add address by lat and long only
 				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
@@ -176,26 +179,26 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 
 					// add the marker to the map
-					$marker_obj = $map->addMarkerByLatLong($lat, $long, '', $content);
+					$markerObj = $map->addMarkerByLatLong($lat, $long, '', $content);
 			
 					// add js function call to marker data
-					$marker['onclickLink'] = $marker_obj->getClickJS();
+					$marker['onclickLink'] = $markerObj->getClickJS();
 			
-					$this->sidebarlinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+					$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 					
 				} else {
 					
 					$content = tx_wecmap_shared::render($marker, $conf['marker']);
 					
 					// add the marker to the map
-					$marker_obj = $map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
+					$markerObj = $map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
 											 $description);
 			
 					// add js function call to marker data
-					$marker['onclickLink'] = $marker_obj->getClickJS();
+					$marker['onclickLink'] = $markerObj->getClickJS();
 			
-					$this->sidebarlinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+					$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 					
 				}
 			}
@@ -214,12 +217,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 
 			// add the marker to the map
-			$marker_obj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
+			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
 			
 			// add js function call to marker data
-			$marker['onclickLink'] = $marker_obj->getClickJS();
-			
-			$this->sidebarlinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+			$marker['onclickLink'] = $markerObj->getClickJS();
+
+			$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 		}
 
 
@@ -234,12 +237,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 	
 	function sidebar() {
 		$c = '<div class="sidebar" style="display:block;">';
-		foreach( $this->sidebarlinks as $link ) {
+		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
 		}
 
 		$c .= '</div>';
-		
+
 		return $c;
 	}
 }
