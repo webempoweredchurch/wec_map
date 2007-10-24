@@ -277,16 +277,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	array		Array of descriptions to be displayed in the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
 	}
 
 	/**
@@ -298,10 +298,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	array		The descriptions to be displayed in the tabs of the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
-	function addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
 
 		// first split the string into it's components. It doesn't need to be perfect, it's just
 		// put together on the other end anyway
@@ -317,7 +317,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
 	}
 
 	/**
@@ -330,9 +330,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	array		The descriptions to be displayed in the tabs of the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 **/
-	function addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
 
 		$uid = intval($uid);
 
@@ -365,7 +365,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
 	}
 
 	/**
@@ -377,25 +377,28 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	string		The description to be displayed in the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
 
 		if($latlong['lat']!='' && $latlong['long']!='') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$this->markers[$minzoom.':'.$maxzoom][] = new $classname(count($this->markers),
+			$marker = new $classname(count($this->markers),
 											  $latlong['lat'],
 											  $latlong['long'],
 											  $title,
 											  $description,
 											  $this->prefillAddress,
 											  $tabLabels);
+			$this->markers[$minzoom.':'.$maxzoom][] = $marker;											
 			$this->markerCount++;
+			return $marker;
 		}
+		return null;
 	}
 
 	/**
@@ -555,7 +558,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 **/
 	function js_triggerMarker() {
 		$c = 
-		'function triggerMarker(id) {
+		'function '. $this->mapName .'_triggerMarker(id) {
 			'.$this->mapName.'.panTo(markers_'. $this->mapName .'[id].getPoint());
 			GEvent.trigger(markers_'. $this->mapName .'[id], \'click\');
 		}';

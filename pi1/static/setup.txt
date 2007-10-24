@@ -45,11 +45,12 @@ plugin.tx_wecmap_pi1 {
 		address.wrap = <p>|</p>
 	}
 	
-	sidebar = COA
-	sidebar {
-		10 = TEXT
-		10.value = ###TITLE###
-		10.wrap = <a href="#" style="display:block;" onclick="triggerMarker('###MARKER_ID###'); return false;">|</a>
+	sidebarItem = COA
+	sidebarItem {
+	  10 = TEXT
+	  10.field = title
+	  10.wrap = <a href="#" style="display:block;" onclick="{field:onclickLink} return false;">|</a>
+	  10.insertData = true
 	}
 	
 	markers.1 {

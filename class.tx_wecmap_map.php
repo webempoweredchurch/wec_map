@@ -222,17 +222,17 @@ class tx_wecmap_map {
 	 * @param	string		The description to be displayed in the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	added marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
 
 
@@ -245,10 +245,10 @@ class tx_wecmap_map {
 	 * @param	string		The description to be displayed in the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
@@ -264,6 +264,7 @@ class tx_wecmap_map {
 			$marker->setMapName($this->mapName);
 			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
 			$this->markerCount++;
+			return $marker;
 		}
 	}
 
@@ -275,10 +276,10 @@ class tx_wecmap_map {
 	 * @param	string		The description to be displayed in the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
-	function addMarkerByString($string, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByString($string, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 
 		// first split the string into it's components. It doesn't need to be perfect, it's just
 		// put together on the other end anyway
@@ -294,7 +295,7 @@ class tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
 
 	/**
@@ -306,10 +307,10 @@ class tx_wecmap_map {
 	 * @param	string		The description to be displayed in the marker popup.
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
-	 * @return	none
+	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
-	function addMarkerByTCA($table, $uid, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByTCA($table, $uid, $title='', $description='', $minzoom = 0, $maxzoom = 17) {
 
 		$uid = intval($uid);
 
@@ -342,7 +343,7 @@ class tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		$this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom);
 	}
 
 

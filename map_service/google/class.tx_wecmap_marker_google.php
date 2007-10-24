@@ -279,6 +279,15 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	}
 
 	/**
+	 * Returns the javascript function call to center on this marker
+	 *
+	 * @return String
+	 **/
+	function getClickJS() {
+		return $this->mapName.'_triggerMarker('. $this->index .');';
+	}
+	
+	/**
 	 * Converts newlines to <br/> tags.
 	 *
 	 * @access	private

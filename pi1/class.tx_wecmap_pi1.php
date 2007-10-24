@@ -176,17 +176,26 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 
 					// add the marker to the map
-					$map->addMarkerByLatLong($lat, $long, '', $content);
-					$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
+					$marker_obj = $map->addMarkerByLatLong($lat, $long, '', $content);
+			
+					// add js function call to marker data
+					$marker['onclickLink'] = $marker_obj->getClickJS();
+			
+					$this->sidebarlinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+					
 				} else {
 					
 					$content = tx_wecmap_shared::render($marker, $conf['marker']);
 					
 					// add the marker to the map
-					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
+					$marker_obj = $map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
 											 $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
+			
+					// add js function call to marker data
+					$marker['onclickLink'] = $marker_obj->getClickJS();
+			
+					$this->sidebarlinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 					
 				}
 			}
@@ -205,8 +214,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 
 			// add the marker to the map
-			$map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
-			$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
+			$marker_obj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
+			
+			// add js function call to marker data
+			$marker['onclickLink'] = $marker_obj->getClickJS();
+			
+			$this->sidebarlinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 		}
 
 
