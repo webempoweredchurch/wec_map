@@ -37,27 +37,32 @@
  */
 class tx_wecmap_shared {
 
-	function makeDescription($row) {
+	function render($data, $conf, $table = '') {
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['description'], $this->conf['marker.']['description.'] );
+		$local_cObj->start($data, $table );
+		$output = tx_wecmap_shared::cObjGet($conf, $local_cObj);
+
 		return $output;
 	}
 
-	function makeTitle($row) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		$local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle( $this->conf['marker.']['title'], $this->conf['marker.']['title.'] );
-		return $output;
-	}
+	function cObjGet($setup, &$cObj, $addKey='')	{
+		if (is_array($setup))	{
 
-	function makeSidebarLink($link) {
-		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
-		// $local_cObj->start($row, 'fe_users' );
-		$output = $local_cObj->cObjGetSingle($this->conf['sidebar'], $this->conf['sidebar.'] );
-		return $output;
-	}
+			$sKeyArray = $setup;
+			$content ='';
 
+			foreach($sKeyArray as $theKey => $theValue)	{
+
+				if (!strstr($theKey,'.'))	{
+					$conf=$setup[$theKey.'.'];
+					$content.=$cObj->cObjGetSingle($theValue,$conf,$addKey.$theKey);	// Get the contentObject
+				}
+			}
+			return $content;
+		}
+	}
+	
+	
 	function listQueryFromCSV($field, $values, $table, $mode = 'AND') {
 		$where = ' AND (';
 		$csv = t3lib_div::trimExplode(',', $values);

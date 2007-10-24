@@ -191,7 +191,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$countries[] = $row[$countryField];
 
 					// add a little info so users know what to do
-					$title = tx_wecmap_shared::makeTitle(array('name' => $this->pi_getLL('country_zoominfo_title')));
+					$title = tx_wecmap_shared::render(array('name' => $this->pi_getLL('country_zoominfo_title')), $conf['marker.']);
 					$description = sprintf($this->pi_getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -205,8 +205,12 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					// add this country to the array
 					$cities[] = $row[$cityField];
 
+					// combine title config to pass to render function
+					$title_conf = array('title' => $conf['marker.']['title'], 'title.' => $conf['marker.']['title.']);
+					
 					// add a little info so users know what to do
-					$title = tx_wecmap_shared::makeTitle(array('name' => 'Info'));
+					$title = tx_wecmap_shared::render(array('name' => 'Info'), $title_conf);
+
 					$count = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('count(*)', 'fe_users', $cityField.'="'. $row[$cityField] .'"');
 					$count = $count[0]['count(*)'];
 
@@ -229,13 +233,11 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				}
 
 				// make title and description
-				$title = tx_wecmap_shared::makeTitle($row);
-				$description = tx_wecmap_shared::makeDescription($row);
-
+				$content = tx_wecmap_shared::render($row, $conf['marker.']);
 
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8);
 				}
 			}
 

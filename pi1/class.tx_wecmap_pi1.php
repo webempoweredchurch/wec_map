@@ -160,56 +160,53 @@ class tx_wecmap_pi1 extends tslib_pibase {
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
 
-					$title       = tx_wecmap_shared::makeTitle($marker);
-					$description = tx_wecmap_shared::makeDescription($marker);
+					$content = tx_wecmap_shared::render($marker, $conf['marker.']);
 
 					// add address by string
-					$map->addMarkerByString($marker['address'], $title, $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);
+					$map->addMarkerByString($marker['address'], '', $content);
+					$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
 				
 				// add address by lat and long only
 				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
 
-					$title       = tx_wecmap_shared::makeTitle($marker);
-					$description = tx_wecmap_shared::makeDescription(array('description'=> $marker['description']));
-					$lat         = $marker['lat'];
-					$long        = $marker['long'];
+					$content = tx_wecmap_shared::render($marker, $conf['marker.']);
+					$lat     = $marker['lat'];
+					$long    = $marker['long'];
+
 
 
 					// add the marker to the map
-					$map->addMarkerByLatLong($lat, $long, $title, $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);				
+					$map->addMarkerByLatLong($lat, $long, '', $content);
+					$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
 				} else {
-
-					$title       = tx_wecmap_shared::makeTitle($marker);
-					$description = tx_wecmap_shared::makeDescription($marker);
-
-
+					
+					$content = tx_wecmap_shared::render($marker, $conf['marker']);
+					
 					// add the marker to the map
 					$map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
 											 $description);
-					$this->sidebarlinks[] = tx_wecmap_shared::makeSidebarLink($marker['title']);
+					$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
 					
 				}
 			}
 		} else {
 			// put all the data into an array
-			$data['city']        = $city;
-			$data['state']       = $state;
-			$data['street']      = $street;
-			$data['zip']         = $zip;
-			$data['country']     = $country;
-			$data['title']       = $title;
-			$data['description'] = $description;
+			$marker['city']        = $city;
+			$marker['state']       = $state;
+			$marker['street']      = $street;
+			$marker['zip']         = $zip;
+			$marker['country']     = $country;
+			$marker['title']       = $title;
+			$marker['description'] = $description;
 
 
-			$title       = tx_wecmap_shared::makeTitle($data);
-			$description = tx_wecmap_shared::makeDescription($data);
+			$content = tx_wecmap_shared::render($marker, $conf['marker.']);
 
 
 			// add the marker to the map
-			$map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description);
+			$map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
+			$this->sidebarlinks[] = tx_wecmap_shared::render($marker['title'], $conf['sidebar.']);
 		}
 
 
