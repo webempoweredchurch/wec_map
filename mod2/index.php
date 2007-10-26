@@ -40,7 +40,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 	// DEFAULT initialization of a module [END]
 
 require_once('../class.tx_wecmap_cache.php');
-
+require_once('../class.tx_wecmap_shared.php');
 
 
 /**
@@ -422,16 +422,15 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				}
 
 				// make title and description
-				$title = tx_wecmap_shared::makeTitle($row);
-				$description = tx_wecmap_shared::makeDescription($row, $countryField);
+				$content = tx_wecmap_shared::render($row, $conf['marker.']);
 
 
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
 				// if private was checked, don't use address to geocode
 				if($private) {
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8);
 				} else {
-					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 8);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8);
 				}
 			}
 		}
