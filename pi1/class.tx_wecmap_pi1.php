@@ -176,8 +176,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$lat     = $marker['lat'];
 					$long    = $marker['long'];
 
-
-
 					// add the marker to the map
 					$markerObj = $map->addMarkerByLatLong($lat, $long, '', $content);
 			
