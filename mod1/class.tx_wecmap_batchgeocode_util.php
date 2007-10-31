@@ -41,7 +41,11 @@ class tx_wecmap_batchgeocode_util {
 	function getStatusBar($processedAddresses, $totalAddresses, $visible=true) {
 		global $LANG, $BE_USER;
 
-		$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
+		if($totalAddresses == 0) {
+			$progressBarWidth = 0;
+		} else {
+			$progressBarWidth = round($processedAddresses / $totalAddresses * 100);
+		}
 
 		if(!is_object($LANG)) {
 			require_once(t3lib_extMgm::extPath('lang').'lang.php');
