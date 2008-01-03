@@ -49,7 +49,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	var $strokeColor;
 	var $prefillAddress;
 	var $hasTabs;
-
+	var $iconID;
+	
 	/**
 	 * Constructor for the Google Maps marker class.
 	 *
@@ -65,7 +66,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @param	string		Unused for Google Maps.
 	 * @return	none
 	 */
-	function tx_wecmap_marker_google($index, $latitude, $longitude, $title, $description, $prefillAddress = false, $tabLabels=null, $color='0xFF0000', $strokeColor='0xFFFFFF') {
+	function tx_wecmap_marker_google($index, $latitude, $longitude, $title, $description, $prefillAddress = false, $tabLabels=null, $color='0xFF0000', $strokeColor='0xFFFFFF', $iconID='') {
 
 		global $LANG;
 		if(!is_object($LANG)) {
@@ -103,6 +104,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 
 		$this->latitude = $latitude;
 		$this->longitude = $longitude;
+		
+		$this->iconID = $iconID;
 	}
 
 
@@ -119,10 +122,10 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 
 		if(is_array($titleArray)) {
 			$this->hasTabs = true;
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
+			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
 		} else {
 			$this->hasTabs = false;
-			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', "'.$titleArray.$textArray.'")';
+			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', "'.$titleArray.$textArray.'")';
 		}
 
 	}
@@ -139,7 +142,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$textArray = $arrays[1];
 
 		$this->hasTabs = true;
-		return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName .', '. $titleArray .' ,'. $textArray .')';
+		return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
 	}
 
 	/**

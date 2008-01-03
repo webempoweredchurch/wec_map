@@ -46,6 +46,7 @@ class tx_wecmap_marker {
 	var $color;
 	var $strokeColor;
 	var $mapName;
+	var $iconID;
 
 	/**
 	 * Constructor stub. See map_service classes for more details on the marker

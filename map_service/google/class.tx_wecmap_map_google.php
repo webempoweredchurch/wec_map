@@ -57,8 +57,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $directionsDivID;
 	var $showInfoOnLoad;
 
+	// array to hold the different Icons - gipsy - 071212
+	var $icons;
+	
 	var $lang;
-
+	
 	var $markerClassName = 'tx_wecmap_marker_google';
 
 	/**
@@ -73,7 +76,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->prefixId = 'tx_wecmap_map_google';
 		$this->js = array();
 		$this->markers = array();
-
+		
+		// array to hold the different Icons - gipsy - 071212
+		$this->icons = array();                             
+		
 		if(!$key) {
 			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
 			$this->key = $domainmgr->getKey();
@@ -222,6 +228,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$jsContent[] = $control;
 			}
 			$jsContent[] = $this->js_icon();
+			
+			foreach ($this->icons as $icon) {
+				$jsContent[] = $icon;
+			}
+			
 			$jsContent[] = $this->js_newGMarkerManager('mgr_'.$this->mapName, $this->mapName);
 			$jsContent[] = 'var index_'. $this->mapName .' = 0;';
 			foreach($this->markers as $key => $markers) {
@@ -280,13 +291,13 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function &addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom, $iconID);
 	}
 
 	/**
@@ -301,7 +312,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
-	function &addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
 
 		// first split the string into it's components. It doesn't need to be perfect, it's just
 		// put together on the other end anyway
@@ -317,7 +328,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom, $iconID);
 	}
 
 	/**
@@ -332,7 +343,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	integer		Maximum zoom level for marker to appear.
 	 * @return	marker object
 	 **/
-	function &addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
 
 		$uid = intval($uid);
 
@@ -365,7 +376,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
 
 		/* Create a marker at the specified latitude and longitdue */
-		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom);
+		return $this->addMarkerByLatLongWithTabs($latlong['lat'], $latlong['long'], $tabLabels, $title, $description, $minzoom, $maxzoom, $iconID);
 	}
 
 	/**
@@ -380,7 +391,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function &addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17) {
+	function &addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
@@ -393,7 +404,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 											  $title,
 											  $description,
 											  $this->prefillAddress,
-											  $tabLabels);
+											  $tabLabels,
+											  '0xFF0000',
+											  '0xFFFFFF',
+											  $iconID);
+											
 			$this->markers[$minzoom.':'.$maxzoom][] = $marker;											
 			$this->markerCount++;
 			return $marker;
@@ -401,6 +416,27 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		return null;
 	}
 
+
+ 
+	/**
+	 * Adds more custom icons to the Javascript Code
+	 *
+	 * @access   public
+	 * 
+	 * 
+	 */
+	function add_marker_icon ($iconID, $imagepath, $shadowpath, $width, $height, $shadowWidth, $shadowHeight, $anchorX, $ancorY, $infoAnchorX, $infoAnchorY) {
+	  $this->icons[] = '
+	 	var icon_'. $this->mapName . $iconID .' = new GIcon();
+	 	icon_'. $this->mapName . $iconID .'.image = "'.$path.$imagepath.'";
+	 	icon_'. $this->mapName . $iconID .'.shadow = "'.$path.$shadowpath.'";
+	 	icon_'. $this->mapName . $iconID .'.iconSize = new GSize('.$width.', '.$height.');
+	 	icon_'. $this->mapName . $iconID .'.shadowSize = new GSize('.$shadowWidth.', '.$shadowHeight.');
+	 	icon_'. $this->mapName . $iconID .'.iconAnchor = new GPoint('.$anchorX.', '.$ancorY.');
+	 	icon_'. $this->mapName . $iconID .'.infoWindowAnchor = new GPoint('.$infoAnchorX.', '.$infoAnchorY.');';
+	}
+ 
+ 
 	/**
 	 * Creates the overall map div.
 	 *
