@@ -43,6 +43,8 @@ class tx_wecmap_map {
 	var $lat;
 	var $long;
 	var $zoom;
+	var $radius;
+	var $kilometers;
 	var $markers;
 	var $width;
 	var $height;
@@ -170,6 +172,33 @@ class tx_wecmap_map {
 	}
 
 	/**
+	 * Sets the radius from the center that markers need to be within
+	 *
+	 * @param	integer		The radius from the center
+	 * @param 	boolean		Whether it's kilometers or miles
+	 * @return	none
+	 */
+	function setRadius($radius, $kilometers = false) {
+		$this->kilometers = $kilometers;
+		$this->radius = $radius;
+	}
+
+	# haversine formula to calculate distance between two points
+	function getDistance($lat1, $long1, $lat2, $long2) 
+	{ 
+	    $l1 = deg2rad ($lat1); 
+	    $l2 = deg2rad ($lat2); 
+	    $o1 = deg2rad ($long1); 
+	    $o2 = deg2rad ($long2); 
+
+		$this->kilometers ? $radius = 6372.795 : $radius = 3959.8712 ;
+		
+
+		return 2 * $radius * asin(min(1, sqrt( pow(sin(($l2-$l1)/2), 2) + cos($l1)*cos($l2)* pow(sin(($o2-$o1)/2), 2) )));
+	}
+	
+	
+	/**
 	 * Calculates the bounds for the latitude and longitude based on the
 	 * defined markers.
 	 *
@@ -249,15 +278,17 @@ class tx_wecmap_map {
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
 	function &addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17, $iconID='') {
-		$latlong = array();
-		$latlong['lat'] = $lat;
-		$latlong['long'] = $long;
 
-		if($latlong['lat']!='' && $latlong['long']!='') {
+		$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
+
+		if(!empty($this->center) &&  $distance < $this->radius)
+			return null;
+			
+		if($lat != '' && $long != '') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
 			$marker =  new $classname(count($this->markers),
-											  $latlong['lat'],
-											  $latlong['long'],
+											  $lat,
+											  $long,
 											  $title,
 											  $description,
 											  $this->prefillAddress,

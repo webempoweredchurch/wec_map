@@ -57,7 +57,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $directionsDivID;
 	var $showInfoOnLoad;
 
-	// array to hold the different Icons - gipsy - 071212
+	// array to hold the different Icons
 	var $icons;
 	
 	var $lang;
@@ -77,7 +77,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->js = array();
 		$this->markers = array();
 		
-		// array to hold the different Icons - gipsy - 071212
+		// array to hold the different Icons
 		$this->icons = array();                             
 		
 		if(!$key) {
@@ -395,7 +395,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$latlong = array();
 		$latlong['lat'] = $lat;
 		$latlong['long'] = $long;
-
+		if(!empty($this->center) &&  $distance < $this->radius)
+			return null;
 		if($latlong['lat']!='' && $latlong['long']!='') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
 			$marker = new $classname(count($this->markers),
