@@ -1,0 +1,44 @@
+tx_wecmap_api {
+	addressform = HTML
+	addressform.value (
+		<form method="post">
+			<input  />
+		</form>
+	)
+	
+	directions = COA
+	directions {
+		10 = TEXT
+		10.value = <div id="{field:map_id}_directions"></div>	
+		10.insertData = true
+	}
+	
+	sidebar = COA
+	sidebar {
+		10 = TEXT
+		10.field = content
+		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="display:block;">|</div>
+		10.insertData = true
+	}
+	
+	sidebarItem = COA
+	sidebarItem {
+	  10 = TEXT
+	  10.field = title
+	  10.wrap = <a href="#" style="display:block;" onclick="{field:onclickLink} return false;">|</a>
+	  10.insertData = true
+	}
+	
+	output = COA
+	output {
+		10 = TEXT
+		10.field = map
+		10.wrap = |
+		20 = TEXT
+		20.field = directions
+		20.wrap = |
+		30 = TEXT
+		30.field = sidebar
+		30.wrap = |
+	}
+}

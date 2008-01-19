@@ -112,6 +112,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
+		$this->mapName = $mapName;
 
 		// get this from flexform only. If empty, we check the TS, see below.
 		$street      = $this->pi_getFFvalue($piFlexForm, 'street', 'default');
@@ -141,6 +142,10 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 
+		// TODO: remove or so
+		// $map->add_marker_icon('blue', 'typo3conf/ext/wec_map/images/mm_20_blue.png', 'typo3conf/ext/wec_map/images/mm_20_shadow.png', 12, 20, 22, 20, 6, 20, 5, 1);
+		// $map->setRadius(650);
+		
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
 		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
@@ -210,9 +215,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$marker['title']       = $title;
 			$marker['description'] = $description;
 
-
 			$content = tx_wecmap_shared::render($marker, $conf['marker.']);
-
 
 			// add the marker to the map
 			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
@@ -223,25 +226,31 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 		}
 
-
-		// draw the map
-		$content = $map->drawMap();
-
-		// add directions div if applicable
-		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
-		$content .= $this->sidebar();
-		return $this->pi_wrapInBaseClass($content);
+		// gather all the content together
+		$content = array();
+		$content['map'] = $map->drawMap();
+		if($showWrittenDirs) $content['directions'] = $this->directions();
+		$content['sidebar'] = $this->sidebar();
+		
+		// run all the content pieces through TS to assemble them
+		$output = tx_wecmap_shared::render($content, $conf['output.']);
+		
+		return $this->pi_wrapInBaseClass($output);
+	}
+	
+	function directions() {
+		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['directions.']);
+		return $out;
 	}
 	
 	function sidebar() {
-		$c = '<div class="sidebar" style="display:block;">';
+		$c = '';
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
 		}
+		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName, 'content' => $c), $this->conf['sidebar.']);
 
-		$c .= '</div>';
-
-		return $c;
+		return $out;
 	}
 }
 
