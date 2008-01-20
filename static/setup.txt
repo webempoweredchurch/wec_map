@@ -1,10 +1,21 @@
 tx_wecmap_api {
-	addressform = HTML
-	addressform.value (
-		<form method="post">
-			<input  />
-		</form>
-	)
+	addressForm = COA
+	addressForm {
+		10 = TEXT
+		10.value (
+		<div id="{field:map_id}_addressform">
+			<form method="post" action="">
+				<label for="{field:map_id}_radius">Radius:</label><input type="text" name="{field:map_id}_radius" id="{field:map_id}_radius"/><br />
+				<label for="{field:map_id}_address">Address:</label><input  type="text" name="{field:map_id}_address" id="{field:map_id}_address" /><br />
+				<label for="{field:map_id}_city">City:</label><input  type="text" name="{field:map_id}_city" id="{field:map_id}_city" /><br />
+				<label for="{field:map_id}_state">State:</label><input  type="text" name="{field:map_id}_state" id="{field:map_id}_state" /><br />
+				<label for="{field:map_id}_zip">Zip:</label><input  type="text" name="{field:map_id}_zip" id="{field:map_id}_zip" />
+			</form>
+		</div>
+		) 
+		10.insertData = true
+		
+	}
 	
 	directions = COA
 	directions {
@@ -31,14 +42,18 @@ tx_wecmap_api {
 	
 	output = COA
 	output {
-		10 = TEXT
+		10       = TEXT
 		10.field = map
-		10.wrap = |
-		20 = TEXT
+		10.wrap  = |
+		20       = TEXT
 		20.field = directions
-		20.wrap = |
-		30 = TEXT
+		20.wrap  = |
+		30       = TEXT
 		30.field = sidebar
-		30.wrap = |
+		30.wrap  = |
+		40       = TEXT
+		40.field = addressForm
+		40.wrap  = |
+
 	}
 }
