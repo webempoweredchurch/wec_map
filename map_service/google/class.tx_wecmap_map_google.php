@@ -59,9 +59,9 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 	// array to hold the different Icons
 	var $icons;
-	
+
 	var $lang;
-	
+
 	var $markerClassName = 'tx_wecmap_marker_google';
 
 	/**
@@ -76,10 +76,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->prefixId = 'tx_wecmap_map_google';
 		$this->js = array();
 		$this->markers = array();
-		
+
 		// array to hold the different Icons
-		$this->icons = array();                             
-		
+		$this->icons = array();
+
 		if(!$key) {
 			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
 			$this->key = $domainmgr->getKey();
@@ -228,11 +228,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$jsContent[] = $control;
 			}
 			$jsContent[] = $this->js_icon();
-			
+
 			foreach ($this->icons as $icon) {
 				$jsContent[] = $icon;
 			}
-			
+
 			$jsContent[] = $this->js_newGMarkerManager('mgr_'.$this->mapName, $this->mapName);
 			$jsContent[] = 'var index_'. $this->mapName .' = 0;';
 			foreach($this->markers as $key => $markers) {
@@ -392,16 +392,20 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
 	function &addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
-		$latlong = array();
-		$latlong['lat'] = $lat;
-		$latlong['long'] = $long;
-		if(!empty($this->center) &&  $distance < $this->radius)
-			return null;
-		if($latlong['lat']!='' && $latlong['long']!='') {
+
+		if(!empty($this->radius)) {
+			$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
+
+			if(!empty($this->center) &&  $distance < $this->radius) {
+				return null;
+			}
+		}
+
+		if($lat != '' && $long != '') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
 			$marker = new $classname(count($this->markers),
-											  $latlong['lat'],
-											  $latlong['long'],
+											  $lat,
+											  $long,
 											  $title,
 											  $description,
 											  $this->prefillAddress,
@@ -409,8 +413,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 											  '0xFF0000',
 											  '0xFFFFFF',
 											  $iconID);
-											
-			$this->markers[$minzoom.':'.$maxzoom][] = $marker;											
+
+			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
 			$this->markerCount++;
 			return $marker;
 		}
@@ -418,13 +422,13 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 
 
- 
+
 	/**
 	 * Adds more custom icons to the Javascript Code
 	 *
 	 * @access   public
-	 * 
-	 * 
+	 *
+	 *
 	 */
 	function add_marker_icon ($iconID, $imagepath, $shadowpath, $width, $height, $shadowWidth, $shadowHeight, $anchorX, $ancorY, $infoAnchorX, $infoAnchorY) {
 	  $this->icons[] = '
@@ -436,8 +440,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 	icon_'. $this->mapName . $iconID .'.iconAnchor = new GPoint('.$anchorX.', '.$ancorY.');
 	 	icon_'. $this->mapName . $iconID .'.infoWindowAnchor = new GPoint('.$infoAnchorX.', '.$infoAnchorY.');';
 	}
- 
- 
+
+
 	/**
 	 * Creates the overall map div.
 	 *
@@ -594,14 +598,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return String
 	 **/
 	function js_triggerMarker() {
-		$c = 
+		$c =
 		'function '. $this->mapName .'_triggerMarker(id) {
 			'.$this->mapName.'.panTo(markers_'. $this->mapName .'[id].getPoint());
 			GEvent.trigger(markers_'. $this->mapName .'[id], \'click\');
 		}';
-		return $c;	
+		return $c;
 	}
-	
+
 	/**
 	 * Creates the Marker Manager Javascript object.
 	 *
@@ -650,7 +654,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 *
 	 * @access	private
 	 * @return	string		Javascript definitions for marker icons.
-	 * @todo	Add support for custom icons.
 	 */
 	function js_icon() {
 		/* If we're in the backend, get an absolute path.  Frontend can use a relative path. */

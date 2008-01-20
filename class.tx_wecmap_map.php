@@ -184,20 +184,20 @@ class tx_wecmap_map {
 	}
 
 	# haversine formula to calculate distance between two points
-	function getDistance($lat1, $long1, $lat2, $long2) 
-	{ 
-	    $l1 = deg2rad ($lat1); 
-	    $l2 = deg2rad ($lat2); 
-	    $o1 = deg2rad ($long1); 
-	    $o2 = deg2rad ($long2); 
+	function getDistance($lat1, $long1, $lat2, $long2)
+	{
+	    $l1 = deg2rad ($lat1);
+	    $l2 = deg2rad ($lat2);
+	    $o1 = deg2rad ($long1);
+	    $o2 = deg2rad ($long2);
 
 		$this->kilometers ? $radius = 6372.795 : $radius = 3959.8712 ;
-		
+
 
 		return 2 * $radius * asin(min(1, sqrt( pow(sin(($l2-$l1)/2), 2) + cos($l1)*cos($l2)* pow(sin(($o2-$o1)/2), 2) )));
 	}
-	
-	
+
+
 	/**
 	 * Calculates the bounds for the latitude and longitude based on the
 	 * defined markers.
@@ -279,11 +279,15 @@ class tx_wecmap_map {
 	 */
 	function &addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17, $iconID='') {
 
-		$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
+		if(!empty($this->radius)) {
+			$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
 
-		if(!empty($this->center) &&  $distance < $this->radius)
-			return null;
-			
+			if(!empty($this->center) &&  $distance < $this->radius) {
+				return null;
+			}
+		}
+
+
 		if($lat != '' && $long != '') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
 			$marker =  new $classname(count($this->markers),
@@ -392,7 +396,7 @@ class tx_wecmap_map {
 		return $this->markerClassName;
 	}
 
-	
+
 	function markerCount() {
 		return $this->markerCount;
 	}
