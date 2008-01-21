@@ -227,11 +227,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			foreach( $this->controls as $control ) {
 				$jsContent[] = $control;
 			}
-			$jsContent[] = $this->js_icon();
-
-			foreach ($this->icons as $icon) {
-				$jsContent[] = $icon;
-			}
+			$jsContent[] = $this->js_icons();
 
 			$jsContent[] = $this->js_newGMarkerManager('mgr_'.$this->mapName, $this->mapName);
 			$jsContent[] = 'var index_'. $this->mapName .' = 0;';
@@ -430,7 +426,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 *
 	 *
 	 */
-	function add_marker_icon ($iconID, $imagepath, $shadowpath, $width, $height, $shadowWidth, $shadowHeight, $anchorX, $ancorY, $infoAnchorX, $infoAnchorY) {
+	function addMarkerIcon ($iconID, $imagepath, $shadowpath, $width, $height, $shadowWidth, $shadowHeight, $anchorX, $ancorY, $infoAnchorX, $infoAnchorY) {
 	  $this->icons[] = '
 	 	var icon_'. $this->mapName . $iconID .' = new GIcon();
 	 	icon_'. $this->mapName . $iconID .'.image = "'.$path.$imagepath.'";
@@ -655,7 +651,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @access	private
 	 * @return	string		Javascript definitions for marker icons.
 	 */
-	function js_icon() {
+	function js_icons() {
 		/* If we're in the backend, get an absolute path.  Frontend can use a relative path. */
 		if (TYPO3_MODE=='BE')	{
 			$path = t3lib_div::getIndpEnv('TYPO3_SITE_URL').t3lib_extMgm::siteRelPath('wec_map');
@@ -663,7 +659,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$path = t3lib_extMgm::siteRelPath('wec_map');
 		}
 
-		return
+		// add default icon set
+		$this->icons[] =
 		'var icon_'. $this->mapName .' = new GIcon();
 		icon_'. $this->mapName .'.image = "'.$path.'images/mm_20_red.png";
 		icon_'. $this->mapName .'.shadow = "'.$path.'images/mm_20_shadow.png";
@@ -672,6 +669,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		icon_'. $this->mapName .'.iconAnchor = new GPoint(6, 20);
 		icon_'. $this->mapName .'.infoWindowAnchor = new GPoint(5, 1);';
 
+		return implode("\n", $this->icons);
 	}
 
 	/**
