@@ -134,17 +134,25 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 
+		// add icon. Returns true if added, false otherwise
+		if($map->addMarkerIcon($conf['icon.'])) {
+			$iconID = $conf['icon.']['iconID'];
+		} else {
+			$iconID = '';
+		}
+		
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
 		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
 		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
 		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
 
-		$streetField = $this->getAddressField('street');
-		$cityField = $this->getAddressField('city');
-		$stateField = $this->getAddressField('state');
-		$zipField = $this->getAddressField('zip');
+		$streetField  = $this->getAddressField('street');
+		$cityField    = $this->getAddressField('city');
+		$stateField   = $this->getAddressField('state');
+		$zipField     = $this->getAddressField('zip');
 		$countryField = $this->getAddressField('country');
+
 
 		// start where clause
 		$where = '1=1';
@@ -195,7 +203,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$description = sprintf($this->pi_getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2, $iconID);
 				}
 
 
@@ -229,7 +237,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					}
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,$maxzoom);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,$maxzoom, $iconID);
 				}
 
 				// make title and description
@@ -237,7 +245,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8, 17, $iconID);
 				}
 			}
 

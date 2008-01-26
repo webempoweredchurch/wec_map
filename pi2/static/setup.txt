@@ -15,6 +15,21 @@ plugin.tx_wecmap_pi2 {
 	centerLong = 
 	mapName =
 	
+	# this is just an example for how to add a new icon
+	# icon {
+	# 	iconID       = default
+	# 	imagepath    = typo3conf/ext/wec_map/images/mm_20_red.png
+	# 	shadowpath   = typo3conf/ext/wec_map/images/mm_20_shadow.png
+	# 	width        = 12
+	# 	height       = 20
+	# 	shadowWidth  = 22
+	# 	shadowHeight = 20
+	# 	anchorX      = 6
+	# 	ancorY       = 20
+	# 	infoAnchorX  = 5
+	# 	infoAnchorY  = 1
+	# }
+	
 	marker {
 		title = TEXT
 		title.field = name

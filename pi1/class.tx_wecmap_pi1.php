@@ -142,9 +142,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 
-		// TODO: remove or so
-		// $map->add_marker_icon('blue', 'typo3conf/ext/wec_map/images/mm_20_blue.png', 'typo3conf/ext/wec_map/images/mm_20_shadow.png', 12, 20, 22, 20, 6, 20, 5, 1);
-		// $map->setRadius(650);
+		// add icon. Returns true if added, false otherwise
+		if($map->addMarkerIcon($conf['icon.'])) {
+			$iconID = $conf['icon.']['iconID'];
+		} else {
+			$iconID = '';
+		}
 		
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
@@ -167,7 +170,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 					$content = tx_wecmap_shared::render($marker, $conf['marker.']);
 					// add address by string
-					$markerObj = $map->addMarkerByString($marker['address'], '', $content);
+					$markerObj = $map->addMarkerByString($marker['address'], '', $content, 0, 17, $iconID);
 
 					// add js function call to marker data
 					$marker['onclickLink'] = $markerObj->getClickJS();
@@ -182,7 +185,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					$long    = $marker['long'];
 
 					// add the marker to the map
-					$markerObj = $map->addMarkerByLatLong($lat, $long, '', $content);
+					$markerObj = $map->addMarkerByLatLong($lat, $long, '', $content, 0, 17, $iconID);
 			
 					// add js function call to marker data
 					$marker['onclickLink'] = $markerObj->getClickJS();
@@ -196,7 +199,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					// add the marker to the map
 					$markerObj = $map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
-											 $description);
+											 $description, 0, 17, $iconID);
 			
 					// add js function call to marker data
 					$marker['onclickLink'] = $markerObj->getClickJS();
@@ -218,7 +221,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$content = tx_wecmap_shared::render($marker, $conf['marker.']);
 
 			// add the marker to the map
-			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content);
+			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content, 0, 17, $iconID);
 			
 			// add js function call to marker data
 			$marker['onclickLink'] = $markerObj->getClickJS();
