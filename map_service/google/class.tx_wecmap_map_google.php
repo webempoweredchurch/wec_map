@@ -421,20 +421,31 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 	/**
 	 * Adds more custom icons to the Javascript Code
-	 *
-	 * @access   public
+	 * Takes an assoc. array with the following keys:
+	 * $iconID, $imagepath, $shadowpath, $width, $height, 
+	 * $shadowWidth, $shadowHeight, $anchorX, $anchorY, 
+	 * $infoAnchorX, $infoAnchorY
+	 * 
+	 * @return 		boolean
+	 * @access   	public
 	 *
 	 *
 	 */
-	function addMarkerIcon ($iconID, $imagepath, $shadowpath, $width, $height, $shadowWidth, $shadowHeight, $anchorX, $ancorY, $infoAnchorX, $infoAnchorY) {
-	  $this->icons[] = '
-	 	var icon_'. $this->mapName . $iconID .' = new GIcon();
-	 	icon_'. $this->mapName . $iconID .'.image = "'.$path.$imagepath.'";
-	 	icon_'. $this->mapName . $iconID .'.shadow = "'.$path.$shadowpath.'";
-	 	icon_'. $this->mapName . $iconID .'.iconSize = new GSize('.$width.', '.$height.');
-	 	icon_'. $this->mapName . $iconID .'.shadowSize = new GSize('.$shadowWidth.', '.$shadowHeight.');
-	 	icon_'. $this->mapName . $iconID .'.iconAnchor = new GPoint('.$anchorX.', '.$ancorY.');
-	 	icon_'. $this->mapName . $iconID .'.infoWindowAnchor = new GPoint('.$infoAnchorX.', '.$infoAnchorY.');';
+	function addMarkerIcon ($dataArray) {
+		if(empty($dataArray)) {
+			return false;
+		} else {
+		  	$this->icons[] = '
+			 	var icon_'. $this->mapName . $dataArray['iconID'] .' = new GIcon();
+			 	icon_'. $this->mapName . $dataArray['iconID'] .'.image = "'.$dataArray['imagepath'].'";
+			 	icon_'. $this->mapName . $dataArray['iconID'] .'.shadow = "'.$dataArray['shadowpath'].'";
+			 	icon_'. $this->mapName . $dataArray['iconID'] .'.iconSize = new GSize('.$dataArray['width'].', '.$dataArray['height'].');
+			 	icon_'. $this->mapName . $dataArray['iconID'] .'.shadowSize = new GSize('.$dataArray['shadowWidth'].', '.$dataArray['shadowHeight'].');
+			 	icon_'. $this->mapName . $dataArray['iconID'] .'.iconAnchor = new GPoint('.$dataArray['anchorX'].', '.$dataArray['anchorY'].');
+			 	icon_'. $this->mapName . $dataArray['iconID'] .'.infoWindowAnchor = new GPoint('.$dataArray['infoAnchorX'].', '.$dataArray['infoAnchorY'].');';
+			return true;
+		}
+		
 	}
 
 
