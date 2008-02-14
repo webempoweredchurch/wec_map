@@ -251,14 +251,17 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		}
 
-		$content = $map->drawMap();
+		// gather all the content together
+		$content = array();
+		$content['map'] = $map->drawMap();
+		$content['addressForm'] = $this->getAddressForm();
+		if($showWrittenDirs) $content['directions'] = $this->getDirections();
+		$content['sidebar'] = $this->getSidebar();
 
-		// add directions div if applicable
-		if($showWrittenDirs) $content .= '<div id="'.$mapName.'_directions"></div>';
+		// run all the content pieces through TS to assemble them
+		$output = tx_wecmap_shared::render($content, $conf['output.']);
 
-		/* Draw the map */
-		return $this->pi_wrapInBaseClass($content);
-	}
+		return $this->pi_wrapInBaseClass($output);	}
 
 	/**
 	 * Gets the address mapping from the TCA.
@@ -278,6 +281,26 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		}
 
 		return $fieldName;
+	}
+	
+	function getAddressForm() {
+		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['addressForm.']);
+		return $out;
+	}
+	
+	function getDirections() {
+		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['directions.']);
+		return $out;
+	}
+	
+	function getSidebar() {
+		$c = '';
+		foreach( $this->sidebarLinks as $link ) {
+			$c .= $link;
+		}
+		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName, 'content' => $c), $this->conf['sidebar.']);
+
+		return $out;
 	}
 }
 
