@@ -352,7 +352,7 @@ class tx_wecmap_backend {
 			$isMappable = $conf['ctrl']['EXT']['wec_map']['isMappable'];
 			if($isMappable) {
 				$title = $LANG->sL($conf['ctrl']['title']);
-				$config['items'][] = Array($title, $table);
+				$config['items'][] = Array($title . ' ('.$table.')', $table);
 			}
 		}
 		return $config;
