@@ -94,7 +94,7 @@ if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 		
 	t3lib_extMgm::addTCAcolumns('fe_users', $mapTCA, 1);
 	$TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_map';
-	t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;Map,tx_wecmap_map');
+	t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;LLL:EXT:wec_map/locallang_db.xml:berecord_maplabel,tx_wecmap_map');
 }
 
 
