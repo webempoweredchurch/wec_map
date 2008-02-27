@@ -68,9 +68,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 		// get configuration from flexform or TS. Flexform values take
 		// precedence.
-		$apiKey = $this->pi_getFFvalue($piFlexForm, 'apiKey', 'mapConfig');
-		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
-
 		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'mapConfig');
 		empty($width) ? $width = $conf['width']:null;
 
@@ -126,7 +123,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		/* Create the map class and add markers to the map */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className = t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+		$map = new $className(null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
 		// evaluate config to see which map controls we need to show
 		if($mapControlSize == 'large') {

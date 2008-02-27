@@ -65,9 +65,6 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 
 		// get config from flexform or TS. Flexforms take precedence.
-		$apiKey = $this->pi_getFFvalue($piFlexForm, 'apiKey', 'default');
-		empty($apiKey) ? $apiKey = $conf['apiKey']:null;
-
 		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'default');
 		empty($width) ? $width = $conf['width']:null;
 
@@ -124,7 +121,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+		$map = new $className(null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
 		// evaluate map controls based on configuration
 		if($mapControlSize == 'large') {
@@ -148,12 +145,12 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		// there are two ways of buiding the SQL query:
 		// 1. from the data given via flexform
 		// 2. all manually from TS
-		// So we check whther it's set via TS, and if not we use FF data
+		// So we check whether it's set via TS, and if not we use FF data
 		if(empty($conf['tables.'])) {
 			foreach( $tables as $table ) {
 
 				if(!empty($pid)) {
-					$where = tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table);
+					$where = '1=1' . tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table);
 				} else {
 					$where = '';
 				}

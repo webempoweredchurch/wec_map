@@ -7,16 +7,6 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
-					<apiKey>
-						<TCEforms>
-							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.apiKey</label>
-							<config>
-								<type>input</type>
-								<size>100</size>
-							</config>
-						</TCEforms>
-					</apiKey>
-						
 					<mapWidth>
 						<TCEforms>
 							<label>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapWidth</label>
