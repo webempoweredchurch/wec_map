@@ -11,7 +11,7 @@
         <languageKey index="default" type="array">
             <label index="tt_content.list_type_pi1">WEC Simple Map</label>
             <label index="tt_content.list_type_pi2">WEC Frontend User Map</label>
-            <label index="tt_content.list_type_pi3">WEC Map Anything</label>
+            <label index="tt_content.list_type_pi3">WEC Table Map</label>
             <label index="tt_content.pi_flexform.sheet">Address</label>
             <label index="berecord_maplabel">Map</label>
             <label index="berecord_geocodelabel">Coords</label>

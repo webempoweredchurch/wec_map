@@ -150,14 +150,15 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			foreach( $tables as $table ) {
 
 				if(!empty($pid)) {
-					$where = '1=1' . tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table);
+					$where = '1=1' . tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table, 'OR');
 				} else {
 					$where = '';
 				}
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, $where);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $where);
 
 				foreach( $res as $key => $value ) {
-					$map->addMarkerByTCA($table, $value['uid'], 'Title', 'Description'.'I come from '.$table.' with UID '.$value['uid']);
+					$desc = $this->getRecordTitle($table, $value);
+					$map->addMarkerByTCA($table, $value['uid'], '', $desc.' ('.$table.')');
 				}
 			}
 		} else {
@@ -168,7 +169,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, $values['where']);
 
 				foreach( $res as $key => $value ) {
-					$map->addMarkerByTCA($table, $value['uid'], 'Title', 'Description'.'I come from '.$table.' with UID '.$value['uid']);
+					$desc = $this->getRecordTitle($table, $value);
+					$map->addMarkerByTCA($table, $value['uid'], '', $desc.' ('.$table.')');			
 				}
 			}
 		}
@@ -180,6 +182,44 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 		/* Draw the map */
 		return $this->pi_wrapInBaseClass($content);
+	}
+	
+	
+	function getRecordTitle($table,$row) {
+		global $TCA;
+
+		if (is_array($TCA[$table])) {
+			// TODO: debug
+			t3lib_div::debug($TCA[$table]);
+		// If configured, call userFunc
+		if ($TCA[$table]['ctrl']['label_userFunc'])     {
+			$params['table'] = $table;
+			$params['row'] = $row;
+			$params['title'] = '';
+
+			t3lib_div::callUserFunction($TCA[$table]['ctrl']['label_userFunc'],$params,$this);
+			$t = $params['title'];
+		} else {
+
+			// No userFunc: Build label
+			$t = $row[$TCA[$table]['ctrl']['label']];
+
+			if ($TCA[$table]['ctrl']['label_alt'] && ($TCA[$table]['ctrl']['label_alt_force'] || !strcmp($t,'')))   {
+				$altFields=t3lib_div::trimExplode(',',$TCA[$table]['ctrl']['label_alt'],1);
+				$tA=array();
+				$tA[]=$t;
+				if ($TCA[$table]['ctrl']['label_alt_force'])    {
+					foreach ($altFields as $fN)     {
+						$t = trim(strip_tags($row[$fN]));
+						if (!empty($t)) $tA[] = $t;
+					}
+					$t=implode(', ',$tA);
+				}
+			}
+		}
+
+		return $t;
+		}
 	}
 }
 
