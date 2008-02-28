@@ -134,7 +134,7 @@ class tx_wecmap_recordhandler {
 	 **/
 	function getJS() {
 		global $LANG;
-		$js = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>'.chr(10).
+		$js = '<script type="text/javascript" src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'typo3/contrib/prototype/prototype.js"></script>'.chr(10).
 			  '<script type="text/javascript" src="../contrib/tablesort/fastinit.js"></script>'.chr(10).
 			  '<script type="text/javascript" src="../contrib/tablesort/tablesort.js"></script>'.chr(10).
 			  '<script type="text/javascript">

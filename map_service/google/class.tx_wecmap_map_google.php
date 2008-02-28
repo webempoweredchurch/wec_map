@@ -209,7 +209,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map_helpers'] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/helpers.js" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
-				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). t3lib_extMgm::siteRelPath('wec_map').'contrib/prototype/prototype.js" type="text/javascript"></script>';
+				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 
 			$htmlContent .= $this->mapDiv($this->mapName, $this->width, $this->height);

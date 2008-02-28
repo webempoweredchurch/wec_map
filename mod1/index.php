@@ -356,8 +356,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			}
 		}
 		$content[] = '</ul>';
-
-		$content[] = '<script type="text/javascript" src="../contrib/prototype/prototype.js"></script>';
+		$content[] = '<script type="text/javascript" src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'typo3/contrib/prototype/prototype.js"></script>';
 		$content[] = '<script type="text/javascript">
 						function startGeocode() {
 							var updater;
