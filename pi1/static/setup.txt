@@ -12,7 +12,7 @@ plugin.tx_wecmap_pi1 {
 	mapName =
 
 	# this is just an example for how to add a new icon
-	# icon {
+	# icons.1 {
 	# 	iconID       = default
 	# 	imagepath    = typo3conf/ext/wec_map/images/mm_20_red.png
 	# 	shadowpath   = typo3conf/ext/wec_map/images/mm_20_shadow.png
@@ -21,7 +21,7 @@ plugin.tx_wecmap_pi1 {
 	# 	shadowWidth  = 22
 	# 	shadowHeight = 20
 	# 	anchorX      = 6
-	# 	ancorY       = 20
+	# 	anchorY      = 20
 	# 	infoAnchorX  = 5
 	# 	infoAnchorY  = 1
 	# }

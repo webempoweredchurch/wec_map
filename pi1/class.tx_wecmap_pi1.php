@@ -139,13 +139,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 
-		// add icon. Returns true if added, false otherwise
-		if($map->addMarkerIcon($conf['icon.'])) {
-			$iconID = $conf['icon.']['iconID'];
-		} else {
-			$iconID = '';
-		}
-		
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
 		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
@@ -159,8 +152,23 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if(empty($zip) && empty($state) && empty($city)) {
 
 			$sidebar = '';
+			
+			// add icons
+			if(!empty($conf['icons.'])) {
+				foreach( $conf['icons.'] as $key => $value ) {
+					$map->addMarkerIcon($value);
+				}
+				
+			} else {
+				$iconID = '';
+			}
+			
+			
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
+
+				// use the icon specified in the marker config
+				$iconID = $marker['iconID'];
 
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
@@ -218,7 +226,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$content = tx_wecmap_shared::render($marker, $conf['marker.']);
 
 			// add the marker to the map
-			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content, 0, 17, $iconID);
+			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content, 0, 17);
 			
 			// add js function call to marker data
 			$marker['onclickLink'] = $markerObj->getClickJS();
