@@ -131,12 +131,45 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 
-		// add icon. Returns true if added, false otherwise
-		if($map->addMarkerIcon($conf['icon.'])) {
-			$iconID = $conf['icon.']['iconID'];
+		// set up groups:
+		// country
+		$countryConf = array();
+		$countryConf['icon'] = $conf['groups.']['country.']['icon.'];
+		$countryConf['minzoom'] = $conf['groups.']['country.']['zoom.']['min'];
+		$countryConf['maxzoom'] = $conf['groups.']['country.']['zoom.']['max'];
+		// country icon, if configured
+		if(!empty($countryConf['icon']['imagepath'])) {
+			$map->addMarkerIcon($countryConf['icon']);			
 		} else {
-			$iconID = '';
+			$countryConf['icon']['iconID'] ? null : $countryConf['icon']['iconID'] = null;
 		}
+
+		
+		// city
+		$cityConf = array();
+		$cityConf['icon'] = $conf['groups.']['city.']['icon.'];
+		$cityConf['minzoom'] = $conf['groups.']['city.']['zoom.']['min'];
+		$cityConf['maxzoom'] = $conf['groups.']['city.']['zoom.']['max'];
+		// country icon, if configured
+		if(!empty($cityConf['icon']['imagepath'])) {
+			$map->addMarkerIcon($cityConf['icon']);			
+		} else {
+			$cityConf['icon']['iconID'] ? null : $cityConf['icon']['iconID'] = null;
+		}
+		// TODO: debug
+		t3lib_div::debug($cityConf['icon']);
+		// single
+		$singleConf = array();
+		$singleConf['icon'] = $conf['groups.']['single.']['icon.'];
+		$singleConf['minzoom'] = $conf['groups.']['single.']['zoom.']['min'];
+		$singleConf['maxzoom'] = $conf['groups.']['single.']['zoom.']['max'];
+		// country icon, if configured
+		if(!empty($singleConf['icon']['imagepath'])) {
+			$map->addMarkerIcon($singleConf['icon']);			
+		} else {
+			$singleConf['icon']['iconID'] ? null : $singleConf['icon']['iconID'] = null;
+		}
+		
 		
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
@@ -199,8 +232,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					$title = tx_wecmap_shared::render(array('name' => $this->pi_getLL('country_zoominfo_title')), $conf['marker.']);
 					$description = sprintf($this->pi_getLL('country_zoominfo_desc'), $row[$countryField]);
 
-					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2, $iconID);
+					// add a marker for this country and only show it between the configured zoom level.
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, $countryConf['minzoom'], $countryConf['maxzoom'], $countryConf['icon']['iconID']);
 				}
 
 
@@ -221,7 +254,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 					// extra processing if private is turned on
 					if($private) {
-						$maxzoom = 17;
+						$maxzoom = $singleConf['maxzoom'];
 						if($count == 1) {
 							$description = sprintf($this->pi_getLL('citycount_si'),$row[$cityField]);
 						} else {
@@ -229,12 +262,13 @@ class tx_wecmap_pi2 extends tslib_pibase {
 						}
 
 					} else {
-						$maxzoom = 7;
+						$maxzoom = $cityConf['maxzoom'];
 						$description = sprintf($this->pi_getLL('city_zoominfo_desc'), $row[$cityField]);
 					}
 
-					// add a marker for this country and only show it between zoom levels 0 and 2.
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,$maxzoom, $iconID);
+					// add a marker for the city level and only show it 
+					// either from city-min to single-max or city-min to city-max, depending on privacy settings
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, $cityConf['minzoom'],$maxzoom, $cityConf['icon']['iconID']);
 				}
 
 				// make title and description
@@ -242,7 +276,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8, 17, $iconID);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
 				}
 			}
 
@@ -291,6 +325,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 	}
 	
 	function getSidebar() {
+		return null;
 		$c = '';
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
