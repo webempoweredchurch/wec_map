@@ -15,36 +15,30 @@ plugin.tx_wecmap_pi2 {
 	mapName =
 
 	groups.country {
-		this is just an example for how to add a new icon
-		icon {
-			iconID       = blue
-			imagepath    = typo3conf/ext/wec_map/images/mm_20_blue.png
-			shadowpath   = typo3conf/ext/wec_map/images/mm_20_shadow.png
-			width        = 12
-			height       = 20
-			shadowWidth  = 22
-			shadowHeight = 20
-			anchorX      = 6
-			anchorY      = 20
-			infoAnchorX  = 5
-			infoAnchorY  = 1
-		}
+		# this is just an example for how to add a new icon
+		# icon {
+		# 	iconID       = blue
+		# 	imagepath    = typo3conf/ext/wec_map/images/mm_20_blue.png
+		# 	shadowpath   = typo3conf/ext/wec_map/images/mm_20_shadow.png
+		# 	width        = 12
+		# 	height       = 20
+		# 	shadowWidth  = 22
+		# 	shadowHeight = 20
+		# 	anchorX      = 6
+		# 	anchorY      = 20
+		# 	infoAnchorX  = 5
+		# 	infoAnchorY  = 1
+		# }
 		zoom.min = 0
 		zoom.max = 2
 	}
 	
 	groups.city {
-		icon {
-			iconID       = blue
-		}
 		zoom.min = 3
 		zoom.max = 7
 	}
 	
 	groups.single {
-		icon {
-			iconID       = blue
-		}
 		zoom.min = 8
 		zoom.max = 17
 	}
