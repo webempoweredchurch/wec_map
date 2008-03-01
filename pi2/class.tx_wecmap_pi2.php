@@ -292,7 +292,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		// run all the content pieces through TS to assemble them
 		$output = tx_wecmap_shared::render($content, $conf['output.']);
 
-		return $this->pi_wrapInBaseClass($output);	}
+		return $this->pi_wrapInBaseClass($output);
+	}
 
 	/**
 	 * Gets the address mapping from the TCA.
