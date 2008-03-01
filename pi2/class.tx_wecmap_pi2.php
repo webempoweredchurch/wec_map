@@ -156,13 +156,13 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		} else {
 			$cityConf['icon']['iconID'] ? null : $cityConf['icon']['iconID'] = null;
 		}
-		// TODO: debug
-		t3lib_div::debug($cityConf['icon']);
+
 		// single
 		$singleConf = array();
 		$singleConf['icon'] = $conf['groups.']['single.']['icon.'];
 		$singleConf['minzoom'] = $conf['groups.']['single.']['zoom.']['min'];
 		$singleConf['maxzoom'] = $conf['groups.']['single.']['zoom.']['max'];
+
 		// country icon, if configured
 		if(!empty($singleConf['icon']['imagepath'])) {
 			$map->addMarkerIcon($singleConf['icon']);			
