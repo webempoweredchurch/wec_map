@@ -166,11 +166,23 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 				$table = $values['table'];
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('uid', $table, $values['where']);
-
-				foreach( $res as $key => $value ) {
-					$desc = $this->getRecordTitle($table, $value);
-					$map->addMarkerByTCA($table, $value['uid'], '', $desc.' ('.$table.')');			
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $values['where']);
+				
+				// add icon if configured, else see if we just have an iconID
+				// and use that. We assume the icon is added somewhere else.
+				if(!empty($values['icon.']['imagepath'])) {
+					$map->addMarkerIcon($values['icon.']);			
+				} else {
+					$values['icon.']['iconID'] ? null : $values['icon.']['iconID'] = null;
+				}
+				
+				foreach( $res as $key => $data ) {
+					
+					// get title and description
+					list($title,$desc) = $this->getTitleAndDescription($values, $data);
+					
+					
+					$map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $values['icon.']['iconID']);
 				}
 			}
 		}
@@ -184,13 +196,38 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		return $this->pi_wrapInBaseClass($content);
 	}
 	
+	/**
+	 * returns an array with title and description
+	 *
+	 * @return array
+	 **/
+	function getTitleAndDescription($conf, $data) {
+
+		// merge the table into the data
+		$data = array_merge($data, array('table' => $conf['table']));
+
+		// process title only if TS config is present
+		if(!empty($conf['title.'])) {
+			$title = tx_wecmap_shared::render($data, $conf['title.'], $conf['table']);
+		} else {
+			$title = '';
+		}
+
+		// process description also only if TS config is present
+		if(!empty($conf['description.'])) {
+			$desc = tx_wecmap_shared::render($data, $conf['description.'], $conf['table']);
+		} else {
+			$desc = $this->getRecordTitle($conf['table'], $data).' ('.$conf['table'].')';			
+		}
+
+		return array($title, $desc);
+	}
 	
 	function getRecordTitle($table,$row) {
 		global $TCA;
 
 		if (is_array($TCA[$table])) {
-			// TODO: debug
-			t3lib_div::debug($TCA[$table]);
+
 		// If configured, call userFunc
 		if ($TCA[$table]['ctrl']['label_userFunc'])     {
 			$params['table'] = $table;

@@ -14,35 +14,52 @@ plugin.tx_wecmap_pi3 {
 	centerLong = 
 	mapName =
 	
-	marker {
-		title = TEXT
-		title.field = name
-		title.wrap = <h1>|</h1>
-
-		description = COA
-		description {
-			10 = COA
-			10 {
-				10 = TEXT
-				10.field = address
-				10.wrap = | <br/>
-
-				20 = TEXT
-				20.field = city
-				20.wrap = |, 
-
-				30 = TEXT
-				30.field = zone
-				30.wrap = | &nbsp;
-
-				40 = TEXT
-				40.field = zip
-			}
-			10.wrap = <p>|</p>
-	
-			20 = TEXT
-			20.field = phone
-			20.wrap = <p>|</p>
-		}
-	}
+	# example for tables configuration
+	#
+	# tables {
+	# 	10 {
+	# 		table = tt_address
+	# 		
+	# 		# this is just an example for how to add a new icon
+	# 		icon {
+	# 			iconID       = default
+	# 			imagepath    = typo3conf/ext/wec_map/images/mm_20_red.png
+	# 			shadowpath   = typo3conf/ext/wec_map/images/mm_20_shadow.png
+	# 			width        = 12
+	# 			height       = 20
+	# 			shadowWidth  = 22
+	# 			shadowHeight = 20
+	# 			anchorX      = 6
+	# 			anchorY      = 20
+	# 			infoAnchorX  = 5
+	# 			infoAnchorY  = 1
+	# 		}
+	# 		
+	#		# config for title
+	# 		title {
+	# 			title = TEXT
+	# 			title.field = name
+	# 			title.wrap = <h1>|</h1>
+	# 		}
+	# 		
+	#		# config for description
+	# 		description = COA
+	# 		description {
+	# 			10 = COA
+	# 			10 {
+	# 				10 = TEXT
+	# 				10.field = name
+	# 		
+	# 				20 = TEXT
+	# 				20.field = table
+	# 				20.wrap = (|) 
+	# 			}
+	# 			10.wrap = <p>|</p>
+	# 		}
+	# 	}
+	# 	20 {
+	# 		table = fe_users
+	# 		where = pid=95 and deleted=0 and disable=0
+	# 	}
+	# }
 }
