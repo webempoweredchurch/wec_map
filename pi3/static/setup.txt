@@ -6,7 +6,6 @@ plugin.tx_wecmap_pi3 {
 	controls.showOverviewMap = 
 	controls.showMapType = 
 	controls.showScale = 
-	userGroups =
 	pid = 
 	
 	zoomLevel = 
