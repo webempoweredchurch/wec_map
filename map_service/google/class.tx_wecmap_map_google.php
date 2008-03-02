@@ -447,6 +447,20 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 		
 	}
+	
+	/**
+	 * Sets the map center to a given address' coordinates.
+	 *
+	 * @return void
+	 **/
+	function setCenterByAddress($street, $city, $state, $zip, $country = null) {
+
+		/* Geocode the address */
+		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
+		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
+		$this->lat = $latlong['lat'];
+		$this->long = $latlong['long'];
+	}
 
 
 	/**
