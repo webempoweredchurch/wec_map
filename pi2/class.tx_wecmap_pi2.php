@@ -135,9 +135,10 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				$pState   = strip_tags(t3lib_div::_POST($mapName.'_state'));
 				$pZip     = strip_tags(t3lib_div::_POST($mapName.'_zip'));
 				$pCountry = strip_tags(t3lib_div::_POST($mapName.'_country'));
+				$pKilometers = intval(t3lib_div::_POST($mapName.'_kilometers'));
 
 				$map->setCenterByAddress($pAddress, $pCity, $pState, $pZip, $pCountry);
-				$map->setRadius($pRadius);
+				$map->setRadius($pRadius, $pKilometers);
 				
 			}
 			

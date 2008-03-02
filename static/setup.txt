@@ -7,6 +7,7 @@ tx_wecmap_api {
 		20.layout = <tr><td>###LABEL###</td><td> ###FIELD### </td></tr>
 		20.data (
 			Radius: | {field:map_id}_radius=select | 10=10, 25=25, 50=50, 100=100, 250=250
+			Unit: | {field:map_id}_kilometers=select | *miles=0, kilometers=1
 			Address: | {field:map_id}_address=input
 			City: | {field:map_id}_city=input
 			State: | {field:map_id}_state=input
