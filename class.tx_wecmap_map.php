@@ -282,11 +282,10 @@ class tx_wecmap_map {
 		if(!empty($this->radius)) {
 			$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
 
-			if(!empty($this->center) &&  $distance < $this->radius) {
+			if(!empty($this->lat) && !empty($this->long) &&  $distance > $this->radius) {
 				return null;
 			}
 		}
-
 
 		if($lat != '' && $long != '') {
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
