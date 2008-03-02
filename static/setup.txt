@@ -1,26 +1,23 @@
 tx_wecmap_api {
 	addressForm = COA
 	addressForm {
-		5 = FORM
-		5.layout = ###LABEL###: ###FIELD###
-		5.data (
+		10 = HTML
+		10.value = <table>
+		20 = FORM
+		20.layout = <tr><td>###LABEL###</td><td> ###FIELD### </td></tr>
+		20.data (
 			Radius: | {field:map_id}_radius=input
-		)
-		
-		# 10 = TEXT
-		# 10.value (
-		# <div id="{field:map_id}_addressform">
-		# 	<form method="post" action="">
-		# 		<label for="{field:map_id}_radius">Radius:</label><input type="text" name="{field:map_id}_radius" id="{field:map_id}_radius"/><br />
-		# 		<label for="{field:map_id}_address">Address:</label><input  type="text" name="{field:map_id}_address" id="{field:map_id}_address" /><br />
-		# 		<label for="{field:map_id}_city">City:</label><input  type="text" name="{field:map_id}_city" id="{field:map_id}_city" /><br />
-		# 		<label for="{field:map_id}_state">State:</label><input  type="text" name="{field:map_id}_state" id="{field:map_id}_state" /><br />
-		# 		<label for="{field:map_id}_zip">Zip:</label><input  type="text" name="{field:map_id}_zip" id="{field:map_id}_zip" />
-		# 	</form>
-		# </div>
-		# ) 
-		# 10.insertData = true
-		
+			Address: | {field:map_id}_address=input
+			City: | {field:map_id}_city=input
+			State: | {field:map_id}_state=input
+			Zip: | {field:map_id}_zip=input
+			| {field:map_id}_submit=submit | Submit
+		) 
+		20.data.insertData = 1
+		20.wrapFieldName = tx_wecmap_api[|]
+		20.no_cache = 1
+		30 = HTML 
+		30.value = </table>
 	}
 	
 	directions = COA
