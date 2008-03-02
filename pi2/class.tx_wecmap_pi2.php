@@ -103,6 +103,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
+		
+		$showRadiusSearch = $this->pi_getFFvalue($piFlexForm, 'showRadiusSearch', 'default');
+		empty($showRadiusSearch) ? $showRadiusSearch = $conf['showRadiusSearch']:null;
 
 		$centerLat = $conf['centerLat'];
 
@@ -112,12 +115,34 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
+		$this->mapName = $mapName;
+
 
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className(null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
+		// process radius search
+		if($showRadiusSearch) {
+
+			// check for POST vars for our map. If there are any, proceed.
+			$pRadius = intval(t3lib_div::_POST($mapName.'_radius'));
+
+			if(!empty($pRadius)) {
+				$pAddress = strip_tags(t3lib_div::_POST($mapName.'_address'));
+				$pCity    = strip_tags(t3lib_div::_POST($mapName.'_city'));
+				$pState   = strip_tags(t3lib_div::_POST($mapName.'_state'));
+				$pZip     = strip_tags(t3lib_div::_POST($mapName.'_zip'));
+				$pCountry = strip_tags(t3lib_div::_POST($mapName.'_country'));
+
+				$map->setCenterByAddress($pAddress, $pCity, $pState, $pZip, $pCountry);
+				$map->setRadius($pRadius);
+				
+			}
+			
+		}
+		
 		// evaluate map controls based on configuration
 		if($mapControlSize == 'large') {
 			$map->addControl('largeMap');
@@ -285,8 +310,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		// gather all the content together
 		$content = array();
 		$content['map'] = $map->drawMap();
-		$content['addressForm'] = $this->getAddressForm();
-		if($showWrittenDirs) $content['directions'] = $this->getDirections();
+		if($showRadiusSearch) $content['addressForm'] = $this->getAddressForm();
+		if($showWrittenDirs)  $content['directions'] = $this->getDirections();
 		$content['sidebar'] = $this->getSidebar();
 
 		// run all the content pieces through TS to assemble them
