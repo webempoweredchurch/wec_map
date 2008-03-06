@@ -176,8 +176,11 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				if(!empty($pid)) {
 					$where = '1=1' . tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table, 'OR');
 				} else {
-					$where = '';
+					$where = '1=1';
 				}
+				
+				$where .= $this->cObj->enableFields($table);
+				
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $where);
 
 				foreach( $res as $key => $value ) {
@@ -189,9 +192,17 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			foreach( $conf['tables.'] as $table => $values ) {
 
 				$table = $values['table'];
-
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $values['where']);
 				
+				if(!empty($values['where'])) {
+					$where = $values['where'];
+				} else {
+					$where = '1=1';
+				}
+				
+				$where .= $this->cObj->enableFields($table);
+
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $where);
+
 				// add icon if configured, else see if we just have an iconID
 				// and use that. We assume the icon is added somewhere else.
 				if(!empty($values['icon.']['imagepath'])) {
