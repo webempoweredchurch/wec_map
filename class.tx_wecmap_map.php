@@ -28,6 +28,7 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_marker.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_markergroup.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 
 /**
@@ -49,7 +50,8 @@ class tx_wecmap_map {
 	var $width;
 	var $height;
 	var $mapName;
-	var $markerCount = 0;
+	var $groupCount = 0;
+	var $groups;
 	var $js;
 	var $key;
 
@@ -132,8 +134,8 @@ class tx_wecmap_map {
 		$max_lat_distance = -360;
 
 		// find farthest away point
-		foreach($this->markers as $key => $markers) {
-			foreach( $markers as $marker ) {
+		foreach($this->groups as $key => $group) {
+			foreach( $group->markers as $marker ) {
 				if(($marker->getLatitude() - $this->lat) >= $max_lat_distance) {
 					$max_lat_distance = $marker->getLatitude() - $this->lat;
 					$max_lat = $marker->getLatitude();
@@ -211,8 +213,8 @@ class tx_wecmap_map {
 		$maxLong = -360;
 
 		/* Find min and max zoom lat and long */
-		foreach($this->markers as $key => $markers) {
-			foreach( $markers as $marker ) {
+		foreach($this->groups as $key => $group) {
+			foreach( $group->markers as $marker ) {
 				if ($marker->getLatitude() < $minLat)
 					$minLat = $marker->getLatitude();
 				if ($marker->getLatitude() > $maxLat)
@@ -288,20 +290,22 @@ class tx_wecmap_map {
 		}
 
 		if($lat != '' && $long != '') {
+			$group = $this->addGroup($minzoom, $maxzoom);
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$marker =  new $classname(count($this->markers),
-											  $lat,
-											  $long,
-											  $title,
-											  $description,
-											  $this->prefillAddress,
-			  								  null,
-											  '0xFF0000',
-											  '0xFFFFFF',
-											  $iconID);
+			$marker =  new $classname($group->getMarkerCount(),
+									  $lat,
+									  $long,
+									  $title,
+									  $description,
+									  $this->prefillAddress,
+	  								  null,
+									  '0xFF0000',
+									  '0xFFFFFF',
+									  $iconID);
+			$marker->setMinZoom($minzoom);
 			$marker->setMapName($this->mapName);
-			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
-			$this->markerCount++;
+			$group->addMarker($marker);
+
 			return $marker;
 		}
 	}
@@ -373,7 +377,7 @@ class tx_wecmap_map {
 		$street = $record[$streetfield];
 		$city 	= $record[$cityfield];
 		$state 	= $record[$statefield];
-		$zip		= $record[$zipfield];
+		$zip	= $record[$zipfield];
 		$country= $record[$countryfield];
 
 		/* Geocode the address */
@@ -384,7 +388,23 @@ class tx_wecmap_map {
 		return $this->addMarkerByLatLong($latlong['lat'], $latlong['long'], $title, $description, $minzoom, $maxzoom, $iconID);
 	}
 
+	/**
+	 * adds a group to this map
+	 *
+	 * @return int id of this group
+	 **/
+	function &addGroup($minzoom = 1, $maxzoom = '') {
 
+		if(!is_object($this->groups[$minzoom.':'.$maxzoom])) {
+			$groupClass = t3lib_div::makeInstanceClassName('tx_wecmap_markergroup');
+			$group = new $groupClass($this->groupCount, $minzoom, $maxzoom);
+			$this->groupCount++;
+			$group->setMapName($this->mapName);
+			$this->groups[$minzoom.':'.$maxzoom] = $group;			
+		}
+
+		return $this->groups[$minzoom.':'.$maxzoom];
+	}
 
 
 	/**

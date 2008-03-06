@@ -39,12 +39,12 @@
  * @subpackage tx_wecmap
  */
 class tx_wecmap_markergroup {
-	var $markers;		// array of marker objects
-	var $markerCount; 	// convenience variable with number of markers = sizeof($markers);
-	var $id;			// unique identifier of this group
-	var $mapName;		// the name of the map this group belongs to
-	var $minZoom;		// min zoom level for this group
-	var $maxZoom;		// max zoom level for this group
+	var $markers;			// array of marker objects
+	var $markerCount = 0; 	// convenience variable with number of markers = sizeof($markers);
+	var $id;				// unique identifier of this group
+	var $mapName;			// the name of the map this group belongs to
+	var $minzoom;			// min zoom level for this group
+	var $maxzoom;			// max zoom level for this group
 	
 	/**
 	 * PHP4 Constructor
@@ -52,8 +52,8 @@ class tx_wecmap_markergroup {
 	 * 
 	 * @return void
 	 **/
-	function tx_wecmap_markergroup($id, $minZoom, $maxZoom) {
-		$this->__construct($id, $minZoom, $maxZoom);
+	function tx_wecmap_markergroup($id, $minzoom, $maxzoom) {
+		$this->__construct($id, $minzoom, $maxzoom);
 	}
 	
 	/**
@@ -61,19 +61,33 @@ class tx_wecmap_markergroup {
 	 *
 	 * @return void
 	 **/
-	function __construct($id, $minZoom, $maxZoom) {
+	function __construct($id, $minzoom, $maxzoom) {
 		$this->id = $id;
-		$this->minZoom = $minZoom;
-		$this->maxZoom = $maxZoom;
+		$this->minzoom = $minzoom;
+		$this->maxzoom = $maxzoom;
 	}
 	
 	/**
 	 * returns the js array
 	 *
-	 * @return void
+	 * @return array javascript content
 	 **/
 	function drawMarkerJS() {
+		$jsContent = array();
+
+		$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'] = [];';
 		
+		foreach($this->markers as $key => $marker) {
+
+			if($this->directions) {
+				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeJSwithDirections() .');';
+			} else {
+				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeJS() .');';
+			}
+
+			$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'['. $this->id .'], ' . $this->minzoom . ', ' . $this->maxzoom . ');';
+		}
+		return $jsContent;
 	}
 	
 	/**
@@ -82,6 +96,7 @@ class tx_wecmap_markergroup {
 	 * @return void
 	 **/
 	function addMarker($markerObj) {
+		$markerObj->setGroupId($this->id);
 		$this->markers[] = $markerObj;
 		$this->markerCount++;
 	}
@@ -92,7 +107,7 @@ class tx_wecmap_markergroup {
 	 * @return int
 	 **/
 	function getMinZoom() {
-		return $this->minZoom;
+		return $this->minzoom;
 	}
 	
 	/**
@@ -101,7 +116,7 @@ class tx_wecmap_markergroup {
 	 * @return int
 	 **/
 	function getMaxZoom() {
-		return $this->maxZoom;
+		return $this->maxzoom;
 	}
 	
 	/**
@@ -120,6 +135,19 @@ class tx_wecmap_markergroup {
 	 **/
 	function setMapName($name) {
 		$this->mapName = $name;
+	}
+	
+	/**
+	 * Returns whether this group has any markers
+	 *
+	 * @return boolean
+	 **/
+	function hasMarkers() {
+		if($this->markerCount > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 }

@@ -205,10 +205,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			if(TYPO3_MODE == 'FE') {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map_helpers'] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/helpers.js" type="text/javascript"></script>';
 			} else {
-				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2.x&amp;key='.$this->key.'" type="text/javascript"></script>';
+				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 
@@ -219,6 +219,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent[] = $this->js_triggerMarker();
 			$jsContent[] = $this->js_setDirections();
 			$jsContent[] = $this->js_errorHandler();
+			$jsContent[] = '';
 			$jsContent[] = 'var markers_'. $this->mapName .' = [];';
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2($this->mapName);
@@ -227,26 +228,18 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			foreach( $this->controls as $control ) {
 				$jsContent[] = $control;
 			}
+			$jsContent[] = '';
 			$jsContent[] = $this->js_icons();
-
+			$jsContent[] = '';
 			$jsContent[] = $this->js_newGMarkerManager('mgr_'.$this->mapName, $this->mapName);
-			$jsContent[] = 'var index_'. $this->mapName .' = 0;';
-			foreach($this->markers as $key => $markers) {
-				$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'] = [];';
-				$key = explode(':',$key);
-				foreach( $markers as $marker ) {
-					if($this->directions) {
-						$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'].push('. $marker->writeJSwithDirections() .');';
-					} else {
-						$jsContent[] = 'markers_'. $this->mapName .'[index_'. $this->mapName .'].push('. $marker->writeJS() .');';
-					}
+			$jsContent[] = '';
 
-				}
-				$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'[index_'. $this->mapName .'], ' . $key[0] . ', ' . $key[1] . ');';
-				$jsContent[] = 'index_'. $this->mapName .'++;';
+			foreach( $this->groups as $key => $group ) {
+				$jsContent = array_merge($jsContent, $group->drawMarkerJS());
+				$jsContent[] = '';
 			}
 
-			$jsContent[] = 'markers_'. $this->mapName .' = markers_'. $this->mapName .'.flatten();';
+			// $jsContent[] = 'markers_'. $this->mapName .' = markers_'. $this->mapName .'.flatten();';
 			$jsContent[] = 'mgr_'. $this->mapName .'.refresh();';
 			$jsContent[] = $this->js_initialOpenInfoWindow();
 			$jsContent[] = $this->js_drawMapEnd();
@@ -435,8 +428,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(empty($dataArray)) {
 			return false;
 		} else {
-		  	$this->icons[] = '
-			 	var icon_'. $this->mapName . $dataArray['iconID'] .' = new GIcon();
+		  	$this->icons[] = 
+			 	'var icon_'. $this->mapName . $dataArray['iconID'] .' = new GIcon();
 			 	icon_'. $this->mapName . $dataArray['iconID'] .'.image = "'.$dataArray['imagepath'].'";
 			 	icon_'. $this->mapName . $dataArray['iconID'] .'.shadow = "'.$dataArray['shadowpath'].'";
 			 	icon_'. $this->mapName . $dataArray['iconID'] .'.iconSize = new GSize('.$dataArray['width'].', '.$dataArray['height'].');
@@ -519,7 +512,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			for (var i=0; i < text.length; i++) {
 				tabs.push(new GInfoWindowTab(title[i], text[i]));
 			};
-			GEvent.addListener(marker, "click", function() { marker.openInfoWindowTabsHtml(tabs); });			return marker;
+			GEvent.addListener(marker, "click", function() { marker.openInfoWindowTabsHtml(tabs); });
+			return marker;
 		}';
 	}
 
@@ -532,8 +526,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	function js_drawMapStart() {
 		return
 		'var '.$this->mapName.';'.chr(10).
-		'function drawMap_'. $this->mapName .'() {
-			if (GBrowserIsCompatible()) {';
+		'function drawMap_'. $this->mapName .'() {'.chr(10).
+			'if (GBrowserIsCompatible()) {';
 	}
 
 	/**
@@ -620,9 +614,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 **/
 	function js_triggerMarker() {
 		$c =
-		'function '. $this->mapName .'_triggerMarker(id) {
-			'.$this->mapName.'.panTo(markers_'. $this->mapName .'[id].getPoint());
-			GEvent.trigger(markers_'. $this->mapName .'[id], \'click\');
+		'function '. $this->mapName .'_triggerMarker(group, id, zoom) {
+			marker = markers_'. $this->mapName .'[group][id];
+			'.$this->mapName.'.setZoom(zoom);
+			'.$this->mapName.'.panTo(marker.getPoint());
+			
+			setTimeout("GEvent.trigger(marker, \'click\')",300);
 		}';
 		return $c;
 	}
@@ -686,13 +683,13 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		// add default icon set
 		$this->icons[] =
-		'var icon_'. $this->mapName .' = new GIcon();
-		icon_'. $this->mapName .'.image = "'.$path.'images/mm_20_red.png";
-		icon_'. $this->mapName .'.shadow = "'.$path.'images/mm_20_shadow.png";
-		icon_'. $this->mapName .'.iconSize = new GSize(12, 20);
-		icon_'. $this->mapName .'.shadowSize = new GSize(22, 20);
-		icon_'. $this->mapName .'.iconAnchor = new GPoint(6, 20);
-		icon_'. $this->mapName .'.infoWindowAnchor = new GPoint(5, 1);';
+		'var icon_'. $this->mapName .' = new GIcon();'.chr(10).
+		'icon_'. $this->mapName .'.image = "'.$path.'images/mm_20_red.png";'.chr(10).
+		'icon_'. $this->mapName .'.shadow = "'.$path.'images/mm_20_shadow.png";'.chr(10).
+		'icon_'. $this->mapName .'.iconSize = new GSize(12, 20);'.chr(10).
+		'icon_'. $this->mapName .'.shadowSize = new GSize(22, 20);'.chr(10).
+		'icon_'. $this->mapName .'.iconAnchor = new GPoint(6, 20);'.chr(10).
+		'icon_'. $this->mapName .'.infoWindowAnchor = new GPoint(5, 1);';
 
 		return implode("\n", $this->icons);
 	}
@@ -771,9 +768,16 @@ class tx_wecmap_map_google extends tx_wecmap_map {
     function hasThingsToDisplay() {
         $valid = false;
 
-        if(sizeof($this->markers) > 0) {
-            $validMarkers = true;
-        }
+        if(sizeof($this->groups) > 0) {
+            $validMarkers = false;
+			foreach( $this->groups as $key => $group ) {
+				if($group->hasMarkers()) {
+            		$validMarkers = true;
+				}
+			}
+        } else {
+			$validMarkers = false;
+		}
 
         if(isset($this->lat) and isset($this->long)) {
             $validCenter = true;

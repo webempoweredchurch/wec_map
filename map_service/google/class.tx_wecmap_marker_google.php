@@ -287,7 +287,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return String
 	 **/
 	function getClickJS() {
-		return $this->mapName.'_triggerMarker('. $this->index .');';
+		return $this->mapName.'_triggerMarker('. $this->groupId .', '. $this->index .', '. $this->minzoom .');';
 	}
 	
 	/**

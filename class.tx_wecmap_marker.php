@@ -40,13 +40,14 @@ class tx_wecmap_marker {
 
 	var $latitude;
 	var $longitude;
-
+	var $minzoom = 0;
 	var $title;
 	var $description;
 	var $color;
 	var $strokeColor;
 	var $mapName;
 	var $iconID;
+	var $groupId = -1;
 
 	/**
 	 * Constructor stub. See map_service classes for more details on the marker
@@ -126,6 +127,24 @@ class tx_wecmap_marker {
 	 **/
 	function setMapName($mapName) {
 		$this->mapName = $mapName;
+	}
+	
+	/**
+	 * set the id of the group this marker belongs to
+	 *
+	 * @return void
+	 **/
+	function setGroupId($id) {
+		$this->groupId = $id;
+	}
+	
+	/**
+	 * sets the minimum zoom level this marker is displayed on
+	 *
+	 * @return void
+	 **/
+	function setMinzoom($zoom) {
+		$this->minzoom = $zoom;
 	}
 }
 
