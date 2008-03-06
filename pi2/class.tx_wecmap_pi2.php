@@ -47,6 +47,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 	var $scriptRelPath = 'pi2/class.tx_wecmap_pi2.php';	// Path to this script relative to the extension dir.
 	var $extKey = 'wec_map';	// The extension key.
 	var $pi_checkCHash = TRUE;
+	var $sidebarLinks = array();
 
 	/**
 	 * Draws a Google map containing all frontend users of a website.
@@ -106,6 +107,10 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		
 		$showRadiusSearch = $this->pi_getFFvalue($piFlexForm, 'showRadiusSearch', 'default');
 		empty($showRadiusSearch) ? $showRadiusSearch = $conf['showRadiusSearch']:null;
+		
+		$showSidebar = $this->pi_getFFvalue($piFlexForm, 'showSidebar', 'default');
+		empty($showSidebar) ? $showSidebar = $conf['showSidebar']:null;
+		$this->showSidebar = $showSidebar;
 
 		$centerLat = $conf['centerLat'];
 
@@ -232,7 +237,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		// create country and zip code array to keep track of which country and state we already added to the map.
 		// the point is to create only one marker per country on a higher zoom level to not
-		// overload the map with all the markers and do the same with zip codes.
+		// overload the map with all the markers, and do the same with zip codes.
 		$countries = array();
 		$cities = array();
 		while (($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result))) {
@@ -254,8 +259,11 @@ class tx_wecmap_pi2 extends tslib_pibase {
 					// add this country to the array
 					$countries[] = $row[$countryField];
 
+					// combine title config to pass to render function
+					$title_conf = array('title' => $conf['marker.']['title'], 'title.' => $conf['marker.']['title.']);
+
 					// add a little info so users know what to do
-					$title = tx_wecmap_shared::render(array('name' => $this->pi_getLL('country_zoominfo_title')), $conf['marker.']);
+					$title = tx_wecmap_shared::render(array('name' => $this->pi_getLL('country_zoominfo_title')), $title_conf);
 					$description = sprintf($this->pi_getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between the configured zoom level.
@@ -294,7 +302,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 					// add a marker for the city level and only show it 
 					// either from city-min to single-max or city-min to city-max, depending on privacy settings
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, $cityConf['minzoom'],$maxzoom, $cityConf['icon']['iconID']);
+					$marker = $map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, $cityConf['minzoom'],$maxzoom, $cityConf['icon']['iconID']);
 				}
 
 				// make title and description
@@ -302,7 +310,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
+					$marker = $map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
+					$this->addSidebarItem($marker, $row['name']);
 				}
 			}
 
@@ -311,9 +320,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		// gather all the content together
 		$content = array();
 		$content['map'] = $map->drawMap();
-		if($showRadiusSearch) $content['addressForm'] = $this->getAddressForm();
-		if($showWrittenDirs)  $content['directions'] = $this->getDirections();
-		$content['sidebar'] = $this->getSidebar();
+		if($showRadiusSearch) 	$content['addressForm'] = $this->getAddressForm();
+		if($showWrittenDirs)  	$content['directions']  = $this->getDirections();
+		if($showSidebar)		$content['sidebar']     = $this->getSidebar();
 
 		// run all the content pieces through TS to assemble them
 		$output = tx_wecmap_shared::render($content, $conf['output.']);
@@ -341,6 +350,20 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		return $fieldName;
 	}
 	
+	/**
+	 * adds a sidebar item corresponding to the given marker.
+	 * Does so only if the sidebar is enabled.
+	 *
+	 * @return void
+	 **/
+	function addSidebarItem(&$marker, $title) {
+		if(!$this->showSidebar && $marker == null) return;
+		$data = array();
+		$data['onclickLink'] = $marker->getClickJS();
+		$data['title'] = $title;
+		$this->sidebarLinks[] = tx_wecmap_shared::render($data, $this->conf['sidebarItem.']);
+	}
+	
 	function getAddressForm() {
 		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['addressForm.']);
 		return $out;
@@ -352,8 +375,10 @@ class tx_wecmap_pi2 extends tslib_pibase {
 	}
 	
 	function getSidebar() {
-		return null;
+		if(empty($this->sidebarLinks)) return null;
+		
 		$c = '';
+				
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
 		}

@@ -32,7 +32,7 @@ tx_wecmap_api {
 	sidebar {
 		10 = TEXT
 		10.field = content
-		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="display:block;">|</div>
+		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="display:block; height: 200px; overflow: auto;">|</div>
 		10.insertData = true
 	}
 	

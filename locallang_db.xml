@@ -59,6 +59,7 @@
 			<label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
 			<label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
 			<label index="tt_content.pi_flexform.showRadiusSearch">Show Radius Search</label>
+			<label index="tt_content.pi_flexform.showSidebar">Show Marker Sidebar</label>
 			<label index="tt_content.pi_flexform.prefillAddress">Prefill Address from User Info</label>
         </languageKey>
 		<languageKey index="de" type="array">
