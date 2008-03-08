@@ -84,9 +84,10 @@ class tx_wecmap_markergroup {
 			} else {
 				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeJS() .');';
 			}
-
-			$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'['. $this->id .'], ' . $this->minzoom . ', ' . $this->maxzoom . ');';
 		}
+		
+		$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'['. $this->id .'], ' . $this->minzoom . ', ' . $this->maxzoom . ');';
+		
 		return $jsContent;
 	}
 	
