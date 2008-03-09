@@ -385,26 +385,29 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(!empty($this->radius)) {
 			$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
 
-			if(!empty($this->center) &&  $distance < $this->radius) {
+			if(!empty($this->lat) && !empty($this->long) &&  $distance > $this->radius) {
 				return null;
 			}
 		}
 
 		if($lat != '' && $long != '') {
+			$group = $this->addGroup($minzoom, $maxzoom);
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$marker = new $classname(count($this->markers),
-											  $lat,
-											  $long,
-											  $title,
-											  $description,
-											  $this->prefillAddress,
-											  $tabLabels,
-											  '0xFF0000',
-											  '0xFFFFFF',
-											  $iconID);
+			$marker = new $classname($group->getMarkerCount(),
+									  $lat,
+									  $long,
+									  $title,
+									  $description,
+									  $this->prefillAddress,
+									  $tabLabels,
+									  '0xFF0000',
+									  '0xFFFFFF',
+									  $iconID);
+			$marker->setMinZoom($minzoom);
+			$marker->setMapName($this->mapName);
+			$group->addMarker($marker);
+			$group->setDirections($this->directions);
 
-			$this->markers[$minzoom.':'.$maxzoom][] = $marker;
-			$this->markerCount++;
 			return $marker;
 		}
 		return null;

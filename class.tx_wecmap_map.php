@@ -292,7 +292,7 @@ class tx_wecmap_map {
 		if($lat != '' && $long != '') {
 			$group = $this->addGroup($minzoom, $maxzoom);
 			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$marker =  new $classname($group->getMarkerCount(),
+			$marker = new $classname($group->getMarkerCount(),
 									  $lat,
 									  $long,
 									  $title,
@@ -302,12 +302,12 @@ class tx_wecmap_map {
 									  '0xFF0000',
 									  '0xFFFFFF',
 									  $iconID);
-			$marker->setMinZoom($minzoom);
-			$marker->setMapName($this->mapName);
 			$group->addMarker($marker);
+			$group->setDirections($this->directions);
 
 			return $marker;
 		}
+		return null;
 	}
 
 	/**

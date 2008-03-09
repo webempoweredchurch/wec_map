@@ -41,6 +41,7 @@ class tx_wecmap_marker {
 	var $latitude;
 	var $longitude;
 	var $minzoom = 0;
+	var $maxzoom;
 	var $title;
 	var $description;
 	var $color;
@@ -145,6 +146,15 @@ class tx_wecmap_marker {
 	 **/
 	function setMinzoom($zoom) {
 		$this->minzoom = $zoom;
+	}
+	
+	/**
+	 * sets the maximum zoom level this marker is displayed on
+	 *
+	 * @return void
+	 **/
+	function setmaxzoom($zoom) {
+		$this->maxzoom = $zoom;
 	}
 }
 

@@ -287,7 +287,26 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return String
 	 **/
 	function getClickJS() {
-		return $this->mapName.'_triggerMarker('. $this->groupId .', '. $this->index .', '. $this->minzoom .');';
+		return $this->mapName.'_triggerMarker('. $this->groupId .', '. $this->index .', '. $this->calculateClickZoom() .');';
+	}
+	
+	/**
+	 * calculates the optimal zoom level for the click
+	 *
+	 * @return integer
+	 **/
+	function calculateClickZoom() {
+		$zoom = 14;
+		// we want to keep the zoom level around $zoom, but will
+		// choose the max if the marker is only visible under $zoom,
+		// or the min if it's only shown over $zoom.
+		if($zoom < $this->minzoom) {
+			$zoom = $this->minzoom;
+		} else if($zoom > $this->maxzoom) {
+			$zoom = $this->maxzoom;
+		}
+		
+		return $zoom;
 	}
 	
 	/**
