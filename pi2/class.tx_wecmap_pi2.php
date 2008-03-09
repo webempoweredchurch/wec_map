@@ -357,7 +357,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 	 * @return void
 	 **/
 	function addSidebarItem(&$marker, $title) {
-		if(!$this->showSidebar && $marker == null) return;
+		if(!($this->showSidebar && is_object($marker))) return;
 		$data = array();
 		$data['onclickLink'] = $marker->getClickJS();
 		$data['title'] = $title;

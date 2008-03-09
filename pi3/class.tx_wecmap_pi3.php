@@ -107,6 +107,10 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$showRadiusSearch = $this->pi_getFFvalue($piFlexForm, 'showRadiusSearch', 'mapConfig');
 		empty($showRadiusSearch) ? $showRadiusSearch = $conf['showRadiusSearch']:null;
 		
+		$showSidebar = $this->pi_getFFvalue($piFlexForm, 'showSidebar', 'mapConfig');
+		empty($showSidebar) ? $showSidebar = $conf['showSidebar']:null;
+		$this->showSidebar = $showSidebar;
+		
 		$tables = $this->pi_getFFvalue($piFlexForm, 'tables', 'default');
 		empty($tables) ? $tables = $conf['tables']:null;
 		if (!empty($tables)) $tables = explode(',', $tables);
@@ -185,7 +189,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 				foreach( $res as $key => $value ) {
 					$desc = $this->getRecordTitle($table, $value);
-					$map->addMarkerByTCA($table, $value['uid'], '', $desc.' ('.$table.')');
+					$marker = $map->addMarkerByTCA($table, $value['uid'], '', $desc.' ('.$table.')');
+					$this->addSidebarItem($marker, $value['name']);
 				}
 			}
 		} else {
@@ -216,8 +221,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($values, $data);
 					
-					
-					$map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $values['icon.']['iconID']);
+					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $values['icon.']['iconID']);
+					$this->addSidebarItem($marker, $data['name']);
 				}
 			}
 		}
@@ -225,9 +230,9 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		// gather all the content together
 		$content = array();
 		$content['map'] = $map->drawMap();
-		$content['addressForm'] = $this->getAddressForm();
+		if($showRadiusSearch) $content['addressForm'] = $this->getAddressForm();
 		if($showWrittenDirs) $content['directions'] = $this->getDirections();
-		$content['sidebar'] = $this->getSidebar();
+		if($showSidebar) $content['sidebar'] = $this->getSidebar();
 
 		// run all the content pieces through TS to assemble them
 		$output = tx_wecmap_shared::render($content, $conf['output.']);
@@ -308,8 +313,21 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		return $out;
 	}
 	
+	/**
+	 * adds a sidebar item corresponding to the given marker.
+	 * Does so only if the sidebar is enabled.
+	 *
+	 * @return void
+	 **/
+	function addSidebarItem(&$marker, $title) {
+		if(!($this->showSidebar && is_object($marker))) return;
+		$data = array();
+		$data['onclickLink'] = $marker->getClickJS();
+		$data['title'] = $title;
+		$this->sidebarLinks[] = tx_wecmap_shared::render($data, $this->conf['sidebarItem.']);
+	}
+	
 	function getSidebar() {
-		return null;
 		$c = '';
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
