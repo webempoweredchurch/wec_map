@@ -96,12 +96,12 @@ class tx_wecmap_markergroup {
 	 *
 	 * @return void
 	 **/
-	function addMarker($markerObj) {
+	function addMarker(&$markerObj) {
 		$markerObj->setMinZoom($this->minzoom);
 		$markerObj->setMaxZoom($this->maxzoom);
 		$markerObj->setMapName($this->mapName);
 		$markerObj->setGroupId($this->id);
-		$this->markers[] = $markerObj;
+		$this->markers[] = &$markerObj;
 		$this->markerCount++;
 	}
 	
