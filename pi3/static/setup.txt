@@ -13,19 +13,6 @@ plugin.tx_wecmap_pi3 {
 	centerLong = 
 	mapName =
 	
-	homeicon {
-		iconID       = homeicon
-		imagepath    = typo3conf/ext/wec_map/images/icon_home.gif
-		shadowpath   = typo3conf/ext/wec_map/images/icon_home_shadow.png
-		width        = 16
-		height       = 16
-		shadowWidth  = 25
-		shadowHeight = 25
-		anchorX      = 0
-		anchorY      = 0
-		infoAnchorX  = 5
-		infoAnchorY  = 1
-	}
 	# example for tables configuration
 	#
 	# tables {
@@ -105,6 +92,7 @@ plugin.tx_wecmap_pi3 {
 		10.wrap = <p>|</p>
 	}
 	
+	homeicon    < tx_wecmap_api.homeicon
 	sidebar 	< tx_wecmap_api.sidebar
 	directions 	< tx_wecmap_api.directions
 	sidebarItem < tx_wecmap_api.sidebarItem

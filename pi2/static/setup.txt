@@ -75,6 +75,7 @@ plugin.tx_wecmap_pi2 {
 		}
 	}
 	
+	homeicon	< tx_wecmap_api.homeicon
 	sidebar 	< tx_wecmap_api.sidebar
 	directions 	< tx_wecmap_api.directions
 	sidebarItem < tx_wecmap_api.sidebarItem
