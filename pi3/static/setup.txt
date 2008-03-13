@@ -47,14 +47,14 @@ plugin.tx_wecmap_pi3 {
 	# 			infoAnchorY  = 1
 	# 		}
 	# 		
-	#		# config for title
+	# 		# config for title
 	# 		title {
 	# 			title = TEXT
 	# 			title.field = name
 	# 			title.wrap = <h1>|</h1>
 	# 		}
 	# 		
-	#		# config for description
+	# 		# config for description
 	# 		description = COA
 	# 		description {
 	# 			10 = COA
@@ -74,6 +74,36 @@ plugin.tx_wecmap_pi3 {
 	# 		where = pid=95 and deleted=0 and disable=0
 	# 	}
 	# }
+	
+	# config for title
+	defaulttitle {
+		title = TEXT
+		title.field = name
+		title.wrap = <h1>|</h1>
+	}
+	
+	# config for description
+	defaultdescription = COA
+	defaultdescription {
+		10 = COA
+		10 {
+			10 = TEXT
+			10.field = street
+			10.wrap = |<br />
+	
+			20 = TEXT
+			20.field = city
+			20.wrap = |,&nbsp;
+			
+			30 = TEXT
+			30.field = state
+			30.wrap = |&nbsp;
+			
+			40 = TEXT
+			40.field = zip
+		}
+		10.wrap = <p>|</p>
+	}
 	
 	sidebar 	< tx_wecmap_api.sidebar
 	directions 	< tx_wecmap_api.directions

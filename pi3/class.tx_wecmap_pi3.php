@@ -177,8 +177,9 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		// 2. all manually from TS
 		// So we check whether it's set via TS, and if not we use FF data
 		if(empty($conf['tables.'])) {
+			
 			foreach( $tables as $table ) {
-
+				
 				if(!empty($pid)) {
 					$where = '1=1' . tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table, 'OR');
 				} else {
@@ -189,19 +190,22 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $where);
 
-				foreach( $res as $key => $value ) {
-					$desc = $this->getRecordTitle($table, $value);
-					$marker = $map->addMarkerByTCA($table, $value['uid'], '', $desc.' ('.$table.')');
-					$this->addSidebarItem($marker, $value['name']);
+				foreach( $res as $key => $data ) {
+					$conf['table'] = $table;
+
+					// get title and description
+					list($title,$desc) = $this->getTitleAndDescription($conf, $data);
+					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc);
+					$this->addSidebarItem($marker, $data['name']);
 				}
 			}
 		} else {
-			foreach( $conf['tables.'] as $table => $values ) {
+			foreach( $conf['tables.'] as $table => $tconf ) {
 
-				$table = $values['table'];
+				$table = $tconf['table'];
 				
-				if(!empty($values['where'])) {
-					$where = $values['where'];
+				if(!empty($tconf['where'])) {
+					$where = $tconf['where'];
 				} else {
 					$where = '1=1';
 				}
@@ -212,18 +216,18 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 				// add icon if configured, else see if we just have an iconID
 				// and use that. We assume the icon is added somewhere else.
-				if(!empty($values['icon.']['imagepath'])) {
-					$map->addMarkerIcon($values['icon.']);			
+				if(!empty($tconf['icon.']['imagepath'])) {
+					$map->addMarkerIcon($tconf['icon.']);			
 				} else {
-					$values['icon.']['iconID'] ? null : $values['icon.']['iconID'] = null;
+					$tconf['icon.']['iconID'] ? null : $tconf['icon.']['iconID'] = null;
 				}
 				
 				foreach( $res as $key => $data ) {
 					
 					// get title and description
-					list($title,$desc) = $this->getTitleAndDescription($values, $data);
+					list($title,$desc) = $this->getTitleAndDescription($tconf, $data);
 					
-					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $values['icon.']['iconID']);
+					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $tconf['icon.']['iconID']);
 					$this->addSidebarItem($marker, $data['name']);
 				}
 			}
@@ -256,14 +260,24 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		if(!empty($conf['title.'])) {
 			$title = tx_wecmap_shared::render($data, $conf['title.'], $conf['table']);
 		} else {
-			$title = '';
+			$data['name'] = $this->getRecordTitle($conf['table'], $data);
+			$title = tx_wecmap_shared::render($data, $this->conf['defaulttitle.'], $conf['table']);
 		}
 
-		// process description also only if TS config is present
+		// process description also only if TS config is present,
+		// otherwise display the address
 		if(!empty($conf['description.'])) {
 			$desc = tx_wecmap_shared::render($data, $conf['description.'], $conf['table']);
 		} else {
-			$desc = $this->getRecordTitle($conf['table'], $data).' ('.$conf['table'].')';			
+			$af = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'];
+			$ad = array();
+			$ad['street']  = $data[$af['street']];
+			$ad['city']    = $data[$af['city']];
+			$ad['state']   = $data[$af['state']];
+			$ad['zip']     = $data[$af['zip']];
+			$ad['country'] = $data[$af['country']];
+
+			$desc = tx_wecmap_shared::render($ad, $this->conf['defaultdescription.'], $conf['table']);						
 		}
 
 		return array($title, $desc);
