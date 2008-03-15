@@ -32,7 +32,7 @@ tx_wecmap_api {
 	sidebar {
 		10 = TEXT
 		10.field = content
-		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="display:block; height: 200px; overflow: auto;">|</div>
+		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar">|</div>
 		10.insertData = true
 	}
 	
@@ -46,15 +46,20 @@ tx_wecmap_api {
 	
 	output = COA
 	output {
+		5 = HTML
+		5.value = <table><tr>
 		10       = TEXT
 		10.field = map
-		10.wrap  = |
+		10.wrap  = <td>|</td>
 		20       = TEXT
-		20.field = directions
-		20.wrap  = |
+		20.field = sidebar
+		20.wrap  = <td style="vertical-align: top;">|</td>
+		25 = HTML
+		25.value = </tr></table>
 		30       = TEXT
-		30.field = sidebar
+		30.field = directions
 		30.wrap  = |
+
 		40       = TEXT
 		40.field = addressForm
 		40.wrap  = |
@@ -74,4 +79,8 @@ tx_wecmap_api {
 		infoAnchorX  = 5
 		infoAnchorY  = 1
 	}
+	
+	_CSS_DEFAULT_STYLE (
+		.sidebar {display:block; height: 500px; overflow: auto;}
+	)
 }

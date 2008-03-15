@@ -81,4 +81,5 @@ plugin.tx_wecmap_pi2 {
 	sidebarItem < tx_wecmap_api.sidebarItem
 	addressForm < tx_wecmap_api.addressForm
 	output 		< tx_wecmap_api.output
+	_CSS_DEFAULT_STYLE < tx_wecmap_api._CSS_DEFAULT_STYLE
 }
