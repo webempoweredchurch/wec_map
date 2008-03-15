@@ -196,6 +196,11 @@ class tx_wecmap_pi3 extends tslib_pibase {
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($conf, $data);
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc);
+					
+					// build parameters to pass to the hook
+					$params = array('table' => $table, 'data' => $data, 'markerObj' => &$marker);
+					$this->processHook($params);
+
 					$this->addSidebarItem($marker, $data['name']);
 				}
 			}
@@ -228,6 +233,11 @@ class tx_wecmap_pi3 extends tslib_pibase {
 					list($title,$desc) = $this->getTitleAndDescription($tconf, $data);
 					
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $tconf['icon.']['iconID']);
+
+					// build parameters to pass to the hook
+					$params = array('table' => $table, 'data' => $data, 'markerObj' => &$marker);
+					$this->processHook($params);
+
 					$this->addSidebarItem($marker, $data['name']);
 				}
 			}
@@ -244,6 +254,27 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$output = tx_wecmap_shared::render($content, $conf['output.']);
 
 		return $this->pi_wrapInBaseClass($output);
+	}
+	
+	/**
+	 * Processes the hook
+	 *
+	 * @return void
+	 **/
+	function processHook(&$params) {
+			// Hook: Allows to manipulate the parameters which are taken to build the chash:
+		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_pi3']['markerHook']))	{
+			$cHashParamsHook =& $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_pi3']['markerHook'];
+			if (is_array($cHashParamsHook)) {
+				$hookParameters = array(
+					'params' => &$params,
+				);
+				$hookReference = null;
+				foreach ($cHashParamsHook as $hookFunction)	{
+					t3lib_div::callUserFunction($hookFunction, $hookParameters, $hookReference);
+				}
+			}
+		}
 	}
 	
 	/**
