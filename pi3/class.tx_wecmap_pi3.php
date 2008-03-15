@@ -60,6 +60,22 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 
+		// check for WEC Map API static template inclusion
+		if(empty($conf['output']) && !empty($conf['defaulttitle.'])) {
+			global $LANG;
+			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
+			$out .= $LANG->getLL('wecApiTemplateNotIncluded');
+			return $out;
+		}
+		
+		// check for WEC Table Map static template inclusion
+		if(empty($conf['defaulttitle.'])) {
+			global $LANG;
+			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
+			$out .= $LANG->getLL('pi3TemplateNotIncluded');
+			return $out;
+		}
+		
 		/* Initialize the Flexform and pull the data into a new object */
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];

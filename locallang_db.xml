@@ -27,6 +27,26 @@
 			<label index="getDirections">Get Directions</label>
 			<label index="fromHereTo">From here to:</label>
 			<label index="toHereFrom">To here from:</label>
+			<label index="pi1TemplateNotIncluded">
+			    <![CDATA[
+			    <p>Please include the WEC Simple Map static template on your page.</p>
+			    ]]>
+			</label>
+			<label index="pi2TemplateNotIncluded">
+			    <![CDATA[
+			    <p>Please include the WEC Frontend User Map static template on your page.</p>
+			    ]]>
+			</label>
+			<label index="pi3TemplateNotIncluded">
+			    <![CDATA[
+			    <p>Please include the WEC Table Map static template on your page.</p>
+			    ]]>
+			</label>
+			<label index="wecApiTemplateNotIncluded">
+                <![CDATA[
+			    <p>Please include the WEC Map API static template on your page and make sure it's included before (above) any other WEC Map static templates.</p>
+                ]]>
+			</label>
 			<label index="tt_content.pi_flexform.title">Title</label>
 			<label index="tt_content.pi_flexform.description">Description</label>
 			<label index="tt_content.pi_flexform.street">Street Address</label>
