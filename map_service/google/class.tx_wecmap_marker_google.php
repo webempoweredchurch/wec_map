@@ -121,11 +121,9 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$titleArray = $arrays[0];
 		$textArray = $arrays[1];
 
-		if(is_array($titleArray)) {
-			$this->hasTabs = true;
+		if($this->hasTabs) {
 			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
 		} else {
-			$this->hasTabs = false;
 			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', "'.$titleArray.$textArray.'")';
 		}
 
@@ -142,7 +140,6 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$titleArray = $arrays[0];
 		$textArray = $arrays[1];
 
-		$this->hasTabs = true;
 		return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
 	}
 	
@@ -165,8 +162,11 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		}
 		
 		if(!is_array($this->tabLabels)) {
+			global $LANG;
 			$this->tabLabels = array();
+			$this->tabLabels[] = $LANG->getLL('info');
 		}
+
 		$this->tabLabels[] = addslashes($tabLabel);
 		$this->title[] = addslashes($title);
 		$this->description[] = addslashes($description);
@@ -255,50 +255,53 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		global $LANG;
 
 		if(is_array($this->tabLabels) && !empty($this->tabLabels)) {
+			$this->hasTabs = true;
 			$titleArray = '[';
 			$first = true;
 			foreach( $this->tabLabels as $value ) {
 				$value = strip_tags($value);
 				if($first) {
-					$titleArray .= '"'. $value .'"';
+					$titleArray .= '\''. $value .'\'';
 				} else {
-					$titleArray .= ', "'. $value .'"';
+					$titleArray .= ', \''. $value .'\'';
 				}
 				$first = false;
 			}
 
 			if($directions) {
-				$titleArray .= ', "'. $LANG->getLL('directions') .'"]';
+				$titleArray .= ', \''. $LANG->getLL('directions') .'\']';
 			} else {
 				$titleArray .= ']';
 			}
-
 
 			$textArray = '[';
 			$first = true;
 
 			for($i = 0; $i < count($this->title); $i++) {
 				if($first) {
-					$textArray .= '"'. $this->title[$i].$this->description[$i] .'"';
+					$textArray .= '\''. $this->title[$i].$this->description[$i] .'\'';
 				} else {
-					$textArray .= ', "'. $this->title[$i].$this->description[$i] .'"';
+					$textArray .= ', \''. $this->title[$i].$this->description[$i] .'\'';
 				}
 				$first = false;
 			}
 
 			if($directions) {
-				$textArray .= ', "'. $this->getDirectionsHTML() .'"]';
+				$textArray .= ', \''. $this->getDirectionsHTML() .'\']';
 			} else {
 				$textArray .= ']';
 			}
+			
 		} else {
-
+			
 			if($directions) {
+				$this->hasTabs = true;
 				$titleArray = '[\''. $LANG->getLL('info') .'\', \''. $LANG->getLL('directions') .'\']';
 
 				$textArray = '[\''.$this->title.$this->description.'\', \''. $this->getDirectionsHTML(). '\']';
 
 			} else {
+				$this->hasTabs = false;
 				$titleArray = $this->title;
 				$textArray = $this->description;
 			}
