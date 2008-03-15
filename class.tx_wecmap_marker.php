@@ -86,6 +86,24 @@ class tx_wecmap_marker {
 	}
 
 	/**
+	 * Setter for the marker title.
+	 *
+	 * @return void
+	 **/
+	function setTitle($newTitle) {
+		$this->title = $newTitle;
+	}
+
+	/**
+	 * Setter for marker description
+	 *
+	 * @return void
+	 **/
+	function setDescription($newDesc) {
+		$this->description = $newDesc;
+	}
+	
+	/**
 	 * Getter for marker color
 	 *
 	 * @return string marker color
