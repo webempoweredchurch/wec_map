@@ -4,6 +4,7 @@
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.mapTitle</sheetTitle>
+					<cshFile>LLL:EXT:wec_map/csh/locallang_csh_ff.xml</cshFile>
 				</TCEforms>
 				<type>array</type>
 				<el>
@@ -133,6 +134,7 @@
 			<ROOT>
 				<TCEforms>
 					<sheetTitle>LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.controlsTitle</sheetTitle>
+					<cshFile>LLL:EXT:wec_map/csh/locallang_csh_ff.xml</cshFile>
 				</TCEforms>
 				<type>array</type>
 				<el>

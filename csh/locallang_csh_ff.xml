@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<description>CSH labels for the WEC Map Plugins</description>
+		<type>CSH</type>
+		<csh_table></csh_table>
+		<fileId>EXT:wec_map/csh/locallang_csh_ff.xml</fileId>
+		<labelContext type="array"></labelContext>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+		    <label index="title.description">The title of the marker</label>
+            <label index="description.description">The description of the marker</label>
+            <label index="coord.description">Shows the latitude and longitude of the address given.</label>
+            <label index="coord.details">Lat and long can be changed manually if desired. If the address couldn't be resolved, lat and long won't be available.</label>
+
+            <label index="showWrittenDirections.description">This will print out written directions additional to showing the route graphically on the map.</label>
+            <label index="overviewMap.description">Shows a minimap in the corner for better navigating around the map.</label>
+            <label index="mapType.description">Shows the map type control that can be used to toggle normal, satellite, or hybrid view.</label>
+
+
+            <label index="showRadiusSearch.description">Shows an address form and radius selector that can be used to filter the markers on the map to only show those within the given radius from the given address.</label>
+            <label index="showSidebar.description">Shows a sidebar with a list of all the markers that, when clicked, will pan and zoom to the marker it corresponds to.</label>
+            <label index="privacy.description">Only shows how many users are in a city instead of showing individual markers. This can be used to protect users' privacy.</label>
+            
+		</languageKey>
+	</data>
+</T3locallang>
