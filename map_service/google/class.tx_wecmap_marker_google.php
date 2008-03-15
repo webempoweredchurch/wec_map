@@ -167,7 +167,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		if(!is_array($this->tabLabels)) {
 			$this->tabLabels = array();
 		}
-		$this->tabLabels[] = $tabLabel;
+		$this->tabLabels[] = addslashes($tabLabel);
 		$this->title[] = addslashes($title);
 		$this->description[] = addslashes($description);
 	}
