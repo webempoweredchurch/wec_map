@@ -151,7 +151,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 *
 	 * @return void
 	 **/
-	function addTab($title, $description) {
+	function addTab($tabLabel, $title, $description) {
 		if(!is_array($this->title)) {
 			$temp = $this->title;
 			$this->title = array();
@@ -163,6 +163,11 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			$this->description = array();
 			$this->description[] = $temp;
 		}
+		
+		if(!is_array($this->tabLabels)) {
+			$this->tabLabels = array();
+		}
+		$this->tabLabels[] = $tabLabel;
 		$this->title[] = addslashes($title);
 		$this->description[] = addslashes($description);
 	}
