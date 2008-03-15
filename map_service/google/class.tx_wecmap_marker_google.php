@@ -49,6 +49,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	var $strokeColor;
 	var $prefillAddress;
 	var $hasTabs;
+	var $tabLabels;
 	var $iconID;
 	
 	/**
@@ -143,6 +144,27 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 
 		$this->hasTabs = true;
 		return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
+	}
+	
+	/**
+	 * adds a new tab to the marker
+	 *
+	 * @return void
+	 **/
+	function addTab($title, $description) {
+		if(!is_array($this->title)) {
+			$temp = $this->title;
+			$this->title = array();
+			$this->title[] = $temp;
+		}
+		
+		if(!is_array($this->description)) {
+			$temp = $this->description;
+			$this->description = array();
+			$this->description[] = $temp;
+		}
+		$this->title[] = addslashes($title);
+		$this->description[] = addslashes($description);
 	}
 
 	/**
