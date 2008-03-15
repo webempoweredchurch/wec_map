@@ -109,10 +109,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
 		empty($scale) ? $scale = $conf['controls.']['showScale']:null;
 
-		$private = $this->pi_getFFvalue($piFlexForm, 'privacy', 'default');
-		empty($private) ? $private = $conf['private']:null;
-
-		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'default');
+		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'mapConfig');
 		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
 
 		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'mapConfig');
