@@ -87,6 +87,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'default');
 		empty($height) ? $height = $conf['height']:null;
+		$this->height = $height;
 
 		$userGroups = $this->pi_getFFvalue($piFlexForm, 'userGroups', 'default');
 		empty($userGroups) ? $userGroups = $conf['userGroups']:null;
@@ -400,7 +401,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
 		}
-		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName, 'content' => $c), $this->conf['sidebar.']);
+		$out = tx_wecmap_shared::render(array('map_height' => $this->height, 'map_id' => $this->mapName, 'content' => $c), $this->conf['sidebar.']);
 
 		return $out;
 	}

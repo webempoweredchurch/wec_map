@@ -89,6 +89,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'mapConfig');
 		empty($height) ? $height = $conf['height']:null;
+		$this->height = $height;
 
 		$mapControlSize = $this->pi_getFFvalue($piFlexForm, 'mapControlSize', 'mapControls');
 		(empty($mapControlSize) || $mapControlSize == 'none') ? $mapControlSize = $conf['controls.']['mapControlSize']:null;
@@ -278,7 +279,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
 		}
-		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName, 'content' => $c), $this->conf['sidebar.']);
+		$out = tx_wecmap_shared::render(array('map_height' => $this->height, 'map_id' => $this->mapName, 'content' => $c), $this->conf['sidebar.']);
 
 		return $out;
 	}
