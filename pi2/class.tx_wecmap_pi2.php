@@ -116,7 +116,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$showDirs = $this->pi_getFFvalue($piFlexForm, 'showDirections', 'default');
 		empty($showDirs) ? $showDirs = $conf['showDirections']:null;
 
-		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'mapConfig');
+		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'default');
 		empty($showWrittenDirs) ? $showWrittenDirs = $conf['showWrittenDirections']:null;
 
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');

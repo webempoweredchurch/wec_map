@@ -103,7 +103,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
 
-		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'default');
+		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapConfig');
 		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
 
 		$scale = $this->pi_getFFvalue($piFlexForm, 'scale', 'mapControls');
@@ -115,7 +115,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$showWrittenDirs = $this->pi_getFFvalue($piFlexForm, 'showWrittenDirections', 'mapConfig');
 		empty($showWrittenDirs) ? $showWrittenDirs = $conf['showWrittenDirections']:null;
 
-		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'default');
+		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'mapConfig');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
 
 		$showRadiusSearch = $this->pi_getFFvalue($piFlexForm, 'showRadiusSearch', 'mapConfig');
