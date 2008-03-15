@@ -277,18 +277,12 @@ class tx_wecmap_pi3 extends tslib_pibase {
 	 *
 	 * @return void
 	 **/
-	function processHook(&$params) {
-			// Hook: Allows to manipulate the parameters which are taken to build the chash:
+	function processHook(&$hookParameters) {
 		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_pi3']['markerHook']))	{
-			$cHashParamsHook =& $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_pi3']['markerHook'];
-			if (is_array($cHashParamsHook)) {
-				$hookParameters = array(
-					'params' => &$params,
-				);
-				$hookReference = null;
-				foreach ($cHashParamsHook as $hookFunction)	{
-					t3lib_div::callUserFunction($hookFunction, $hookParameters, $hookReference);
-				}
+			$hooks =& $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_pi3']['markerHook'];
+			$hookReference = null;
+			foreach ($hooks as $hookFunction)	{
+				t3lib_div::callUserFunction($hookFunction, $hookParameters, $hookReference);
 			}
 		}
 	}
