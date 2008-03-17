@@ -129,6 +129,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		empty($showSidebar) ? $showSidebar = $conf['showSidebar']:null;
 		$this->showSidebar = $showSidebar;
 
+		$kml = $conf['kml'];
+
 		$centerLat = $conf['centerLat'];
 
 		$centerLong = $conf['centerLong'];
@@ -145,6 +147,15 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className(null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
+		// get kml urls for each included record
+		if(!empty($kml)) {
+			$where = 'uid IN ('.$kml.')';
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('url', 'tx_wecmap_external', $where);			
+			foreach( $res as $key => $url ) {
+				$map->addKML($url['url']);
+			}
+		}
+		
 		// process radius search
 		if($showRadiusSearch) {
 
