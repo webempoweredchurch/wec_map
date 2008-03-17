@@ -152,7 +152,16 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			$where = 'uid IN ('.$kml.')';
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('url', 'tx_wecmap_external', $where);			
 			foreach( $res as $key => $url ) {
-				$map->addKML($url['url']);
+				$link = trim($url['url']);
+				$oldAbs = $GLOBALS['TSFE']->absRefPrefix;
+				$GLOBALS['TSFE']->absRefPrefix = t3lib_div::getIndpEnv('TYPO3_SITE_URL');
+				$linkConf = Array(
+					'parameter' => $link,
+					'returnLast' => 'url'
+				);
+				$link = $this->cObj->typolink('', $linkConf);
+				$GLOBALS['TSFE']->absRefPrefix = $oldAbs;
+				$map->addKML($link);
 			}
 		}
 		
