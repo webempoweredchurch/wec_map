@@ -205,7 +205,8 @@ class tx_wecmap_cache {
 		$hash = tx_wecmap_cache::hash($street, $city, $state, $zip, $country);
 		$result = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_wecmap_cache', ' address_hash="'.$hash.'"');
 		if ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($result)) {
-			return array('lat' => $row['latitude'], 'long' => $row['longitude']);
+			$latlong = array('lat' => $row['latitude'], 'long' => $row['longitude']);
+			return $latlong;
 		} else {
 			return null;
 		}

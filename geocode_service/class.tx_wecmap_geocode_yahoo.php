@@ -103,10 +103,10 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 			$latlong['long'] = $xml['Result']['Longitude'];
 		}
 		if (is_null($xml['Result']['Latitude']) or is_null($xml['Result']['Longitude'])) {
-			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo! geocode failed for '.$addressString, 'wec_map', 2, $addressArray);
+			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo : '.$addressString, 'wec_map_geocode', 2, $addressArray);
 			return null;
 		} else {
-			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo! geocode succeeded for '.$addressString, 'wec_map', -1, $addressArray);
+			if (TYPO3_DLOG) t3lib_div::devLog('Yahoo : '.$addressString, 'wec_map_geocode', -1, $addressArray);
 			return $latlong;
 		}
 	}
