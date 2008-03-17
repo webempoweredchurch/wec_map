@@ -9,6 +9,10 @@
     </meta>
     <data type="array">
         <languageKey index="default" type="array">
+
+            <label index="tx_wecmap_external.title">Title</label>
+            <label index="tx_wecmap_external.url">URL</label>
+            <label index="tx_wecmap_external">WEC Map External Resource</label>
             <label index="tt_content.list_type_pi1">WEC Simple Map</label>
             <label index="tt_content.list_type_pi2">WEC Frontend User Map</label>
             <label index="tt_content.list_type_pi3">WEC Table Map</label>
@@ -79,6 +83,7 @@
 			<label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
 			<label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
 			<label index="tt_content.pi_flexform.showRadiusSearch">Show Radius Search</label>
+			<label index="tt_content.pi_flexform.kml">KML to overlay</label>
 			<label index="tt_content.pi_flexform.showSidebar">Show Marker Sidebar</label>
 			<label index="tt_content.pi_flexform.prefillAddress">Prefill Address from User Info</label>
         </languageKey>

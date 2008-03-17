@@ -129,6 +129,9 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		empty($tables) ? $tables = $conf['tables']:null;
 		if (!empty($tables)) $tables = explode(',', $tables);
 
+		$kml = $this->pi_getFFvalue($piFlexForm, 'kml', 'default');
+		empty($kml) ? $kml = $conf['kml']:null;
+
 		$centerLat = $conf['centerLat'];
 
 		$centerLong = $conf['centerLong'];
@@ -143,6 +146,15 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
 		$map = new $className(null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+
+		// get kml urls for each included record
+		if(!empty($kml)) {
+			$where = 'uid IN ('.$kml.')';
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('url', 'tx_wecmap_external', $where);			
+			foreach( $res as $key => $url ) {
+				$map->addKML($url['url']);
+			}
+		}
 
 		// process radius search
 		if($showRadiusSearch) {
@@ -256,7 +268,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				}
 			}
 		}
-
+		
+		// $map->addKML('http://kml.lover.googlepages.com/my-vacation-photos.kml');
 		// gather all the content together
 		$content = array();
 		$content['map'] = $map->drawMap();

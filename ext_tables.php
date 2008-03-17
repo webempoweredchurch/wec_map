@@ -37,6 +37,20 @@ t3lib_extMgm::addStaticFile($_EXTKEY,'pi3/static/','WEC Table Map');
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi2/static/','WEC Frontend User Map');
 t3lib_extMgm::addStaticFile($_EXTKEY,'pi1/static/','WEC Simple Map');
 
+$TCA["tx_wecmap_external"] = Array (
+	"ctrl" => Array (
+		'title' => 'LLL:EXT:wec_map/locallang_db.xml:tx_wecmap_external',
+	 	'label' => 'title',
+		'tstamp' => 'tstamp',
+		'crdate' => 'crdate',
+		"delete" => "deleted",
+		"dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
+		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."ext_icon.gif",
+	),
+	"feInterface" => Array (
+		"fe_admin_fieldList" => "title, url",
+	)
+);
 
 /* Define the address related fields for a frontend user */
 t3lib_div::loadTCA('fe_users');

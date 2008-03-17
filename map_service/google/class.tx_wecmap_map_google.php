@@ -53,6 +53,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $controls;
 	var $type;
 	var $directions;
+	var $kml;
 	var $prefillAddress;
 	var $directionsDivID;
 	var $showInfoOnLoad;
@@ -76,7 +77,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->prefixId = 'tx_wecmap_map_google';
 		$this->js = array();
 		$this->markers = array();
-
+		$this->kml = array();
+		
 		// array to hold the different Icons
 		$this->icons = array();
 
@@ -224,6 +226,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2($this->mapName);
 			$jsContent[] = $this->js_newGDirections();
+			$jsContent[] = $this->js_addKMLOverlay();
 			$jsContent[] = $this->js_setCenter($this->mapName, $this->lat, $this->long, $this->zoom, $this->type);
 			foreach( $this->controls as $control ) {
 				$jsContent[] = $control;
@@ -444,6 +447,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		
 	}
 	
+	/**
+	 * Adds a KML overlay to the map.
+	 *
+	 * @return void
+	 **/
+	function addKML($url) {
+		$this->kml[] = $url;
+	}
 	/**
 	 * Sets the map center to a given address' coordinates.
 	 *
@@ -668,6 +679,20 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 */
 	function js_addControl($name, $control) {
 		return $name.'.addControl('.$control.');';
+	}
+
+	/**
+	 * generate the js for kml overlays
+	 *
+	 * @return string
+	 **/
+	function js_addKMLOverlay() {
+		$out ='';
+		foreach( $this->kml as $url ) {
+			$out .= 'var '.$this->mapName.'_gx = new GGeoXml("'.$url.'");'."\n";
+			$out .= $this->mapName.'.addOverlay('.$this->mapName.'_gx);'."\n";
+		}
+		return $out;
 	}
 
 	/**

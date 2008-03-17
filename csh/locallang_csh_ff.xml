@@ -22,7 +22,7 @@
             <label index="showRadiusSearch.description">Shows an address form and radius selector that can be used to filter the markers on the map to only show those within the given radius from the given address.</label>
             <label index="showSidebar.description">Shows a sidebar with a list of all the markers that, when clicked, will pan and zoom to the marker it corresponds to.</label>
             <label index="privacy.description">Only shows how many users are in a city instead of showing individual markers. This can be used to protect users' privacy.</label>
-            
+            <label index="kml.description">Selects which additional KML data should be shown on the map. The information is taken from WEC Map External Resource records.</label>
 		</languageKey>
 	</data>
 </T3locallang>
