@@ -46,24 +46,22 @@ tx_wecmap_api {
 	
 	output = COA
 	output {
-		5 = HTML
-		5.value = <table><tr>
-		10       = TEXT
-		10.field = map
-		10.wrap  = <td>|</td>
-		20       = TEXT
-		20.field = sidebar
-		20.wrap  = <td style="vertical-align: top;">|</td>
-		25 = HTML
-		25.value = </tr></table>
+		20       = HTML
+		20.value  = <table><tr>
 		30       = TEXT
-		30.field = directions
-		30.wrap  = |
-
+		30.field = map
+		30.wrap  = <td>|</td>
 		40       = TEXT
-		40.field = addressForm
-		40.wrap  = |
-
+		40.field = sidebar
+		40.wrap  = <td style="vertical-align: top;">|</td>
+		50       = HTML
+		50.value = </tr></table>
+		60       = TEXT
+		60.field = directions
+		60.wrap  = |
+		70       = TEXT
+		70.field = addressForm
+		70.wrap  = |
 	}
 	
 	homeicon {
