@@ -51,6 +51,8 @@ $TCA["tx_wecmap_external"] = Array (
 		"fe_admin_fieldList" => "title, url",
 	)
 );
+t3lib_extMgm::allowTableOnStandardPages('tx_wecmap_external'); 
+
 
 /* Define the address related fields for a frontend user */
 t3lib_div::loadTCA('fe_users');
