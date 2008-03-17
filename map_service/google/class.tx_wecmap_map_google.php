@@ -208,7 +208,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map_helpers'] = '<script src="'.t3lib_extMgm::siteRelPath('wec_map').'contrib/helpers.js" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'" type="text/javascript"></script>';
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
