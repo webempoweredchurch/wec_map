@@ -81,15 +81,12 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$piFlexForm = $this->cObj->data['pi_flexform'];
 
 		// get config from flexform or TS. Flexforms take precedence.
-		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'default');
+		$width = $this->pi_getFFvalue($piFlexForm, 'mapWidth', 'mapConfig');
 		empty($width) ? $width = $conf['width']:null;
 
-		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'default');
+		$height = $this->pi_getFFvalue($piFlexForm, 'mapHeight', 'mapConfig');
 		empty($height) ? $height = $conf['height']:null;
 		$this->height = $height;
-
-		$userGroups = $this->pi_getFFvalue($piFlexForm, 'userGroups', 'default');
-		empty($userGroups) ? $userGroups = $conf['userGroups']:null;
 
 		$pid = $this->pi_getFFvalue($piFlexForm, 'pid', 'default');
 		empty($pid) ? $pid = $conf['pid']:null;
