@@ -61,7 +61,7 @@ class tx_wecmap_geocode_worldkit extends t3lib_svbase {
 		$url = 	'http://worldkit.org/geocoder/rest/?'.
 				'city='.$city.','.$country;
 
-		$xml = file_get_contents($url);
+		$xml = t3lib_div::getURL($url);
 
 		$latlong = array();
 		$xml = t3lib_div::xml2array($xml);
