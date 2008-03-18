@@ -170,6 +170,11 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$this->tabLabels[] = addslashes($tabLabel);
 		$this->title[] = addslashes($title);
 		$this->description[] = addslashes($description);
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': manually adding tab to marker '.$this->index.' with title '. $this->title, 'wec_map_api');
+		}
+		// devlog end
 	}
 
 	/**
@@ -317,6 +322,11 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return String
 	 **/
 	function getClickJS() {
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': adding marker '.$this->index.'('.strip_tags($this->title).') to sidebar', 'wec_map_api');
+		}
+		// devlog end
 		return $this->mapName.'_triggerMarker('. $this->groupId .', '. $this->index .', '. $this->calculateClickZoom() .');';
 	}
 	

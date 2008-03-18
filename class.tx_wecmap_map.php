@@ -183,6 +183,12 @@ class tx_wecmap_map {
 	function setRadius($radius, $kilometers = false) {
 		$this->kilometers = $kilometers;
 		$this->radius = $radius;
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			$kilometers ? $km = 'km':$km = 'miles';
+			t3lib_div::devLog($this->mapName.': setting radius '.$radius.' '.$km, 'wec_map_api');
+		}
+		// devlog end
 	}
 
 	# haversine formula to calculate distance between two points

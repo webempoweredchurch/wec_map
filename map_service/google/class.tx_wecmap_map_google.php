@@ -133,6 +133,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 *
 	 **/
 	function addControl($name) {
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': adding control '.$name, 'wec_map_api');
+		}
+		// devlog end
 		switch ($name)
 		{
 			case 'largeMap':
@@ -181,6 +186,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string	HTML and Javascript markup to draw the map.
 	 */
 	function drawMap() {
+
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': starting map draw', 'wec_map_api');
+		}
+		// devlog end
 
 		/* Initialize locallang.  If we're in the backend context, we're fine.
 		   If we're in the frontend, then we need to manually set it up. */
@@ -253,17 +264,24 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$manualCall = '<script type="text/javascript">setTimeout("drawMap_'. $this->mapName .'()",500);</script>';
 			}
 
+			// TODO: devlog start
+			if(TYPO3_DLOG) {
+				t3lib_div::devLog($this->mapName.': finished map drawing', 'wec_map_api');
+			}
+			// devlog end
 			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
 		} else if (!$hasKey) {
 			$error = '<p>'.$LANG->getLL('error_noApiKey').'</p>';
-			return $error;
 		} else if (!$hasThingsToDisplay) {
 			$error = '<p>'.$LANG->getLL('error_nothingToDisplay').'</p>';
-			return $error;
 		} else if (!$hasHeightWidth) {
 			$error = '<p>'.$LANG->getLL('error_noHeightWidth').'</p>';
-			return $error;
 		}
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': finished map drawing with errors', 'wec_map_api', 2);
+		}
+		return $error;
 	}
 
 	/**
@@ -838,8 +856,18 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 **/
 	function hasHeightWidth() {
 		if(!empty($this->width) && !empty($this->height)) {
+			// TODO: devlog start
+			if(TYPO3_DLOG) {
+				t3lib_div::devLog($this->mapName.': height: '.$this->height.', width: '.$this->width, 'wec_map_api');
+			}
+			// devlog end
 			return true;
 		} else {
+			// TODO: devlog start
+			if(TYPO3_DLOG) {
+				t3lib_div::devLog($this->mapName.': width or height missing', 'wec_map_api', 3);
+			}
+			// devlog end
 			return false;
 		}
 	}
@@ -854,6 +882,19 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 **/
 	function enableDirections($prefillAddress = false, $divID = null) {
 		$this->prefillAddress = $prefillAddress;
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			if($prefillAddress && $divID) {
+				t3lib_div::devLog($this->mapName.': enabling directions with prefill and written dirs', 'wec_map_api');				
+			} else if($prefillAddress && !$divID) {
+				t3lib_div::devLog($this->mapName.': enabling directions with prefill and without written dirs', 'wec_map_api');
+			} else if(!$prefillAddress && $divID) {
+				t3lib_div::devLog($this->mapName.': enabling directions without prefill but with written dirs', 'wec_map_api');
+			} else if(!$prefillAddress && !$divID) {
+				t3lib_div::devLog($this->mapName.': enabling directions without prefill and written dirs', 'wec_map_api');
+			}
+		}
+		// devlog end
 		$this->directions = true;
 		$this->directionsDivID = $divID;
 	}
