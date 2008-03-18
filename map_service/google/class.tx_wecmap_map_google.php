@@ -189,7 +189,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		// TODO: devlog start
 		if(TYPO3_DLOG) {
-			t3lib_div::devLog($this->mapName.': starting map draw', 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': starting map drawing', 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': API key: '.$this->key, 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': domain: '.t3lib_div::getIndpEnv('HTTP_HOST'), 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': map type: '.$this->type, 'wec_map_api');
 		}
 		// devlog end
 
@@ -248,6 +251,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent[] = '';
 
 			foreach( $this->groups as $key => $group ) {
+				// TODO: devlog start
+				if(TYPO3_DLOG) {
+					t3lib_div::devLog($this->mapName.': adding '. $group->getMarkerCount() .' markers from group '.$group->id, 'wec_map_api');
+				}
+				// devlog end
 				$jsContent = array_merge($jsContent, $group->drawMarkerJS());
 				$jsContent[] = '';
 			}
@@ -772,6 +780,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		// process center
 		if(!isset($this->lat) or !isset($this->long)) {
+			// TODO: devlog start
+			if(TYPO3_DLOG) {
+				t3lib_div::devLog($this->mapName.': setting center to '.$lat.', '.$long, 'wec_map_api');
+			}
+			// devlog end
 			$this->setCenter($lat, $long);
 		}
 
@@ -800,7 +813,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if ($zoom > 15) {
 			$zoom = 15;
 		}
-
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': set zoom '.$zoom, 'wec_map_api');
+		}
+		// devlog end
 		return $zoom;
 	}
 

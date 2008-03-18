@@ -215,7 +215,7 @@ class tx_wecmap_domainmgr {
 	function getRequestDomain() {
 		// get domain from the current http request
 		$requestDomain = t3lib_div::getIndpEnv('HTTP_HOST');
-
+		
 		return array($requestDomain => '');
 	}
 
