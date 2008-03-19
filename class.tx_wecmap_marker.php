@@ -171,7 +171,7 @@ class tx_wecmap_marker {
 	 *
 	 * @return void
 	 **/
-	function setmaxzoom($zoom) {
+	function setMaxzoom($zoom) {
 		$this->maxzoom = $zoom;
 	}
 }
