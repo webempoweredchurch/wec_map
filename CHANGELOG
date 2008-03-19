@@ -1,0 +1,20 @@
+[NEW] !IMPORTANT Optimize TS by requiring an extra static template which needs to be added to the template
+[NEW] Add new plugin that will map records from any record configured for WEC Map, by default fe_users, tt_address, and cal.
+[NEW] Improved WEC FE User map TS config options. See docs.
+[NEW] Add radius search to map. Only markers within given radius around given address will show.
+[NEW] Ability to add custom marker icons, thanks to Andreas Hupfau
+[NEW] Add ability to overlay any kml file to map via backend records
+[NEW] Add context sensitive help to plugin flexforms (TYPO3 4.2+ only)
+[NEW] Add new method setCenterByAddress() to API
+[NEW] New new method addTab() to API, used to add a new tab to a marker
+[NEW] Add title and desc setters for marker objects
+[NEW] Add error messages in the plugins if static templates are missing.
+[NEW] Add hook to pi3 for marker preprocessing
+[NEW] Add sidebar with links to markers
+[NEW] Significantly clean up javascript output
+[FIXED] Pass all the marker objects by reference now
+[FIXED] Keep wec_map at the bottom of the ext list for correct TCA inclusion
+[FIXED] Remove dependency on our prototype and use TYPO3's instead.
+[FIXED] Remove unneeded javascript helper methods
+[FIXED] Remove API key from FlexForms and TypoScript; all API key management is done through the Map Domain Manager
+[FIXED] Fixed divide by zero error in batch geocoder
