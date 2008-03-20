@@ -65,6 +65,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		// check for WEC Map API static template inclusion
 		if(empty($conf['output']) && !(empty($conf['marker.']['title']) && empty($conf['marker.']['description']))) {
 			global $LANG;
+			if(!is_object($LANG)) {
+				require_once(t3lib_extMgm::extPath('lang').'lang.php');
+				$LANG = t3lib_div::makeInstance('language');
+				$LANG->init($BE_USER->uc['lang']);
+			}
 			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 			$out .= $LANG->getLL('wecApiTemplateNotIncluded');
 			return $out;
@@ -73,6 +78,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		// check for WEC Simple Map static template inclusion
 		if(empty($conf['marker.']['title']) && empty($conf['marker.']['description'])) {
 			global $LANG;
+			if(!is_object($LANG)) {
+				require_once(t3lib_extMgm::extPath('lang').'lang.php');
+				$LANG = t3lib_div::makeInstance('language');
+				$LANG->init($BE_USER->uc['lang']);
+			}
 			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 			$out .= $LANG->getLL('pi1TemplateNotIncluded');
 			return $out;
