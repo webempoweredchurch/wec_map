@@ -175,9 +175,18 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				$pZip        = strip_tags(t3lib_div::_POST($mapName.'_zip'));
 				$pCountry    = strip_tags(t3lib_div::_POST($mapName.'_country'));
 				$pKilometers = intval(t3lib_div::_POST($mapName.'_kilometers'));
-
+				
+				$data = array(
+					'street' => $pAddress,
+					'city'	=> $pCity,
+					'state' => $pState,
+					'zip' => $pZip,
+					'country' => $pCountry
+				);
+				
+				$desc = tx_wecmap_shared::render($data, $conf['defaultdescription.']);
 				$map->addMarkerIcon($conf['homeicon.']);
-				$map->addMarkerByAddress($pAddress, $pCity, $pState, $pZip, $pCountry, 'Source', '',0 , 17, 'homeicon');
+				$map->addMarkerByAddress($pAddress, $pCity, $pState, $pZip, $pCountry, '', $desc ,0 , 17, 'homeicon');
 				$map->setCenterByAddress($pAddress, $pCity, $pState, $pZip, $pCountry);
 				$map->setRadius($pRadius, $pKilometers);
 				
@@ -402,6 +411,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 	}
 	
 	function getSidebar() {
+		if(empty($this->sidebarLinks)) return null;
 		$c = '';
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
