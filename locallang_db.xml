@@ -111,14 +111,14 @@
 			<label index="tt_content.pi_flexform.conLargeMapS">Klein</label>
 			<label index="tt_content.pi_flexform.conLargeMapZ">Nur Zoom</label>
 			<label index="tt_content.pi_flexform.conNone">Nichts</label>
-			<label index="tt_content.pi_flexform.conOverview">Übersichts Karte anzeigen</label>
+			<label index="tt_content.pi_flexform.conOverview">Übersichtskarte anzeigen</label>
 			<label index="tt_content.pi_flexform.conScale">Skala anzeigen</label>
 			<label index="tt_content.pi_flexform.conType">Kartentyp anzeigen</label>
 			<label index="tt_content.pi_flexform.controlsTitle">Kartenfunktionen</label>
 			<label index="tt_content.pi_flexform.coord">Koordinaten</label>
 			<label index="tt_content.pi_flexform.country">Land</label>
 			<label index="tt_content.pi_flexform.description">Beschreibung</label>
-			<label index="tt_content.pi_flexform.initialMapType">Kartentyp zu Begin</label>
+			<label index="tt_content.pi_flexform.initialMapType">Kartentyp zu Beginn</label>
 			<label index="tt_content.pi_flexform.mapHeight">Höhe (pixel)</label>
 			<label index="tt_content.pi_flexform.mapTitle">Kartendetails</label>
 			<label index="tt_content.pi_flexform.mapWidth">Breite (pixel)</label>
