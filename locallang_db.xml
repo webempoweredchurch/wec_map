@@ -136,6 +136,35 @@
 			<label index="tt_content.pi_flexform.typeSatellite">Satellit</label>
 			<label index="tt_content.pi_flexform.userGroup">Nach FE Benutzergruppe filtern (standardmässig alle angezeigt)</label>
 			<label index="tt_content.pi_flexform.zip">PLZ</label>
+			<label index="tx_wecmap_external.title">Title</label>
+            <label index="tx_wecmap_external.url">URL</label>
+            <label index="tx_wecmap_external">WEC Map Externe Resource</label>
+            <label index="tt_content.list_type_pi3">WEC Table Map</label>
+			<label index="pi1TemplateNotIncluded">
+			    <![CDATA[
+			    <p>Bitte das WEC Simple Map static template auf ihrer Seite einfügen.</p>
+			    ]]>
+			</label>
+			<label index="pi2TemplateNotIncluded">
+			    <![CDATA[
+			    <p>Bitte das WEC FE User Map static template auf ihrer Seite einfügen.</p>
+			    ]]>
+			</label>
+			<label index="pi3TemplateNotIncluded">
+			    <![CDATA[
+			    <p>Bitte das WEC Table Map static template auf ihrer Seite einfügen.</p>
+			    ]]>
+			</label>
+			<label index="wecApiTemplateNotIncluded">
+                <![CDATA[
+			    <p>Bitte das WEC Map API static template auf ihrer Seite einfügen und sichergehen dass es bevor allen anderen WEC Map templates eingefügt wird.</p>
+                ]]>
+			</label>
+            <label index="tt_content.pi_flexform.tables">Tables to map data from</label>
+            <label index="tt_content.pi_flexform.showRadiusSearch">Radius Suche anzeigen</label>
+            <label index="tt_content.pi_flexform.kml">KML zum Überlegen</label>
+            <label index="tt_content.pi_flexform.showSidebar">Marker Sidebar anzeigen</label>
+			
 		</languageKey>
     </data>
     <orig_hash type="array">
