@@ -38,6 +38,7 @@
 class tx_wecmap_shared {
 
 	function render($data, $conf, $table = '') {
+		if (!defined('PATH_tslib')) define('PATH_tslib', t3lib_extMgm::extPath('cms').'tslib/');
 		require_once(PATH_tslib.'class.tslib_content.php');
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($data, $table );
