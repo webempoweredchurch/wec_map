@@ -569,24 +569,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	}
 
 	/**
-	 * Creates the marker creation function with tabs in Javascript
-	 *
-	 * @return string	The JS code for the marker creation function with tabs.
-	 **/
-	function js_createMarkerWithTabs() {
-		return
-		'function createMarkerWithTabs(point, icon, title, text) {
-			var marker = new GMarker(point, icon);
-			var tabs = [];
-			for (var i=0; i < text.length; i++) {
-				tabs.push(new GInfoWindowTab(title[i], text[i]));
-			};
-			GEvent.addListener(marker, "click", function() { marker.openInfoWindowTabsHtml(tabs); });
-			return marker;
-		}';
-	}
-
-	/**
 	 * Creates the beginning of the drawMap function in Javascript.
 	 *
 	 * @access	private
