@@ -81,7 +81,7 @@
 			<label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
 			<label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
 			<label index="tt_content.pi_flexform.tables">Tables to map data from</label>
-			<label index="tt_content.pi_flexform.showDirs">Show Directions Tab</label>
+			<label index="tt_content.pi_flexform.showDirs">Show Directions</label>
 			<label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
 			<label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
 			<label index="tt_content.pi_flexform.showRadiusSearch">Show Radius Search</label>
@@ -129,7 +129,7 @@
 			<label index="tt_content.pi_flexform.prefillAddress">Adresse aus den Benutzerinformationen übernehmen</label>
 			<label index="tt_content.pi_flexform.privacy">Sensitives Geocoding (ohne Adresse)</label>
 			<label index="tt_content.pi_flexform.sheet">Adresse</label>
-			<label index="tt_content.pi_flexform.showDirs">Zeige Registerkarte 'Wegbeschreibung'</label>
+			<label index="tt_content.pi_flexform.showDirs">Wegbeschreibung zeigen</label>
 			<label index="tt_content.pi_flexform.showInfoOnLoad">Informationsblase beim Laden anzeigen</label>
 			<label index="tt_content.pi_flexform.showWrittenDirs">Zeige Wegbeschreibung als Text</label>
 			<label index="tt_content.pi_flexform.state">Staat</label>
