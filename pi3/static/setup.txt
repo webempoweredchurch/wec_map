@@ -66,7 +66,7 @@ plugin.tx_wecmap_pi3 {
 	defaulttitle {
 		title = TEXT
 		title.field = name
-		title.wrap = <h1>|</h1>
+		title.wrap = <div class="infotitle">|</div>
 	}
 	
 	# config for description
@@ -89,7 +89,7 @@ plugin.tx_wecmap_pi3 {
 			40 = TEXT
 			40.field = zip
 		}
-		10.wrap = <p>|</p>
+		10.wrap = <div>|</div>
 	}
 	
 	homeicon    < tx_wecmap_api.homeicon

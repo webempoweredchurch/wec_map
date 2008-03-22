@@ -29,11 +29,11 @@ plugin.tx_wecmap_pi1 {
 	marker {
 		title = TEXT
 		title.field = title
-		title.wrap = <h1>|</h1>
+		title.wrap = <div class="infotitle">|</div>
 	
 		description = TEXT
 		description.field = description
-		description.wrap = <p>|</p>
+		description.wrap = <div>|</div>
 		
 		address = COA
 		address {
@@ -43,7 +43,7 @@ plugin.tx_wecmap_pi1 {
 
 			20 = TEXT
 			20.field = city
-			20.wrap = |= &nbsp;
+			20.wrap = | &nbsp;
 
 			30 = TEXT
 			30.field = state
@@ -56,7 +56,7 @@ plugin.tx_wecmap_pi1 {
 			50 = TEXT
 			50.field = country
 		}
-		address.wrap = <p>|</p>
+		address.wrap = <div>|</div>
 	}
 	
 	sidebar 	< tx_wecmap_api.sidebar
