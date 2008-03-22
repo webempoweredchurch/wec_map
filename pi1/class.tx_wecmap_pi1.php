@@ -261,7 +261,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
 		}
 		
-		$markerObj->addTab('label', 'title', 'desc');
 		// gather all the content together
 		$content = array();
 		$content['map'] = $map->drawMap();
