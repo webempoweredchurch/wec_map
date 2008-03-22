@@ -79,6 +79,8 @@ tx_wecmap_api {
 	}
 	
 	_CSS_DEFAULT_STYLE (
-		.sidebar {display:block; overflow: auto;}
+		.tx-wecmap-map .sidebar {display:block; overflow: auto;}
+		.tx-wecmap-map .startendaddress {display: block; color: grey; font-size: 85%;}
+		.tx-wecmap-map .infotitle { font-weight: bold; font-size: 110%;}
 	)
 }

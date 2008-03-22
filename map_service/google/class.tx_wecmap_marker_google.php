@@ -78,26 +78,34 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 
 		$this->index = $index;
-		$this->tabLabels = $tabLabels;
+		$this->tabLabels = array();
+		$this->tabLabels[] = $LANG->getLL('info');
+		if(is_array($tabLabels)) {
+			$this->tabLabels = array_merge($this->tabLabels, $tabLabels);
+		}
+
 		$this->prefillAddress = $prefillAddress;
 		$this->hasTabs = false;
 
+		$this->title = array();
+		$this->description = array();
+
 		if(is_array($title)) {
-			$this->title = array();
 			foreach( $title as $value ) {
 				$this->title[] = addslashes($value);
 			}
+			$this->hasTabs = true;
 		} else {
-			$this->title = addslashes($title);
+			$this->title[] = addslashes($title);
 		}
 
 		if(is_array($description)) {
-			$this->description = array();
 			foreach($description as $value ) {
 				$this->description[] = $this->filterNL2BR(addslashes($value));
 			}
+			$this->hasTabs = true;
 		} else {
-			$this->description = $this->filterNL2BR(addslashes($description));
+			$this->description[] = $this->filterNL2BR(addslashes($description));
 		}
 
 		$this->color = $color;
@@ -117,16 +125,27 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return	string	The Javascript to add a marker to the page.
 	 */
 	function writeJS() {
-		$arrays = $this->buildTitleAndDescriptionArrays(false);
-		$titleArray = $arrays[0];
-		$textArray = $arrays[1];
+		global $LANG;
+		$dirHTML = '<br /><div id="gmapDirHead" class="gmapDir" style="white-space: nowrap;">'. $LANG->getLL('directions') .': <a href="#" onclick="toHere_'.$this->mapName.'('. $this->groupId .','. $this->index .')">'. $LANG->getLL('toHereFrom') .'</a> - <a href="#" onclick="fromHere_'.$this->mapName.'('. $this->groupId .','. $this->index .')">'. $LANG->getLL('fromHereTo') .'</a></div>';
+		$markerContent = array();
+		foreach( $this->tabLabels as $index => $label ) {
+			$markerContent[] = $label;
+			if($this->directions && $index == 0) {
+				$markerContent[] = $this->title[$index].$this->description[$index].$dirHTML;
+			} else {
+				$markerContent[] = $this->title[$index].$this->description[$index];
+			}
 
-		if($this->hasTabs) {
-			return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
-		} else {
-			return 'createMarker(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', "'.$titleArray.$textArray.'")';
 		}
+		$out = array();
+		$out[] = 'markerContent_'.$this->mapName.'['.$this->groupId.']['.$this->index.'] = [];';
+		$out[] = 'markerTabs_'.$this->mapName.'['.$this->groupId.']['.$this->index.'] = [];';
 
+		for ( $i=0; $i < (sizeof($markerContent)); $i=$i+2 ) { 
+		 	$out[] = 'markerContent_'.$this->mapName.'['.$this->groupId.']['.$this->index.'].push(\''.$markerContent[$i+1].'\');';
+		 	$out[] = 'markerTabs_'.$this->mapName.'['.$this->groupId.']['.$this->index.'].push(\''.$markerContent[$i].'\');';			
+		}
+		return implode(chr(10), $out);
 	}
 
 	/**
@@ -135,14 +154,20 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return string 	the javascript to add the marker
 	 **/
 	function writeJSwithDirections() {
+		$this->directions = true;
 
-		$arrays = $this->buildTitleAndDescriptionArrays(true);
-		$titleArray = $arrays[0];
-		$textArray = $arrays[1];
-
-		return 'createMarkerWithTabs(new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', '. $titleArray .' ,'. $textArray .')';
+		return $this->writeJS();
 	}
 	
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 **/
+	function writeCreateMarkerJS() {
+		if(empty($this->title[0]) && $this->directions) $this->title[0] = 'Marker';
+		return 'createMarker('.$this->index.', new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', \''. strip_tags($this->title[0]) .'\', '.$this->groupId.', \'\')';
+	}
 	/**
 	 * adds a new tab to the marker
 	 *
@@ -172,17 +197,18 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$this->description[] = addslashes($description);
 		// TODO: devlog start
 		if(TYPO3_DLOG) {
-			t3lib_div::devLog($this->mapName.': manually adding tab to marker '.$this->index.' with title '. $this->title, 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': manually adding tab to marker '.$this->index.' with title '. $title, 'wec_map_api');
 		}
 		// devlog end
 	}
 
+
 	/**
-	 * Creates the html to be shown in the directions tab
+	 * Creates the html to be shown for "to" directions
 	 *
 	 * @return string	HTML for to-directions
 	 **/
-	function getDirectionsHTML() {
+	function getToHTML() {
 		global $LANG;
 
 		if(is_array($this->title)) {
@@ -190,19 +216,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		} else {
 			$title = strip_tags($this->title);
 		}
-
-		$html = '<h1>'. $LANG->getLL('location') .'</h1><div>'. $title .'</div>';
-		$html .= '<h2>'. $LANG->getLL('getDirections') .'</h2><div>';
-		$html .= $this->stripNL(
-			sprintf('<form onsubmit="setDirections_'. $this->mapName .'(\\\'%3$s @ %1$f %2$f\\\', document.getElementById(\\\'tx-wecmap-directions-to-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;" action="#" >
-			<label for="tx-wecmap-directions-to-'. $this->mapName .'">'. $LANG->getLL('fromHereTo') .'</label><input type="text" name="daddr" value="%4$s" id="tx-wecmap-directions-to-'. $this->mapName .'" />
-			<input type="submit" name="submit" value="Go" /></form>',
-			$this->latitude,
-			$this->longitude,
-			$title,
-			$this->getUserAddress()
-			)
-		);
+		
 		$html .= $this->stripNL(
 			sprintf('<form action="#" onsubmit="setDirections_'. $this->mapName .'(document.getElementById(\\\'tx-wecmap-directions-from-'. $this->mapName .'\\\').value, \\\'%3$s @ %1$f %2$f\\\', \\\''. $this->mapName .'\\\'); return false;">
 			<label for="tx-wecmap-directions-from-'. $this->mapName .'">'. $LANG->getLL('toHereFrom') .'</label><input type="text" name="saddr" value="%4$s" id="tx-wecmap-directions-from-'. $this->mapName .'" />
@@ -213,7 +227,35 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			$this->getUserAddress()
 			)
 		);
-		$html .= '</div>';
+		
+		return $html;
+	}
+
+	/**
+	 * Creates the html to be shown for "from" directions
+	 *
+	 * @return string	HTML for from-directions
+	 **/
+	function getFromHTML() {
+		global $LANG;
+
+		if(is_array($this->title)) {
+			$title = strip_tags($this->title[0]);
+		} else {
+			$title = strip_tags($this->title);
+		}
+
+		$html .= $this->stripNL(
+			sprintf('<form onsubmit="setDirections_'. $this->mapName .'(\\\'%3$s @ %1$f %2$f\\\', document.getElementById(\\\'tx-wecmap-directions-to-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;" action="#" >
+			<label for="tx-wecmap-directions-to-'. $this->mapName .'">'. $LANG->getLL('fromHereTo') .'</label><input type="text" name="daddr" value="%4$s" id="tx-wecmap-directions-to-'. $this->mapName .'" />
+			<input type="submit" name="submit" value="Go" /></form>',
+			$this->latitude,
+			$this->longitude,
+			$title,
+			$this->getUserAddress()
+			)
+		);
+
 		return $html;
 	}
 
@@ -241,13 +283,13 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 					$select = implode(',', $selectArray);
 
 					$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($select, 'fe_users', '`uid`='.$feuser_id);
-					return $rows[0][$streetField].', '.$rows[0][$cityField].', '.$rows[0][$stateField].' '.$rows[0][$zipField].', '.$rows[0][$countryField];
+					return '\''.$rows[0][$streetField].', '.$rows[0][$cityField].', '.$rows[0][$stateField].' '.$rows[0][$zipField].', '.$rows[0][$countryField].'\'';
 				}
 			} else {
 
 			}
 		}
-		return null;
+		return '\'\'';
 	}
 
 	/**
@@ -273,11 +315,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 				$first = false;
 			}
 
-			if($directions) {
-				$titleArray .= ', \''. $LANG->getLL('directions') .'\']';
-			} else {
-				$titleArray .= ']';
-			}
+
+			$titleArray .= ']';
 
 			$textArray = '[';
 			$first = true;
@@ -290,26 +329,16 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 				}
 				$first = false;
 			}
-
-			if($directions) {
-				$textArray .= ', \''. $this->getDirectionsHTML() .'\']';
-			} else {
-				$textArray .= ']';
-			}
-			
+			$textArray .= ']';
+		
 		} else {
-			
+			$titleArray = '';
 			if($directions) {
-				$this->hasTabs = true;
-				$titleArray = '[\''. $LANG->getLL('info') .'\', \''. $LANG->getLL('directions') .'\']';
-
-				$textArray = '[\''.$this->title.$this->description.'\', \''. $this->getDirectionsHTML(). '\']';
-
+				$textArray = '\''.$this->title.$this->description.'\'';
 			} else {
-				$this->hasTabs = false;
-				$titleArray = $this->title;
-				$textArray = $this->description;
+				$textArray = '\''.$this->title.$this->description.'\'';				
 			}
+
 		}
 
 		return array($titleArray, $textArray);

@@ -229,13 +229,17 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 			$htmlContent .= $this->mapDiv($this->mapName, $this->width, $this->height);
 			$jsContent = array();
+			$jsContent[] = $this->js_addGlobals();
+
+			if($this->directions) {
+				$jsContent[] = $this->js_dirMethods();				
+				$jsContent[] = $this->js_setDirections();
+			}
+
 			$jsContent[] = $this->js_createMarker();
-			$jsContent[] = $this->js_createMarkerWithTabs();
 			$jsContent[] = $this->js_triggerMarker();
-			$jsContent[] = $this->js_setDirections();
 			$jsContent[] = $this->js_errorHandler();
 			$jsContent[] = '';
-			$jsContent[] = 'var markers_'. $this->mapName .' = [];';
 			$jsContent[] = $this->js_drawMapStart();
 			$jsContent[] = $this->js_newGMap2($this->mapName);
 			$jsContent[] = $this->js_newGDirections();
@@ -260,7 +264,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$jsContent[] = '';
 			}
 
-			// $jsContent[] = 'markers_'. $this->mapName .' = markers_'. $this->mapName .'.flatten();';
 			$jsContent[] = 'mgr_'. $this->mapName .'.refresh();';
 			$jsContent[] = $this->js_initialOpenInfoWindow();
 			$jsContent[] = $this->js_drawMapEnd();
@@ -515,14 +518,41 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	string		The Javascript code for the marker creation function.
 	 */
 	function js_createMarker() {
-		return
-		'function createMarker(point, icon, text) {
+		global $LANG;
+		$out = 
+		'function createMarker(id, point, icon, dir_title, groupid, address) {
 			var marker = new GMarker(point, icon);
+			var tabs = [];
+			var tabLabels = markerTabs_'.$this->mapName.'[groupid][id];
+			var text = markerContent_'.$this->mapName.'[groupid][id];
 			if(text){
-				GEvent.addListener(marker, "click", function() { marker.openInfoWindowHtml(text); });
+				for (var i=0; i < text.length; i++) {
+					tabs.push(new GInfoWindowTab(tabLabels[i], text[i]));
+				};';
+		if($this->directions) {
+			$out .=
+		'	if(dir_title) {
+				if(!('.$this->mapName.'_to_arr[groupid] instanceof Array)) '.$this->mapName.'_to_arr[groupid] = [];
+				'.$this->mapName.'_to_arr[groupid][id] = text[0];
+				'.$this->mapName.'_to_arr[groupid][id] += \'<br /><form action="#" onsubmit="setDirections_'. $this->mapName .'(document.getElementById(\\\'tx-wecmap-directions-from-'. $this->mapName .'\\\').value, \\\'\' + point.y + \', \' + point.x + \' (\'+ dir_title +\')\\\', \\\''. $this->mapName .'\\\'); return false;">\';
+				'.$this->mapName.'_to_arr[groupid][id] += \'<label class="startendaddress" for="tx-wecmap-directions-from-'. $this->mapName .'">'. $LANG->getLL('startaddress') .'</label><input type="text" name="saddr" value="\'+ address +\'" id="tx-wecmap-directions-from-'. $this->mapName .'" />\';
+				'.$this->mapName.'_to_arr[groupid][id] += \'<input type="submit" name="submit" value="Go" /></form>\';
+				if(!('.$this->mapName.'_from_arr[groupid] instanceof Array)) '.$this->mapName.'_from_arr[groupid] = [];
+				'.$this->mapName.'_from_arr[groupid][id] = text[0];
+				'.$this->mapName.'_from_arr[groupid][id] += \'<br /><form action="#" onsubmit="setDirections_'. $this->mapName .'( \\\'\' + point.y + \', \' + point.x + \' (\'+ dir_title +\')\\\', document.getElementById(\\\'tx-wecmap-directions-to-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;">\';
+				'.$this->mapName.'_from_arr[groupid][id] += \'<label class="startendaddress" for="tx-wecmap-directions-to-'. $this->mapName .'">'. $LANG->getLL('endaddress') .'</label><input type="text" name="daddr" value="\'+ address +\'" id="tx-wecmap-directions-to-'. $this->mapName .'" />\';
+				'.$this->mapName.'_from_arr[groupid][id] += \'<input type="submit" name="submit" value="Go" /></form>\';
+			}';
+		}
+		
+		$out .=
+		'	
+				marker.bindInfoWindowTabsHtml(tabs);
 			}
 			return marker;
 		}';
+		
+		return $out;
 	}
 
 	/**
@@ -532,8 +562,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return String	JS function
 	 **/
 	function js_setDirections() {
-		return 'function setDirections_'. $this->mapName .'(fromAddress, toAddress, mapName) {
-	      window["gdir_"+mapName].load("from: " + fromAddress + " to: " + toAddress, {locale: "'. $this->lang .'"});
+		return 'function setDirections_'. $this->mapName .'(fromAddress, toAddress, mapName) {	
+	      	window["gdir_"+mapName].load("from: " + fromAddress + " to: " + toAddress, {locale: "'. $this->lang .'"});
 			'. $this->mapName .'.closeInfoWindow();
 	    }';
 	}
@@ -564,7 +594,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 */
 	function js_drawMapStart() {
 		return
-		'var '.$this->mapName.';'.chr(10).
 		'function drawMap_'. $this->mapName .'() {'.chr(10).
 			'if (GBrowserIsCompatible()) {';
 	}
@@ -760,7 +789,70 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			return $content;
 		}
 	}
+	
+	/**
+	 * Writes the js for the toHere fromHere methods
+	 *
+	 * @return void
+	 **/
+	function js_dirMethods() {
+		$out  = 
+		'function toHere_'.$this->mapName.'(groupid, id) {
+			tabs = [];
+			tabLabels = markerTabs_'.$this->mapName.'[groupid][id];
+			text = markerContent_'.$this->mapName.'[groupid][id];
+			dirs = '.$this->mapName.'_to_arr[groupid][id];
+			for (var i=0; i < text.length; i++) {
+				if(i==0) {
+					tabs.push(new GInfoWindowTab(tabLabels[i], dirs));
+				} else {
+					tabs.push(new GInfoWindowTab(tabLabels[i], text[i]));					
+				}
 
+			};
+			markers_'.$this->mapName.'[groupid][id].openInfoWindowTabsHtml(tabs);
+		}'.chr(10);
+		
+		$out  .= 
+		'function fromHere_'.$this->mapName.'(groupid, id) {
+			tabs = [];
+			tabLabels = markerTabs_'.$this->mapName.'[groupid][id];
+			text = markerContent_'.$this->mapName.'[groupid][id];
+			dirs = '.$this->mapName.'_from_arr[groupid][id];
+			for (var i=0; i < text.length; i++) {
+				if(i==0) {
+					tabs.push(new GInfoWindowTab(tabLabels[i], dirs));
+				} else {
+					tabs.push(new GInfoWindowTab(tabLabels[i], text[i]));					
+				}
+
+			};
+			markers_'.$this->mapName.'[groupid][id].openInfoWindowTabsHtml(tabs);
+		}';
+		return $out;
+	}
+
+	/**
+	 * add global js variables
+	 *
+	 * @return void
+	 **/
+	function js_addGlobals() {
+		$out = 
+		'var '.$this->mapName.';'.chr(10).
+		'var markers_'. $this->mapName .' = [];'.chr(10).
+		'var markerContent_'.$this->mapName.' = [];'.chr(10).
+		'var markerTabs_'.$this->mapName.' = [];'.chr(10);
+		
+		if($this->directions) {
+			$out .= 
+			'var '.$this->mapName.'_to_arr = [];'.chr(10).
+			'var '.$this->mapName.'_from_arr = [];'.chr(10);
+		}
+
+		return $out;
+	}
+	
 	/**
 	 * Sets the center and zoom values for the current map dynamically, based
 	 * on the markers to be displayed on the map.

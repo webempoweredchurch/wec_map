@@ -76,13 +76,17 @@ class tx_wecmap_markergroup {
 		$jsContent = array();
 
 		$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'] = [];';
-		
+		$jsContent[] = 'markerContent_'.$this->mapName.'['. $this->id .'] = [];';
+		$jsContent[] = 'markerTabs_'.$this->mapName.'['. $this->id .'] = [];';
 		foreach($this->markers as $key => $marker) {
+			
 
 			if($this->directions) {
-				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeJSwithDirections() .');';
+				$jsContent[] = $marker->writeJSwithDirections();
+				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeCreateMarkerJS() .');';
 			} else {
-				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeJS() .');';
+				$jsContent[] = $marker->writeJS();
+				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeCreateMarkerJS() .');';
 			}
 		}
 		

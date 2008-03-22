@@ -29,8 +29,10 @@
             <label index="info">Info</label>
             <label index="location">Location</label>
 			<label index="getDirections">Get Directions</label>
-			<label index="fromHereTo">From here to:</label>
-			<label index="toHereFrom">To here from:</label>
+			<label index="fromHereTo">From here</label>
+			<label index="toHereFrom">To here</label>
+			<label index="startaddress">Start Address</label>
+			<label index="endaddress">End Address</label>
 			<label index="pi1TemplateNotIncluded">
 			    <![CDATA[
 			    <p>Please include the WEC Simple Map static template on your page.</p>
@@ -91,7 +93,9 @@
 			<label index="berecord_geocodelabel">Koordinaten</label>
 			<label index="berecord_maplabel">Karte</label>
 			<label index="directions">Wegbeschreibung</label>
-			<label index="fromHereTo">Von hier nach:</label>
+			<label index="fromHereTo">Von hier</label>
+			<label index="startaddress">Start Addresse</label>
+			<label index="endaddress">Ziel Addresse</label>
 			<label index="geocodeFailed">Geocoding fehlgeschlagen.</label>
 			<label index="geocodeNoAddress">Kann die Längen- und Breitengrade nicht ermitteln. Bitte eine Adresse eintragen und speichern.</label>
 			<label index="geocodeNotPerformed">Geocoding wurde für diese Adresse noch nicht durchgeführt.</label>
@@ -101,7 +105,7 @@
 			<label index="latitude">Breitengrad</label>
 			<label index="location">Ausgangspunkt</label>
 			<label index="longitude">Längengrad</label>
-			<label index="toHereFrom">Nach hier von:</label>
+			<label index="toHereFrom">Hierhin</label>
 			<label index="tt_content.list_type_pi1">Einfache WEC Landkarte</label>
 			<label index="tt_content.list_type_pi2">WEC Frontend Benutzer Karte</label>
 			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
