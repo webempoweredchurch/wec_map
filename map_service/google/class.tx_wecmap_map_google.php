@@ -205,8 +205,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 		}
-		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
-
+		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');A
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();
@@ -534,14 +533,14 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		'	if(dir_title) {
 				if(!('.$this->mapName.'_to_arr[groupid] instanceof Array)) '.$this->mapName.'_to_arr[groupid] = [];
 				'.$this->mapName.'_to_arr[groupid][id] = text[0];
-				'.$this->mapName.'_to_arr[groupid][id] += \'<br /><form action="#" onsubmit="setDirections_'. $this->mapName .'(document.getElementById(\\\'tx-wecmap-directions-from-'. $this->mapName .'\\\').value, \\\'\' + point.y + \', \' + point.x + \' (\'+ dir_title +\')\\\', \\\''. $this->mapName .'\\\'); return false;">\';
+				'.$this->mapName.'_to_arr[groupid][id] += \'<br /><div id="'.$this->mapName.'_todirform_\'+groupid+\'_\'+id+\'" class="todirform"><form action="#" onsubmit="setDirections_'. $this->mapName .'(document.getElementById(\\\'tx-wecmap-directions-from-'. $this->mapName .'\\\').value, \\\'\' + point.y + \', \' + point.x + \' (\'+ dir_title +\')\\\', \\\''. $this->mapName .'\\\'); return false;">\';
 				'.$this->mapName.'_to_arr[groupid][id] += \'<label class="startendaddress" for="tx-wecmap-directions-from-'. $this->mapName .'">'. $LANG->getLL('startaddress') .'</label><input type="text" name="saddr" value="\'+ address +\'" id="tx-wecmap-directions-from-'. $this->mapName .'" />\';
-				'.$this->mapName.'_to_arr[groupid][id] += \'<input type="submit" name="submit" value="Go" /></form>\';
+				'.$this->mapName.'_to_arr[groupid][id] += \'<input type="submit" name="submit" value="Go" /></form></div>\';
 				if(!('.$this->mapName.'_from_arr[groupid] instanceof Array)) '.$this->mapName.'_from_arr[groupid] = [];
 				'.$this->mapName.'_from_arr[groupid][id] = text[0];
-				'.$this->mapName.'_from_arr[groupid][id] += \'<br /><form action="#" onsubmit="setDirections_'. $this->mapName .'( \\\'\' + point.y + \', \' + point.x + \' (\'+ dir_title +\')\\\', document.getElementById(\\\'tx-wecmap-directions-to-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;">\';
+				'.$this->mapName.'_from_arr[groupid][id] += \'<br /><div id="'.$this->mapName.'_fromdirform_\'+groupid+\'_\'+id+\'" class=""fromdirform><form action="#" onsubmit="setDirections_'. $this->mapName .'( \\\'\' + point.y + \', \' + point.x + \' (\'+ dir_title +\')\\\', document.getElementById(\\\'tx-wecmap-directions-to-'. $this->mapName .'\\\').value, \\\''. $this->mapName .'\\\'); return false;">\';
 				'.$this->mapName.'_from_arr[groupid][id] += \'<label class="startendaddress" for="tx-wecmap-directions-to-'. $this->mapName .'">'. $LANG->getLL('endaddress') .'</label><input type="text" name="daddr" value="\'+ address +\'" id="tx-wecmap-directions-to-'. $this->mapName .'" />\';
-				'.$this->mapName.'_from_arr[groupid][id] += \'<input type="submit" name="submit" value="Go" /></form>\';
+				'.$this->mapName.'_from_arr[groupid][id] += \'<input type="submit" name="submit" value="Go" /></form></div>\';
 			}';
 		}
 		
