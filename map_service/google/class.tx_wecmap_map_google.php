@@ -205,7 +205,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$LANG = t3lib_div::makeInstance('language');
 			$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 		}
-		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');A
+		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();
