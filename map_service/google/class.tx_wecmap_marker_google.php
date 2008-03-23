@@ -127,9 +127,9 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		foreach( $this->tabLabels as $index => $label ) {
 			$markerContent[] = $label;
 			if($this->directions && $index == 0) {
-				$markerContent[] = $this->title[$index].$this->description[$index].$dirHTML;
+				$markerContent[] = '<div id="'.$this->mapName.'_marker_'.$this->groupId.'_'.$this->index.'" class="marker">'.$this->title[$index].$this->description[$index].'</div>'.$dirHTML;
 			} else {
-				$markerContent[] = $this->title[$index].$this->description[$index];
+				$markerContent[] = '<div id="'.$this->mapName.'_marker_'.$this->groupId.'_'.$this->index.'" class="marker">'.$this->title[$index].$this->description[$index].'</div>';
 			}
 
 		}
