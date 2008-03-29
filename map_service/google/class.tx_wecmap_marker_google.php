@@ -239,7 +239,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	function getClickJS() {
 		// TODO: devlog start
 		if(TYPO3_DLOG) {
-			t3lib_div::devLog($this->mapName.': adding marker '.$this->index.'('.strip_tags($this->title).') to sidebar', 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': adding marker '.$this->index.'('.strip_tags($this->title[0]).strip_tags($this->description[0]).') to sidebar', 'wec_map_api');
 		}
 		// devlog end
 		return $this->mapName.'_triggerMarker('. $this->groupId .', '. $this->index .', '. $this->calculateClickZoom() .');';
