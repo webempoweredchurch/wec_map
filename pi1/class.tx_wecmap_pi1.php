@@ -264,7 +264,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		// gather all the content together
 		$content = array();
 		$content['map'] = $map->drawMap();
-		$content['addressForm'] = $this->getAddressForm();
 		if($showWrittenDirs) $content['directions'] = $this->getDirections();
 		$content['sidebar'] = $this->getSidebar();
 
@@ -272,11 +271,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$output = tx_wecmap_shared::render($content, $conf['output.']);
 
 		return $this->pi_wrapInBaseClass($output);
-	}
-	
-	function getAddressForm() {
-		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['addressForm.']);
-		return $out;
 	}
 	
 	function getDirections() {
