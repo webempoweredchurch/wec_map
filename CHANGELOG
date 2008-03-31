@@ -1,4 +1,4 @@
-[NEW] !IMPORTANT Optimize TS by requiring an extra static template which needs to be added to the template
+[NEW] !IMPORTANT Optimize TS by requiring an extra static template which needs to be added to the template before the map will work
 [NEW] Add new plugin that will map records from any record configured for WEC Map, by default fe_users, tt_address, and cal.
 [NEW] Improved WEC FE User map TS config options. See docs.
 [NEW] Add radius search to map. Only markers within given radius around given address will show.
@@ -12,8 +12,8 @@
 [NEW] Add hook to pi3 for marker preprocessing
 [NEW] Add sidebar with links to markers
 [NEW] Directions are now shown on the first tab below the content, similar to maps.google.com
-[NEW] Significantly clean up javascript output
-[FIXED] Really large info bubbles
+[NEW] Significantly cleaned up javascript output
+[FIXED] Really large info bubbles are now smaller
 [FIXED] Pass all the marker objects by reference now
 [FIXED] Keep wec_map at the bottom of the ext list for correct TCA inclusion
 [FIXED] Remove dependency on our prototype and use TYPO3's instead.
