@@ -62,41 +62,13 @@ plugin.tx_wecmap_pi3 {
 	# 	}
 	# }
 	
-	# config for title
-	defaulttitle {
-		title = TEXT
-		title.field = name
-		title.wrap = <div class="infotitle">|</div>
-	}
-	
-	# config for description
-	defaultdescription = COA
-	defaultdescription {
-		10 = COA
-		10 {
-			10 = TEXT
-			10.field = street
-			10.wrap = |<br />
-	
-			20 = TEXT
-			20.field = city
-			20.wrap = |,&nbsp;
-			
-			30 = TEXT
-			30.field = state
-			30.wrap = |&nbsp;
-			
-			40 = TEXT
-			40.field = zip
-		}
-		10.wrap = <div>|</div>
-	}
-	
-	homeicon    < tx_wecmap_api.homeicon
-	sidebar 	< tx_wecmap_api.sidebar
-	directions 	< tx_wecmap_api.directions
-	sidebarItem < tx_wecmap_api.sidebarItem
-	addressForm < tx_wecmap_api.addressForm
-	output 		< tx_wecmap_api.output
-	_CSS_DEFAULT_STYLE < tx_wecmap_api._CSS_DEFAULT_STYLE
+	defaulttitle 		< tx_wecmap_api.defaulttitle
+	defaultdescription 	< tx_wecmap_api.defaultdescription
+	homeicon    		< tx_wecmap_api.homeicon
+	sidebar 			< tx_wecmap_api.sidebar
+	directions 			< tx_wecmap_api.directions
+	sidebarItem 		< tx_wecmap_api.sidebarItem
+	addressForm 		< tx_wecmap_api.addressForm
+	output 				< tx_wecmap_api.output
+	_CSS_DEFAULT_STYLE 	< tx_wecmap_api._CSS_DEFAULT_STYLE
 }

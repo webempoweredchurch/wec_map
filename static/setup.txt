@@ -78,6 +78,36 @@ tx_wecmap_api {
 		infoAnchorY  = 1
 	}
 	
+	# config for title
+	defaulttitle {
+		title = TEXT
+		title.field = name
+		title.wrap = <div class="infotitle">|</div>
+	}
+	
+	# config for description
+	defaultdescription = COA
+	defaultdescription {
+		10 = COA
+		10 {
+			10 = TEXT
+			10.field = street
+			10.wrap = |<br />
+	
+			20 = TEXT
+			20.field = city
+			20.wrap = |,&nbsp;
+			
+			30 = TEXT
+			30.field = state
+			30.wrap = |&nbsp;
+			
+			40 = TEXT
+			40.field = zip
+		}
+		10.wrap = <div>|</div>
+	}
+	
 	_CSS_DEFAULT_STYLE (
 		.sidebar {display:block; overflow: auto;}
 		.tx-wecmap-map .startendaddress {display: block; color: grey; font-size: 85%;}
