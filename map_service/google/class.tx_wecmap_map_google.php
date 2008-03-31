@@ -519,7 +519,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	function js_createMarker() {
 		global $LANG;
 		$out = 
-		'function createMarker(id, point, icon, dir_title, groupid, address) {
+		'function '.$this->mapName.'_createMarker(id, point, icon, dir_title, groupid, address) {
 			var marker = new GMarker(point, icon);
 			var tabs = [];
 			var tabLabels = markerTabs_'.$this->mapName.'[groupid][id];

@@ -162,7 +162,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 **/
 	function writeCreateMarkerJS() {
 		if(empty($this->title[0]) && $this->directions) $this->title[0] = 'Address';
-		return 'createMarker('.$this->index.', new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', \''. strip_tags($this->title[0]) .'\', '.$this->groupId.', \''.$this->getUserAddress().'\')';
+		return $this->mapName.'_createMarker('.$this->index.', new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', \''. strip_tags($this->title[0]) .'\', '.$this->groupId.', \''.$this->getUserAddress().'\')';
 	}
 	/**
 	 * adds a new tab to the marker
