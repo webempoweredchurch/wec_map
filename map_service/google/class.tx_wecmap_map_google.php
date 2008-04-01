@@ -208,11 +208,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 			$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 		}
-		// TODO: devlog start
-		if(TYPO3_DLOG) {
-			t3lib_div::devLog('map class LANG obj has language: '.$LANG->lang, 'wec_map_api');
-		}
-		// devlog end
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();

@@ -78,18 +78,8 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			} else {
 				$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 			}
-			// TODO: devlog start
-			if(TYPO3_DLOG) {
-				t3lib_div::devLog('init LANG obj in marker class', 'wec_map_api');
-			}
-			// devlog end
 		}
 		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
-		// TODO: devlog start
-		if(TYPO3_DLOG) {
-			t3lib_div::devLog('marker class LANG obj has language: '.$LANG->lang, 'wec_map_api');
-		}
-		// devlog end		
 		
 		$this->index = $index;
 		$this->tabLabels = array();
