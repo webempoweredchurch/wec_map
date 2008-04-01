@@ -175,38 +175,6 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			}
 		}
 		
-		// process radius search
-		if($showRadiusSearch) {
-
-			// check for POST vars for our map. If there are any, proceed.
-			$pRadius = intval(t3lib_div::_POST($mapName.'_radius'));
-
-			if(!empty($pRadius)) {
-				$pAddress    = strip_tags(t3lib_div::_POST($mapName.'_address'));
-				$pCity       = strip_tags(t3lib_div::_POST($mapName.'_city'));
-				$pState      = strip_tags(t3lib_div::_POST($mapName.'_state'));
-				$pZip        = strip_tags(t3lib_div::_POST($mapName.'_zip'));
-				$pCountry    = strip_tags(t3lib_div::_POST($mapName.'_country'));
-				$pKilometers = intval(t3lib_div::_POST($mapName.'_kilometers'));
-				
-				$data = array(
-					'street' => $pAddress,
-					'city'	=> $pCity,
-					'state' => $pState,
-					'zip' => $pZip,
-					'country' => $pCountry
-				);
-				
-				$desc = tx_wecmap_shared::render($data, $conf['defaultdescription.']);
-				$map->addMarkerIcon($conf['homeicon.']);
-				$map->addMarkerByAddress($pAddress, $pCity, $pState, $pZip, $pCountry, '', $desc ,0 , 17, 'homeicon');
-				$map->setCenterByAddress($pAddress, $pCity, $pState, $pZip, $pCountry);
-				$map->setRadius($pRadius, $pKilometers);
-				
-			}
-			
-		}
-		
 		// evaluate map controls based on configuration
 		if($mapControlSize == 'large') {
 			$map->addControl('largeMap');
@@ -266,6 +234,37 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
 		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
 
+		// process radius search
+		if($showRadiusSearch) {
+
+			// check for POST vars for our map. If there are any, proceed.
+			$pRadius = intval(t3lib_div::_POST($mapName.'_radius'));
+
+			if(!empty($pRadius)) {
+				$pAddress    = strip_tags(t3lib_div::_POST($mapName.'_address'));
+				$pCity       = strip_tags(t3lib_div::_POST($mapName.'_city'));
+				$pState      = strip_tags(t3lib_div::_POST($mapName.'_state'));
+				$pZip        = strip_tags(t3lib_div::_POST($mapName.'_zip'));
+				$pCountry    = strip_tags(t3lib_div::_POST($mapName.'_country'));
+				$pKilometers = intval(t3lib_div::_POST($mapName.'_kilometers'));
+				
+				$data = array(
+					'street' => $pAddress,
+					'city'	=> $pCity,
+					'state' => $pState,
+					'zip' => $pZip,
+					'country' => $pCountry
+				);
+				
+				$desc = tx_wecmap_shared::render($data, $conf['defaultdescription.']);
+				$map->addMarkerIcon($conf['homeicon.']);
+				$map->addMarkerByAddress($pAddress, $pCity, $pState, $pZip, $pCountry, '', $desc ,0 , 17, 'homeicon');
+				$map->setCenterByAddress($pAddress, $pCity, $pState, $pZip, $pCountry);
+				$map->setRadius($pRadius, $pKilometers);
+				
+			}	
+		}
+		
 		$streetField  = $this->getAddressField('street');
 		$cityField    = $this->getAddressField('city');
 		$stateField   = $this->getAddressField('state');

@@ -106,6 +106,19 @@ class tx_wecmap_markergroup {
 		$markerObj->setMapName($this->mapName);
 		$markerObj->setGroupId($this->id);
 		$this->markers[] = &$markerObj;
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': -----adding marker - start----', 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': id:'.$markerObj->getIndex(), 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': minzoom: '.$this->minzoom, 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': maxzoom: '. $this->maxzoom, 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': group: '. $this->id, 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': count: '.$this->markerCount, 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': title: '.implode(',', $markerObj->getTitle()), 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': desc: '.implode(',',$markerObj->getDescription()), 'wec_map_api');
+			t3lib_div::devLog($this->mapName.': -----adding marker - end----', 'wec_map_api');
+		}
+		// devlog end
 		$this->markerCount++;
 	}
 	

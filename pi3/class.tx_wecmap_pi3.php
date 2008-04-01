@@ -171,6 +171,25 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			}
 		}
 
+		// evaluate map controls based on configuration
+		if($mapControlSize == 'large') {
+			$map->addControl('largeMap');
+		} else if ($mapControlSize == 'small') {
+			$map->addControl('smallMap');
+		} else if ($mapControlSize == 'zoomonly') {
+			$map->addControl('smallZoom');
+		}
+		if($scale) $map->addControl('scale');
+		if($overviewMap) $map->addControl('overviewMap');
+		if($mapType) $map->addControl('mapType');
+		if($initialMapType) $map->setType($initialMapType);
+
+		// check whether to show the directions tab and/or prefill addresses and/or written directions
+		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
+		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
+		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
+		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
+
 		// process radius search
 		if($showRadiusSearch) {
 
@@ -200,28 +219,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				$map->setRadius($pRadius, $pKilometers);
 				
 			}
-			
 		}
 		
-		// evaluate map controls based on configuration
-		if($mapControlSize == 'large') {
-			$map->addControl('largeMap');
-		} else if ($mapControlSize == 'small') {
-			$map->addControl('smallMap');
-		} else if ($mapControlSize == 'zoomonly') {
-			$map->addControl('smallZoom');
-		}
-		if($scale) $map->addControl('scale');
-		if($overviewMap) $map->addControl('overviewMap');
-		if($mapType) $map->addControl('mapType');
-		if($initialMapType) $map->setType($initialMapType);
-
-		// check whether to show the directions tab and/or prefill addresses and/or written directions
-		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
-		if($showDirs && $showWrittenDirs && !$prefillAddress) $map->enableDirections(false, $mapName.'_directions');
-		if($showDirs && !$showWrittenDirs && $prefillAddress) $map->enableDirections(true);
-		if($showDirs && !$showWrittenDirs && !$prefillAddress) $map->enableDirections();
-
 		// there are two ways of buiding the SQL query:
 		// 1. from the data given via flexform
 		// 2. all manually from TS
