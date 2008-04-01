@@ -32,6 +32,8 @@
 			<label index="fromHereTo">From here</label>
 			<label index="toHereFrom">To here</label>
 			<label index="startaddress">Start Address</label>
+			<label index="radius">Radius: </label>
+			<label index="unit">Unit: </label>
 			<label index="endaddress">End Address</label>
 			<label index="pi1TemplateNotIncluded">
 			    <![CDATA[
@@ -55,7 +57,7 @@
 			</label>
 			<label index="tt_content.pi_flexform.title">Title</label>
 			<label index="tt_content.pi_flexform.description">Description</label>
-			<label index="tt_content.pi_flexform.street">Street Address</label>
+			<label index="tt_content.pi_flexform.street">Address</label>
 			<label index="tt_content.pi_flexform.city">City</label>
 			<label index="tt_content.pi_flexform.state">State</label>
 			<label index="tt_content.pi_flexform.zip">ZIP</label>
@@ -106,6 +108,8 @@
 			<label index="location">Ausgangspunkt</label>
 			<label index="longitude">Längengrad</label>
 			<label index="toHereFrom">Hierhin</label>
+			<label index="radius">Radius: </label>
+			<label index="unit">Einheit: </label>
 			<label index="tt_content.list_type_pi1">Einfache WEC Landkarte</label>
 			<label index="tt_content.list_type_pi2">WEC Frontend Benutzer Karte</label>
 			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
