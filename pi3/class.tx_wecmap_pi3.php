@@ -66,7 +66,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			if(!is_object($LANG)) {
 				require_once(t3lib_extMgm::extPath('lang').'lang.php');
 				$LANG = t3lib_div::makeInstance('language');
-				$LANG->init($BE_USER->uc['lang']);
+				$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 			}
 			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 			$out .= $LANG->getLL('wecApiTemplateNotIncluded');
@@ -79,13 +79,12 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			if(!is_object($LANG)) {
 				require_once(t3lib_extMgm::extPath('lang').'lang.php');
 				$LANG = t3lib_div::makeInstance('language');
-				$LANG->init($BE_USER->uc['lang']);
+				$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 			}
 			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 			$out .= $LANG->getLL('pi3TemplateNotIncluded');
 			return $out;
 		}
-		
 		/* Initialize the Flexform and pull the data into a new object */
 		$this->pi_initPIflexform();
 		$piFlexForm = $this->cObj->data['pi_flexform'];
