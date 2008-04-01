@@ -108,7 +108,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(empty($mapName)) $mapName = 'map'.rand();
 		$this->mapName = $mapName;
 
-
 		if(TYPO3_MODE == 'BE') {
 			global $LANG;
 			if($LANG->lang == 'default') {
@@ -198,14 +197,22 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 		/* Initialize locallang.  If we're in the backend context, we're fine.
 		   If we're in the frontend, then we need to manually set it up. */
-		if(TYPO3_MODE == 'BE') {
-			global $LANG;
-		} else {
+		global $LANG;
+		if(!is_object($LANG)) {
 			require_once(t3lib_extMgm::extPath('lang').'lang.php');
 			$LANG = t3lib_div::makeInstance('language');
-			$LANG->init($GLOBALS['TSFE']->config['config']['language']);
+			if(TYPO3_MODE == 'BE') {
+				$LANG->init($BE_USER->uc['lang']);
+			} else {
+				$LANG->init($GLOBALS['TSFE']->config['config']['language']);
+			}
+			$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 		}
-		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog('map class LANG obj has language: '.$LANG->lang, 'wec_map_api');
+		}
+		// devlog end
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();
