@@ -120,6 +120,15 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					script_ended = 1;
 					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
 				</script>
+				<style type="text/css">
+					.dirmenu a:link, .dirmenu a:visited {
+						text-decoration: underline;
+					}
+					.description {
+						margin-top: 8px;
+					}
+					
+				</style>
 			';
 
 			$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
@@ -400,7 +409,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 					// add a little info so users know what to do
 					$title = '';
-					$description = sprintf($LANG->getLL('country_zoominfo_desc'), $row[$countryField]);
+					$description = '<div class="description">'.sprintf($LANG->getLL('country_zoominfo_desc'), $row[$countryField]).'</div>';
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 0,2);
@@ -415,7 +424,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 					// add a little info so users know what to do
 					$title = '';
-					$description = $LANG->getLL('area_zoominfo_desc');
+					$description = '<div class="description">'.$LANG->getLL('area_zoominfo_desc').'</div>';
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
 					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, 3,7);
