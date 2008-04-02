@@ -399,7 +399,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$countries[] = $row[$countryField];
 
 					// add a little info so users know what to do
-					$title = '<div style="font-size: 110%; font-weight: bold;">' .$LANG->getLL('country_zoominfo_title').'</div>';
+					$title = '';
 					$description = sprintf($LANG->getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -414,7 +414,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$cities[] = $row[$cityField];
 
 					// add a little info so users know what to do
-					$title = '<div style="font-size: 110%; font-weight: bold;">' .$LANG->getLL('area_zoominfo_title').'</div>';
+					$title = '';
 					$description = $LANG->getLL('area_zoominfo_desc');
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
