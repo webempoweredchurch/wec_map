@@ -2,3 +2,5 @@
 feUserRecordMap = 0
 # cat=basic; type=boolean; label=Enable Geocoding Status
 geocodingStatus = 0
+# cat=basic; type=input; label=Default country to be used for address lookup if no country is given
+defaultCountry = USA

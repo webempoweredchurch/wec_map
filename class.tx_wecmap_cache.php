@@ -155,7 +155,16 @@ class tx_wecmap_cache {
 				if(!empty($newCountry)) $country = $newCountry;
 			}
 		}
-
+		
+		// if we still have no country, use the default one
+		if(empty($country)) {
+			$country = tx_wecmap_backend::getExtConf('defaultCountry');
+			// TODO: devlog start
+			if(TYPO3_DLOG) {
+				t3lib_div::devLog('Using default country: '.$country, 'wec_map_geocode');
+			}
+			// devlog end
+		}
 	}
 
 
