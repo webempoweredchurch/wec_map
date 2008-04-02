@@ -368,7 +368,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
 					$marker = $map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
-					$this->addSidebarItem($marker, $row['name']);
+					$row['title'] = '';
+					$row['description'] = $content;
+					$this->addSidebarItem($marker, $row);
 				}
 			}
 
@@ -413,11 +415,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 	 *
 	 * @return void
 	 **/
-	function addSidebarItem(&$marker, $title) {
+	function addSidebarItem(&$marker, $data) {
 		if(!($this->showSidebar && is_object($marker))) return;
-		$data = array();
 		$data['onclickLink'] = $marker->getClickJS();
-		$data['title'] = $title;
 		$this->sidebarLinks[] = tx_wecmap_shared::render($data, $this->conf['sidebarItem.']);
 	}
 	

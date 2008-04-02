@@ -241,16 +241,18 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 				foreach( $res as $key => $data ) {
 					$conf['table'] = $table;
-
+					
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($conf, $data);
+					$data['title'] = $title;
+					$data['description'] = $desc;
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc);
 					
 					// build parameters to pass to the hook
 					$params = array('table' => $table, 'data' => $data, 'markerObj' => &$marker);
 					$this->processHook($params);
 
-					$this->addSidebarItem($marker, $data['name']);
+					$this->addSidebarItem($marker, $data);
 				}
 			}
 		} else {
@@ -277,17 +279,17 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				}
 				
 				foreach( $res as $key => $data ) {
-					
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($tconf, $data);
-					
+					$data['title'] = $title;
+					$data['description'] = $desc;	
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $tconf['icon.']['iconID']);
 
 					// build parameters to pass to the hook
 					$params = array('table' => $table, 'data' => $data, 'markerObj' => &$marker);
 					$this->processHook($params);
 
-					$this->addSidebarItem($marker, $data['name']);
+					$this->addSidebarItem($marker, $data);
 				}
 			}
 		}
@@ -410,11 +412,9 @@ class tx_wecmap_pi3 extends tslib_pibase {
 	 *
 	 * @return void
 	 **/
-	function addSidebarItem(&$marker, $title) {
+	function addSidebarItem(&$marker, $data) {
 		if(!($this->showSidebar && is_object($marker))) return;
-		$data = array();
 		$data['onclickLink'] = $marker->getClickJS();
-		$data['title'] = $title;
 		$this->sidebarLinks[] = tx_wecmap_shared::render($data, $this->conf['sidebarItem.']);
 	}
 	
