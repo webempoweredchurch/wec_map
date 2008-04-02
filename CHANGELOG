@@ -13,6 +13,7 @@
 [NEW] Add sidebar with links to markers
 [NEW] Directions are now shown on the first tab below the content, similar to maps.google.com
 [NEW] Significantly cleaned up javascript output
+[NEW] Add option to set default country for address lookup
 [FIXED] Really large info bubbles are now smaller
 [FIXED] Pass all the marker objects by reference now
 [FIXED] Keep wec_map at the bottom of the ext list for correct TCA inclusion
