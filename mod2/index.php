@@ -399,7 +399,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$countries[] = $row[$countryField];
 
 					// add a little info so users know what to do
-					$title = '<h1>' .$LANG->getLL('country_zoominfo_title').'</h1>';
+					$title = '<div style="font-size: 110%; font-weight: bold;">' .$LANG->getLL('country_zoominfo_title').'</div>';
 					$description = sprintf($LANG->getLL('country_zoominfo_desc'), $row[$countryField]);
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -414,7 +414,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					$cities[] = $row[$cityField];
 
 					// add a little info so users know what to do
-					$title = '<h1>' .$LANG->getLL('area_zoominfo_title').'</h1>';
+					$title = '<div style="font-size: 110%; font-weight: bold;">' .$LANG->getLL('area_zoominfo_title').'</div>';
 					$description = $LANG->getLL('area_zoominfo_desc');
 
 					// add a marker for this country and only show it between zoom levels 0 and 2.
@@ -422,15 +422,16 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				}
 
 				// make title and description
-				$content = tx_wecmap_shared::render($row, $conf['marker.']);
+				$title = '<div style="font-size: 110%; font-weight: bold;">'.$row['name'].'</div>';
+				$content = '<div>'.$row[$streetField].'<br />'.$row[$cityField].', '.$row[$stateField].' '.$row[$zipField].'<br />'. $row[$countryField].'</div>';
 
 
 				// add all the markers starting at zoom level 3 so we don't crowd the map right away.
 				// if private was checked, don't use address to geocode
 				if($private) {
-					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8);
+					$map->addMarkerByAddress(null, $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $content, 8);
 				} else {
-					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, 8);
+					$map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $content, 8);
 				}
 			}
 		}
