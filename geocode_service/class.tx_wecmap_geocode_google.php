@@ -63,8 +63,9 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
 			$key = $domainmgr->getKey();
 		}
+		$lookupstr = trim($street.' '.$city.', '.$state.' '.$zip.', '.$country);
 		$url = 'http://maps.google.com/maps/geo?'.
-				$this->buildURL('q', $street.' '.$city.', '.$state.' '.$zip.', '.$country).
+				$this->buildURL('q', $lookupstr).
 				$this->buildURL('output', 'csv').
 				$this->buildURL('key', $key);
 
@@ -124,7 +125,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 
 	function buildURL($name, $value){
 		if($value) {
-			return $name.'='.str_replace(' ', '+', $value).'&';
+			return $name.'='.urlencode($value).'&';
 		}
 	}
 }
