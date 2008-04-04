@@ -363,13 +363,14 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				}
 
 				// make title and description
-				$content = tx_wecmap_shared::render($row, $conf['marker.']);
+				$title = tx_wecmap_shared::render($row, $conf['marker.']['title.']);
+				$description = tx_wecmap_shared::render($row, $conf['marker.']['description.']);
 
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
-					$marker = $map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
-					$row['info_title'] = '';
-					$row['info_description'] = $content;
+					$marker = $map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], $title, $description, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
+					$row['info_title'] = $title;
+					$row['info_description'] = $description;
 					$this->addSidebarItem($marker, $row);
 				}
 			}

@@ -44,9 +44,12 @@ plugin.tx_wecmap_pi2 {
 	}
 	
 	marker {
-		title = TEXT
-		title.field = name
-		title.wrap = <div class="infotitle">|</div>
+		title = COA
+		title {
+			10 = TEXT
+			10.field = name
+			10.wrap = <div class="infotitle">|</div>			
+		}
 
 		description = COA
 		description {
