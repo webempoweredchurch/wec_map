@@ -368,8 +368,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 				// unless we are using privacy, add individual markers as well
 				if(!$private) {
 					$marker = $map->addMarkerByAddress($row[$streetField], $row[$cityField], $row[$stateField], $row[$zipField], $row[$countryField], '', $content, $singleConf['minzoom'], $singleConf['maxzoom'], $singleConf['icon']['iconID']);
-					$row['title'] = '';
-					$row['description'] = $content;
+					$row['info_title'] = '';
+					$row['info_description'] = $content;
 					$this->addSidebarItem($marker, $row);
 				}
 			}

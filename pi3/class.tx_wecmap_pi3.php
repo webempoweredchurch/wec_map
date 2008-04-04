@@ -244,8 +244,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 					
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($conf, $data);
-					$data['title'] = $title;
-					$data['description'] = $desc;
+					$data['info_title'] = $title;
+					$data['info_description'] = $desc;
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc);
 					
 					// build parameters to pass to the hook
@@ -281,8 +281,8 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				foreach( $res as $key => $data ) {
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($tconf, $data);
-					$data['title'] = $title;
-					$data['description'] = $desc;	
+					$data['info_title'] = $title;
+					$data['info_description'] = $desc;	
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $tconf['icon.']['iconID']);
 
 					// build parameters to pass to the hook
