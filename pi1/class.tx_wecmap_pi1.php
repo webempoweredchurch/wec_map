@@ -128,6 +128,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$prefillAddress = $this->pi_getFFvalue($piFlexForm, 'prefillAddress', 'mapConfig');
 		empty($prefillAddress) ? $prefillAddress = $conf['prefillAddress']:null;
 
+		$this->showSidebar = $conf['showSidebar'];
+
 		$centerLat = $conf['centerLat'];
 
 		$centerLong = $conf['centerLong'];
@@ -178,8 +180,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		// determine if an address has been set through flexforms. If not, process TS
 		if(empty($zip) && empty($state) && empty($city)) {
 
-			$sidebar = '';
-			
 			// add icons
 			if(!empty($conf['icons.'])) {
 				foreach( $conf['icons.'] as $key => $value ) {
@@ -204,10 +204,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					// add address by string
 					$markerObj = $map->addMarkerByString($marker['address'], '', $content, 0, 17, $iconID);
 
-					// add js function call to marker data
-					$marker['onclickLink'] = $markerObj->getClickJS();
-					
-					$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+					$this->addSidebarItem($markerObj, $marker);
 				
 				// add address by lat and long only
 				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
@@ -219,10 +216,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					// add the marker to the map
 					$markerObj = $map->addMarkerByLatLong($lat, $long, '', $content, 0, 17, $iconID);
 			
-					// add js function call to marker data
-					$marker['onclickLink'] = $markerObj->getClickJS();
-			
-					$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+					$this->addSidebarItem($markerObj, $marker);
 					
 				} else {
 					
@@ -233,10 +227,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 											 $marker['zip'], $marker['country'], $title,
 											 $description, 0, 17, $iconID);
 			
-					// add js function call to marker data
-					$marker['onclickLink'] = $markerObj->getClickJS();
-			
-					$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+					$this->addSidebarItem($markerObj, $marker);
 					
 				}
 			}
@@ -254,11 +245,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 			// add the marker to the map
 			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content, 0, 17);
-			
-			// add js function call to marker data
-			$marker['onclickLink'] = $markerObj->getClickJS();
-
-			$this->sidebarLinks[] = tx_wecmap_shared::render($marker, $conf['sidebarItem.']);
+			$this->addSidebarItem($markerObj, $marker);
 		}
 		
 		// gather all the content together
@@ -278,7 +265,21 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		return $out;
 	}
 	
+	/**
+	 * adds a sidebar item corresponding to the given marker.
+	 * Does so only if the sidebar is enabled.
+	 *
+	 * @return void
+	 **/
+	function addSidebarItem(&$marker, $data) {
+		if(!($this->showSidebar && is_object($marker))) return;
+		$data['onclickLink'] = $marker->getClickJS();
+		$this->sidebarLinks[] = tx_wecmap_shared::render($data, $this->conf['sidebarItem.']);
+	}
+	
 	function getSidebar() {
+		if(empty($this->sidebarLinks)) return null;
+
 		$c = '';
 		foreach( $this->sidebarLinks as $link ) {
 			$c .= $link;
