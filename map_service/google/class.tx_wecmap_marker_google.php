@@ -293,7 +293,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 */
 	function stripNL($input) {
 		$order  = array("\r\n", "\n", "\r");
-		$replace = '';
+		$replace = '<br />';
 		$newstr = str_replace($order, $replace, $input);
 
 		return $newstr;
