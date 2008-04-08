@@ -73,8 +73,6 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 
 		$latlong = array();
 		$csv = explode(',', $csv);
-		// TODO: debug
-		t3lib_div::debug($street, 'street');
 		if(TYPO3_DLOG) {
 			$addressArray = array(
 				'street' => $street,
