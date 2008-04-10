@@ -1,0 +1,1 @@
+[FIXED] Properly pass groups by reference. Fixes problems in PHP4 with maps not showing up.
