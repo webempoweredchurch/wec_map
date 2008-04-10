@@ -768,7 +768,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$markers = reset($this->markers);
 
 		if(count($markers) == 1 && $this->showInfoOnLoad) {
-			$content = 'GEvent.trigger(markers_'. $this->mapName .'[0], "click");';
+			$content = 'GEvent.trigger(markers_'. $this->mapName .'[0][0], "click");';
 			return $content;
 		}
 	}
@@ -998,6 +998,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 **/
 	function showInfoOnLoad() {
 		$this->showInfoOnLoad = true;
+		// TODO: devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': Showing info bubble on load', 'wec_map_api');
+		}
+		// devlog end
 	}
 }
 
