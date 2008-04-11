@@ -1,2 +1,3 @@
 [FIXED] Properly pass groups by reference. Fixes problems in PHP4 with maps not showing up.
 [FIXED] "Show info bubble on load" now works again.
+[FIXED] Update API documentation with missing methods.
