@@ -206,8 +206,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			} else {
 				$LANG->init($GLOBALS['TSFE']->config['config']['language']);
 			}
-			$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 		}
+		$LANG->includeLLFile('EXT:wec_map/map_service/google/locallang.xml');
 		$hasKey = $this->hasKey();
 		$hasThingsToDisplay = $this->hasThingsToDisplay();
 		$hasHeightWidth = $this->hasHeightWidth();
