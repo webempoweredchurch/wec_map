@@ -1,8 +1,0 @@
-[FIXED] Properly pass groups by reference. Fixes problems in PHP4 with maps not showing up.
-[FIXED] "Show info bubble on load" now works again.
-[FIXED] Update API documentation with missing methods.
-[FIXED] Error messages from the API are now properly shown.
-[FIXED] Added another layer to geocoding to make country detection more reliable.
-[FIXED] Tweak what we send to the Yahoo geocoder to get more accurate information back.
-[FIXED] Changed how low-level zoom markers are shown in FE User Map both in the FE plugin and BE module.
-[FIXED] Checks for template inclusion in WEC Table Map work better now.
