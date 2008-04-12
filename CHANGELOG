@@ -2,3 +2,4 @@
 [FIXED] "Show info bubble on load" now works again.
 [FIXED] Update API documentation with missing methods.
 [FIXED] Error messages from the API are now properly shown.
+[FIXED] Added another layer to geocoding to make country detection more reliable

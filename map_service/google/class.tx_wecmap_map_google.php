@@ -392,6 +392,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$zip	= $record[$zipfield];
 		$country= $record[$countryfield];
 
+		if(empty($country) && $countryfield == 'static_info_country') {
+			$country = $record['country'];
+		} else if(empty($country) && $countryfield == 'country') {
+			$country = $record['static_info_country'];			
+		}
+		
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
