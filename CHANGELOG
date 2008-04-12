@@ -3,3 +3,4 @@
 [FIXED] Update API documentation with missing methods.
 [FIXED] Error messages from the API are now properly shown.
 [FIXED] Added another layer to geocoding to make country detection more reliable
+[FIXED] Tweak what we send to the Yahoo geocoder to get more accurate information back

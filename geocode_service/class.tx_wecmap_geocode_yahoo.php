@@ -66,21 +66,26 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 			case 'United States':
 			case 'United States of America':
 				/* Keep it all if its the US. */
+				$addressString = $street.', '.$city.', '.$state.' '.$zip.', '.$country;
 				break;
 			default:
 				$street = null;
 				$zip = null;
 				$state = null;
+				$addressString = $city.', '.$country;
 				break;
 		}
 
+		$addressString = $street.', '.$city.', '.$state.' '.$zip.', '.$country;
+			
 		$url = 'http://api.local.yahoo.com/MapsService/V1/geocode?'.
 				'appid='.$this->applicationID.'&'.
 				$this->buildURL('street', $street).
 				$this->buildURL('city', $city).
 				$this->buildURL('state', $state).
 				$this->buildURL('zip', $zip).
-				$this->buildURL('country', $country);
+				$this->buildURL('country', $country).
+				$this->buildURL('location', $addressString);
 
 		$xml = t3lib_div::getURL($url);
 
@@ -92,7 +97,7 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 				'zip' => $zip,
 				'country' => $country,
 			);
-			$addressString = $street.', '.$city.' '.$state.' '.$zip.' '.$country;
+			$addressString = $street.', '.$city.', '.$state.' '.$zip.', '.$country;
 		}
 
 		if($xml !== false) {
