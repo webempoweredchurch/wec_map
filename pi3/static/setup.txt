@@ -71,4 +71,7 @@ plugin.tx_wecmap_pi3 {
 	addressForm 		< tx_wecmap_api.addressForm
 	output 				< tx_wecmap_api.output
 	_CSS_DEFAULT_STYLE 	< tx_wecmap_api._CSS_DEFAULT_STYLE
+	
+	# this is simply to check if this template is included
+	templateIncluded = 1
 }
