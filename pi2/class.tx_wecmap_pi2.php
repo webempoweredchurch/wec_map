@@ -311,7 +311,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			if($row[$cityField] != '') {
 
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])  && !empty($row[$zipField])  && !empty($row[$cityField])) {
+				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])) {
 
 					// add this country to the array
 					$countries[] = $row[$countryField];
@@ -329,7 +329,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 
 				// if we haven't added a marker for this zip code yet, do so.
-				if(!in_array($row[$cityField], $cities) && !empty($row[$cityField]) && !empty($row[$zipField])) {
+				if(!in_array($row[$cityField], $cities) && !empty($row[$cityField])) {
 
 					// add this country to the array
 					$cities[] = $row[$cityField];

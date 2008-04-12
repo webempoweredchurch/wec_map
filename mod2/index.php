@@ -402,7 +402,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 			if($row[$cityField] != '') {
 
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])  && !empty($row[$zipField])  && !empty($row[$cityField])) {
+				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])) {
 
 					// add this country to the array
 					$countries[] = $row[$countryField];
@@ -417,7 +417,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 
 				// if we haven't added a marker for this zip code yet, do so.
-				if(!in_array($row[$cityField], $cities) && !empty($cityField) && !empty($row[$zipField])) {
+				if(!in_array($row[$cityField], $cities) && !empty($cityField)) {
 
 					// add this country to the array
 					$cities[] = $row[$cityField];

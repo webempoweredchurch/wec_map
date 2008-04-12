@@ -4,3 +4,4 @@
 [FIXED] Error messages from the API are now properly shown.
 [FIXED] Added another layer to geocoding to make country detection more reliable
 [FIXED] Tweak what we send to the Yahoo geocoder to get more accurate information back
+[FIXED] Changed how low-level zoom markers are shown in FE User Map both in the FE plugin and BE module.
