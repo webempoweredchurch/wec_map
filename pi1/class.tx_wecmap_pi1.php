@@ -200,27 +200,31 @@ class tx_wecmap_pi1 extends tslib_pibase {
 				// determine if address was entered by string or separated
 				if(array_key_exists('address', $marker)) {
 
-					$content = tx_wecmap_shared::render($marker, $conf['marker.']);
+					$title = tx_wecmap_shared::render($marker, $conf['marker.']['title.']);
+					$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
+					
 					// add address by string
-					$markerObj = $map->addMarkerByString($marker['address'], '', $content, 0, 17, $iconID);
+					$markerObj = $map->addMarkerByString($marker['address'], $title, $description, 0, 17, $iconID);
 
 					$this->addSidebarItem($markerObj, $marker);
 				
 				// add address by lat and long only
 				} else if(array_key_exists('lat', $marker) && array_key_exists('long', $marker)) {
 
-					$content = tx_wecmap_shared::render($marker, $conf['marker.']);
+					$title = tx_wecmap_shared::render($marker, $conf['marker.']['title.']);
+					$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
 					$lat     = $marker['lat'];
 					$long    = $marker['long'];
 
 					// add the marker to the map
-					$markerObj = $map->addMarkerByLatLong($lat, $long, '', $content, 0, 17, $iconID);
+					$markerObj = $map->addMarkerByLatLong($lat, $long, $title, $description, 0, 17, $iconID);
 			
 					$this->addSidebarItem($markerObj, $marker);
 					
 				} else {
 					
-					$content = tx_wecmap_shared::render($marker, $conf['marker']);
+					$title = tx_wecmap_shared::render($marker, $conf['marker.']['title.']);
+					$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
 					
 					// add the marker to the map
 					$markerObj = $map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
@@ -241,10 +245,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$marker['title']       = $title;
 			$marker['description'] = $description;
 
-			$content = tx_wecmap_shared::render($marker, $conf['marker.']);
+			$title = tx_wecmap_shared::render($marker, $conf['marker.']['title.']);
+			$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
 
 			// add the marker to the map
-			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, '', $content, 0, 17);
+			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description, 0, 17);
 			$this->addSidebarItem($markerObj, $marker);
 		}
 		

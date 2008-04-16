@@ -27,13 +27,19 @@ plugin.tx_wecmap_pi1 {
 	# }
 	
 	marker {
-		title = TEXT
-		title.field = title
-		title.wrap = <div class="infotitle">|</div>
-	
-		description = TEXT
-		description.field = description
-		description.wrap = <div>|</div>
+		title = COA
+		title {
+			10 = TEXT
+			10.field = title
+			10.wrap = <div class="infotitle">|</div>
+		}
+		
+		description = COA
+		description {
+			10 = TEXT
+			10.field = description
+			10.wrap = <div>|</div>			
+		}
 		
 		address = COA
 		address {
