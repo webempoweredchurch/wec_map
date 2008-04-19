@@ -29,21 +29,15 @@
 
 
 	// DEFAULT initialization of a module [BEGIN]
-unset($MCONF);
-require_once('conf.php');
-require_once($BACK_PATH.'init.php');
-require_once($BACK_PATH.'template.php');
-
 require_once(PATH_t3lib.'class.t3lib_install.php');
 require_once(PATH_t3lib.'class.t3lib_extmgm.php');
-
 $LANG->includeLLFile('EXT:wec_map/mod1/locallang.xml');
 require_once(PATH_t3lib.'class.t3lib_scbase.php');
 $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
-require_once('../class.tx_wecmap_cache.php');
-require_once('../class.tx_wecmap_domainmgr.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
 
 
 /**
