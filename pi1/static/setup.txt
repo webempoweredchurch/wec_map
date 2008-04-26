@@ -49,7 +49,7 @@ plugin.tx_wecmap_pi1 {
 
 			20 = TEXT
 			20.field = city
-			20.wrap = | &nbsp;
+			20.wrap = | ,&nbsp;
 
 			30 = TEXT
 			30.field = state
