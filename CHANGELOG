@@ -1,4 +1,3 @@
 [NEW] Change module inclusion to the new preferred way that gets rid of the relative paths in conf.php
 [NEW] Make changes to the TS static template for title and description to better support the sidebar
 [FIXED] Pass title through htmlspecialchars to prevent js errors in case it contained quotes
-
