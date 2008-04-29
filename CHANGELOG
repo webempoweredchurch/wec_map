@@ -1,5 +1,4 @@
 [NEW] !!!IMPORTANT WEC Simple Map marker bubble TS changed significantly. "title" was formerly defined as TEXT and is now COA
-[NEW] Change module inclusion to the new preferred way that gets rid of the relative paths in conf.php
-[NEW] Make changes to the TS static template for title and description to better support the sidebar
 [NEW] WEC Table Map TS adds a join option to be included in the custom SQL query
+[NEW] Change module inclusion to the new preferred way that gets rid of the relative paths in conf.php
 [FIXED] Pass title through htmlspecialchars to prevent js errors in case it contained quotes
