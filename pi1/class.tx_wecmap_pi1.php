@@ -225,12 +225,11 @@ class tx_wecmap_pi1 extends tslib_pibase {
 					
 					$title = tx_wecmap_shared::render($marker, $conf['marker.']['title.']);
 					$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
-					$address = tx_wecmap_shared::render($marker, $conf['marker.']['address.']);
 					
 					// add the marker to the map
 					$markerObj = $map->addMarkerByAddress($marker['street'], $marker['city'], $marker['state'],
 											 $marker['zip'], $marker['country'], $title,
-											 $description.$address, 0, 17, $iconID);
+											 $description, 0, 17, $iconID);
 			
 					$this->addSidebarItem($markerObj, $marker);
 					
@@ -248,10 +247,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 
 			$title = tx_wecmap_shared::render($marker, $conf['marker.']['title.']);
 			$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
-			$address = tx_wecmap_shared::render($marker, $conf['marker.']['address.']);
 
 			// add the marker to the map
-			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description.$address, 0, 17);
+			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description, 0, 17);
 			$this->addSidebarItem($markerObj, $marker);
 		}
 		
