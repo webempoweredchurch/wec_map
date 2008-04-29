@@ -38,31 +38,27 @@ plugin.tx_wecmap_pi1 {
 		description {
 			10 = TEXT
 			10.field = description
-			10.wrap = <div>|</div>			
-		}
-		
-		address = COA
-		address {
-			10 = TEXT
-			10.field = street
-			10.wrap = | <br/>
+			10.wrap = <div>|</div>		
 
 			20 = TEXT
-			20.field = city
-			20.wrap = | ,&nbsp;
+			20.field = street
+			20.wrap = <br /> | <br/>
 
 			30 = TEXT
-			30.field = state
-			30.wrap = | &nbsp;
+			30.field = city
+			30.wrap = | ,&nbsp;
 
 			40 = TEXT
-			40.field = zip
-			40.wrap = | <br/>
-			
+			40.field = state
+			40.wrap = | &nbsp;
+
 			50 = TEXT
-			50.field = country
+			50.field = zip
+			50.wrap = | <br/>
+			
+			60 = TEXT
+			60.field = country
 		}
-		address.wrap = <div>|</div>
 	}
 	
 	sidebar 	< tx_wecmap_api.sidebar
