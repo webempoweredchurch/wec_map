@@ -58,6 +58,7 @@ plugin.tx_wecmap_pi3 {
 	# 	}
 	# 	20 {
 	# 		table = fe_users
+	#		join  = INNER JOIN some_mm_table
 	# 		where = pid=95 and deleted=0 and disable=0
 	# 	}
 	# }
