@@ -260,6 +260,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			foreach( $conf['tables.'] as $table => $tconf ) {
 
 				$table = $tconf['table'];
+				$join  = $tconf['join'];
 				
 				if(!empty($tconf['where'])) {
 					$where = $tconf['where'];
@@ -267,9 +268,15 @@ class tx_wecmap_pi3 extends tslib_pibase {
 					$where = '1=1';
 				}
 				
+				if($join) {
+					$from = $table.' '.$join;
+				} else {
+					$from = $table;
+				}
+				
 				$where .= $this->cObj->enableFields($table);
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $where);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $from, $where);
 
 				// add icon if configured, else see if we just have an iconID
 				// and use that. We assume the icon is added somewhere else.
