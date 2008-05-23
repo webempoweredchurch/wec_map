@@ -39,23 +39,28 @@ plugin.tx_wecmap_pi1 {
 			10 = TEXT
 			10.field = description
 			10.wrap = <div>|</div>		
+      10.if.isTrue.field = description
 
 			20 = TEXT
 			20.field = street
 			20.wrap = <br /> | <br/>
+      20.if.isTrue.field = street
 
 			30 = TEXT
 			30.field = city
 			30.wrap = | ,&nbsp;
-
+      30.if.isTrue.field = city
+      
 			40 = TEXT
 			40.field = state
 			40.wrap = | &nbsp;
-
+      40.if.isTrue.field = state
+      
 			50 = TEXT
 			50.field = zip
 			50.wrap = | <br/>
-			
+      50.if.isTrue.field = zip
+			      
 			60 = TEXT
 			60.field = country
 		}

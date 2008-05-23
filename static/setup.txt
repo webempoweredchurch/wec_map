@@ -34,6 +34,7 @@ tx_wecmap_api {
 		10.field = content
 		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="height:{field:map_height}px">|</div>
 		10.insertData = true
+    10.if.isTrue.field = content
 	}
 	
 	sidebarItem = COA
@@ -42,6 +43,7 @@ tx_wecmap_api {
 	  10.field = title
 	  10.wrap = <a href="#" style="display:block;" onclick="{field:onclickLink} return false;">|</a>
 	  10.insertData = true
+	  10.if.isTrue.field = title
 	}
 	
 	output = COA
@@ -93,14 +95,17 @@ tx_wecmap_api {
 			10 = TEXT
 			10.field = street
 			10.wrap = |<br />
+	    10.if.isTrue.field = street
 	
 			20 = TEXT
 			20.field = city
 			20.wrap = |,&nbsp;
-			
+	    20.if.isTrue.field = city
+	    			
 			30 = TEXT
 			30.field = state
 			30.wrap = |&nbsp;
+	    30.if.isTrue.field = state
 			
 			40 = TEXT
 			40.field = zip
