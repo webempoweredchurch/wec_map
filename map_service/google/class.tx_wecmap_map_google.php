@@ -57,6 +57,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $prefillAddress;
 	var $directionsDivID;
 	var $showInfoOnLoad;
+	var $maxAutoZoom = 15;
 
 	// array to hold the different Icons
 	var $icons;
@@ -891,8 +892,8 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$zoom = floor(($wZoom < $hZoom) ? $wZoom : $hZoom);
 
 		/* Don't zoom in too far if we only have a single marker.*/
-		if ($zoom > 15) {
-			$zoom = 15;
+		if ($zoom > $this->maxAutoZoom) {
+			$zoom = $this->maxAutoZoom;
 		}
 		// TODO: devlog start
 		if(TYPO3_DLOG) {
@@ -1009,6 +1010,17 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			t3lib_div::devLog($this->mapName.': Showing info bubble on load', 'wec_map_api');
 		}
 		// devlog end
+	}
+	
+	/**
+	 * Sets the maximum zoom level that autozoom will use
+	 *
+	 * @return void
+	 **/
+	function setMaxAutoZoom($newZoom = null) {
+		if($newZoom != null) {
+			$this->maxAutoZoom = $newZoom;
+		}
 	}
 }
 
