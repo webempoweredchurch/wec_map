@@ -63,7 +63,7 @@ class tx_phpunit_test_testcase extends tx_phpunit_testcase {
 	public function createMap() {
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className(null, 500, 500, 39.842286, -96.855469, null, $mapName,'name');
+		$map = new $className(null, 500, 500, 39.842286, -96.855469, null,'name');
 		$map->addMarkerByLatLong(39.842286,-96.855469);
 		return $map;
 	}
