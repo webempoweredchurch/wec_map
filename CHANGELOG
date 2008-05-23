@@ -1,0 +1,2 @@
+[NEW] API and TS Setting to set the maximum auto zoom, see docs
+[FIXED] change TS wraps to only show if there is actually content
