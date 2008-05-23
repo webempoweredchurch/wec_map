@@ -70,6 +70,8 @@ plugin.tx_wecmap_pi1 {
 	sidebar 	< tx_wecmap_api.sidebar
 	directions 	< tx_wecmap_api.directions
 	sidebarItem < tx_wecmap_api.sidebarItem
+	sidebarItem.10.field = title
+	sidebarItem.10.if.isTrue.field = title
 	addressForm < tx_wecmap_api.addressForm
 	output 		< tx_wecmap_api.output
 	_CSS_DEFAULT_STYLE < tx_wecmap_api._CSS_DEFAULT_STYLE

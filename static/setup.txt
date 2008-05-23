@@ -40,10 +40,10 @@ tx_wecmap_api {
 	sidebarItem = COA
 	sidebarItem {
 	  10 = TEXT
-	  10.field = title
+	  10.field = info_title
 	  10.wrap = <a href="#" style="display:block;" onclick="{field:onclickLink} return false;">|</a>
 	  10.insertData = true
-	  10.if.isTrue.field = title
+	  10.if.isTrue.field = info_title
 	}
 	
 	output = COA
