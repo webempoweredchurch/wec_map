@@ -1019,7 +1019,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 **/
 	function setMaxAutoZoom($newZoom = null) {
 		if($newZoom != null) {
-			$this->maxAutoZoom = $newZoom;
+			$this->maxAutoZoom = intval($newZoom);
 		}
 	}
 }
