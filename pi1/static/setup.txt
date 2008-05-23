@@ -10,6 +10,7 @@ plugin.tx_wecmap_pi1 {
 	centerLat = 
 	centerLong = 
 	mapName =
+	maxAutoZoom =
 
 	# this is just an example for how to add a new icon
 	# icons.1 {

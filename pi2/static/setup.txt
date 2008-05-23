@@ -13,6 +13,7 @@ plugin.tx_wecmap_pi2 {
 	centerLat = 
 	centerLong = 
 	mapName =
+	maxAutoZoom =
 
 	groups.country {
 		# this is just an example for how to add a new icon

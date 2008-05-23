@@ -135,6 +135,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$centerLong = $conf['centerLong'];
 
 		$zoomLevel = $conf['zoomLevel'];
+		
+		$maxAutoZoom = $conf['maxAutoZoom'];
 
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
@@ -162,6 +164,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		} else if ($mapControlSize == 'zoomonly') {
 			$map->addControl('smallZoom');
 		}
+
+		$map->setMaxAutoZoom($maxAutoZoom);
 
 		if($scale) $map->addControl('scale');
 		if($overviewMap) $map->addControl('overviewMap');

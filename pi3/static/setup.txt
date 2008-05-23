@@ -12,6 +12,7 @@ plugin.tx_wecmap_pi3 {
 	centerLat = 
 	centerLong = 
 	mapName =
+	maxAutoZoom =
 	
 	# example for tables configuration
 	#
