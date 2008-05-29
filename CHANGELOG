@@ -1,3 +1,1 @@
-[NEW] API and TS Setting to set the maximum auto zoom, see docs
-[FIXED] use correct sidebar title field for pi2 and pi3 by default
-[FIXED] change TS wraps to only show if there is actually content
+[FIXED] revert to old method of loading modules due to lots of path errors in BE modules.
