@@ -1,6 +1,6 @@
 <?php
 
-	// DO NOT REMOVE OR CHANGE THESE 3 LINES:
+// DO NOT REMOVE OR CHANGE THESE 3 LINES:
 $MCONF['script']='_DISPATCH'; 
 $MCONF['name']='tools_txwecmapM1';
 
