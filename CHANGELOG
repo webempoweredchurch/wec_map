@@ -1,1 +1,2 @@
 [FIXED] revert to old method of loading modules due to lots of path errors in BE modules. Please remove and reinstall wec_map from the extension manager.
+[FIXED] minor label changes
