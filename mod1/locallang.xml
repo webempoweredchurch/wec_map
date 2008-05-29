@@ -40,7 +40,7 @@
 				]]>
 			</label>
 			<label index="googleMapsApiKey">Google Maps API Key</label>
-			<label index="submit">Submit</label>
+			<label index="submit">Save</label>
 			
 			<label index="batchGeocode">Batch Geocode</label>
 			<label index="batchInstructions">
