@@ -77,5 +77,10 @@ class tx_wecmap_shared {
 
 		return $where.')';
 	}
+	
+	function getAddressField($table, $field) {
+		t3lib_div::loadTCA($table);
+ 		return $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map']['addressFields'][$field];
+	}
 }
 ?>

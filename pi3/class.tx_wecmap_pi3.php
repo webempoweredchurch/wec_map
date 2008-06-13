@@ -35,6 +35,7 @@
 
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * Simple frontend plugin for displaying an address on a map.
@@ -359,13 +360,12 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		if(!empty($conf['description.'])) {
 			$desc = tx_wecmap_shared::render($data, $conf['description.'], $conf['table']);
 		} else {
-			$af = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'];
 			$ad = array();
-			$ad['street']  = $data[$af['street']];
-			$ad['city']    = $data[$af['city']];
-			$ad['state']   = $data[$af['state']];
-			$ad['zip']     = $data[$af['zip']];
-			$ad['country'] = $data[$af['country']];
+			$ad['street']  = $data[tx_wecmap_shared::getAddressField($conf['table'], 'street')];
+			$ad['city']    = $data[tx_wecmap_shared::getAddressField($conf['table'], 'city')];
+			$ad['state']   = $data[tx_wecmap_shared::getAddressField($conf['table'], 'state')];
+			$ad['zip']     = $data[tx_wecmap_shared::getAddressField($conf['table'], 'zip')];
+			$ad['country'] = $data[tx_wecmap_shared::getAddressField($conf['table'], 'country')];
 
 			$desc = tx_wecmap_shared::render($ad, $this->conf['defaultdescription.'], $conf['table']);						
 		}

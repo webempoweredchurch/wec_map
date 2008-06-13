@@ -345,11 +345,11 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$maptype = $conf['maptype'];
 		$mapcontrolsize = $conf['mapcontrolsize'];
 
-		$streetField = $this->getAddressField('street');
-		$cityField = $this->getAddressField('city');
-		$stateField = $this->getAddressField('state');
-		$zipField = $this->getAddressField('zip');
-		$countryField = $this->getAddressField('country');
+		$streetField  = tx_wecmap_shared::getAddressField('fe_users', 'street');
+		$cityField    = tx_wecmap_shared::getAddressField('fe_users', 'city');
+		$stateField   = tx_wecmap_shared::getAddressField('fe_users', 'state');
+		$zipField     = tx_wecmap_shared::getAddressField('fe_users', 'zip');
+		$countryField = tx_wecmap_shared::getAddressField('fe_users', 'country');
 
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
@@ -459,21 +459,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$out .= '<img'.t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'],'gfx/edit2.gif','width="11" height="12"').' title="Edit me" border="0" alt="" />';
 		$out .= '</a>';
 		return $out;
-	}
-
-	/**
-	 * Gets the address mapping from the TCA.
-	 *
-	 * @param		string		Name of the field to retrieve the mapping for.
-	 * @return		name		Name of the field containing address data.
-	 */
-	function getAddressField($field) {
-		$fieldName = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'][$field];
-		if($fieldName == '') {
-			$fieldName = $field;
-		}
-
-		return $fieldName;
 	}
 }
 

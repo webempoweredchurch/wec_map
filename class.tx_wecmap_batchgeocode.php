@@ -28,6 +28,7 @@
 ***************************************************************/
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * Performs autmated geocoding for any address information.
@@ -108,11 +109,11 @@ class tx_wecmap_batchgeocode {
 		global $TYPO3_DB;
 
 		$addressFields = array(
-			'street' => $this->getAddressField($table, 'street'),
-			'city' => $this->getAddressField($table, 'city'),
-			'state' => $this->getAddressField($table, 'state'),
-			'zip' => $this->getAddressField($table, 'zip'),
-			'country' => $this->getAddressField($table, 'country'),
+			'street'  => tx_wecmap_shared::getAddressField($table, 'street'),
+			'city'    => tx_wecmap_shared::getAddressField($table, 'city'),
+			'state'   => tx_wecmap_shared::getAddressField($table, 'state'),
+			'zip'     => tx_wecmap_shared::getAddressField($table, 'zip'),
+			'country' => tx_wecmap_shared::getAddressField($table, 'country'),
 		);
 
 		$where = "1=1".t3lib_befunc::deleteClause($table);
@@ -136,10 +137,10 @@ class tx_wecmap_batchgeocode {
 	 * @return		none
 	 */
 	function geocodeRecord($row, $addressFields) {
-		$street = $row[$addressFields['street']];
-		$city = $row[$addressFields['city']];
-		$state = $row[$addressFields['state']];
-		$zip = $row[$addressFields['zip']];
+		$street  = $row[$addressFields['street']];
+		$city    = $row[$addressFields['city']];
+		$state   = $row[$addressFields['state']];
+		$zip     = $row[$addressFields['zip']];
 		$country = $row[$addressFields['country']];
 
 		// increment total count
@@ -212,22 +213,6 @@ class tx_wecmap_batchgeocode {
 		}
 
 		return $recordCount;
-	}
-
-	/**
-	 * Gets the address mapping from the TCA.
-	 *
-	 * @param		string		Name of the table to look for the mapping in.
-	 * @param		string		Name of the field to retrieve the mapping for.
-	 * @return		name		Name of the field containing address data.
-	 */
-	function getAddressField($table, $field) {
-		$fieldName = $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map']['addressFields'][$field];
-		if($fieldName == '') {
-			$fieldName = $field;
-		}
-
-		return $fieldName;
 	}
 }
 

@@ -31,6 +31,7 @@ require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
 require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_marker_google.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_domainmgr.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * Map implementation for the Google Maps mapping service.
@@ -376,12 +377,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(!$tca) return false;
 		if(!$tca['isMappable']) return false;
 
-		$addressFields = $tca['addressFields'];
-		$streetfield = $addressFields['street'];
-		$cityfield = $addressFields['city'];
-		$statefield = $addressFields['state'];
-		$zipfield = $addressFields['zip'];
-		$countryfield = $addressFields['country'];
+		$streetfield  = tx_wecmap_shared::getAddressField($table, 'street');
+		$cityfield    = tx_wecmap_shared::getAddressField($table, 'city');
+		$statefield   = tx_wecmap_shared::getAddressField($table, 'state');
+		$zipfield     = tx_wecmap_shared::getAddressField($table, 'zip');
+		$countryfield = tx_wecmap_shared::getAddressField($table, 'country');
 
 		// get address from db for this record
 		$record = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, 'uid='.$uid);

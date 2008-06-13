@@ -30,6 +30,7 @@
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
 require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * General purpose backend class for the WEC Map extension.  This class
@@ -48,11 +49,11 @@ class tx_wecmap_backend {
 
 		if($isMappable) {
 			/* Get the names of the fields from the TCA */
-			$streetField  = tx_wecmap_backend::getFieldNameFromTable('street', $table);
-			$cityField    = tx_wecmap_backend::getFieldNameFromTable('city', $table);
-			$stateField   = tx_wecmap_backend::getFieldNameFromTable('state', $table);
-			$zipField     = tx_wecmap_backend::getFieldNameFromTable('zip', $table);
-			$countryField = tx_wecmap_backend::getFieldNameFromTable('country', $table);
+			$streetField  = tx_wecmap_shared::getAddressField($table, 'street');
+			$cityField    = tx_wecmap_shared::getAddressField($table, 'city');
+			$stateField   = tx_wecmap_shared::getAddressField($table, 'state');
+			$zipField     = tx_wecmap_shared::getAddressField($table, 'zip');
+			$countryField = tx_wecmap_shared::getAddressField($table, 'country');
 
 
 			/* Get the row that we're saving */
@@ -77,11 +78,12 @@ class tx_wecmap_backend {
 		// if geocoding status is disabled, return
 		if(!tx_wecmap_backend::getExtConf('geocodingStatus')) return;
 
-		$street = tx_wecmap_backend::getFieldValue('street', $PA);
-        $city = tx_wecmap_backend::getFieldValue('city', $PA);
-        $state = tx_wecmap_backend::getFieldValue('state', $PA);
-        $zip = tx_wecmap_backend::getFieldValue('zip', $PA);
-        $country = tx_wecmap_backend::getFieldValue('country', $PA);
+		$street  = tx_wecmap_backend::getFieldValue('street', $PA);
+		$city    = tx_wecmap_backend::getFieldValue('city', $PA);
+		$state   = tx_wecmap_backend::getFieldValue('state', $PA);
+		$zip     = tx_wecmap_backend::getFieldValue('zip', $PA);
+		$country = tx_wecmap_backend::getFieldValue('country', $PA);
+
 
 		return tx_wecmap_backend::drawGeocodeStatus($street, $city, $state, $zip, $country);
 
@@ -185,11 +187,12 @@ class tx_wecmap_backend {
 		$width = '400';
 		$height = '400';
  
-		$street = tx_wecmap_backend::getFieldValue('street', $PA);
-    	$city = tx_wecmap_backend::getFieldValue('city', $PA);
-    	$state = tx_wecmap_backend::getFieldValue('state', $PA);
-		$zip = tx_wecmap_backend::getFieldValue('zip', $PA);
+		$street  = tx_wecmap_backend::getFieldValue('street', $PA);
+		$city    = tx_wecmap_backend::getFieldValue('city', $PA);
+		$state   = tx_wecmap_backend::getFieldValue('state', $PA);
+		$zip     = tx_wecmap_backend::getFieldValue('zip', $PA);
 		$country = tx_wecmap_backend::getFieldValue('country', $PA);
+
 		$description = $street.'<br />'.$city.', '.$state.' '.$zip.'<br />'.$country;
 
 		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
@@ -221,7 +224,6 @@ class tx_wecmap_backend {
 	function getFieldValue($key, $PA) {
 		global $TCA;
 		$table = $PA['table'];
-		$ctrlAddressFields = $TCA[$table]['ctrl']['EXT']['wec_map']['addressFields'];
 
         $row = $PA['row'];
         $addressFields = $PA['fieldConf']['config']['params']['addressFields'];
@@ -232,7 +234,7 @@ class tx_wecmap_backend {
         } else {
 			/* If the ctrl section of the TCA has a name, use it */
 			if(isset($ctrlAddressFields[$key])) {
-				$fieldName = $ctrlAddressFields[$key];
+				$fieldName = tx_wecmap_shared::getAddressField($table, $key);
 			} else {
 				/* Otherwise, use the default name */
             	$fieldName = $key;
@@ -287,31 +289,6 @@ class tx_wecmap_backend {
 
         return $value;
 	}
-
-	/**
-	 * Checks the TCA for address mapping rules and returns the field name.
-	 * If a mapping rule is defined, this tells us what field contains address
-	 * related information.  If no rules are defined, we pick default fields
-	 * to use.
-	 *
-	 * @param	string	The portion of the address we're trying to map.
-	 * @param	string	The name of the table that we're trying to map.
-	 * @return	string	The specified portion of the address.
-	 */
-	function getFieldNameFromTable($key, $table) {
-		global $TCA;
-		$ctrlAddressFields = $TCA[$table]['ctrl']['EXT']['wec_map']['addressFields'];
-
-		/* If the ctrl section of the TCA has a name, use it */
-		if(isset($ctrlAddressFields[$key])) {
-			$fieldName = $ctrlAddressFields[$key];
-		} else {
-			/* Otherwise, use the default name */
-           	$fieldName = $key;
-		}
-
-        return $fieldName;
-    }
 
 	/**
 	 * Gets extConf from TYPO3_CONF_VARS and returns the specified key.

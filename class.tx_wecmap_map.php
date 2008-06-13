@@ -30,6 +30,7 @@
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_marker.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_markergroup.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * Main class for the wec_map extension.  This class sits between the various
@@ -369,12 +370,12 @@ class tx_wecmap_map {
 		if(!$tca) return false;
 		if(!$tca['isMappable']) return false;
 
-		$addressFields = $tca['addressFields'];
-		$streetfield = $addressFields['street'];
-		$cityfield = $addressFields['city'];
-		$statefield = $addressFields['state'];
-		$zipfield = $addressFields['zip'];
-		$countryfield = $addressFields['country'];
+		$streetfield  = tx_wecmap_shared::getAddressField($table, 'street');
+		$cityfield    = tx_wecmap_shared::getAddressField($table, 'city');
+		$statefield   = tx_wecmap_shared::getAddressField($table, 'state');
+		$zipfield     = tx_wecmap_shared::getAddressField($table, 'zip');
+		$countryfield = tx_wecmap_shared::getAddressField($table, 'country');
+
 
 		// get address from db for this record
 		$record = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, 'uid='.$uid);

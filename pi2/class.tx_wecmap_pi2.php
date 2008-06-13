@@ -35,6 +35,7 @@
 
 require_once(PATH_tslib.'class.tslib_pibase.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
+
 /**
  * Frontend User Map plugin for displaying all frontend users on a map.
  *
@@ -270,11 +271,11 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			}	
 		}
 		
-		$streetField  = $this->getAddressField('street');
-		$cityField    = $this->getAddressField('city');
-		$stateField   = $this->getAddressField('state');
-		$zipField     = $this->getAddressField('zip');
-		$countryField = $this->getAddressField('country');
+		$streetField  = tx_wecmap_shared::getAddressField('fe_users', 'street');
+		$cityField    = tx_wecmap_shared::getAddressField('fe_users', 'city');
+		$stateField   = tx_wecmap_shared::getAddressField('fe_users', 'state');
+		$zipField     = tx_wecmap_shared::getAddressField('fe_users', 'zip');
+		$countryField = tx_wecmap_shared::getAddressField('fe_users', 'country');
 
 
 		// start where clause
@@ -395,26 +396,6 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		return $this->pi_wrapInBaseClass($output);
 	}
 
-	/**
-	 * Gets the address mapping from the TCA.
-	 *
-	 * @param		string		Name of the field to retrieve the mapping for.
-	 * @return		name		Name of the field containing address data.
-	 */
-	function getAddressField($field) {
-		if(!$this->loadedTCA) {
-			t3lib_div::loadTCA('fe_users');
-			$this->loadedTCA = true;
-		}
-
-		$fieldName = $GLOBALS['TCA']['fe_users']['ctrl']['EXT']['wec_map']['addressFields'][$field];
-		if($fieldName == '') {
-			$fieldName = $field;
-		}
-
-		return $fieldName;
-	}
-	
 	/**
 	 * adds a sidebar item corresponding to the given marker.
 	 * Does so only if the sidebar is enabled.
