@@ -35,37 +35,37 @@
  *
  */
 
+class tx_wecmap_get_address_field_testcase extends tx_phpunit_testcase {
 
-class tx_wecmap_autozoom_testcase extends tx_phpunit_testcase {
-
-	public function test_default_max_auto_zoom_is_15() {
-		$map = $this->createMap();
-		$map->autoCenterAndZoom();
-				
-		$this->assertEquals(15, $map->zoom);
+	public function test_get_street_field_for_fe_users() {
+		$street = tx_wecmap_shared::getAddressField('fe_users', 'street');
+		$this->assertEquals('address', $street);
 	}
 	
-	public function test_max_auto_zoom_setter_with_7() {
-		$map = $this->createMap();
-		$map->setMaxAutoZoom(7);
-		$map->autoCenterAndZoom();
-		
-		$this->assertEquals(7, $map->zoom);
+	public function test_get_zip_field_for_fe_users() {
+		$street = tx_wecmap_shared::getAddressField('fe_users', 'zip');
+		$this->assertEquals('zip', $street);
 	}
 	
-	public function test_max_auto_zoom_is_15_if_setter_empty() {
-		$map = $this->createMap();
-		$map->setMaxAutoZoom();
-		$map->autoCenterAndZoom();
-		$this->assertEquals(15, $map->zoom);
+	public function test_get_state_field_for_fe_users() {
+		$state = tx_wecmap_shared::getAddressField('fe_users', 'state');
+		$this->assertEquals('zone', $state);
 	}
 	
-	public function createMap() {
-		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className(null, 500, 500, 39.842286, -96.855469, null,'name');
-		$map->addMarkerByLatLong(39.842286,-96.855469);
-		return $map;
+	public function test_get_country_field_for_fe_users() {
+		$country = tx_wecmap_shared::getAddressField('fe_users', 'country');
+		$this->assertEquals('static_info_country', $country);
+	}
+	
+	public function test_get_city_field_for_fe_users() {
+		$city = tx_wecmap_shared::getAddressField('fe_users', 'city');
+		$this->assertEquals('city', $city);
+	}
+	
+	
+	public function __construct() {
+		global $TCA;
+		include_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 	}
 
 }
