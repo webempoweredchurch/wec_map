@@ -35,8 +35,8 @@
 				<![CDATA[
 				In order to use the WEC Map extension you must have a Google 
 				Maps API Key. You can sign up for this key at
-				<a href="http://www.google.com/apis/maps/signup.html" target="_new">
-				http://www.google.com/apis/maps/signup.html</a>.
+				<a href="http://code.google.com/apis/maps/signup.html" target="_new">
+				http://code.google.com/apis/maps/signup.html</a>.
 				]]>
 			</label>
 			<label index="googleMapsApiKey">Google Maps API Key</label>
@@ -68,8 +68,8 @@
 				<![CDATA[
 				Um die WEC Karten Erweiterung benutzen zu können, wird ein Google Maps API Schlüssel
 				benötigt. Sie können sich zur Generierung des Schlüssels unter 
-				<a href="http://www.google.com/apis/maps/signup.html" target="_new">
-				http://www.google.com/apis/maps/signup.html</a> anmelden.
+				<a href="http://code.google.com/apis/maps/signup.html" target="_new">
+				http://code.google.com/apis/maps/signup.html</a> anmelden.
 				]]>
 			</label>
 			<label index="batchGeocode">Geocode Stapelverarbeitung</label>
