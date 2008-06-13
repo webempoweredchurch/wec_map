@@ -874,6 +874,18 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		if(!isset($this->zoom) || $this->zoom == '') {
 			$this->setZoom($this->getAutoZoom($latSpan, $longSpan));
 		}
+		
+		// prepare parameters for the center and zoom hook
+		$hookParameters = array('lat' => &$this->lat, 'long' => &$this->long, 'zoom' => &$this->zoom);
+		
+		// process centerAndZoom hook; allows to manipulate zoom and center before displaying the map
+		if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_api']['centerAndZoomHook']))	{
+			$hooks =& $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tx_wecmap_api']['centerAndZoomHook'];
+			$hookReference = null;
+			foreach ($hooks as $hookFunction)	{
+				t3lib_div::callUserFunction($hookFunction, $hookParameters, $hookReference);
+			}
+		}
 	}
 
 	/**
