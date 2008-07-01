@@ -162,7 +162,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				break;
 
 			case 'mapType':
-				$this->controls[] .= $this->js_addControl($this->mapName, 'new GMapTypeControl()');
+				$this->controls[] .= $this->js_addControl($this->mapName, 'new GHierarchicalMapTypeControl()');
 				break;
 			default:
 				break;
@@ -174,6 +174,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 *   G_NORMAL_MAP: This is the normal street map type.
 	 *   G_SATELLITE_MAP: This map type shows Google Earth satellite images.
 	 *   G_HYBRID_MAP: This map type shows transparent street maps over Google Earth satellite images.
+	 *	 G_PHYSICAL_MAP: displays physical map tiles based on terrain information.
 	 */
 	function setType($type) {
 		$this->type = $type;
