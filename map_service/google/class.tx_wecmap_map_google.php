@@ -162,6 +162,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				break;
 
 			case 'mapType':
+				$this->controls[] .= $this->mapName.'.addMapType(G_PHYSICAL_MAP);';
 				$this->controls[] .= $this->js_addControl($this->mapName, 'new GHierarchicalMapTypeControl()');
 				break;
 			default:
