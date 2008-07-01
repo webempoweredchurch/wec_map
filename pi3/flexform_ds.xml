@@ -100,6 +100,10 @@
 										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typeHybrid</numIndex>
 										<numIndex index="1">G_HYBRID_MAP</numIndex>
 									</numIndex>
+									<numIndex index="3" type="array">
+										<numIndex index="0">LLL:EXT:wec_map/locallang_db.xml:tt_content.pi_flexform.typePhysical</numIndex>
+										<numIndex index="1">G_PHYSICAL_MAP</numIndex>
+									</numIndex>
 								</items>
 							</config>
 						</TCEforms>						
