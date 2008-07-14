@@ -29,6 +29,7 @@
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_marker.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
  * Marker implementation for the Google Maps mapping service.
@@ -216,11 +217,12 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 
 				if(!empty($feuser_id)) {
 					$table = 'fe_users';
-					$streetField = tx_wecmap_backend::getFieldNameFromTable('street', $table);
-					$cityField = tx_wecmap_backend::getFieldNameFromTable('city', $table);
-					$stateField = tx_wecmap_backend::getFieldNameFromTable('state', $table);
-					$zipField = tx_wecmap_backend::getFieldNameFromTable('zip', $table);
-					$countryField = tx_wecmap_backend::getFieldNameFromTable('country', $table);
+					$streetField  = tx_wecmap_shared::getAddressField($table, 'street');
+					$cityField    = tx_wecmap_shared::getAddressField($table, 'city');
+					$stateField   = tx_wecmap_shared::getAddressField($table, 'state');
+					$zipField     = tx_wecmap_shared::getAddressField($table, 'zip');
+					$countryField = tx_wecmap_shared::getAddressField($table, 'country');
+
 
 					$select = $streetField.', '.$cityField.', '.$stateField.', '.$zipField.', '.$country;
 					$selectArray = t3lib_div::trimExplode(',', $select, true);
