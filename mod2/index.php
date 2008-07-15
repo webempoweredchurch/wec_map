@@ -102,8 +102,9 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 				// Draw the header.
 			$this->doc = t3lib_div::makeInstance('mediumDoc');
+			$this->doc->docType = 'xhtml_trans';
 			$this->doc->backPath = $BACK_PATH;
-			$this->doc->form='<form action="" method="POST">';
+			$this->doc->form='<form action="" method="post">';
 
 				// JavaScript
 			$this->doc->JScode = '
@@ -118,17 +119,15 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 				<script language="javascript" type="text/javascript">
 					script_ended = 1;
 					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-				</script>
-				<style type="text/css">
+				</script>';
+			
+			$this->doc->inDocStylesArray[] = '
 					.dirmenu a:link, .dirmenu a:visited {
 						text-decoration: underline;
 					}
 					.description {
 						margin-top: 8px;
-					}
-					
-				</style>
-			';
+					}';
 
 			$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_pre($this->pageinfo['_thePath'],50);
 
@@ -249,7 +248,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$mapcontrolsize = $conf['mapcontrolsize'];
 
 		$form = array();
-		$form[] = '<form method="POST">';
 		$form[] = '<table>';
 
 		// scale option
@@ -260,7 +258,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		} else {
 			$form[] = '<td><input type="checkbox" name="tx-wecmap-mod1-scale" id="tx-wecmap-mod1-scale" /></td>';
 		}
-		$form[] = '</tr><tr>';
+		$form[] = '</tr>';
 
 		// minimap option
 		$form[] = '<tr>';
@@ -319,7 +317,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 
 		$form[] = '</table>';
 		$form[] = '<input type="submit" name="tx-wecmap-mod1-submit" id="tx-wecmap-mod1-submit" value="Save" />';
-		$form[] = '</form>';
 
 
 		return implode(chr(10), $form);
