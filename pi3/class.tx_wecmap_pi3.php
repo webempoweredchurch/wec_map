@@ -269,7 +269,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				$join  = $tconf['join'];
 				
 				if(!empty($tconf['where'])) {
-					$where = $tconf['where'];
+					$where = $this->cObj->stdWrap($tconf['where'], $tconf['where.']);
 				} else {
 					$where = '1=1';
 				}
