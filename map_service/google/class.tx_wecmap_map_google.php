@@ -221,14 +221,17 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 
 			// auto center and zoom if necessary
 			$this->autoCenterAndZoom();
-
+			
+			// get desired Google Maps API version
+			$apiVersion = tx_wecmap_backend::getExtConf('apiVersion');
+			
 			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
 			if(TYPO3_MODE == 'FE') {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'&hl='.$this->lang.'" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v='.$apiVersion.'&amp;key='.$this->key.'&hl='.$this->lang.'" type="text/javascript"></script>';
 			} else {
-				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key='.$this->key.'&hl='.$this->lang.'" type="text/javascript"></script>';
+				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v='.$apiVersion.'&amp;key='.$this->key.'&hl='.$this->lang.'" type="text/javascript"></script>';
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 
