@@ -2,4 +2,5 @@
 [NEW] Use Hierarchical Map Type control for more map space
 [NEW] Add Terrain view to map type selector and map flexforms as initial setting
 [NEW] Add new hook to set center coordinates and zoom level
+[FIXED] More solid error handling with Geocoder.us
 [FIXED] Google API key signup link updated 
