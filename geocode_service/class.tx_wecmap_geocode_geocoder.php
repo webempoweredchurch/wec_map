@@ -82,12 +82,19 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 		$xml = t3lib_div::getURL($this->url.'['.$address.']');
 		$latlong = array();
 		if($xml != "couldn't find this address! sorry") {
-			$xml = t3lib_div::xml2array($xml);
-
-			$latlong['lat'] = $xml['geo:Point']['geo:lat'];
-			$latlong['long'] = $xml['geo:Point']['geo:long'];
-
-			if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address, 'wec_map_geocode', -1);
+			$xml2arr = t3lib_div::xml2array($xml);
+			
+			// if $xml2arr is not an array, it couldn't be parsed
+			if(!is_array($xml2arr)) {
+				if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address.': $xml2arr was no array.', 'wec_map_geocode', 3, $xml);
+				if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address.': Instead, it was:', 'wec_map_geocode', 3, $xml2arr);
+				$latlong = null;
+			} else {
+				$latlong['lat'] = $xml2arr['geo:Point']['geo:lat'];
+				$latlong['long'] = $xml2arr['geo:Point']['geo:long'];				
+				if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address, 'wec_map_geocode', -1);
+			}
+			
 		} else {
 			if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address, 'wec_map_geocode', 2);
 			$latlong = null;
