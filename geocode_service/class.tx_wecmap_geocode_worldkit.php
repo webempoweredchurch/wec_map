@@ -68,9 +68,10 @@ class tx_wecmap_geocode_worldkit extends t3lib_svbase {
 		$xml = t3lib_div::xml2array($xml);
 
 		/* @todo	What are our error conditions? */
-
-		$latlong['lat'] = $xml['rdf:RDF']['geo:Point']['geo:lat'];
-		$latlong['long'] = $xml['rdf:RDF']['geo:Point']['geo:long'];
+		if(is_array($xml)) {
+			$latlong['lat'] = $xml['rdf:RDF']['geo:Point']['geo:lat'];
+			$latlong['long'] = $xml['rdf:RDF']['geo:Point']['geo:long'];			
+		}
 
 		return $latlong;
 	}
