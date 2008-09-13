@@ -1,7 +1,0 @@
-[NEW] Allow the Google Maps API version to be chosen from the Extension Manager
-[NEW] Use Hierarchical Map Type control for more map space
-[NEW] Add Terrain view to map type selector and map flexforms as initial setting
-[NEW] Add new hook to set center coordinates and zoom level
-[NEW] Better TS functionality with the Table Map "WHERE" clause
-[FIXED] More solid error handling with Geocoder.us
-[FIXED] Google API key signup link updated

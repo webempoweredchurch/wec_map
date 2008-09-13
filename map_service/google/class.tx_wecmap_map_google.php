@@ -948,7 +948,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
         if($validMarkers or $validCenter) {
             $valid = true;
         }
-
+		
         return $valid;
     }
 
