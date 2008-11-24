@@ -780,7 +780,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$markers = reset($this->markers);
 
 		if(count($markers) == 1 && $this->showInfoOnLoad) {
-			$content = 'GEvent.trigger(markers_'. $this->mapName .'[0][0], "click");';
+			$content = 'window.setTimeout(function() { GEvent.trigger(markers_'. $this->mapName .'[0][0], "click");}, 1000);';
 			return $content;
 		}
 	}
