@@ -1,1 +1,5 @@
 [NEW] WEC Table Map now allows for custom SELECT phrase in addition to the JOIN and WHERE.
+[FIX] add workaround for Google API bug #881
+[FIX] minor documentation fixes
+[FIX] better error handling in worldkit geocoder
+[FIX] a few small HTML validation fixes
