@@ -165,7 +165,7 @@ class tx_wecmap_domainmgr {
 
 		// Get lines from localconf file
 		$lines = $instObj->writeToLocalconf_control();
-		// t3lib_div::debug($lines, 'lines');
+
 		$instObj->setValueInLocalconfFile($lines, '$TYPO3_CONF_VARS[\'EXT\'][\'extConf\'][\''.$this->extKey.'\']', serialize($extConf));
 		$instObj->writeToLocalconf_control($lines);
 	}

@@ -239,7 +239,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		// get module config
 		$conf = $GLOBALS['BE_USER']->getModuleData('tools_txwecmapM2');
 
-		// t3lib_div::debug($conf);
 
 		// get config options
 		$scale = $conf['scale'];
@@ -334,7 +333,6 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$height = 500;
 		$conf = $GLOBALS['BE_USER']->getModuleData('tools_txwecmapM2');
 
-		// t3lib_div::debug($GLOBALS['BE_USER']->uc['moduleData']['tools_txwecmapM2']);
 
 		// get options
 		$scale = $conf['scale'];
