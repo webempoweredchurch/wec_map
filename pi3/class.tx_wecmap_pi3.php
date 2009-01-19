@@ -338,6 +338,11 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			$hookReference = null;
 			foreach ($hooks as $hookFunction)	{
 				t3lib_div::callUserFunction($hookFunction, $hookParameters, $hookReference);
+				// devlog start
+				if(TYPO3_DLOG) {
+					t3lib_div::devLog($this->mapName.': Called hook. Markers may have been changed.', 'wec_map_api', 2);
+				}
+				// devlog end
 			}
 		}
 	}
