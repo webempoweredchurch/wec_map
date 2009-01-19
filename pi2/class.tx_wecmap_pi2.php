@@ -115,6 +115,9 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
 
+		$googleEarth = $this->pi_getFFvalue($piFlexForm, 'googleEarth', 'mapControls');
+		empty($googleEarth) ? $googleEarth = $conf['controls.']['showGoogleEarth']:null;
+		
 		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'default');
 		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
 
@@ -193,6 +196,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
+		if($googleEarth) $map->addControl('googleEarth');
 
 		// set up groups:
 		// country

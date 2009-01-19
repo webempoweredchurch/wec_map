@@ -110,6 +110,9 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$mapType = $this->pi_getFFvalue($piFlexForm, 'mapType', 'mapControls');
 		empty($mapType) ? $mapType = $conf['controls.']['showMapType']:null;
 
+		$googleEarth = $this->pi_getFFvalue($piFlexForm, 'googleEarth', 'mapControls');
+		empty($googleEarth) ? $googleEarth = $conf['controls.']['showGoogleEarth']:null;
+		
 		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapConfig');
 		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
 
@@ -171,6 +174,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
+		if($googleEarth) $map->addControl('googleEarth');
 
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
