@@ -165,6 +165,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$this->controls[] .= $this->mapName.'.addMapType(G_PHYSICAL_MAP);';
 				$this->controls[] .= $this->js_addControl($this->mapName, 'new GHierarchicalMapTypeControl()');
 				break;
+				
+			case 'googleEarth':
+				$this->controls[] .= $this->mapName.'.addMapType(G_SATELLITE_3D_MAP);';
+				break;
 			default:
 				break;
 		}
@@ -889,6 +893,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$hookReference = null;
 			foreach ($hooks as $hookFunction)	{
 				t3lib_div::callUserFunction($hookFunction, $hookParameters, $hookReference);
+				// devlog start
+				if(TYPO3_DLOG) {
+					t3lib_div::devLog($this->mapName.': Called hook. Potentially new lat/long/zoom', 'wec_map_api', 2);
+					t3lib_div::devLog($this->mapName.': Lat: '.$this->lat.' Long: '.$this->long.' Zoom: '.$this->zoom, 'wec_map_api', 2);
+				}
+				// devlog end
 			}
 		}
 	}
