@@ -92,6 +92,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				 * 200:  OK
 				 */
 				if (TYPO3_DLOG) t3lib_div::devLog('Google: '.$addressString, 'wec_map_geocode', -1, $addressArray);
+				if (TYPO3_DLOG) t3lib_div::devLog('Google Answer', 'wec_map_geocode', -1, $csv);
 				$latlong['lat'] = $csv[2];
 				$latlong['long'] = $csv[3];
 				break;
