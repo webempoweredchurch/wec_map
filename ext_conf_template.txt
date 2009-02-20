@@ -6,3 +6,5 @@ feUserRecordMap = 0
 geocodingStatus = 0
 # cat=basic; type=input; label=Default country: Default country to be used for address lookup if no country is given
 defaultCountry = USA
+# cat=basic; type=input; label=Which URL to load the API from: Useful if you have a Premier key from Google. sprintf formatting.
+apiURL = http://maps.google.com/maps?file=api&amp;v=%s&amp;key=%s&amp;hl=%s

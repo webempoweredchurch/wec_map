@@ -229,13 +229,21 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			// get desired Google Maps API version
 			$apiVersion = tx_wecmap_backend::getExtConf('apiVersion');
 			
+			// get the correct API URL
+			$apiURL = tx_wecmap_backend::getExtConf('apiURL');
+			$apiURL = sprintf($apiURL, $apiVersion, $this->key, $this->lang);
+
+			if (TYPO3_DLOG) {
+				t3lib_div::devLog($this->mapName.': loading API from URL: '.$apiURL, 'wec_map_api');
+			}
+			
 			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
 			if(TYPO3_MODE == 'FE') {
 				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';
 				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="http://maps.google.com/maps?file=api&amp;v='.$apiVersion.'&amp;key='.$this->key.'&amp;hl='.$this->lang.'" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="'.$apiURL.'" type="text/javascript"></script>';
 			} else {
-				$htmlContent .= '<script src="http://maps.google.com/maps?file=api&amp;v='.$apiVersion.'&amp;key='.$this->key.'&amp;hl='.$this->lang.'" type="text/javascript"></script>';
+				$htmlContent .= '<script src="'.$apiURL.'" type="text/javascript"></script>';
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 			}
 
