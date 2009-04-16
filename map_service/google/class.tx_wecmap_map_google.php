@@ -331,7 +331,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function &addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
+	function &addMarkerByAddressWithTabs($street, $city, $state, $zip, $country, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconID = '') {
 		/* Geocode the address */
 		$lookupTable = t3lib_div::makeInstance('tx_wecmap_cache');
 		$latlong = $lookupTable->lookup($street, $city, $state, $zip, $country, $this->key);
@@ -352,7 +352,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
-	function &addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
+	function &addMarkerByStringWithTabs($string, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconID = '') {
 
 		// first split the string into it's components. It doesn't need to be perfect, it's just
 		// put together on the other end anyway
@@ -383,7 +383,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @param	integer		Maximum zoom level for marker to appear.
 	 * @return	marker object
 	 **/
-	function &addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
+	function &addMarkerByTCAWithTabs($table, $uid, $tabLabels, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconID = '') {
 
 		$uid = intval($uid);
 
@@ -436,7 +436,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * @return	marker object
 	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
-	function &addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconId = '') {
+	function &addMarkerByLatLongWithTabs($lat, $long, $tabLabels = null, $title=null, $description=null, $minzoom = 0, $maxzoom = 17, $iconID = '') {
 
 		if(!empty($this->radius)) {
 			$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
