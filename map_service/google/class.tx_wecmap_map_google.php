@@ -239,8 +239,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			
 			/* If we're in the frontend, use TSFE.  Otherwise, include JS manually. */
 			if(TYPO3_MODE == 'FE') {
-				$GLOBALS['TSFE']->JSeventFuncCalls['onload'][$this->prefixId] .= 'drawMap_'. $this->mapName .'();';
-				$GLOBALS['TSFE']->JSeventFuncCalls['onunload'][$this->prefixId]='GUnload();';
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps'] = '<script src="'.$apiURL.'" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="'.$apiURL.'" type="text/javascript"></script>';
@@ -287,13 +285,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$jsContent[] = 'mgr_'. $this->mapName .'.refresh();';
 			$jsContent[] = $this->js_initialOpenInfoWindow();
 			$jsContent[] = $this->js_drawMapEnd();
-
-			// there is no onload() in the BE, so we need to call drawMap() manually.
-			if(TYPO3_MODE == 'FE') {
-				$manualCall = null;
-			} else {
-				$manualCall = '<script type="text/javascript">setTimeout("drawMap_'. $this->mapName .'()",500);</script>';
-			}
+			$jsContent[] = $this->js_loadCalls();
 
 			// TODO: devlog start
 			if(TYPO3_DLOG) {
@@ -317,7 +309,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 			
 			// then return it
-			return $htmlContent.t3lib_div::wrapJS($jsContentString).$manualCall;
+			return $htmlContent.t3lib_div::wrapJS($jsContentString);
 			
 		} else if (!$hasKey) {
 			$error = '<p>'.$LANG->getLL('error_noApiKey').'</p>';
@@ -875,6 +867,19 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			'var '.$this->mapName.'_from_arr = [];'.chr(10);
 		}
 
+		return $out;
+	}
+	
+	/**
+	 * Returns the Javascript that is responsible for loading and unloading
+	 * the maps.
+	 *
+	 * @return string The javascript output
+	 **/
+	function js_loadCalls() {
+		$out = 'GEvent.addDomListener(window, "load", function() {drawMap_'.$this->mapName.'();});';
+		$out .= 'GEvent.addDomListener(window, "unload", function() {GUnload();});';
+		
 		return $out;
 	}
 	
