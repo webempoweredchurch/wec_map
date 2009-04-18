@@ -1,5 +1,5 @@
 tx_wecmap_api {
-	addressForm = COA
+	addressForm = COA_INT
 	addressForm {
 		10 = HTML
 		10.value = <table>
@@ -15,7 +15,6 @@ tx_wecmap_api {
 			| {field:map_id}_submit=submit | Submit
 		) 
 		20.data.insertData = 1
-		20.no_cache = 1
 		20.noValueInsert = 0
 		30 = HTML 
 		30.value = </table>
