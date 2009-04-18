@@ -879,10 +879,10 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	function js_loadCalls() {
 		$out = 'GEvent.addDomListener(window, "load", function() {drawMap_'.$this->mapName.'();});';
 		$out .= 'GEvent.addDomListener(window, "unload", function() {GUnload();});';
-		
+
 		return $out;
 	}
-	
+
 	/**
 	 * Sets the center and zoom values for the current map dynamically, based
 	 * on the markers to be displayed on the map.
