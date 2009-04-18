@@ -300,7 +300,25 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				t3lib_div::devLog($this->mapName.': finished map drawing', 'wec_map_api');
 			}
 			// devlog end
-			return $htmlContent.t3lib_div::wrapJS(implode(chr(10), $jsContent)).$manualCall;
+			
+			// get our content out of the array into a string
+			$jsContentString = implode(chr(10), $jsContent);
+			
+			// if available, minify it first
+			if(method_exists("t3lib_div","minifyJavaScript")) {
+				$error = null;
+				$minJSContentString = t3lib_div::minifyJavaScript($jsContentString, $error);
+
+				// only use the minified js if there were no errors converting
+				if (empty($error)) {
+					$jsContentString = $minJSContentString;
+				}
+				
+			}
+			
+			// then return it
+			return $htmlContent.t3lib_div::wrapJS($jsContentString).$manualCall;
+			
 		} else if (!$hasKey) {
 			$error = '<p>'.$LANG->getLL('error_noApiKey').'</p>';
 		} else if (!$hasThingsToDisplay) {
