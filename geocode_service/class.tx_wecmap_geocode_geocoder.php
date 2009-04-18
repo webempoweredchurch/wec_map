@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -83,7 +83,7 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 		$latlong = array();
 		if($xml != "couldn't find this address! sorry") {
 			$xml2arr = t3lib_div::xml2array($xml);
-			
+
 			// if $xml2arr is not an array, it couldn't be parsed
 			if(!is_array($xml2arr)) {
 				if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address.': $xml2arr was no array.', 'wec_map_geocode', 3, $xml);
@@ -91,10 +91,10 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 				$latlong = null;
 			} else {
 				$latlong['lat'] = $xml2arr['geo:Point']['geo:lat'];
-				$latlong['long'] = $xml2arr['geo:Point']['geo:long'];				
+				$latlong['long'] = $xml2arr['geo:Point']['geo:long'];
 				if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address, 'wec_map_geocode', -1);
 			}
-			
+
 		} else {
 			if (TYPO3_DLOG) t3lib_div::devLog('Geocoder.us: '.$address, 'wec_map_geocode', 2);
 			$latlong = null;

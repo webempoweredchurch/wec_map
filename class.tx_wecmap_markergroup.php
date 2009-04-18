@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -33,7 +33,7 @@
  * Defines a group of markers to display on the map. This class is the interface
  * to the GMarkerManager. Every map has one or more groups, which has one or more
  * markers. Every marker belongs to one group, and every group belongs to one map.
- * 
+ *
  * @author Web-Empowered Church Team <map@webempoweredchurch.org>
  * @package TYPO3
  * @subpackage tx_wecmap
@@ -45,17 +45,17 @@ class tx_wecmap_markergroup {
 	var $mapName;			// the name of the map this group belongs to
 	var $minzoom;			// min zoom level for this group
 	var $maxzoom;			// max zoom level for this group
-	
+
 	/**
 	 * PHP4 Constructor
 	 * @param int unique id of this group
-	 * 
+	 *
 	 * @return void
 	 **/
 	function tx_wecmap_markergroup($id, $minzoom, $maxzoom) {
 		$this->__construct($id, $minzoom, $maxzoom);
 	}
-	
+
 	/**
 	 * PHP5 constructor
 	 *
@@ -66,7 +66,7 @@ class tx_wecmap_markergroup {
 		$this->minzoom = $minzoom;
 		$this->maxzoom = $maxzoom;
 	}
-	
+
 	/**
 	 * returns the js array
 	 *
@@ -79,7 +79,7 @@ class tx_wecmap_markergroup {
 		$jsContent[] = 'markerContent_'.$this->mapName.'['. $this->id .'] = [];';
 		$jsContent[] = 'markerTabs_'.$this->mapName.'['. $this->id .'] = [];';
 		foreach($this->markers as $key => $marker) {
-			
+
 
 			if($this->directions) {
 				$jsContent[] = $marker->writeJSwithDirections();
@@ -89,12 +89,12 @@ class tx_wecmap_markergroup {
 				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeCreateMarkerJS() .');';
 			}
 		}
-		
+
 		$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'['. $this->id .'], ' . $this->minzoom . ', ' . $this->maxzoom . ');';
-		
+
 		return $jsContent;
 	}
-	
+
 	/**
 	 * adds a marker object to this group
 	 *
@@ -121,7 +121,7 @@ class tx_wecmap_markergroup {
 		// devlog end
 		$this->markerCount++;
 	}
-	
+
 	/**
 	 * return min zoom level
 	 *
@@ -130,7 +130,7 @@ class tx_wecmap_markergroup {
 	function getMinZoom() {
 		return $this->minzoom;
 	}
-	
+
 	/**
 	 * return max zoom
 	 *
@@ -139,7 +139,7 @@ class tx_wecmap_markergroup {
 	function getMaxZoom() {
 		return $this->maxzoom;
 	}
-	
+
 	/**
 	 * return the number of markers in this group
 	 *
@@ -148,7 +148,7 @@ class tx_wecmap_markergroup {
 	function getMarkerCount() {
 		return $this->markerCount;
 	}
-	
+
 	/**
 	 * set map name
 	 *
@@ -157,7 +157,7 @@ class tx_wecmap_markergroup {
 	function setMapName($name) {
 		$this->mapName = $name;
 	}
-	
+
 	/**
 	 * Enables directions
 	 *
@@ -166,7 +166,7 @@ class tx_wecmap_markergroup {
 	function setDirections($dirs=true) {
 		$this->directions = $dirs;
 	}
-	
+
 	/**
 	 * Returns whether this group has any markers
 	 *
@@ -179,7 +179,7 @@ class tx_wecmap_markergroup {
 			return false;
 		}
 	}
-	
+
 }
 
 

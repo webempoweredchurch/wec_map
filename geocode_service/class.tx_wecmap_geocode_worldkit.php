@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -70,7 +70,7 @@ class tx_wecmap_geocode_worldkit extends t3lib_svbase {
 		/* @todo	What are our error conditions? */
 		if(is_array($xml)) {
 			$latlong['lat'] = $xml['rdf:RDF']['geo:Point']['geo:lat'];
-			$latlong['long'] = $xml['rdf:RDF']['geo:Point']['geo:long'];			
+			$latlong['long'] = $xml['rdf:RDF']['geo:Point']['geo:long'];
 		}
 
 		return $latlong;

@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -63,8 +63,8 @@ class tx_wecmap_shared {
 			return $content;
 		}
 	}
-	
-	
+
+
 	function listQueryFromCSV($field, $values, $table, $mode = 'AND') {
 		$where = ' AND (';
 		$csv = t3lib_div::trimExplode(',', $values);
@@ -77,7 +77,7 @@ class tx_wecmap_shared {
 
 		return $where.')';
 	}
-	
+
 	function getAddressField($table, $field) {
 		t3lib_div::loadTCA($table);
  		return $GLOBALS['TCA'][$table]['ctrl']['EXT']['wec_map']['addressFields'][$field];

@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -186,7 +186,7 @@ class tx_wecmap_backend {
 	function drawMap($PA, $fobj) {
 		$width = '400';
 		$height = '400';
- 
+
 		$street  = tx_wecmap_backend::getFieldValue('street', $PA);
 		$city    = tx_wecmap_backend::getFieldValue('city', $PA);
 		$state   = tx_wecmap_backend::getFieldValue('state', $PA);

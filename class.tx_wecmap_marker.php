@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -102,7 +102,7 @@ class tx_wecmap_marker {
 	function setDescription($newDesc) {
 		$this->description = $newDesc;
 	}
-	
+
 	/**
 	 * Getter for marker color
 	 *
@@ -147,7 +147,7 @@ class tx_wecmap_marker {
 	function setMapName($mapName) {
 		$this->mapName = $mapName;
 	}
-	
+
 	/**
 	 * set the id of the group this marker belongs to
 	 *
@@ -156,7 +156,7 @@ class tx_wecmap_marker {
 	function setGroupId($id) {
 		$this->groupId = $id;
 	}
-	
+
 	/**
 	 * sets the minimum zoom level this marker is displayed on
 	 *
@@ -165,7 +165,7 @@ class tx_wecmap_marker {
 	function setMinzoom($zoom) {
 		$this->minzoom = $zoom;
 	}
-	
+
 	/**
 	 * sets the maximum zoom level this marker is displayed on
 	 *

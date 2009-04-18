@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -261,7 +261,6 @@ class tx_wecmap_map {
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
 	 * @return	added marker object
-	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
 	function &addMarkerByAddress($street, $city, $state, $zip, $country, $title='', $description='', $minzoom = 0, $maxzoom = 17, $iconID='') {
 
@@ -284,7 +283,6 @@ class tx_wecmap_map {
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
 	 * @return	marker object
-	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 */
 	function &addMarkerByLatLong($lat, $long, $title='', $description='', $minzoom = 0, $maxzoom = 17, $iconID='') {
 
@@ -326,7 +324,6 @@ class tx_wecmap_map {
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
 	 * @return	marker object
-	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
 	function &addMarkerByString($string, $title='', $description='', $minzoom = 0, $maxzoom = 17, $iconID = '') {
 
@@ -357,7 +354,6 @@ class tx_wecmap_map {
 	 * @param	integer		Minimum zoom level for marker to appear.
 	 * @param	integer		Maximum zoom level for marker to appear.
 	 * @return	marker object
-	 * @todo	Zoom levels are very Google specific.  Is there a generic way to handle this?
 	 **/
 	function &addMarkerByTCA($table, $uid, $title='', $description='', $minzoom = 0, $maxzoom = 17, $iconID = '') {
 
@@ -390,7 +386,7 @@ class tx_wecmap_map {
 		if(empty($country) && $countryfield == 'static_info_country') {
 			$country = $record['country'];
 		} else if(empty($country) && $countryfield == 'country') {
-			$country = $record['static_info_country'];			
+			$country = $record['static_info_country'];
 		}
 
 		/* Geocode the address */
@@ -413,7 +409,7 @@ class tx_wecmap_map {
 			$group = new $groupClass($this->groupCount, $minzoom, $maxzoom);
 			$this->groupCount++;
 			$group->setMapName($this->mapName);
-			$this->groups[$minzoom.':'.$maxzoom] =& $group;			
+			$this->groups[$minzoom.':'.$maxzoom] =& $group;
 		}
 
 		return $this->groups[$minzoom.':'.$maxzoom];
