@@ -200,28 +200,38 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		// set up groups:
 		// country
-		$countryConf = array();
-		$countryConf['icon'] = $conf['groups.']['country.']['icon.'];
-		$countryConf['minzoom'] = $conf['groups.']['country.']['zoom.']['min'];
-		$countryConf['maxzoom'] = $conf['groups.']['country.']['zoom.']['max'];
-		// country icon, if configured
-		if(!empty($countryConf['icon']['imagepath'])) {
-			$map->addMarkerIcon($countryConf['icon']);			
+		if (is_array($conf['groups.']['country.']) || $private) {
+			$countryConf = array();
+			$countryConf['icon'] = $conf['groups.']['country.']['icon.'];
+			$countryConf['minzoom'] = $conf['groups.']['country.']['zoom.']['min'];
+			$countryConf['maxzoom'] = $conf['groups.']['country.']['zoom.']['max'];
+			// country icon, if configured
+			if(!empty($countryConf['icon']['imagepath'])) {
+				$map->addMarkerIcon($countryConf['icon']);			
+			} else {
+				$countryConf['icon']['iconID'] ? null : $countryConf['icon']['iconID'] = null;
+			}
+			$showCountries = true;
 		} else {
-			$countryConf['icon']['iconID'] ? null : $countryConf['icon']['iconID'] = null;
+			$showCountries = false;
 		}
 
 		
 		// city
-		$cityConf = array();
-		$cityConf['icon'] = $conf['groups.']['city.']['icon.'];
-		$cityConf['minzoom'] = $conf['groups.']['city.']['zoom.']['min'];
-		$cityConf['maxzoom'] = $conf['groups.']['city.']['zoom.']['max'];
-		// country icon, if configured
-		if(!empty($cityConf['icon']['imagepath'])) {
-			$map->addMarkerIcon($cityConf['icon']);			
+		if (is_array($conf['groups.']['city.']) || $private) {
+			$cityConf = array();
+			$cityConf['icon'] = $conf['groups.']['city.']['icon.'];
+			$cityConf['minzoom'] = $conf['groups.']['city.']['zoom.']['min'];
+			$cityConf['maxzoom'] = $conf['groups.']['city.']['zoom.']['max'];
+			// country icon, if configured
+			if(!empty($cityConf['icon']['imagepath'])) {
+				$map->addMarkerIcon($cityConf['icon']);			
+			} else {
+				$cityConf['icon']['iconID'] ? null : $cityConf['icon']['iconID'] = null;
+			}
+			$showCities = true;
 		} else {
-			$cityConf['icon']['iconID'] ? null : $cityConf['icon']['iconID'] = null;
+			$showCities = false;
 		}
 
 		// single
@@ -321,7 +331,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			if($row[$cityField] != '') {
 
 				// if we haven't added a marker for this country yet, do so.
-				if(!in_array($row[$countryField], $countries) && !empty($row[$countryField])) {
+				if ($showCountries && !in_array($row[$countryField], $countries) && !empty($row[$countryField])) {
 
 					// add this country to the array
 					$countries[] = $row[$countryField];
@@ -339,7 +349,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 
 				// if we haven't added a marker for this zip code yet, do so.
-				if(!in_array($row[$cityField], $cities) && !empty($row[$cityField])) {
+				if ($showCities && !in_array($row[$cityField], $cities) && !empty($row[$cityField])) {
 
 					// add this country to the array
 					$cities[] = $row[$cityField];
