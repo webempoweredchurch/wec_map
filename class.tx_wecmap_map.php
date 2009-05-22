@@ -289,6 +289,12 @@ class tx_wecmap_map {
 		if(!empty($this->radius)) {
 			$distance = $this->getDistance($this->lat, $this->long, $lat, $long);
 
+			// devlog start
+			if(TYPO3_DLOG) {
+				t3lib_div::devLog($this->mapName.': Distance: '.$distance.' - Radius: '.$this->radius, 'wec_map_api');
+			}
+			// devlog end
+
 			if(!empty($this->lat) && !empty($this->long) &&  $distance > $this->radius) {
 				return null;
 			}
