@@ -119,6 +119,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			}
 		} else {
 			$this->lang = $GLOBALS['TSFE']->config['config']['language'];
+
 			if(empty($this->lang)) $this->lang = 'en';
 		}
 	}
