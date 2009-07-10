@@ -75,23 +75,18 @@ class tx_wecmap_markergroup {
 	function drawMarkerJS() {
 		$jsContent = array();
 
-		$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'] = [];';
-		$jsContent[] = 'markerContent_'.$this->mapName.'['. $this->id .'] = [];';
-		$jsContent[] = 'markerTabs_'.$this->mapName.'['. $this->id .'] = [];';
-		foreach($this->markers as $key => $marker) {
-
-
-			if($this->directions) {
+		foreach ($this->markers as $key => $marker) {
+			if ($this->directions) {
 				$jsContent[] = $marker->writeJSwithDirections();
-				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeCreateMarkerJS() .');';
+				$jsContent[] = $marker->writeCreateMarkerJS();
 			} else {
 				$jsContent[] = $marker->writeJS();
-				$jsContent[] = 'markers_'. $this->mapName .'['. $this->id .'].push('. $marker->writeCreateMarkerJS() .');';
+				$jsContent[] = $marker->writeCreateMarkerJS();
 			}
 		}
-
-		$jsContent[] = 'mgr_'. $this->mapName .'.addMarkers(markers_'. $this->mapName .'['. $this->id .'], ' . $this->minzoom . ', ' . $this->maxzoom . ');';
-
+		if (count($jsContent)) {
+			$jsContent[] = 'WecMap.addMarkersToManager("' . $this->mapName .'", ' . $this->id . ', ' . $this->minzoom . ', ' . $this->maxzoom . ');';
+		}
 		return $jsContent;
 	}
 

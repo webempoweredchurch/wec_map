@@ -40,7 +40,7 @@ tx_wecmap_api {
 	sidebarItem {
 	  10 = TEXT
 	  10.field = info_title
-	  10.wrap = <a href="#" style="display:block;" onclick="{field:onclickLink} return false;">|</a>
+	  10.wrap = <a href="#" style="display:block;" onclick="return {field:onclickLink};">|</a>
 	  10.insertData = true
 	  10.if.isTrue.field = info_title
 	}

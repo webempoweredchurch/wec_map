@@ -83,8 +83,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 		$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 		
 		$this->index = $index;
-		$this->tabLabels = array();
-		$this->tabLabels[] = $LANG->getLL('info');
+		$this->tabLabels = array($LANG->getLL('info'));
 		if(is_array($tabLabels)) {
 			$this->tabLabels = array_merge($this->tabLabels, $tabLabels);
 		}
@@ -127,27 +126,17 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 * @return	string	The Javascript to add a marker to the page.
 	 */
 	function writeJS() {
-		global $LANG;
-		$dirHTML = '<br /><div id="'.$this->mapName.'_dirmenu_'.$this->groupId.'_'. $this->index .'" class="dirmenu" style="white-space: nowrap;">'. $LANG->getLL('directions') .': <a href="#" onclick="toHere_'.$this->mapName.'('. $this->groupId .','. $this->index .'); return false;">'. $LANG->getLL('toHereFrom') .'</a> - <a href="#" onclick="fromHere_'.$this->mapName.'('. $this->groupId .','. $this->index .'); return false;">'. $LANG->getLL('fromHereTo') .'</a></div>';
 		$markerContent = array();
-		foreach( $this->tabLabels as $index => $label ) {
-			$markerContent[] = $label;
-			if($this->directions && $index == 0) {
-				$markerContent[] = '<div id="'.$this->mapName.'_marker_'.$this->groupId.'_'.$this->index.'" class="marker">'.$this->title[$index].$this->description[$index].'</div>'.$dirHTML;
-			} else {
-				$markerContent[] = '<div id="'.$this->mapName.'_marker_'.$this->groupId.'_'.$this->index.'" class="marker">'.$this->title[$index].$this->description[$index].'</div>';
-			}
-
+		foreach ($this->tabLabels as $index => $label) {
+			$markerContent[] = $this->title[$index] . $this->description[$index];
 		}
-		$out = array();
-		$out[] = 'markerContent_'.$this->mapName.'['.$this->groupId.']['.$this->index.'] = [];';
-		$out[] = 'markerTabs_'.$this->mapName.'['.$this->groupId.']['.$this->index.'] = [];';
 
-		for ( $i=0; $i < (sizeof($markerContent)); $i=$i+2 ) { 
-		 	$out[] = 'markerContent_'.$this->mapName.'['.$this->groupId.']['.$this->index.'].push(\''.$markerContent[$i+1].'\');';
-		 	$out[] = 'markerTabs_'.$this->mapName.'['.$this->groupId.']['.$this->index.'].push(\''.$markerContent[$i].'\');';			
+		if ($this->directions) {
+			$markerContent[0] .= '<br /><div id="'.$this->mapName.'_dirmenu_'.$this->groupId.'_'. $this->index .'" class="dirmenu" style="white-space: nowrap;">'. $GLOBALS['LANG']->getLL('directions') .': <a href="#" onclick="return WecMap.openDirectionsToHere(\\\'' . $this->mapName . '\\\', ' . $this->groupId . ', ' . $this->index . ');">' . $GLOBALS['LANG']->getLL('toHereFrom') . '</a> - <a href="#" onclick="return WecMap.openDirectionsFromHere(\\\'' . $this->mapName . '\\\', ' . $this->groupId . ', ' . $this->index . ');">'. $GLOBALS['LANG']->getLL('fromHereTo') .'</a></div>';
 		}
-		return implode(chr(10), $out);
+
+		return '
+WecMap.addBubble("' . $this->mapName . '", ' . $this->groupId . ', ' . $this->index . ', [\''  . implode('\',\'', $this->tabLabels) . '\'], [\'' . implode('\',\'', $markerContent) . '\']);';
 	}
 
 	/**
@@ -157,19 +146,21 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	 **/
 	function writeJSwithDirections() {
 		$this->directions = true;
-
 		return $this->writeJS();
 	}
-	
+
 	/**
 	 * undocumented function
 	 *
 	 * @return void
 	 **/
 	function writeCreateMarkerJS() {
-		if(empty($this->title[0]) && $this->directions) $this->title[0] = 'Address';
-		return $this->mapName.'_createMarker('.$this->index.', new GLatLng('.$this->latitude.','.$this->longitude.'), icon_'. $this->mapName . $this->iconID .', \''. htmlspecialchars(strip_tags($this->title[0])) .'\', '.$this->groupId.', \''.$this->getUserAddress().'\')';
+		if (empty($this->title[0]) && $this->directions) {
+			$this->title[0] = 'Address';
+		}
+		return 'WecMap.addMarker("' . $this->mapName. '", ' . $this->index . ', [' . $this->latitude . ',' . $this->longitude . '], "' . $this->iconID . '", \''. htmlspecialchars(strip_tags($this->title[0])) .'\', '.$this->groupId.', \''.$this->getUserAddress().'\');';
 	}
+
 	/**
 	 * adds a new tab to the marker
 	 *
@@ -178,20 +169,16 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	function addTab($tabLabel, $title, $description) {
 		if(!is_array($this->title)) {
 			$temp = $this->title;
-			$this->title = array();
-			$this->title[] = $temp;
+			$this->title = array($temp);
 		}
 		
 		if(!is_array($this->description)) {
 			$temp = $this->description;
-			$this->description = array();
-			$this->description[] = $temp;
+			$this->description = array($temp);
 		}
 		
 		if(!is_array($this->tabLabels)) {
-			global $LANG;
-			$this->tabLabels = array();
-			$this->tabLabels[] = $LANG->getLL('info');
+			$this->tabLabels = array($GLOBALS['LANG']->getLL('info'));
 		}
 
 		$this->tabLabels[] = addslashes($tabLabel);
@@ -249,25 +236,23 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 			t3lib_div::devLog($this->mapName.': adding marker '.$this->index.'('.strip_tags($this->title[0]).strip_tags($this->description[0]).') to sidebar', 'wec_map_api');
 		}
 		// devlog end
-		return $this->mapName.'_triggerMarker('. $this->groupId .', '. $this->index .', '. $this->calculateClickZoom() .');';
+		return 'WecMap.jumpTo(\'' . $this->mapName . '\', ' . $this->groupId . ', ' . $this->index . ', ' . $this->calculateClickZoom() . ');';
 	}
-	
+
 	/**
 	 * calculates the optimal zoom level for the click
-	 *
+	 * we want to keep the zoom level around $zoom, but will
+	 * choose the max if the marker is only visible under $zoom,
+	 * or the min if it's only shown over $zoom.
 	 * @return integer
 	 **/
 	function calculateClickZoom() {
 		$zoom = 14;
-		// we want to keep the zoom level around $zoom, but will
-		// choose the max if the marker is only visible under $zoom,
-		// or the min if it's only shown over $zoom.
-		if($zoom < $this->minzoom) {
+		if ($zoom < $this->minzoom) {
 			$zoom = $this->minzoom;
-		} else if($zoom > $this->maxzoom) {
+		} else if ($zoom > $this->maxzoom) {
 			$zoom = $this->maxzoom;
 		}
-		
 		return $zoom;
 	}
 	
@@ -281,9 +266,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	function filterNL2BR($input) {
 		$order  = array("\r\n", "\n", "\r");
 		$replace = '<br />';
-		$newstr = str_replace($order, $replace, $input);
-
-		return $newstr;
+		return str_replace($order, $replace, $input);
 	}
 
 	/**
@@ -296,9 +279,7 @@ class tx_wecmap_marker_google extends tx_wecmap_marker {
 	function stripNL($input) {
 		$order  = array("\r\n", "\n", "\r");
 		$replace = '<br />';
-		$newstr = str_replace($order, $replace, $input);
-
-		return $newstr;
+		return str_replace($order, $replace, $input);
 	}
 }
 
