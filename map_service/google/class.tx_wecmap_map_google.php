@@ -291,7 +291,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		} else if (!$hasKey) {
 			$error = '<p>'.$LANG->getLL('error_noApiKey').'</p>';
 			// syslog start
-				t3lib_div::sysLog('No API key set for domain: '.t3lib_div::getIndpEnv('HTTP_HOST').' & page id: '.$GLOBALS['TSFE']->id, 'wec_map', 4);
+				t3lib_div::sysLog('No API key set for domain: '.t3lib_div::getIndpEnv('HTTP_HOST').' & page id: '.$GLOBALS['TSFE']->id, 'wec_map', 3);
 			// syslog end
 		} else if (!$hasThingsToDisplay) {
 			$error = '<p>'.$LANG->getLL('error_nothingToDisplay').'</p>';

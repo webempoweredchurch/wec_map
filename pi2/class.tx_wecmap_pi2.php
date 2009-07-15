@@ -73,7 +73,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 			$out .= $LANG->getLL('wecApiTemplateNotIncluded');
 			// syslog start
-				t3lib_div::sysLog('WEC Map API template not included on page id '.$GLOBALS['TSFE']->id, 'wec_map', 4);
+				t3lib_div::sysLog('WEC Map API template not included on page id '.$GLOBALS['TSFE']->id, 'wec_map', 3);
 			// syslog end
 			return $out;
 		}
@@ -89,7 +89,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			$LANG->includeLLFile('EXT:wec_map/locallang_db.xml');
 			$out .= $LANG->getLL('pi2TemplateNotIncluded');
 			// syslog start
-				t3lib_div::sysLog('WEC FE User template not included on page id '.$GLOBALS['TSFE']->id, 'wec_map', 4);
+				t3lib_div::sysLog('WEC FE User template not included on page id '.$GLOBALS['TSFE']->id, 'wec_map', 3);
 			// syslog end
 			return $out;
 		}
