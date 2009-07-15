@@ -1,220 +1,284 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-    <meta type="array">
-        <description></description>
-        <type></type>
-        <csh_table></csh_table>
-        <labelContext type="array">
-        </labelContext>
-    </meta>
-    <data type="array">
-        <languageKey index="default" type="array">
-
-            <label index="tx_wecmap_external.title">Title</label>
-            <label index="tx_wecmap_external.url">URL</label>
-            <label index="tx_wecmap_external">WEC Map External Resource</label>
-            <label index="tt_content.list_type_pi1">WEC Simple Map</label>
-            <label index="tt_content.list_type_pi2">WEC Frontend User Map</label>
-            <label index="tt_content.list_type_pi3">WEC Table Map</label>
-            <label index="tt_content.pi_flexform.sheet">Address</label>
-            <label index="berecord_maplabel">Map</label>
-            <label index="berecord_geocodelabel">Coords</label>
-            <label index="geocodeFailed">Geocoding failed.</label>
-            <label index="geocodeNotPerformed">Geocoding has not been performed for this address.</label>
-            <label index="geocodeSuccessful">Geocoding successful!</label>
-			<label index="geocodeNoAddress">Cannot determine latitude and longitude.  Please enter an address and save.</label>
-            <label index="latitude">Latitude</label>
-            <label index="longitude">Longitude</label>
-            <label index="directions">Directions</label>
-            <label index="info">Info</label>
-            <label index="location">Location</label>
-			<label index="getDirections">Get Directions</label>
-			<label index="fromHereTo">From here</label>
-			<label index="toHereFrom">To here</label>
-			<label index="startaddress">Start Address</label>
-			<label index="radius">Radius: </label>
-			<label index="unit">Unit: </label>
-			<label index="endaddress">End Address</label>
-			<label index="pi1TemplateNotIncluded">
-			    <![CDATA[
-			    <p>Please include the WEC Simple Map static template on your page.</p>
-			    ]]>
-			</label>
-			<label index="pi2TemplateNotIncluded">
-			    <![CDATA[
-			    <p>Please include the WEC Frontend User Map static template on your page.</p>
-			    ]]>
-			</label>
-			<label index="pi3TemplateNotIncluded">
-			    <![CDATA[
-			    <p>Please include the WEC Table Map static template on your page.</p>
-			    ]]>
-			</label>
-			<label index="wecApiTemplateNotIncluded">
+  <meta type="array">
+    <description></description>
+    <type></type>
+    <csh_table></csh_table>
+    <labelContext type="array">
+    </labelContext>
+  </meta>
+  <data type="array">
+    <languageKey index="default" type="array">
+      <label index="tx_wecmap_external.title">Title</label>
+      <label index="tx_wecmap_external.url">URL</label>
+      <label index="tx_wecmap_external">WEC Map External Resource</label>
+      <label index="tt_content.list_type_pi1">WEC Simple Map</label>
+      <label index="tt_content.list_type_pi2">WEC Frontend User Map</label>
+      <label index="tt_content.list_type_pi3">WEC Table Map</label>
+      <label index="tt_content.pi_flexform.sheet">Address</label>
+      <label index="berecord_maplabel">Map</label>
+      <label index="berecord_geocodelabel">Coords</label>
+      <label index="geocodeFailed">Geocoding failed.</label>
+      <label index="geocodeNotPerformed">Geocoding has not been performed for this address.</label>
+      <label index="geocodeSuccessful">Geocoding successful!</label>
+      <label index="geocodeNoAddress">Cannot determine latitude and longitude.  Please enter an address and save.</label>
+      <label index="latitude">Latitude</label>
+      <label index="longitude">Longitude</label>
+      <label index="directions">Directions</label>
+      <label index="info">Info</label>
+      <label index="location">Location</label>
+      <label index="getDirections">Get Directions</label>
+      <label index="fromHereTo">From here</label>
+      <label index="toHereFrom">To here</label>
+      <label index="startaddress">Start Address</label>
+      <label index="radius">Radius: </label>
+      <label index="unit">Unit: </label>
+      <label index="endaddress">End Address</label>
+      <label index="pi1TemplateNotIncluded">
+          <![CDATA[
+          <p>Please include the WEC Simple Map static template on your page.</p>
+          ]]>
+      </label>
+      <label index="pi2TemplateNotIncluded">
+          <![CDATA[
+          <p>Please include the WEC Frontend User Map static template on your page.</p>
+          ]]>
+      </label>
+      <label index="pi3TemplateNotIncluded">
+          <![CDATA[
+          <p>Please include the WEC Table Map static template on your page.</p>
+          ]]>
+      </label>
+      <label index="wecApiTemplateNotIncluded">
                 <![CDATA[
-			    <p>Please include the WEC Map API static template on your page and make sure it's included before (above) any other WEC Map static templates.</p>
+          <p>Please include the WEC Map API static template on your page and make sure it's included before (above) any other WEC Map static templates.</p>
                 ]]>
-			</label>
-			<label index="tt_content.pi_flexform.title">Title</label>
-			<label index="tt_content.pi_flexform.description">Description</label>
-			<label index="tt_content.pi_flexform.street">Address</label>
-			<label index="tt_content.pi_flexform.city">City</label>
-			<label index="tt_content.pi_flexform.state">State</label>
-			<label index="tt_content.pi_flexform.zip">ZIP</label>
-			<label index="tt_content.pi_flexform.country">Country</label>
-			<label index="tt_content.pi_flexform.coord">Coords</label>
-			<label index="tt_content.pi_flexform.mapTitle">Map Details</label>
-			<label index="tt_content.pi_flexform.mapWidth">Width (pixels)</label>
-			<label index="tt_content.pi_flexform.mapHeight">Height (pixels)</label>
-			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
-			<label index="tt_content.pi_flexform.controlsTitle">Map Controls</label>
-			<label index="tt_content.pi_flexform.conType">Show Map Type</label>
-			<label index="tt_content.pi_flexform.conNone">None</label>
-			<label index="tt_content.pi_flexform.conScale">Show Scale</label>
-			<label index="tt_content.pi_flexform.conOverview">Show Overview Map</label>
-			<label index="tt_content.pi_flexform.conLargeMap">Size of Map Controls</label>
-			<label index="tt_content.pi_flexform.conLargeMapL">Large</label>
-			<label index="tt_content.pi_flexform.conLargeMapS">Small</label>
-			<label index="tt_content.pi_flexform.conLargeMapZ">Zoom only</label>
-			<label index="tt_content.pi_flexform.privacy">Sensitive geocode (no address)</label>
-			<label index="tt_content.pi_flexform.userGroup">Filter by FE user group (default: all)</label>
-			<label index="tt_content.pi_flexform.initialMapType">Initial Map Type</label>
-			<label index="tt_content.pi_flexform.typeNormal">Normal</label>
-			<label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
-			<label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
-			<label index="tt_content.pi_flexform.typePhysical">Terrain</label>
-			<label index="tt_content.pi_flexform.tables">Tables to map data from</label>
-			<label index="tt_content.pi_flexform.showDirs">Show Directions</label>
-			<label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
-			<label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
-			<label index="tt_content.pi_flexform.showRadiusSearch">Show Radius Search</label>
-			<label index="tt_content.pi_flexform.kml">KML to overlay</label>
-			<label index="tt_content.pi_flexform.showSidebar">Show Marker Sidebar</label>
-			<label index="tt_content.pi_flexform.prefillAddress">Prefill Address from User Info</label>
-        </languageKey>
-		<languageKey index="de" type="array">
-			<label index="berecord_geocodelabel">Koordinaten</label>
-			<label index="berecord_maplabel">Karte</label>
-			<label index="directions">Wegbeschreibung</label>
-			<label index="fromHereTo">Von hier</label>
-			<label index="startaddress">Start Addresse</label>
-			<label index="endaddress">Ziel Addresse</label>
-			<label index="geocodeFailed">Geocoding fehlgeschlagen.</label>
-			<label index="geocodeNoAddress">Kann die Längen- und Breitengrade nicht ermitteln. Bitte eine Adresse eintragen und speichern.</label>
-			<label index="geocodeNotPerformed">Geocoding wurde für diese Adresse noch nicht durchgeführt.</label>
-			<label index="geocodeSuccessful">Geocoding erfolgreich!</label>
-			<label index="getDirections">Zeige Wegbeschreibung</label>
-			<label index="info">Adresse</label>
-			<label index="latitude">Breitengrad</label>
-			<label index="location">Ausgangspunkt</label>
-			<label index="longitude">Längengrad</label>
-			<label index="toHereFrom">Hierhin</label>
-			<label index="radius">Radius: </label>
-			<label index="unit">Einheit: </label>
-			<label index="tt_content.list_type_pi1">Einfache WEC Landkarte</label>
-			<label index="tt_content.list_type_pi2">WEC Frontend Benutzer Karte</label>
-			<label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
-			<label index="tt_content.pi_flexform.city">Ortschaft</label>
-			<label index="tt_content.pi_flexform.conLargeMap">Grösse der Navigationselemente</label>
-			<label index="tt_content.pi_flexform.conLargeMapL">Gross</label>
-			<label index="tt_content.pi_flexform.conLargeMapS">Klein</label>
-			<label index="tt_content.pi_flexform.conLargeMapZ">Nur Zoom</label>
-			<label index="tt_content.pi_flexform.conNone">Nichts</label>
-			<label index="tt_content.pi_flexform.conOverview">Übersichtskarte anzeigen</label>
-			<label index="tt_content.pi_flexform.conScale">Skala anzeigen</label>
-			<label index="tt_content.pi_flexform.conType">Kartentyp anzeigen</label>
-			<label index="tt_content.pi_flexform.controlsTitle">Kartenfunktionen</label>
-			<label index="tt_content.pi_flexform.coord">Koordinaten</label>
-			<label index="tt_content.pi_flexform.country">Land</label>
-			<label index="tt_content.pi_flexform.description">Beschreibung</label>
-			<label index="tt_content.pi_flexform.initialMapType">Kartentyp zu Beginn</label>
-			<label index="tt_content.pi_flexform.mapHeight">Höhe (pixel)</label>
-			<label index="tt_content.pi_flexform.mapTitle">Kartendetails</label>
-			<label index="tt_content.pi_flexform.mapWidth">Breite (pixel)</label>
-			<label index="tt_content.pi_flexform.prefillAddress">Adresse aus den Benutzerinformationen übernehmen</label>
-			<label index="tt_content.pi_flexform.privacy">Sensitives Geocoding (ohne Adresse)</label>
-			<label index="tt_content.pi_flexform.sheet">Adresse</label>
-			<label index="tt_content.pi_flexform.showDirs">Wegbeschreibung zeigen</label>
-			<label index="tt_content.pi_flexform.showInfoOnLoad">Informationsblase beim Laden anzeigen</label>
-			<label index="tt_content.pi_flexform.showWrittenDirs">Zeige Wegbeschreibung als Text</label>
-			<label index="tt_content.pi_flexform.state">Staat</label>
-			<label index="tt_content.pi_flexform.street">Strasse</label>
-			<label index="tt_content.pi_flexform.title">Titel</label>
-			<label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
-			<label index="tt_content.pi_flexform.typeNormal">Normal</label>
-			<label index="tt_content.pi_flexform.typeSatellite">Satellit</label>
-			<label index="tt_content.pi_flexform.userGroup">Nach FE Benutzergruppe filtern (standardmässig alle angezeigt)</label>
-			<label index="tt_content.pi_flexform.zip">PLZ</label>
-			<label index="tx_wecmap_external.title">Title</label>
-            <label index="tx_wecmap_external.url">URL</label>
-            <label index="tx_wecmap_external">WEC Map Externe Resource</label>
-            <label index="tt_content.list_type_pi3">WEC Datenbank Karte</label>
-			<label index="pi1TemplateNotIncluded">
-			    <![CDATA[
-			    <p>Bitte das WEC Simple Map static template auf ihrer Seite einfügen.</p>
-			    ]]>
-			</label>
-			<label index="pi2TemplateNotIncluded">
-			    <![CDATA[
-			    <p>Bitte das WEC FE User Map static template auf ihrer Seite einfügen.</p>
-			    ]]>
-			</label>
-			<label index="pi3TemplateNotIncluded">
-			    <![CDATA[
-			    <p>Bitte das WEC Table Map static template auf ihrer Seite einfügen.</p>
-			    ]]>
-			</label>
-			<label index="wecApiTemplateNotIncluded">
+      </label>
+      <label index="tt_content.pi_flexform.title">Title</label>
+      <label index="tt_content.pi_flexform.description">Description</label>
+      <label index="tt_content.pi_flexform.street">Address</label>
+      <label index="tt_content.pi_flexform.city">City</label>
+      <label index="tt_content.pi_flexform.state">State</label>
+      <label index="tt_content.pi_flexform.zip">ZIP</label>
+      <label index="tt_content.pi_flexform.country">Country</label>
+      <label index="tt_content.pi_flexform.coord">Coords</label>
+      <label index="tt_content.pi_flexform.mapTitle">Map Details</label>
+      <label index="tt_content.pi_flexform.mapWidth">Width (pixels)</label>
+      <label index="tt_content.pi_flexform.mapHeight">Height (pixels)</label>
+      <label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
+      <label index="tt_content.pi_flexform.controlsTitle">Map Controls</label>
+      <label index="tt_content.pi_flexform.conType">Show Map Type</label>
+      <label index="tt_content.pi_flexform.conNone">None</label>
+      <label index="tt_content.pi_flexform.conScale">Show Scale</label>
+      <label index="tt_content.pi_flexform.conOverview">Show Overview Map</label>
+      <label index="tt_content.pi_flexform.conLargeMap">Size of Map Controls</label>
+      <label index="tt_content.pi_flexform.conLargeMapL">Large</label>
+      <label index="tt_content.pi_flexform.conLargeMapS">Small</label>
+      <label index="tt_content.pi_flexform.conLargeMapZ">Zoom only</label>
+      <label index="tt_content.pi_flexform.privacy">Sensitive geocode (no address)</label>
+      <label index="tt_content.pi_flexform.userGroup">Filter by FE user group (default: all)</label>
+      <label index="tt_content.pi_flexform.initialMapType">Initial Map Type</label>
+      <label index="tt_content.pi_flexform.typeNormal">Normal</label>
+      <label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
+      <label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
+      <label index="tt_content.pi_flexform.typePhysical">Terrain</label>
+      <label index="tt_content.pi_flexform.tables">Tables to map data from</label>
+      <label index="tt_content.pi_flexform.showDirs">Show Directions</label>
+      <label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
+      <label index="tt_content.pi_flexform.showWrittenDirs">Show Written Directions</label>
+      <label index="tt_content.pi_flexform.showRadiusSearch">Show Radius Search</label>
+      <label index="tt_content.pi_flexform.kml">KML to overlay</label>
+      <label index="tt_content.pi_flexform.showSidebar">Show Marker Sidebar</label>
+      <label index="tt_content.pi_flexform.prefillAddress">Prefill Address from User Info</label>
+    </languageKey>
+    <languageKey index="de" type="array">
+      <label index="berecord_geocodelabel">Koordinaten</label>
+      <label index="berecord_maplabel">Karte</label>
+      <label index="directions">Wegbeschreibung</label>
+      <label index="fromHereTo">Von hier</label>
+      <label index="startaddress">Start Addresse</label>
+      <label index="endaddress">Ziel Addresse</label>
+      <label index="geocodeFailed">Geocoding fehlgeschlagen.</label>
+      <label index="geocodeNoAddress">Kann die Längen- und Breitengrade nicht ermitteln. Bitte eine Adresse eintragen und speichern.</label>
+      <label index="geocodeNotPerformed">Geocoding wurde für diese Adresse noch nicht durchgeführt.</label>
+      <label index="geocodeSuccessful">Geocoding erfolgreich!</label>
+      <label index="getDirections">Zeige Wegbeschreibung</label>
+      <label index="info">Adresse</label>
+      <label index="latitude">Breitengrad</label>
+      <label index="location">Ausgangspunkt</label>
+      <label index="longitude">Längengrad</label>
+      <label index="toHereFrom">Hierhin</label>
+      <label index="radius">Radius: </label>
+      <label index="unit">Einheit: </label>
+      <label index="tt_content.list_type_pi1">Einfache WEC Landkarte</label>
+      <label index="tt_content.list_type_pi2">WEC Frontend Benutzer Karte</label>
+      <label index="tt_content.pi_flexform.apiKey">Google Maps API Key</label>
+      <label index="tt_content.pi_flexform.city">Ortschaft</label>
+      <label index="tt_content.pi_flexform.conLargeMap">Grösse der Navigationselemente</label>
+      <label index="tt_content.pi_flexform.conLargeMapL">Gross</label>
+      <label index="tt_content.pi_flexform.conLargeMapS">Klein</label>
+      <label index="tt_content.pi_flexform.conLargeMapZ">Nur Zoom</label>
+      <label index="tt_content.pi_flexform.conNone">Nichts</label>
+      <label index="tt_content.pi_flexform.conOverview">Übersichtskarte anzeigen</label>
+      <label index="tt_content.pi_flexform.conScale">Skala anzeigen</label>
+      <label index="tt_content.pi_flexform.conType">Kartentyp anzeigen</label>
+      <label index="tt_content.pi_flexform.controlsTitle">Kartenfunktionen</label>
+      <label index="tt_content.pi_flexform.coord">Koordinaten</label>
+      <label index="tt_content.pi_flexform.country">Land</label>
+      <label index="tt_content.pi_flexform.description">Beschreibung</label>
+      <label index="tt_content.pi_flexform.initialMapType">Kartentyp zu Beginn</label>
+      <label index="tt_content.pi_flexform.mapHeight">Höhe (pixel)</label>
+      <label index="tt_content.pi_flexform.mapTitle">Kartendetails</label>
+      <label index="tt_content.pi_flexform.mapWidth">Breite (pixel)</label>
+      <label index="tt_content.pi_flexform.prefillAddress">Adresse aus den Benutzerinformationen übernehmen</label>
+      <label index="tt_content.pi_flexform.privacy">Sensitives Geocoding (ohne Adresse)</label>
+      <label index="tt_content.pi_flexform.sheet">Adresse</label>
+      <label index="tt_content.pi_flexform.showDirs">Wegbeschreibung zeigen</label>
+      <label index="tt_content.pi_flexform.showInfoOnLoad">Informationsblase beim Laden anzeigen</label>
+      <label index="tt_content.pi_flexform.showWrittenDirs">Zeige Wegbeschreibung als Text</label>
+      <label index="tt_content.pi_flexform.state">Staat</label>
+      <label index="tt_content.pi_flexform.street">Strasse</label>
+      <label index="tt_content.pi_flexform.title">Titel</label>
+      <label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
+      <label index="tt_content.pi_flexform.typeNormal">Normal</label>
+      <label index="tt_content.pi_flexform.typeSatellite">Satellit</label>
+      <label index="tt_content.pi_flexform.userGroup">Nach FE Benutzergruppe filtern (standardmässig alle angezeigt)</label>
+      <label index="tt_content.pi_flexform.zip">PLZ</label>
+      <label index="tx_wecmap_external.title">Title</label>
+      <label index="tx_wecmap_external.url">URL</label>
+      <label index="tx_wecmap_external">WEC Map Externe Resource</label>
+      <label index="tt_content.list_type_pi3">WEC Datenbank Karte</label>
+      <label index="pi1TemplateNotIncluded">
+          <![CDATA[
+          <p>Bitte das WEC Simple Map static template auf ihrer Seite einfügen.</p>
+          ]]>
+      </label>
+      <label index="pi2TemplateNotIncluded">
+          <![CDATA[
+          <p>Bitte das WEC FE User Map static template auf ihrer Seite einfügen.</p>
+          ]]>
+      </label>
+      <label index="pi3TemplateNotIncluded">
+          <![CDATA[
+          <p>Bitte das WEC Table Map static template auf ihrer Seite einfügen.</p>
+          ]]>
+      </label>
+      <label index="wecApiTemplateNotIncluded">
                 <![CDATA[
-			    <p>Bitte das WEC Map API static template auf ihrer Seite einfügen und sichergehen dass es bevor allen anderen WEC Map templates eingefügt wird.</p>
+          <p>Bitte das WEC Map API static template auf ihrer Seite einfügen und sichergehen dass es bevor allen anderen WEC Map templates eingefügt wird.</p>
                 ]]>
-			</label>
-            <label index="tt_content.pi_flexform.tables">Datenbanktabellen die gezeigt werden sollen</label>
-            <label index="tt_content.pi_flexform.showRadiusSearch">Radius Suche anzeigen</label>
-            <label index="tt_content.pi_flexform.kml">KML zum Überlegen</label>
-            <label index="tt_content.pi_flexform.showSidebar">Marker Sidebar anzeigen</label>
-			
-		</languageKey>
-    </data>
-    <orig_hash type="array">
-        <languageKey index="default" type="array">
-            <label index="tt_content.list_type_pi1" type="integer">225796182</label>
-            <label index="tt_content.list_type_pi2" type="integer">120586834</label>
-            <label index="tt_content.pi_flexform.sheet" type="integer">232242979</label>
-            <label index="berecord_maplabel" type="integer">74399392</label>
-            <label index="berecord_geocodelabel" type="integer">221407392</label>
-            <label index="geocodeFailed" type="integer">89896938</label>
-            <label index="geocodeNotPerformed" type="integer">181728665</label>
-            <label index="geocodeSuccessful" type="integer">96358869</label>
-            <label index="latitude" type="integer">61926260</label>
-            <label index="longitude" type="integer">162847420</label>
-            <label index="tt_content.pi_flexform.title" type="integer">192455458</label>
-            <label index="tt_content.pi_flexform.description" type="integer">190479069</label>
-            <label index="tt_content.pi_flexform.street" type="integer">179304820</label>
-            <label index="tt_content.pi_flexform.city" type="integer">92079470</label>
-            <label index="tt_content.pi_flexform.state" type="integer">74066497</label>
-            <label index="tt_content.pi_flexform.zip" type="integer">70553491</label>
-            <label index="tt_content.pi_flexform.country" type="integer">93787849</label>
-            <label index="tt_content.pi_flexform.coord" type="integer">221407392</label>
-            <label index="tt_content.pi_flexform.mapTitle" type="integer">6747234</label>
-            <label index="tt_content.pi_flexform.mapWidth" type="integer">181225966</label>
-            <label index="tt_content.pi_flexform.mapHeight" type="integer">113932431</label>
-            <label index="tt_content.pi_flexform.apiKey" type="integer">247013010</label>
-            <label index="tt_content.pi_flexform.controlsTitle" type="integer">138144243</label>
-            <label index="tt_content.pi_flexform.conType" type="integer">150739092</label>
-            <label index="tt_content.pi_flexform.conNone" type="integer">112064895</label>
-            <label index="tt_content.pi_flexform.conScale" type="integer">96911390</label>
-            <label index="tt_content.pi_flexform.conOverview" type="integer">162836771</label>
-            <label index="tt_content.pi_flexform.conLargeMap" type="integer">182502642</label>
-            <label index="tt_content.pi_flexform.conLargeMapL" type="integer">61250356</label>
-            <label index="tt_content.pi_flexform.conLargeMapS" type="integer">40239204</label>
-            <label index="tt_content.pi_flexform.conLargeMapZ" type="integer">201008951</label>
-            <label index="tt_content.pi_flexform.privacy" type="integer">232400027</label>
-            <label index="tt_content.pi_flexform.userGroup" type="integer">217984635</label>
-        </languageKey>
-    </orig_hash>
-    <orig_text type="array">
-        <languageKey index="default" type="array">
-        </languageKey>
-    </orig_text>
+      </label>
+      <label index="tt_content.pi_flexform.tables">Datenbanktabellen die gezeigt werden sollen</label>
+      <label index="tt_content.pi_flexform.showRadiusSearch">Radius Suche anzeigen</label>
+      <label index="tt_content.pi_flexform.kml">KML zum Überlegen</label>
+      <label index="tt_content.pi_flexform.showSidebar">Marker Sidebar anzeigen</label>
+    </languageKey>
+    <languageKey index="fr" type="array">
+      <label index="tx_wecmap_external.title">Titre</label>
+      <label index="tx_wecmap_external.url">URL</label>
+      <label index="tx_wecmap_external">WEC Map ressource externe</label>
+      <label index="tt_content.list_type_pi1">WEC Map carte simple</label>
+      <label index="tt_content.list_type_pi2">WEC carte Frontend User</label>
+      <label index="tt_content.list_type_pi3">WEC carte tableau</label>
+      <label index="tt_content.pi_flexform.sheet">Adresse</label>
+      <label index="berecord_maplabel">Carte</label>
+      <label index="berecord_geocodelabel">Coordonnées</label>
+      <label index="geocodeFailed">Échec du géocodage</label>
+      <label index="geocodeNotPerformed">Le géocodage n'a pas été effectué pour cette adresse</label>
+      <label index="geocodeSuccessful">Géocodage réussi!</label>
+      <label index="geocodeNoAddress">Impossible de déterminer la longitude et la latitude. Entrer une adresse et sauvegarder.</label>
+      <label index="latitude">Latitude</label>
+      <label index="longitude">Longitude</label>
+      <label index="directions">Directions</label>
+      <label index="info">Info</label>
+      <label index="location">Lieu</label>
+      <label index="getDirections">Itinéraire</label>
+      <label index="fromHereTo">Vers ce lieu</label>
+      <label index="toHereFrom">À partir de ce lieu</label>
+      <label index="startaddress">Lieu de départ</label>
+      <label index="radius">Rayon</label>
+      <label index="unit">Unité:</label>
+      <label index="endaddress">Lieu d'arrivée</label>
+      <label index="pi1TemplateNotIncluded">Please include the WEC Simple Map static template on your page.</label>
+      <label index="pi2TemplateNotIncluded">Please include the WEC Frontend User Map static template on your page.</label>
+      <label index="pi3TemplateNotIncluded">Please include the WEC Table Map static template on your page.</label>
+      <label index="wecApiTemplateNotIncluded">&lt;p&gt;Please include the WEC Map API static template on your page and make sure it's included before (above) any other WEC Map static templates.</label>
+      <label index="tt_content.pi_flexform.title">Titre</label>
+      <label index="tt_content.pi_flexform.description">Description</label>
+      <label index="tt_content.pi_flexform.street">Adresse</label>
+      <label index="tt_content.pi_flexform.city">Ville</label>
+      <label index="tt_content.pi_flexform.state">État / Province</label>
+      <label index="tt_content.pi_flexform.zip">Code postal</label>
+      <label index="tt_content.pi_flexform.country">Pays</label>
+      <label index="tt_content.pi_flexform.coord">Coordonnées</label>
+      <label index="tt_content.pi_flexform.mapTitle">Détails de la carte</label>
+      <label index="tt_content.pi_flexform.mapWidth">Largeur (pixels)</label>
+      <label index="tt_content.pi_flexform.mapHeight">Hauteur (pixels)</label>
+      <label index="tt_content.pi_flexform.apiKey">Clé Google Maps API Key</label>
+      <label index="tt_content.pi_flexform.controlsTitle">Contrôle de carte</label>
+      <label index="tt_content.pi_flexform.conType">Afficher le type de carte</label>
+      <label index="tt_content.pi_flexform.conNone">Aucun</label>
+      <label index="tt_content.pi_flexform.conScale">Afficher l'échelle</label>
+      <label index="tt_content.pi_flexform.conOverview">Afficher la vue d'ensemble</label>
+      <label index="tt_content.pi_flexform.conLargeMap">Taille des contrôles de carte</label>
+      <label index="tt_content.pi_flexform.conLargeMapL">Grande</label>
+      <label index="tt_content.pi_flexform.conLargeMapS">Petite</label>
+      <label index="tt_content.pi_flexform.conLargeMapZ">Zoom seulement</label>
+      <label index="tt_content.pi_flexform.privacy">Géocode sans adresse</label>
+      <label index="tt_content.pi_flexform.userGroup">Filtrer par FE user (tous par défaut)</label>
+      <label index="tt_content.pi_flexform.initialMapType">Type de carte initial</label>
+      <label index="tt_content.pi_flexform.typeNormal">Normal</label>
+      <label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
+      <label index="tt_content.pi_flexform.typeHybrid">Hybride</label>
+      <label index="tt_content.pi_flexform.typePhysical">Terrain</label>
+      <label index="tt_content.pi_flexform.tables">Table sur laquelle puiser les données</label>
+      <label index="tt_content.pi_flexform.showDirs">Afficher les directions</label>
+      <label index="tt_content.pi_flexform.showInfoOnLoad">Afficher l'info bulle automatiquement</label>
+      <label index="tt_content.pi_flexform.showWrittenDirs">Afficher l'itinéraire</label>
+      <label index="tt_content.pi_flexform.showRadiusSearch">Afficher la recherche par rayon</label>
+      <label index="tt_content.pi_flexform.kml">KML à insérer</label>
+      <label index="tt_content.pi_flexform.showSidebar">Afficher les contrôles verticaux</label>
+      <label index="tt_content.pi_flexform.prefillAddress">Inclure l'adresse à partir des informations d'usager</label>
+    </languageKey>
+  </data>
+  <orig_hash type="array">
+    <languageKey index="default" type="array">
+      <label index="tt_content.list_type_pi1" type="integer">225796182</label>
+      <label index="tt_content.list_type_pi2" type="integer">120586834</label>
+      <label index="tt_content.pi_flexform.sheet" type="integer">232242979</label>
+      <label index="berecord_maplabel" type="integer">74399392</label>
+      <label index="berecord_geocodelabel" type="integer">221407392</label>
+      <label index="geocodeFailed" type="integer">89896938</label>
+      <label index="geocodeNotPerformed" type="integer">181728665</label>
+      <label index="geocodeSuccessful" type="integer">96358869</label>
+      <label index="latitude" type="integer">61926260</label>
+      <label index="longitude" type="integer">162847420</label>
+      <label index="tt_content.pi_flexform.title" type="integer">192455458</label>
+      <label index="tt_content.pi_flexform.description" type="integer">190479069</label>
+      <label index="tt_content.pi_flexform.street" type="integer">179304820</label>
+      <label index="tt_content.pi_flexform.city" type="integer">92079470</label>
+      <label index="tt_content.pi_flexform.state" type="integer">74066497</label>
+      <label index="tt_content.pi_flexform.zip" type="integer">70553491</label>
+      <label index="tt_content.pi_flexform.country" type="integer">93787849</label>
+      <label index="tt_content.pi_flexform.coord" type="integer">221407392</label>
+      <label index="tt_content.pi_flexform.mapTitle" type="integer">6747234</label>
+      <label index="tt_content.pi_flexform.mapWidth" type="integer">181225966</label>
+      <label index="tt_content.pi_flexform.mapHeight" type="integer">113932431</label>
+      <label index="tt_content.pi_flexform.apiKey" type="integer">247013010</label>
+      <label index="tt_content.pi_flexform.controlsTitle" type="integer">138144243</label>
+      <label index="tt_content.pi_flexform.conType" type="integer">150739092</label>
+      <label index="tt_content.pi_flexform.conNone" type="integer">112064895</label>
+      <label index="tt_content.pi_flexform.conScale" type="integer">96911390</label>
+      <label index="tt_content.pi_flexform.conOverview" type="integer">162836771</label>
+      <label index="tt_content.pi_flexform.conLargeMap" type="integer">182502642</label>
+      <label index="tt_content.pi_flexform.conLargeMapL" type="integer">61250356</label>
+      <label index="tt_content.pi_flexform.conLargeMapS" type="integer">40239204</label>
+      <label index="tt_content.pi_flexform.conLargeMapZ" type="integer">201008951</label>
+      <label index="tt_content.pi_flexform.privacy" type="integer">232400027</label>
+      <label index="tt_content.pi_flexform.userGroup" type="integer">217984635</label>
+    </languageKey>
+  </orig_hash>
+  <orig_text type="array">
+    <languageKey index="default" type="array"></languageKey>
+  </orig_text>
 </T3locallang>
