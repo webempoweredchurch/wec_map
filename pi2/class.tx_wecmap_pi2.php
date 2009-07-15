@@ -229,7 +229,7 @@ class tx_wecmap_pi2 extends tslib_pibase {
 			$cityConf['icon'] = $conf['groups.']['city.']['icon.'];
 			$cityConf['minzoom'] = $conf['groups.']['city.']['zoom.']['min'];
 			$cityConf['maxzoom'] = $conf['groups.']['city.']['zoom.']['max'];
-			// country icon, if configured
+			// city icon, if configured
 			if(!empty($cityConf['icon']['imagepath'])) {
 				$map->addMarkerIcon($cityConf['icon']);			
 			} else {
