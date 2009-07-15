@@ -131,7 +131,7 @@ var WecMap = {
 					this.directionsToData[map][groupId] = [];
 				}
 
-				var dirText = text[0] + '<br /><div id="' + map + '_todirform_' + groupId + '_' + markerId + '" class="todirform"><form action="#" onsubmit="return WecMap.setDirections(\'' + map + '\', document.getElementById(\'tx-wecmap-directions-to-' + map + '\').value, [' + point.y + ', ' + point.x + '], \'' + dirTitle + '\');">';
+				var dirText = text[0] + '<br /><div id="' + map + '_todirform_' + groupId + '_' + markerId + '" class="todirform"><form action="#" onsubmit="return WecMap.setDirections(\'' + map + '\', [' + point.y + ', ' + point.x + '], document.getElementById(\'tx-wecmap-directions-to-' + map + '\').value, \'' + dirTitle + '\');">';
 				dirText += '<label class="startendaddress" for="tx-wecmap-directions-to-' + map + '">' + this.labels.endaddress + '</label><input type="text" name="daddr" value="' + address + '" id="tx-wecmap-directions-to-' + map + '" />';
 				dirText += '<input type="submit" name="submit" value="Go" /></form></div>';
 				this.directionsFromData[map][groupId][markerId] = dirText;
