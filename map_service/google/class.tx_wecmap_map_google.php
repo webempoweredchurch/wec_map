@@ -229,9 +229,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			$this->autoCenterAndZoom();
 			
 			$htmlContent .= $this->mapDiv();
-			
+
+			$get = t3lib_div::_GPmerged('tx_wecmap_api');
+
 			// if we're forcing static display, skip the js
-			if($this->static && $this->staticMode == 'force') {
+			if($this->static && ($this->staticMode == 'force' || ($this->staticUrlParam && intval($get['static']) == 1))) {
 				return $htmlContent;
 			}
 			
