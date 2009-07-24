@@ -147,6 +147,12 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		
 		$maxAutoZoom = $conf['maxAutoZoom'];
 
+		$static = $conf['static.']['enabled'];
+		$staticMode = $conf['static.']['mode'];
+		$staticExtent = $conf['static.']['extent']; 
+		$staticUrlParam = $conf['static.']['urlParam'];
+		$staticLimit = $conf['static.']['limit'];
+
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 		$this->mapName = $mapName;
@@ -182,7 +188,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($initialMapType) $map->setType($initialMapType);
 		if($googleEarth) $map->addControl('googleEarth');
 		
-		$map->enableStatic('automatic', 'each');
+		if($static) $map->enableStatic($staticMode, $staticExtent, $staticUrlParam, $staticLimit);
 
 		// check whether to show the directions tab and/or prefill addresses and/or written directions
 		if($showDirs && $showWrittenDirs && $prefillAddress) $map->enableDirections(true, $mapName.'_directions');
