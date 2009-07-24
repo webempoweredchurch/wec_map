@@ -1,1 +1,1 @@
-[FIX] subdomain API key handling was broken
+[NEW] enable static maps/failover. See TS reference in docs for more info
