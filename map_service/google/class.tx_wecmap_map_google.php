@@ -59,6 +59,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	var $directionsDivID;
 	var $showInfoOnLoad;
 	var $maxAutoZoom = 15;
+	var $static = false;
 
 	// array to hold the different Icons
 	var $icons;
@@ -98,6 +99,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->showInfoOnLoad = false;
 		$this->width = $width;
 		$this->height = $height;
+		$this->origHeight = $height;
 
 		if (($lat != '' && $lat != null) || ($long != '' && $long != null)) {
 			$this->setCenter($lat, $long);
@@ -227,6 +229,13 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			// auto center and zoom if necessary
 			$this->autoCenterAndZoom();
 			
+			$htmlContent .= $this->mapDiv();
+			
+			// if we're forcing static display, skip the js
+			if($this->static && $this->staticMode == 'force') {
+				return $htmlContent;
+			}
+			
 			// get desired Google Maps API version
 			$apiVersion = tx_wecmap_backend::getExtConf('apiVersion');
 			
@@ -248,8 +257,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 				$htmlContent .= '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile . '" type="text/javascript"></script>';
 			}
-
-			$htmlContent .= $this->mapDiv($this->mapName, $this->width, $this->height);
+			
 			$jsContent = array();
 			$jsContent[] = $this->js_createLabels();
 			$jsContent[] = $this->js_errorHandler();
@@ -304,7 +312,59 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		}
 		return $error;
 	}
+	
+	
+	/**
+	 * Draws the static map if desired
+	 *
+	 * @return String content
+	 **/
+	function drawStaticMap() {
+		if(!$this->static) return null;
 
+
+		$index = 0;
+		if($this->staticExtent == 'all') {
+			$markerString = '';
+			if($this->staticLimit > 50) $this->staticLimit = 50;
+			foreach( $this->groups as $key => $group ) {
+				foreach( $group->markers as $marker ) {
+					if($index >= $this->staticLimit) break 2;
+					$index++;
+					$markerString .= $marker->latitude.','.$marker->longitude.'%7C';
+				}
+			}
+			$img = $this->generateStaticMap($markerString);
+			return $img;	
+		} elseif($this->staticExtent == 'each') {
+			foreach( $this->groups as $key => $group ) {
+				foreach( $group->markers as $marker ) {
+					if($index >= $this->staticLimit) break 2;
+					$markerString = $marker->latitude.','.$marker->longitude;
+					$img .= $this->generateStaticMap($markerString, false);
+					$index++;
+				}
+			}
+			$this->height = $this->height * $index;
+			return $img;
+		} else {
+			return null;
+		}
+	}
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 **/
+	function generateStaticMap($markers, $center = true, $alt = '') {
+		if($center) {
+			return '<img class="tx-wecmap-api-staticmap" alt="'.$alt.'" src="http://maps.google.com/staticmap?center='.$this->lat .','.$this->long .'&zoom='.$this->zoom.'&size='.$this->width.'x'.$this->height.'&maptype='.$this->type.'&markers='.$markers .'&key='.$this->key.'&sensor=false" />';			
+		} else {
+			return '<img class="tx-wecmap-api-staticmap" alt="'.$alt.'" src="http://maps.google.com/staticmap?size='.$this->width.'x'.$this->height.'&maptype='.$this->type.'&markers='.$markers .'&key='.$this->key.'&sensor=false" />';
+		}
+
+	}
 	/**
 	 * Adds an address to the currently list of markers rendered on the map. Support tabs.
 	 *
@@ -503,13 +563,11 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 * Creates the overall map div.
 	 *
 	 * @access	private
-	 * @param	string		ID of the div tag.
-	 * @param	integer		Width of the map in pixels.
-	 * @param	integer		Height of the map in pixels.
 	 * @return	string		The HTML for the map div tag.
 	 */
-	function mapDiv($id, $width, $height) {
-		return '<div id="'.$id.'" class="tx-wecmap-map" style="width:'.$width.'px; height:'.$height.'px;"></div>';
+	function mapDiv() {
+		$staticContent = $this->drawStaticMap();
+		return '<div id="'.$this->mapName.'" class="tx-wecmap-map" style="width:'.$this->width.'px; height:'.$this->height.'px">'.$staticContent.'</div>';			
 	}
 
 	/**
@@ -703,7 +761,7 @@ WecMap.addIcon("' . $this->mapName .'", "default", "'.$path.'images/mm_20_red.pn
 	 * @return string The javascript output
 	 **/
 	function js_loadCalls() {
-		return 'GEvent.addDomListener(window, "load", function() { drawMap_' . $this->mapName . '(); });
+		return 'GEvent.addDomListener(window, "load", function() { document.getElementById("'.$this->mapName.'").style.height="'.$this->origHeight.'px"; drawMap_' . $this->mapName . '();});
 GEvent.addDomListener(window, "unload", function() { GUnload(); });';
 	}
 
@@ -881,12 +939,39 @@ GEvent.addDomListener(window, "unload", function() { GUnload(); });';
 	}
 
 	/**
+	 * Enables static maps
+	 * 
+	 * @param $mode String either automatic or force
+	 * @param $extent String either all or each
+	 * @param $urlParam boolean enable URL parameter to force static map
+	 * @param $limit int Limit of markers on a map or marker maps
+	 *
+	 * @return void
+	 **/
+	function enableStatic($mode='automatic', $extent='all', $urlParam=false, $limit=50) {
+		$this->static = true;
+		$this->staticMode = $mode;
+		$this->staticExtent = $extent;
+		$this->staticUrlParam = $urlParam;
+		$this->staticLimit = $limit;
+		
+		// devlog start
+		if(TYPO3_DLOG) {
+			t3lib_div::devLog($this->mapName.': Enabling static maps: '.$mode.':'.$extent.':'.$urlParam.':'.$limit, 'wec_map_api');
+		}
+		// devlog end
+	}
+
+	/**
 	 * Makes the marker info bubble show on load if there is only one marker on the map
 	 *
 	 * @return void
 	 **/
 	function showInfoOnLoad() {
-		$this->showInfoOnLoad = true;
+		if(sizeof($this->groups) == 1 && $this->groups[0]->getMarkerCount() == 1) {
+			$this->showInfoOnLoad = true;			
+		}
+
 		// TODO: devlog start
 		if(TYPO3_DLOG) {
 			t3lib_div::devLog($this->mapName.': Showing info bubble on load', 'wec_map_api');
