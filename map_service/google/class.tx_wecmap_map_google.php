@@ -950,9 +950,13 @@ GEvent.addDomListener(window, "unload", function() { GUnload(); });';
 	 **/
 	function enableStatic($mode='automatic', $extent='all', $urlParam=false, $limit=50) {
 		$this->static = true;
+		if(empty($mode)) $mode = 'automatic';
 		$this->staticMode = $mode;
+		if(empty($extent)) $extent = 'all';
 		$this->staticExtent = $extent;
+		if(empty($urlParam)) $urlParam = false;
 		$this->staticUrlParam = $urlParam;
+		if(empty($limit)) $limit = 50;
 		$this->staticLimit = $limit;
 		
 		// devlog start
