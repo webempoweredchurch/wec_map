@@ -1,11 +1,1 @@
-[NEW] move JS into an external file. Should improve load time and multiple maps on one page. Thanks to Benni Mack!
-[NEW] add French localization. Thanks to Patrick Gaumond!
-[NEW] add Google Earth API view; browser plugin required.
-[NEW] make the API URL configurable. Needed for Premier API keys.
-[NEW] added syslog logging for better error visibility.
-[NEW] change Plugins to USER_INT, improving caching and speed. Thanks to Benni Mack!
-[NEW] make city and country groups in the WEC FE User Map hidable. Thanks to Benni Mack!
-[FIX] fix a typo responsible for not allowing customized icons to show up.
-[FIX] fix from-here-to (written) directions. Locations were flipped.
-[FIX] replace some deprecated TYPO3 methods with newer ones.
-[FIX] small bug in API key domain matching. Thanks to Steffen Kamper!
+[FIX] subdomain API key handling was broken
