@@ -70,7 +70,7 @@ class tx_wecmap_domainmgr {
 		if(!$found) {
 			foreach( $keyConfig as $key => $value ) {
 
-				if(strpos($key, $domain) !== false) {
+				if(strpos($domain, $key) !== false) {
 					$found = true;
 					return $value;
 				}
