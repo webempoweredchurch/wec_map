@@ -99,7 +99,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 		$this->showInfoOnLoad = false;
 		$this->width = $width;
 		$this->height = $height;
-		$this->origHeight = $height;
 
 		if (($lat != '' && $lat != null) || ($long != '' && $long != null)) {
 			$this->setCenter($lat, $long);
@@ -345,7 +344,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 					$index++;
 				}
 			}
-			$this->height = $this->height * $index;
 			return $img;
 		} else {
 			return null;
@@ -567,7 +565,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 */
 	function mapDiv() {
 		$staticContent = $this->drawStaticMap();
-		return '<div id="'.$this->mapName.'" class="tx-wecmap-map" style="width:'.$this->width.'px; height:'.$this->height.'px">'.$staticContent.'</div>';			
+		return '<div id="'.$this->mapName.'" class="tx-wecmap-map" style="width:'.$this->width.'px; height: 100%">'.$staticContent.'</div>';			
 	}
 
 	/**
@@ -761,7 +759,7 @@ WecMap.addIcon("' . $this->mapName .'", "default", "'.$path.'images/mm_20_red.pn
 	 * @return string The javascript output
 	 **/
 	function js_loadCalls() {
-		return 'GEvent.addDomListener(window, "load", function() { document.getElementById("'.$this->mapName.'").style.height="'.$this->origHeight.'px"; drawMap_' . $this->mapName . '();});
+		return 'GEvent.addDomListener(window, "load", function() { document.getElementById("'.$this->mapName.'").style.height="'.$this->height.'px"; drawMap_' . $this->mapName . '();});
 GEvent.addDomListener(window, "unload", function() { GUnload(); });';
 	}
 
