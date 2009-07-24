@@ -187,7 +187,6 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		if($googleEarth) $map->addControl('googleEarth');
-		
 		if($static) $map->enableStatic($staticMode, $staticExtent, $staticUrlParam, $staticLimit);
 
 		// check whether to show the directions tab and/or prefill addresses and/or written directions

@@ -159,6 +159,12 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 		$maxAutoZoom = $conf['maxAutoZoom'];
 		
+		$static = $conf['static.']['enabled'];
+		$staticMode = $conf['static.']['mode'];
+		$staticExtent = $conf['static.']['extent']; 
+		$staticUrlParam = $conf['static.']['urlParam'];
+		$staticLimit = $conf['static.']['limit'];
+		
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 		$this->mapName = $mapName;
@@ -203,7 +209,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 		if($mapType) $map->addControl('mapType');
 		if($initialMapType) $map->setType($initialMapType);
 		if($googleEarth) $map->addControl('googleEarth');
-
+		if($static) $map->enableStatic($staticMode, $staticExtent, $staticUrlParam, $staticLimit);
+	
 		// set up groups:
 		// country
 		if (is_array($conf['groups.']['country.']) || $private) {
