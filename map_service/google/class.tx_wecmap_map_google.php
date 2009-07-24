@@ -761,8 +761,15 @@ WecMap.addIcon("' . $this->mapName .'", "default", "'.$path.'images/mm_20_red.pn
 	 * @return string The javascript output
 	 **/
 	function js_loadCalls() {
-		return 'GEvent.addDomListener(window, "load", function() { document.getElementById("'.$this->mapName.'").style.height="'.$this->height.'px"; drawMap_' . $this->mapName . '();});
-GEvent.addDomListener(window, "unload", function() { GUnload(); });';
+		$loadCalls = 'GEvent.addDomListener(window, "load", function() {';
+		$loadCalls .= 'if(document.getElementById("'.$this->mapName.'_radiusform") != null) document.getElementById("'.$this->mapName.'_radiusform").style.display = "";';
+		$loadCalls .= 'if(document.getElementById("'.$this->mapName.'_sidebar") != null) document.getElementById("'.$this->mapName.'_sidebar").style.display = "";';
+
+		$loadCalls .= 'document.getElementById("'.$this->mapName.'").style.height="'.$this->height.'px";';
+		$loadCalls .= 'drawMap_' . $this->mapName . '();});';
+		$loadCalls .= 'GEvent.addDomListener(window, "unload", function() { GUnload(); });';
+		
+		return $loadCalls;
 	}
 
 	/**

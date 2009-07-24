@@ -1,8 +1,9 @@
 tx_wecmap_api {
 	addressForm = COA_INT
 	addressForm {
-		10 = HTML
-		10.value = <table>
+		10 = TEXT
+		10.value = <table id="{field:map_id}_radiusform" class="radiusform" style="display: none;">
+		10.insertData = true
 		20 = FORM
 		20.layout = <tr><td>###LABEL###</td><td> ###FIELD### </td></tr>
 		20.data (
@@ -31,7 +32,7 @@ tx_wecmap_api {
 	sidebar {
 		10 = TEXT
 		10.field = content
-		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="height:{field:map_height}px">|</div>
+		10.wrap = <div id="{field:map_id}_sidebar" class="sidebar" style="height:{field:map_height}px; display: none;">|</div>
 		10.insertData = true
     10.if.isTrue.field = content
 	}
