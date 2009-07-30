@@ -332,7 +332,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				foreach( $group->markers as $marker ) {
 					if($index >= $this->staticLimit) break 2;
 					$index++;
-					$markerString .= $marker->latitude.','.$marker->longitude.'%7C';
+					$markerString .= $marker->latitude.','.$marker->longitude.',small%7C';
 				}
 			}
 			$img = $this->generateStaticMap($markerString);
@@ -341,7 +341,7 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 			foreach( $this->groups as $key => $group ) {
 				foreach( $group->markers as $marker ) {
 					if($index >= $this->staticLimit) break 2;
-					$markerString = $marker->latitude.','.$marker->longitude;
+					$markerString = $marker->latitude.','.$marker->longitude.',small';
 					$img .= $this->generateStaticMap($markerString, false);
 					$index++;
 				}
