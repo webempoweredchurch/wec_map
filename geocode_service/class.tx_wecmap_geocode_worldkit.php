@@ -60,7 +60,7 @@ class tx_wecmap_geocode_worldkit extends t3lib_svbase {
 	function lookup($street, $city, $state, $zip, $country)	{
 
 		$url = 	'http://worldkit.org/geocoder/rest/?'.
-				'city='.$city.','.$country;
+				'city='.urlencode($city).','.urlencode($country);
 
 		$xml = t3lib_div::getURL($url);
 

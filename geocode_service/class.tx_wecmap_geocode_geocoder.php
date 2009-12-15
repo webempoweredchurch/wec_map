@@ -77,7 +77,7 @@ class tx_wecmap_geocode_geocoder extends t3lib_svbase {
 
 
 		$address = $street.', '.$city.', '.$state.' '.$zip;
-		$address = str_replace(' ', '%20', $address);
+		$address = urlencode($address);
 
 		$xml = t3lib_div::getURL($this->url.'['.$address.']');
 		$latlong = array();

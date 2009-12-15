@@ -119,7 +119,7 @@ class tx_wecmap_geocode_yahoo extends t3lib_svbase {
 
 	function buildURL($name, $value){
 		if($value) {
-			return $name.'='.str_replace(' ', '+', $value).'&';
+			return $name.'='.urlencode(str_replace(' ', '+', $value)).'&';
 		}
 	}
 
