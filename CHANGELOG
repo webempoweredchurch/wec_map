@@ -1,1 +1,2 @@
 [NEW] enable static maps/failover. See TS reference in docs for more info
+[FIX] Fatal Error when a required class wasn't included in some situations

@@ -27,6 +27,8 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
+require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
+
 /**
  * Main address lookup class for the wec_map extension.  Looks up existing
  * values in cache tables or initiates service chain to perform a lookup.
