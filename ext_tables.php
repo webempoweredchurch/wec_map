@@ -45,7 +45,7 @@ $TCA["tx_wecmap_external"] = Array (
 		'crdate' => 'crdate',
 		"delete" => "deleted",
 		"dynamicConfigFile" => t3lib_extMgm::extPath($_EXTKEY)."tca.php",
-		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."ext_icon.gif",
+		"iconfile" => t3lib_extMgm::extRelPath($_EXTKEY)."res/icon_tx_wecmap_external_resource.gif",
 	),
 	"feInterface" => Array (
 		"fe_admin_fieldList" => "title, url",
