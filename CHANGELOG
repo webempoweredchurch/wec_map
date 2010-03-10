@@ -1,4 +1,2 @@
-[NEW] enable static maps/failover. See TS reference in docs for more info (experimental)
-[FIX] Fatal Error when a required class wasn't included in some situations
-[FIX] urlencode everything sent to the geocoders instead of manually replacing certain characters
-[FIX] little default CSS tweak to be more specific
+[NEW] New icons
+[FIX] Restore TYPO3 4.2 compatibility
