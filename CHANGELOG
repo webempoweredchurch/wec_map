@@ -1,2 +1,1 @@
-[NEW] New icons
-[FIX] Restore TYPO3 4.2 compatibility
+[FIX] Only use relative height for the map height when it is a static HTML map
