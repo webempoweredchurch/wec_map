@@ -567,7 +567,12 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 	 */
 	function mapDiv() {
 		$staticContent = $this->drawStaticMap();
-		return '<div id="'.$this->mapName.'" class="tx-wecmap-map" style="width:'.$this->width.'px; height: 100%">'.$staticContent.'</div>';			
+		if ($this->static) {
+			$height = '100%';
+		} else {
+			$height = $this->height . 'px';
+		}
+		return '<div id="'.$this->mapName.'" class="tx-wecmap-map" style="width:'.$this->width.'px; height:' . $height . ';">'.$staticContent.'</div>';
 	}
 
 	/**
