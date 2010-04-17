@@ -984,9 +984,8 @@ WecMap.addIcon("' . $this->mapName .'", "default", "'.$path.'images/mm_20_red.pn
 	 * @return void
 	 **/
 	function showInfoOnLoad() {
-		if(sizeof($this->groups) == 1 && $this->groups[0]->getMarkerCount() == 1) {
-			$this->showInfoOnLoad = true;			
-		}
+
+		$this->showInfoOnLoad = true;			
 
 		// TODO: devlog start
 		if(TYPO3_DLOG) {

@@ -1,1 +1,2 @@
 [FIX] Only use relative height for the map height when it is a static HTML map
+[FIX] Enable Show Info on Load again. Behavior for maps with more than on marker is undefined.
