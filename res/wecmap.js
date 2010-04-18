@@ -47,7 +47,11 @@ var WecMap = {
 		if (!(this.icons[map] instanceof Array)) { this.icons[map] = []; }
 		if (!(this.bubbleData[map] instanceof Array)) { this.bubbleData[map] = []; }
 		if (!(this.markers[map] instanceof Array)) { this.markers[map] = []; }
-		this.maps[map] = new GMap2(document.getElementById(map));
+		var height = document.getElementById(map).style.height;
+		var width = document.getElementById(map).style.width;
+		var mapsize = new GSize(parseInt(width, 10), parseInt(height, 10));
+		
+		this.maps[map] = new GMap2(document.getElementById(map), {size: mapsize});
 		this.markerManagers[map] = new GMarkerManager(this.maps[map]);
 	},
 
