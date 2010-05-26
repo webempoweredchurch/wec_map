@@ -198,20 +198,20 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		// see if we need to open the marker bubble on load
 		if($showInfoOnLoad) $map->showInfoOnLoad();
 
+		// add icons regardless of whether the ext is configured in TS or Flexform.
+		if(!empty($conf['icons.'])) {
+			foreach( $conf['icons.'] as $key => $value ) {
+				$map->addMarkerIcon($value);
+			}
+			
+		} else {
+			$iconID = '';
+		}
+			
+			
 		// determine if an address has been set through flexforms. If not, process TS
 		if(empty($zip) && empty($state) && empty($city)) {
 
-			// add icons
-			if(!empty($conf['icons.'])) {
-				foreach( $conf['icons.'] as $key => $value ) {
-					$map->addMarkerIcon($value);
-				}
-				
-			} else {
-				$iconID = '';
-			}
-			
-			
 			// loop through markers
 			foreach($conf['markers.'] as $marker) {
 
