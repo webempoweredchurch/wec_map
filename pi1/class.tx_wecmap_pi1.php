@@ -270,7 +270,7 @@ class tx_wecmap_pi1 extends tslib_pibase {
 			$description = tx_wecmap_shared::render($marker, $conf['marker.']['description.']);
 
 			// add the marker to the map
-			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description, 0, 17);
+			$markerObj = $map->addMarkerByAddress($street, $city, $state, $zip, $country, $title, $description, 0, 17, $conf['marker.']['iconID']);
 			$this->addSidebarItem($markerObj, $marker);
 		}
 		
