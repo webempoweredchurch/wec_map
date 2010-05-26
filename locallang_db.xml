@@ -96,8 +96,8 @@
       <label index="berecord_maplabel">Karte</label>
       <label index="directions">Wegbeschreibung</label>
       <label index="fromHereTo">Von hier</label>
-      <label index="startaddress">Start Addresse</label>
-      <label index="endaddress">Ziel Addresse</label>
+      <label index="startaddress">Start Adresse</label>
+      <label index="endaddress">Ziel Adresse</label>
       <label index="geocodeFailed">Geocoding fehlgeschlagen.</label>
       <label index="geocodeNoAddress">Kann die Längen- und Breitengrade nicht ermitteln. Bitte eine Adresse eintragen und speichern.</label>
       <label index="geocodeNotPerformed">Geocoding wurde für diese Adresse noch nicht durchgeführt.</label>
