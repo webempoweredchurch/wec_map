@@ -1,3 +1,5 @@
-[FIX] Only use relative height for the map height when it is a static HTML map
+[FIX] German localization fixes.
+[FIX] Custom icons can now be used for Simple Maps that are setup in the Flexform only. 
+[FIX] Only use relative height for the map height when it is a static HTML map.
 [FIX] Enable Show Info on Load again. Behavior for maps with more than on marker is undefined.
 [FIX] Google Maps now shows correctly in Javascript tabs. Thanks to Michael Waider for the fix!
