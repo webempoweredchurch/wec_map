@@ -1,5 +1,175 @@
+2.3.5
 [FIX] German localization fixes.
 [FIX] Custom icons can now be used for Simple Maps that are setup in the Flexform only. 
-[FIX] Only use relative height for the map height when it is a static HTML map.
 [FIX] Enable Show Info on Load again. Behavior for maps with more than on marker is undefined.
 [FIX] Google Maps now shows correctly in Javascript tabs. Thanks to Michael Waider for the fix!
+
+2.3.4
+[FIX] Only use relative height for the map height when it is a static HTML map.
+[FIX] Enable Show Info on Load again. Behavior for maps with more than on marker is undefined.
+
+2.3.3
+[NEW] New icons
+[FIX] Restore TYPO3 4.2 compatibility
+
+2.3.2
+[NEW] enable static maps/failover. See TS reference in docs for more info (experimental)
+[FIX] Fatal Error when a required class wasn't included in some situations
+[FIX] urlencode everything sent to the geocoders instead of manually replacing certain characters
+[FIX] little default CSS tweak to be more specific
+
+2.3.1
+[FIX] subdomain API key handling was broken
+
+2.3.0
+[NEW] move JS into an external file. Should improve load time and multiple maps on one page. Thanks to Benni Mack!
+[NEW] add French localization. Thanks to Patrick Gaumond!
+[NEW] add Google Earth API view; browser plugin required.
+[NEW] make the API URL configurable. Needed for Premier API keys.
+[NEW] added syslog logging for better error visibility.
+[NEW] change plugins to USER_INT, improving caching and speed. Thanks to Benni Mack!
+[NEW] make city and country groups in the WEC FE User Map hidable. Thanks to Benni Mack!
+[FIX] fix a typo responsible for not allowing customized icons to show up.
+[FIX] fix from-here-to (written) directions. Locations were flipped.
+[FIX] replace some deprecated TYPO3 methods with newer ones.
+[FIX] small bug in API key domain matching. Thanks to Steffen Kamper!
+
+2.2.1
+[NEW] WEC Table Map now allows for custom SELECT phrase in addition to the JOIN and WHERE.
+[FIX] add workaround for Google Maps API bug #881
+[FIX] minor documentation fixes
+[FIX] better error handling in worldkit geocoder
+[FIX] a few small HTML validation fixes
+
+2.2.0
+[NEW] Allow the Google Maps API version to be chosen from the Extension Manager
+[NEW] Use Hierarchical Map Type control for more map space
+[NEW] Add Terrain view to map type selector and map flexforms as initial setting
+[NEW] Add new hook to set center coordinates and zoom level
+[FIXED] More solid error handling with Geocoder.us
+[FIXED] Google API key signup link updated 
+
+2.1.2
+[FIXED] revert to old method of loading modules due to lots of path errors in BE modules.
+[FIXED] minor label changes
+
+2.1.1
+[NEW] API and TS Setting to set the maximum auto zoom
+[FIXED] use correct sidebar title field for pi2 and pi3 by default
+[FIXED] change TS wraps to only show if there is actually content
+
+2.1.0
+[NEW] !!!IMPORTANT WEC Simple Map marker bubble TS changed significantly. "title" was formerly defined as TEXT and is now COA
+[NEW] WEC Table Map TS adds a join option to be included in the custom SQL query
+[NEW] Change module inclusion to the new preferred way that gets rid of the relative paths in conf.php
+[FIXED] Pass title through htmlspecialchars to prevent js errors in case it contained quotes
+
+2.0.1
+[FIXED] Properly pass groups by reference. Fixes problems in PHP4 with maps not showing up.
+[FIXED] "Show info bubble on load" now works again.
+[FIXED] Update API documentation with missing methods.
+[FIXED] Error messages from the API are now properly shown.
+[FIXED] Added another layer to geocoding to make country detection more reliable.
+[FIXED] Tweak what we send to the Yahoo geocoder to get more accurate information back.
+[FIXED] Changed how low-level zoom markers are shown in FE User Map both in the FE plugin and BE module.
+[FIXED] Checks for template inclusion in WEC Table Map work better now.
+
+2.0.0
+[NEW] !IMPORTANT Optimize TS by requiring an extra static template which needs to be added to the template before the map will work
+[NEW] Add new plugin that will map records from any record configured for WEC Map, by default fe_users, tt_address, and cal.
+[NEW] Improved WEC FE User map TS config options. See docs.
+[NEW] Add radius search to map. Only markers within given radius around given address will show.
+[NEW] Ability to add custom marker icons, thanks to Andreas Hupfau
+[NEW] Add ability to overlay any kml file to map via backend records
+[NEW] Add context sensitive help to plugin flexforms (TYPO3 4.2+ only)
+[NEW] Add new method setCenterByAddress() to API
+[NEW] New new method addTab() to API, used to add a new tab to a marker
+[NEW] Add title and desc setters for marker objects
+[NEW] Add error messages in the plugins if static templates are missing.
+[NEW] Add hook to pi3 for marker preprocessing
+[NEW] Add sidebar with links to markers
+[NEW] Directions are now shown on the first tab below the content, similar to maps.google.com
+[NEW] Significantly cleaned up javascript output
+[NEW] Add option to set default country for address lookup
+[FIXED] Really large info bubbles are now smaller
+[FIXED] Pass all the marker objects by reference now
+[FIXED] Keep wec_map at the bottom of the ext list for correct TCA inclusion
+[FIXED] Remove dependency on our prototype and use TYPO3's instead.
+[FIXED] Remove unneeded javascript helper methods
+[FIXED] Remove API key from FlexForms and TypoScript; all API key management is done through the Map Domain Manager
+[FIXED] Fixed divide by zero error in batch geocoder
+
+1.3.6
+[FIXED] Regression bug: Filtering the FE Map by usergroup now works correctly if users are in more than one group
+
+1.3.5
+[FIXED] wrong function call in the Batch Geocoder
+
+1.3.4
+[FIXED] Google Geocoder works correctly again
+
+1.3.3
+[FIXED] Filtering the FE Map by usergroup now works correctly if users are in more than one group
+
+1.3.2
+[NEW] Localize Google Maps error messages
+[NEW] Add a conflicting extension
+[FIXED] Bug when addresses are normalized in some places (_cache) and not in others (_backend)
+[FIXED] Incorrect API key usage when geocoding from the backend
+[FIXED] Add more descriptive error message for directions
+[FIXED] Update docs with 
+1.3.1 changelog and fix wrong CSS reference
+[FIXED] Map now zooms properly when only a manual center is given
+
+1.3.1
+[NEW] Add German translation thanks to Christoph Kuhn
+[FIXED] Direction "to here from" were flipped around
+[FIXED] Deleting domains in the API Key Settings works now
+[FIXED] Missing inclusion of the install tool class caused bug in TYPO3 versions < 4.1
+
+1.3.0
+[NEW] Domain management for API keys so the extension can be used on multidomain setups.
+[NEW] Add map controls to the FE User Map in the BE.
+[NEW] Directions are now built into the map, complete with written driving directions.
+[NEW] Add method that adds a marker based on just a table and uid. The address info is taken out of the TCA. See documentation for more details.
+[NEW] If there is only one marker on the map it's now possible to open the info bubble on load.
+[FIXED] potential bug that could cause funky errors due to clearing of cache when it wasn't necessary.
+[FIXED] "cannot redeclare $this" error message in PHP in a TYPO3 hook declaration.
+[FIXED] In some instances the geocoder would override manually changed coordinates.
+[FIXED] Make the map independent of the Prototype JS library. This fixes possible compatibility problems with other JS libraries and saves several hundred kb of files to be loaded.
+[FIXED] Don't include Google's API and other files more than once in the header if there is more than one map on a page.
+[FIXED] Some improvements to the geocoders.
+
+1.2.0
+[NEW] More than one map can now be put on one page.
+!!! To make this possible, the id of the containing div had to be made unique. That means if you used it in your CSS to style the map you will have to change it from the id “map” to the class “tx-wecmap-map”. There is also a way to manually specify the id, see the TS reference for both plugins for more information. !!!
+[NEW] Initial center and zoom level can now be set via TS. See TS reference for more information.
+[FIX] Unescaped quotes causing the map to not show in certain cases
+
+1.1.2
+[FIX] Path error resulting in Prototype not being included properly in the BE
+[FIX] Extension can now be installed globally without errors
+
+1.1.1
+[NEW] Add status indicator image when saving a cache record
+[FIX] Improve rendering of record table with long coordinates
+[FIX] Bug that caused the current cache record's buttons to freeze
+
+1.1.0
+[NEW] Improved WEC Admin Geocode Admin including record filter, inline editing of records, sortable tables columns, speed improvements and overall design improvements, all using AJAX
+[NEW] API now supports tabs for marker info windows. See “Using the WEC Map API” for more information
+[NEW] API and plugins now support directions
+[FIX] Several bugs with geocode status in BE records not saving correctly
+[FIX] Deleted records are no longer geocoded and displayed
+[FIX] Geocode status now shows the right amount of significant digits
+[FIX] Variable name typo causing addresses in the FE User Map Plugin to not be mapped
+
+1.0.1
+[NEW] Add ability to set initial map type
+[NEW] Address fields are now read from the TCA
+[FIX] Some typos in localization
+[FIX] Replace short open tag with full open tag
+[FIX] Progress bar in Batch Geocoder now renders correctly
+
+1.0.0
+Initial release.
