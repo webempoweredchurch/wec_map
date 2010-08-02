@@ -1,4 +1,5 @@
 2.3.6-dev
+[FIX] !!! change defaulttitle to COA to make it more consistent. This will break a customized defaulttitle, so be sure to adjust accordingly. 
 [FIX] Use core content object methods to ensure correct display. This fixes a bug that would display content objects out of order.
 [FIX] Change grey to gray in some inline CSS to appease the CSS validator
 [FIX] Update API section in the docs with all the arguments for the addMarker* methods

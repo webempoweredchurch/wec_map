@@ -42,7 +42,7 @@ class tx_wecmap_shared {
 		require_once(PATH_tslib.'class.tslib_content.php');
 		$local_cObj = t3lib_div::makeInstance('tslib_cObj'); // Local cObj.
 		$local_cObj->start($data, $table );
-		//$output = tx_wecmap_shared::cObjGet($conf, $local_cObj);
+    //$output = tx_wecmap_shared::cObjGet($conf, $local_cObj);
     $output = $local_cObj->cObjGet($conf);
 
 		return $output;
