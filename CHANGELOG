@@ -1,3 +1,6 @@
+2.3.6
+[FIX] Change grey to gray in some inline CSS to appease the CSS validator
+
 2.3.5
 [FIX] German localization fixes.
 [FIX] Custom icons can now be used for Simple Maps that are setup in the Flexform only. 
