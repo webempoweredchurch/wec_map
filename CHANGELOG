@@ -1,4 +1,5 @@
 2.3.6-dev
+[FIX] Use core content object methods to ensure correct display. This fixes a bug that would display content objects out of order.
 [FIX] Change grey to gray in some inline CSS to appease the CSS validator
 [FIX] Update API section in the docs with all the arguments for the addMarker* methods
 
