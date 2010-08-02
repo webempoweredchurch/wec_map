@@ -1,5 +1,6 @@
-2.3.6
+2.3.6-dev
 [FIX] Change grey to gray in some inline CSS to appease the CSS validator
+[FIX] Update API section in the docs with all the arguments for the addMarker* methods
 
 2.3.5
 [FIX] German localization fixes.
