@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -27,8 +27,10 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
-require_once('conf.php'); // Get back path and TYPO3 mod path
-require_once($BACK_PATH. 'init.php');
+// include all the necessary TYPO3 files
+define('TYPO3_MOD_PATH', '../typo3conf/ext/wec_map/mod1/');
+$BACK_PATH='../../../../typo3/';
+require($BACK_PATH. 'init.php');
 require_once('../class.tx_wecmap_cache.php');
 require_once('class.tx_wecmap_recordhandler.php');
 

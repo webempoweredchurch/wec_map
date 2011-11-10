@@ -347,6 +347,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		}
 		$content[] = '</ul>';
 		$content[] = '<script type="text/javascript" src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'typo3/contrib/prototype/prototype.js"></script>';
+
+		$updaterPath = t3lib_extMgm::extRelPath('wec_map') . 'mod1/tx_wecmap_batchgeocode_ai.php';
 		$content[] = '<script type="text/javascript">
 						function startGeocode() {
 							var updater;
@@ -354,7 +356,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 							$(\'startGeocoding\').disable();
 							$(\'status\').setStyle({display: \'block\'});
 
-							updater = new Ajax.PeriodicalUpdater(\'status\', \'tx_wecmap_batchgeocode_ai.php\', { method: \'get\', frequency: 5, decay: 10 });
+							updater = new Ajax.PeriodicalUpdater(\'status\', \'' . $updaterPath . '\', { method: \'get\', frequency: 5, decay: 10 });
 						}
 						</script>';
 

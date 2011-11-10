@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -133,9 +133,10 @@ class tx_wecmap_recordhandler {
 	 **/
 	function getJS() {
 		global $LANG;
+		$recordHandlerPath = t3lib_extMgm::extRelPath('wec_map') . 'mod1/tx_wecmap_recordhandler_ai.php';
 		$js = '<script type="text/javascript" src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL').'typo3/contrib/prototype/prototype.js"></script>'.chr(10).
-			  '<script type="text/javascript" src="../contrib/tablesort/fastinit.js"></script>'.chr(10).
-			  '<script type="text/javascript" src="../contrib/tablesort/tablesort.js"></script>'.chr(10).
+			  '<script type="text/javascript" src="' . $GLOBALS['BACK_PATH'] . '../' . t3lib_extMgm::siteRelPath('wec_map') . 'contrib/tablesort/fastinit.js"></script>'.chr(10).
+			  '<script type="text/javascript" src="' . $GLOBALS['BACK_PATH'] . '../' . t3lib_extMgm::siteRelPath('wec_map') . 'contrib/tablesort/tablesort.js"></script>'.chr(10).
 			  '<script type="text/javascript">
 				SortableTable.setup({ rowEvenClass : \'bgColor-20\', rowOddClass : \'bgColor-10\'})
 
@@ -161,14 +162,14 @@ class tx_wecmap_recordhandler {
 				function resetSearch() {
 					$(\'recordSearchbox\').value = "Filter records...";
 					$(\'resetSearchboxButton\').update();
-					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
+					var addresses = $(\'recordTable\').getElementsBySelector(\'.address\');
 					addresses.each(function(address) { address.parentNode.show()});
 				}
 
 				function filter() {
 					$(\'resetSearchboxButton\').update("<a href=\"#\" onclick=\"resetSearch(); return false;\">&nbsp;Clear</a>");
 					sword = $F(\'recordSearchbox\');
-					var addresses = $(\'recordTable\').getElementsByClassName(\'address\');
+					var addresses = $(\'recordTable\').getElementsBySelector(\'.address\');
 					result = addresses.partition(function(n) {return matches(n, sword)});
 					// updateCount(result[0].size());
 					result[0].each(function(address) { address.parentNode.show()});
@@ -207,14 +208,14 @@ class tx_wecmap_recordhandler {
 				function deleteAll() {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteAll\';
-				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\',
+				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'' . $recordHandlerPath .'\',
 				          {method: \'post\', parameters: pars, onComplete:clearTable});
 				}
 
 				function deleteRecord(id) {
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=deleteSingle&record=\'+id;
-				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\',
+				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'' . $recordHandlerPath .'\',
 				          {method: \'post\', parameters: pars, onComplete:clearRow(id)});
 				}
 
@@ -226,7 +227,7 @@ class tx_wecmap_recordhandler {
 					var links = getSaveCancelLinks(id, latitude.innerHTML, longitude.innerHTML);
 					latitude.update(\'<input class="latForm" type="text" size="17" value="\'+latitude.innerHTML+\'"/>\');
 					longitude.update(\'<input class="longForm" type="text" size="17" value="\'+longitude.innerHTML+\'"/>\');
-					var buttonElement = $(id).getElementsByClassName(\'editButton\');
+					var buttonElement = $(id).getElementsBySelector(\'.editButton\');
 					buttonElement[0].update(links);
 				}
 
@@ -246,24 +247,24 @@ class tx_wecmap_recordhandler {
 				}
 
 				function saveRecord(id) {
-					var longEl = $(id).getElementsByClassName("longForm");
+					var longEl = $(id).getElementsBySelector(".longForm");
 					var longValue = $F(longEl[0]);
-					var lat = $(id).getElementsByClassName(\'latForm\');
+					var lat = $(id).getElementsBySelector(\'.latForm\');
 					var latValue = $F(lat[0]);
-					$(id).getElementsByClassName(\'editButton\')[0].update(\'<img src="../images/aai.gif" />\');
+					$(id).getElementsBySelector(\'.editButton\')[0].update(\'<img src="' . t3lib_extMgm::extRelPath('wec_map') . '/images/aai.gif" />\');
 
 					// Setup the parameters and make the ajax call
 					var pars = \'?cmd=saveRecord&record=\'+id+\'&latitude=\'+latValue+\'&longitude=\'+longValue;
-				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'tx_wecmap_recordhandler_ai.php\',
+				    var myAjax = new Ajax.Updater(\'deleteAllStatus\', \'' . $recordHandlerPath .'\',
 				          {method: \'post\', parameters: pars, onComplete:unEdit(id,longValue,latValue)});
 				}
 
 				function unEdit(id, longVal, lat) {
-					var longitudes = $(id).getElementsByClassName(\'longitude\');
-					var latitudes = $(id).getElementsByClassName(\'latitude\');
+					var longitudes = $(id).getElementsBySelector(\'.longitude\');
+					var latitudes = $(id).getElementsBySelector(\'.latitude\');
 					var longitude = longitudes[0];
 					var latitude = latitudes[0];
-					$(id).getElementsByClassName(\'editButton\')[0].update(getEditLink(id));
+					$(id).getElementsBySelector(\'.editButton\')[0].update(getEditLink(id));
 					longitude.update(longVal);
 					latitude.update(lat);
 				}
@@ -305,7 +306,7 @@ class tx_wecmap_recordhandler {
 					var count = $(\'recordCount\');
 					var number = count.innerHTML;
 					var pars = \'?cmd=updatePagination&page=\'+page+\'&itemsPerPage='. $this->itemsPerPage .'&count=\'+number;
-				    var myAjax = new Ajax.Updater(\'pagination\', \'tx_wecmap_recordhandler_ai.php\',
+				    var myAjax = new Ajax.Updater(\'pagination\', \'' . $recordHandlerPath .'\',
 				          {method: \'post\', parameters: pars});
 				}
 			</script>';
