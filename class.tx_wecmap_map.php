@@ -302,17 +302,19 @@ class tx_wecmap_map {
 
 		if($lat != '' && $long != '') {
 			$group =& $this->addGroup($minzoom, $maxzoom);
-			$classname = t3lib_div::makeInstanceClassname($this->getMarkerClassName());
-			$marker = new $classname($group->getMarkerCount(),
-									  $lat,
-									  $long,
-									  $title,
-									  $description,
-									  $this->prefillAddress,
-	  								  null,
-									  '0xFF0000',
-									  '0xFFFFFF',
-									  $iconID);
+			$marker = t3lib_div::makeInstance(
+							$this->getMarkerClassName(),
+							$group->getMarkerCount(),
+							$lat,
+							$long,
+							$title,
+							$description,
+							$this->prefillAddress,
+							null,
+							'0xFF0000',
+							'0xFFFFFF',
+							$iconID
+						);
 			$group->addMarker($marker);
 			$group->setDirections($this->directions);
 
@@ -411,8 +413,7 @@ class tx_wecmap_map {
 	function &addGroup($minzoom = 1, $maxzoom = '') {
 
 		if(!is_object($this->groups[$minzoom.':'.$maxzoom])) {
-			$groupClass = t3lib_div::makeInstanceClassName('tx_wecmap_markergroup');
-			$group = new $groupClass($this->groupCount, $minzoom, $maxzoom);
+			$group = t3lib_div::makeInstance('tx_wecmap_markergroup', $this->groupCount, $minzoom, $maxzoom);
 			$this->groupCount++;
 			$group->setMapName($this->mapName);
 			$this->groups[$minzoom.':'.$maxzoom] =& $group;

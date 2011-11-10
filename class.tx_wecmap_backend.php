@@ -195,8 +195,7 @@ class tx_wecmap_backend {
 
 		$description = $street.'<br />'.$city.', '.$state.' '.$zip.'<br />'.$country;
 
-		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height);
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google', $apiKey, $width, $height);
 		$map->addMarkerByAddress($street, $city, $state, $zip, $country, '<h1>Address</h1>', $description);
 
 		// add some default controls to the map

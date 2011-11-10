@@ -116,7 +116,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 					script_ended = 1;
 					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
 				</script>';
-			
+
 			$this->doc->inDocStylesArray[] = '
 					.dirmenu a:link, .dirmenu a:visited {
 						text-decoration: underline;
@@ -343,8 +343,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$countryField = tx_wecmap_shared::getAddressField('fe_users', 'country');
 
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className($apiKey, $width, $height);
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google', $apiKey, $width, $height);
 
 		// evaluate map controls based on configuration
 		switch ($mapcontrolsize) {

@@ -197,8 +197,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$count = $count[0]['COUNT(*)'];
 
 		require_once('class.tx_wecmap_recordhandler.php');
-		$recordhandlerClass = t3lib_div::makeInstanceClassname('tx_wecmap_recordhandler');
-		$recordHandler = new $recordhandlerClass($count);
+		$recordHandler = t3lib_div::makeInstance('tx_wecmap_recordhandler', $count);
 
 		global $LANG;
 
@@ -226,8 +225,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 	function apiKeyAdmin() {
 		global $TYPO3_CONF_VARS, $LANG;
 
-		$domainmgrClass = t3lib_div::makeInstanceClassname('tx_wecmap_domainmgr');
-		$domainmgr = new $domainmgrClass();
+		$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
 
 		$blankDomainValue = 'Enter domain....';
 
@@ -328,10 +326,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$content = array();
 
 	 	require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
-		$batchGeocodeClass = t3lib_div::makeInstanceClassname('tx_wecmap_batchgeocode');
-
 		/* Set the geocoding limit to 1 so that we only get the count, rather than actually geocoding addresses */
-		$batchGeocode = new $batchGeocodeClass(1);
+		$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode', 1);
 		$batchGeocode->addAllTables();
 		$batchGeocode->geocode();
 

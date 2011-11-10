@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -76,7 +76,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			// syslog end
 			return $out;
 		}
-		
+
 		// check for WEC Map API static template inclusion
 		if(empty($conf['output']) && !empty($conf['templateIncluded'])) {
 			global $LANG;
@@ -119,7 +119,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 		$googleEarth = $this->pi_getFFvalue($piFlexForm, 'googleEarth', 'mapControls');
 		empty($googleEarth) ? $googleEarth = $conf['controls.']['showGoogleEarth']:null;
-		
+
 		$initialMapType = $this->pi_getFFvalue($piFlexForm, 'initialMapType', 'mapConfig');
 		empty($initialMapType) ? $initialMapType = $conf['initialMapType']:null;
 
@@ -137,11 +137,11 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 		$showRadiusSearch = $this->pi_getFFvalue($piFlexForm, 'showRadiusSearch', 'mapConfig');
 		empty($showRadiusSearch) ? $showRadiusSearch = $conf['showRadiusSearch']:null;
-		
+
 		$showSidebar = $this->pi_getFFvalue($piFlexForm, 'showSidebar', 'mapConfig');
 		empty($showSidebar) ? $showSidebar = $conf['showSidebar']:null;
 		$this->showSidebar = $showSidebar;
-		
+
 		$tables = $this->pi_getFFvalue($piFlexForm, 'tables', 'default');
 		empty($tables) ? $tables = $conf['tables']:null;
 		if (!empty($tables)) $tables = explode(',', $tables);
@@ -156,26 +156,25 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$zoomLevel = $conf['zoomLevel'];
 
 		$maxAutoZoom = $conf['maxAutoZoom'];
-		
+
 		$static = $conf['static.']['enabled'];
 		$staticMode = $conf['static.']['mode'];
-		$staticExtent = $conf['static.']['extent']; 
+		$staticExtent = $conf['static.']['extent'];
 		$staticUrlParam = $conf['static.']['urlParam'];
 		$staticLimit = $conf['static.']['limit'];
-		
+
 		$mapName = $conf['mapName'];
 		if(empty($mapName)) $mapName = 'map'.$this->cObj->data['uid'];
 		$this->mapName = $mapName;
 
 		/* Create the Map object */
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className(null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google', null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
 		// get kml urls for each included record
 		if(!empty($kml)) {
 			$where = 'uid IN ('.$kml.')';
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('url', 'tx_wecmap_external', $where);			
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('url', 'tx_wecmap_external', $where);
 			foreach( $res as $key => $url ) {
 				$link = trim($url['url']);
 				$oldAbs = $GLOBALS['TSFE']->absRefPrefix;
@@ -198,9 +197,9 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		} else if ($mapControlSize == 'zoomonly') {
 			$map->addControl('smallZoom');
 		}
-		
+
 		$map->setMaxAutoZoom($maxAutoZoom);
-				
+
 		if($scale) $map->addControl('scale');
 		if($overviewMap) $map->addControl('overviewMap');
 		if($mapType) $map->addControl('mapType');
@@ -227,7 +226,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				$pZip        = strip_tags(t3lib_div::_POST($mapName.'_zip'));
 				$pCountry    = strip_tags(t3lib_div::_POST($mapName.'_country'));
 				$pKilometers = intval(t3lib_div::_POST($mapName.'_kilometers'));
-				
+
 				$data = array(
 					'street' => $pAddress,
 					'city'	=> $pCity,
@@ -235,43 +234,43 @@ class tx_wecmap_pi3 extends tslib_pibase {
 					'zip' => $pZip,
 					'country' => $pCountry
 				);
-				
+
 				$desc = tx_wecmap_shared::render($data, $conf['defaultdescription.']);
 				$map->addMarkerIcon($conf['homeicon.']);
 				$map->addMarkerByAddress($pAddress, $pCity, $pState, $pZip, $pCountry, '', $desc ,0 , 17, 'homeicon');
 				$map->setCenterByAddress($pAddress, $pCity, $pState, $pZip, $pCountry);
 				$map->setRadius($pRadius, $pKilometers);
-				
+
 			}
 		}
-		
+
 		// there are two ways of buiding the SQL query:
 		// 1. from the data given via flexform
 		// 2. all manually from TS
 		// So we check whether it's set via TS, and if not we use FF data
 		if(empty($conf['tables.'])) {
-			
+
 			foreach( $tables as $table ) {
-				
+
 				if(!empty($pid)) {
 					$where = '1=1' . tx_wecmap_shared::listQueryFromCSV('pid', $pid, $table, 'OR');
 				} else {
 					$where = '1=1';
 				}
-				
+
 				$where .= $this->cObj->enableFields($table);
-				
+
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', $table, $where);
 
 				foreach( $res as $key => $data ) {
 					$conf['table'] = $table;
-					
+
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($conf, $data);
 					$data['info_title'] = $title;
 					$data['info_description'] = $desc;
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc);
-					
+
 					// build parameters to pass to the hook
 					$params = array('table' => $table, 'data' => $data, 'markerObj' => &$marker);
 					$this->processHook($params);
@@ -285,23 +284,23 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				$select = $tconf['select'];
 				$table = $tconf['table'];
 				$join  = $tconf['join'];
-				
+
 				if(!empty($tconf['where'])) {
 					$where = $this->cObj->stdWrap($tconf['where'], $tconf['where.']);
 				} else {
 					$where = '1=1';
 				}
-				
+
 				if($join) {
 					$from = $table.' '.$join;
 				} else {
 					$from = $table;
 				}
-				
+
 				if(empty($select)) {
 					$select = '*';
 				}
-				
+
 				$where .= $this->cObj->enableFields($table);
 
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($select, $from, $where);
@@ -309,16 +308,16 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				// add icon if configured, else see if we just have an iconID
 				// and use that. We assume the icon is added somewhere else.
 				if(!empty($tconf['icon.']['imagepath'])) {
-					$map->addMarkerIcon($tconf['icon.']);			
+					$map->addMarkerIcon($tconf['icon.']);
 				} else {
 					$tconf['icon.']['iconID'] ? null : $tconf['icon.']['iconID'] = null;
 				}
-				
+
 				foreach( $res as $key => $data ) {
 					// get title and description
 					list($title,$desc) = $this->getTitleAndDescription($tconf, $data);
 					$data['info_title'] = $title;
-					$data['info_description'] = $desc;	
+					$data['info_description'] = $desc;
 					$marker = $map->addMarkerByTCA($table, $data['uid'], $title, $desc, 0, 17, $tconf['icon.']['iconID']);
 
 					// build parameters to pass to the hook
@@ -329,7 +328,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 				}
 			}
 		}
-		
+
 		// $map->addKML('http://kml.lover.googlepages.com/my-vacation-photos.kml');
 		// gather all the content together
 		$content = array();
@@ -343,7 +342,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 
 		return $this->pi_wrapInBaseClass($output);
 	}
-	
+
 	/**
 	 * Processes the hook
 	 *
@@ -363,7 +362,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			}
 		}
 	}
-	
+
 	/**
 	 * returns an array with title and description
 	 *
@@ -394,12 +393,12 @@ class tx_wecmap_pi3 extends tslib_pibase {
 			$ad['zip']     = $data[tx_wecmap_shared::getAddressField($conf['table'], 'zip')];
 			$ad['country'] = $data[tx_wecmap_shared::getAddressField($conf['table'], 'country')];
 
-			$desc = tx_wecmap_shared::render($ad, $this->conf['defaultdescription.'], $conf['table']);						
+			$desc = tx_wecmap_shared::render($ad, $this->conf['defaultdescription.'], $conf['table']);
 		}
 
 		return array($title, $desc);
 	}
-	
+
 	function getRecordTitle($table,$row) {
 		global $TCA;
 
@@ -435,17 +434,17 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		return $t;
 		}
 	}
-	
+
 	function getAddressForm() {
 		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['addressForm.']);
 		return $out;
 	}
-	
+
 	function getDirections() {
 		$out = tx_wecmap_shared::render(array('map_id' => $this->mapName), $this->conf['directions.']);
 		return $out;
 	}
-	
+
 	/**
 	 * adds a sidebar item corresponding to the given marker.
 	 * Does so only if the sidebar is enabled.
@@ -457,7 +456,7 @@ class tx_wecmap_pi3 extends tslib_pibase {
 		$data['onclickLink'] = $marker->getClickJS();
 		$this->sidebarLinks[] = tx_wecmap_shared::render($data, $this->conf['sidebarItem.']);
 	}
-	
+
 	function getSidebar() {
 		if(empty($this->sidebarLinks)) return null;
 		$c = '';

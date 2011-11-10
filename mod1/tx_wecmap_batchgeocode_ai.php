@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -35,8 +35,7 @@ require_once(t3lib_extMgm::extPath('wec_map').'mod1/class.tx_wecmap_batchgeocode
 
 // create an instance of our batch geocode class
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_batchgeocode.php');
-$batchGeocodeClass = t3lib_div::makeInstanceClassname('tx_wecmap_batchgeocode');
-$batchGeocode = new $batchGeocodeClass();
+$batchGeocode = t3lib_div::makeInstance('tx_wecmap_batchgeocode');
 
 // add all tables to check which ones need geocoding and do it
 $batchGeocode->addAllTables();

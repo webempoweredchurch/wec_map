@@ -6,7 +6,7 @@
 * All rights reserved
 *
 * This file is part of the Web-Empowered Church (WEC)
-* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries 
+* (http://WebEmpoweredChurch.org) ministry of Christian Technology Ministries
 * International (http://CTMIinc.org). The WEC is developing TYPO3-based
 * (http://typo3.org) free software for churches around the world. Our desire
 * is to use the Internet to help offer new life through Jesus Christ. Please
@@ -41,29 +41,28 @@ class tx_wecmap_autozoom_testcase extends tx_phpunit_testcase {
 	public function test_default_max_auto_zoom_is_15() {
 		$map = $this->createMap();
 		$map->autoCenterAndZoom();
-				
+
 		$this->assertEquals(15, $map->zoom);
 	}
-	
+
 	public function test_max_auto_zoom_setter_with_7() {
 		$map = $this->createMap();
 		$map->setMaxAutoZoom(7);
 		$map->autoCenterAndZoom();
-		
+
 		$this->assertEquals(7, $map->zoom);
 	}
-	
+
 	public function test_max_auto_zoom_is_15_if_setter_empty() {
 		$map = $this->createMap();
 		$map->setMaxAutoZoom();
 		$map->autoCenterAndZoom();
 		$this->assertEquals(15, $map->zoom);
 	}
-	
+
 	public function createMap() {
 		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$className=t3lib_div::makeInstanceClassName('tx_wecmap_map_google');
-		$map = new $className(null, 500, 500, 39.842286, -96.855469, null,'name');
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google', null, 500, 500, 39.842286, -96.855469, null,'name');
 		$map->addMarkerByLatLong(39.842286,-96.855469);
 		return $map;
 	}
