@@ -196,7 +196,7 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$count 	= $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('COUNT(*)', 'tx_wecmap_cache','');
 		$count = $count[0]['COUNT(*)'];
 
-		require_once('class.tx_wecmap_recordhandler.php');
+		require_once(t3lib_extMgm::extPath('wec_map') . 'mod1/class.tx_wecmap_recordhandler.php');
 		$recordHandler = t3lib_div::makeInstance('tx_wecmap_recordhandler', $count);
 
 		global $LANG;
