@@ -85,7 +85,7 @@ class tx_wecmap_markergroup {
 			}
 		}
 		if (count($jsContent)) {
-			$jsContent[] = 'WecMap.addMarkersToManager("' . $this->mapName .'", ' . $this->id . ', ' . $this->minzoom . ', ' . $this->maxzoom . ');';
+			$jsContent[] = '// WecMap.addMarkersToManager("' . $this->mapName .'", ' . $this->id . ', ' . $this->minzoom . ', ' . $this->maxzoom . ');  // not implemented';
 		}
 		return $jsContent;
 	}

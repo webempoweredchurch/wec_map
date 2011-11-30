@@ -81,11 +81,10 @@ tx_wecmap_api {
 	}
 	
 	# config for title
-  defaulttitle = COA
 	defaulttitle {
-		10 = TEXT
-		10.field = name
-		10.wrap = <div class="infotitle">|</div>
+		title = TEXT
+		title.field = name
+		title.wrap = <div class="infotitle">|</div>
 	}
 	
 	# config for description
@@ -118,5 +117,10 @@ tx_wecmap_api {
 		.tx-wecmap_map .sidebar {display:block; overflow: auto;}
 		.tx-wecmap-map .startendaddress {display: block; color: grey; font-size: 85%;}
 		.tx-wecmap-map .infotitle { font-weight: bold; font-size: 110%;}
+		.tx-wecmap-map #copyright-control a:link,
+		.tx-wecmap-map #copyright-control a:visited,
+		.tx-wecmap-map #copyright-control a:focus,
+		.tx-wecmap-map #copyright-control a:hover,
+		.tx-wecmap-map #copyright-control a:active { color: #7878CC; }
 	)
 }

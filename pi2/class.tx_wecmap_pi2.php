@@ -171,8 +171,8 @@ class tx_wecmap_pi2 extends tslib_pibase {
 
 
 		/* Create the Map object */
-		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$map = t3lib_div::makeInstance('tx_wecmap_map_google', null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google_v3/class.tx_wecmap_map_google_v3.php');
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google_v3', null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
 		// get kml urls for each included record
 		if(!empty($kml)) {

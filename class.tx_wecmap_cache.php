@@ -92,6 +92,8 @@ class tx_wecmap_cache {
 
 				/* Insert the lat/long into the cache.  */
 				tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $latlong['lat'], $latlong['long']);
+				$latlong['lat'] = trim($latlong['lat'],'0');
+				$latlong['long'] = trim($latlong['long'],'0');
 			}
 
 			/* Return the lat/long, either from cache table for from fresh lookup */

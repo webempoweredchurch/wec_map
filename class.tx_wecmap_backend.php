@@ -29,7 +29,7 @@
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_map.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_cache.php');
-require_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
+require_once(t3lib_extMgm::extPath('wec_map').'map_service/google_v3/class.tx_wecmap_map_google_v3.php');
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_shared.php');
 
 /**
@@ -195,7 +195,7 @@ class tx_wecmap_backend {
 
 		$description = $street.'<br />'.$city.', '.$state.' '.$zip.'<br />'.$country;
 
-		$map = t3lib_div::makeInstance('tx_wecmap_map_google', $apiKey, $width, $height);
+		$map = t3lib_div::makeInstance( 'tx_wecmap_map_google_v3', $apiKey, $width, $height);
 		$map->addMarkerByAddress($street, $city, $state, $zip, $country, '<h1>Address</h1>', $description);
 
 		// add some default controls to the map

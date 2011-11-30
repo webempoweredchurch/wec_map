@@ -34,6 +34,10 @@
       <label index="radius">Radius: </label>
       <label index="unit">Unit: </label>
       <label index="endaddress">End Address</label>
+      <label index="OSM">OSM</label>
+      <label index="OSM-alt">OpenStreetmap layer</label>
+      <label index="OSM-bike">OSM-bike</label>
+      <label index="OSM-bike-alt">OpenCycleMap layer</label>
       <label index="pi1TemplateNotIncluded">
           <![CDATA[
           <p>Please include the WEC Simple Map static template on your page.</p>
@@ -82,6 +86,8 @@
       <label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
       <label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
       <label index="tt_content.pi_flexform.typePhysical">Terrain</label>
+      <label index="tt_content.pi_flexform.typeOSM">OpenStreetMap</label>
+      <label index="tt_content.pi_flexform.typeOCM">OpenCycleMap</label>
       <label index="tt_content.pi_flexform.tables">Tables to map data from</label>
       <label index="tt_content.pi_flexform.showDirs">Show Directions</label>
       <label index="tt_content.pi_flexform.showInfoOnLoad">Show Info Bubble On Load</label>
@@ -98,6 +104,10 @@
       <label index="fromHereTo">Von hier</label>
       <label index="startaddress">Start Adresse</label>
       <label index="endaddress">Ziel Adresse</label>
+      <label index="OSM">OSM</label>
+      <label index="OSM-bike">OSM-Rad</label>
+      <label index="OSM-alt">OpenStreetmap Layer</label>
+      <label index="OSM-bike-alt">OpenCycleMap Layer</label>
       <label index="geocodeFailed">Geocoding fehlgeschlagen.</label>
       <label index="geocodeNoAddress">Kann die Längen- und Breitengrade nicht ermitteln. Bitte eine Adresse eintragen und speichern.</label>
       <label index="geocodeNotPerformed">Geocoding wurde für diese Adresse noch nicht durchgeführt.</label>
@@ -142,6 +152,8 @@
       <label index="tt_content.pi_flexform.typeHybrid">Hybrid</label>
       <label index="tt_content.pi_flexform.typeNormal">Normal</label>
       <label index="tt_content.pi_flexform.typeSatellite">Satellit</label>
+      <label index="tt_content.pi_flexform.typeOSM">OpenStreetMap</label>
+      <label index="tt_content.pi_flexform.typeOCM">OpenCycleMap</label>
       <label index="tt_content.pi_flexform.userGroup">Nach FE Benutzergruppe filtern (standardmässig alle angezeigt)</label>
       <label index="tt_content.pi_flexform.zip">PLZ</label>
       <label index="tx_wecmap_external.title">Title</label>
@@ -199,6 +211,10 @@
       <label index="radius">Rayon</label>
       <label index="unit">Unité:</label>
       <label index="endaddress">Lieu d'arrivée</label>
+      <label index="OSM">OSM</label>
+      <label index="OSM-bike">OSM-bike</label>
+      <label index="OSM-alt">OpenStreetmap layer</label>
+      <label index="OSM-bike-alt">OpenCycleMap layer</label>
       <label index="pi1TemplateNotIncluded">Please include the WEC Simple Map static template on your page.</label>
       <label index="pi2TemplateNotIncluded">Please include the WEC Frontend User Map static template on your page.</label>
       <label index="pi3TemplateNotIncluded">Please include the WEC Table Map static template on your page.</label>
@@ -231,6 +247,8 @@
       <label index="tt_content.pi_flexform.typeSatellite">Satellite</label>
       <label index="tt_content.pi_flexform.typeHybrid">Hybride</label>
       <label index="tt_content.pi_flexform.typePhysical">Terrain</label>
+      <label index="tt_content.pi_flexform.typeOSM">OpenStreetMap</label>
+      <label index="tt_content.pi_flexform.typeOCM">OpenCycleMap</label>
       <label index="tt_content.pi_flexform.tables">Table sur laquelle puiser les données</label>
       <label index="tt_content.pi_flexform.showDirs">Afficher les directions</label>
       <label index="tt_content.pi_flexform.showInfoOnLoad">Afficher l'info bulle automatiquement</label>

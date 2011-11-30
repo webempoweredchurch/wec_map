@@ -342,8 +342,8 @@ class  tx_wecmap_module1 extends t3lib_SCbase {
 		$zipField     = tx_wecmap_shared::getAddressField('fe_users', 'zip');
 		$countryField = tx_wecmap_shared::getAddressField('fe_users', 'country');
 
-		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$map = t3lib_div::makeInstance('tx_wecmap_map_google', $apiKey, $width, $height);
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google_v3/class.tx_wecmap_map_google_v3.php');
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google_v3', $apiKey, $width, $height);
 
 		// evaluate map controls based on configuration
 		switch ($mapcontrolsize) {

@@ -64,17 +64,18 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 			$domainmgr = t3lib_div::makeInstance('tx_wecmap_domainmgr');
 			$key = $domainmgr->getKey();
 		}
-		$lookupstr = trim($street.' '.$city.', '.$state.' '.$zip.', '.$country);
+		// $lookupstr = trim($street.' '.$city.', '.$state.' '.$zip.', '.$country);
+        $lookupstr = utf8_encode( trim($street.','.$zip.' '.$city.','.$country) );
 		$url = 'http://maps.google.com/maps/geo?'.
 				$this->buildURL('q', $lookupstr).
 				$this->buildURL('output', 'csv').
 				$this->buildURL('key', $key);
 
 		$csv = t3lib_div::getURL($url);
-
 		$latlong = array();
 		$csv = explode(',', $csv);
-		if(TYPO3_DLOG) {
+		if(TYPO3_DLOG)
+		{
 			$addressArray = array(
 				'street' => $street,
 				'city' => $city,
@@ -82,7 +83,7 @@ class tx_wecmap_geocode_google extends t3lib_svbase {
 				'zip' => $zip,
 				'country' => $country,
 			);
-			$addressString = $street.', '.$city.', '.$state.' '.$zip.', '.$country;
+			$addressString = $url;
 		}
 
 		switch($csv[0]) {

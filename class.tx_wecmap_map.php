@@ -220,17 +220,20 @@ class tx_wecmap_map {
 		$maxLong = -360;
 
 		/* Find min and max zoom lat and long */
-		foreach($this->groups as $key => $group) {
-			foreach( $group->markers as $marker ) {
-				if ($marker->getLatitude() < $minLat)
-					$minLat = $marker->getLatitude();
-				if ($marker->getLatitude() > $maxLat)
-					$maxLat = $marker->getLatitude();
+		if ( is_array( $this->groups ) )
+		{
+			foreach($this->groups as $key => $group) {
+				foreach( $group->markers as $marker ) {
+					if ($marker->getLatitude() < $minLat)
+						$minLat = $marker->getLatitude();
+					if ($marker->getLatitude() > $maxLat)
+						$maxLat = $marker->getLatitude();
 
-				if ($marker->getLongitude() < $minLong)
-					$minLong = $marker->getLongitude();
-				if ($marker->getLongitude() > $maxLong)
-					$maxLong = $marker->getLongitude();
+					if ($marker->getLongitude() < $minLong)
+						$minLong = $marker->getLongitude();
+					if ($marker->getLongitude() > $maxLong)
+						$maxLong = $marker->getLongitude();
+				}
 			}
 		}
 
@@ -303,18 +306,17 @@ class tx_wecmap_map {
 		if($lat != '' && $long != '') {
 			$group =& $this->addGroup($minzoom, $maxzoom);
 			$marker = t3lib_div::makeInstance(
-							$this->getMarkerClassName(),
-							$group->getMarkerCount(),
-							$lat,
-							$long,
-							$title,
-							$description,
-							$this->prefillAddress,
-							null,
-							'0xFF0000',
-							'0xFFFFFF',
-							$iconID
-						);
+			                          $this->getMarkerClassName(),
+			                          $group->getMarkerCount(),
+									  $lat,
+									  $long,
+									  $title,
+									  $description,
+									  $this->prefillAddress,
+	  								  null,
+									  '0xFF0000',
+									  '0xFFFFFF',
+									  $iconID);
 			$group->addMarker($marker);
 			$group->setDirections($this->directions);
 

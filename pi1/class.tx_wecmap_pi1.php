@@ -167,8 +167,8 @@ class tx_wecmap_pi1 extends tslib_pibase {
 		$description = $this->pi_getFFvalue($piFlexForm, 'description', 'default');
 
 		/* Create the map class and add markers to the map */
-		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google/class.tx_wecmap_map_google.php');
-		$map = t3lib_div::makeInstance('tx_wecmap_map_google', null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
+		include_once(t3lib_extMgm::extPath('wec_map').'map_service/google_v3/class.tx_wecmap_map_google_v3.php');
+		$map = t3lib_div::makeInstance('tx_wecmap_map_google_v3', null, $width, $height, $centerLat, $centerLong, $zoomLevel, $mapName);
 
 		// evaluate config to see which map controls we need to show
 		if($mapControlSize == 'large') {
