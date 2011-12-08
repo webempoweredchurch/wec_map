@@ -81,10 +81,11 @@ tx_wecmap_api {
 	}
 	
 	# config for title
+  defaulttitle = COA
 	defaulttitle {
-		title = TEXT
-		title.field = name
-		title.wrap = <div class="infotitle">|</div>
+		10 = TEXT
+		10.field = name
+		10.wrap = <div class="infotitle">|</div>
 	}
 	
 	# config for description

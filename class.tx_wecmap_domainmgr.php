@@ -27,7 +27,7 @@
 * This copyright notice MUST APPEAR in all copies of the file!
 ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('wec_map', 'class.tx_wecmap_backend.php'));
+require_once(t3lib_extMgm::extPath('wec_map') . 'class.tx_wecmap_backend.php');
 require_once(PATH_t3lib . 'class.t3lib_install.php');
 
 /**

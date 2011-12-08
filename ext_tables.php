@@ -3,11 +3,11 @@ if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
 require_once(t3lib_extMgm::extPath('wec_map').'class.tx_wecmap_backend.php');
 
-if (TYPO3_MODE=='BE')    {       
+if (TYPO3_MODE=='BE')    {
 	/* Add the backend modules */
     t3lib_extMgm::addModule('tools','txwecmapM1',"",t3lib_extMgm::extPath($_EXTKEY).'mod1/');
     t3lib_extMgm::addModule('tools','txwecmapM2',"",t3lib_extMgm::extPath($_EXTKEY).'mod2/');
-	
+
 	/* Add the plugin to the New Content Element wizard */
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_wecmap_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_wecmap_pi1_wizicon.php';
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_wecmap_pi2_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi2/class.tx_wecmap_pi2_wizicon.php';
@@ -51,7 +51,7 @@ $TCA["tx_wecmap_external"] = Array (
 		"fe_admin_fieldList" => "title, url",
 	)
 );
-t3lib_extMgm::allowTableOnStandardPages('tx_wecmap_external'); 
+t3lib_extMgm::allowTableOnStandardPages('tx_wecmap_external');
 
 
 /* Define the address related fields for a frontend user */
@@ -97,9 +97,9 @@ if(t3lib_extMgm::isLoaded('tt_address')) {
 /* If we want to show a map in frontend user records, add it to the TCA */
 if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 	$mapTCA = array (
-		'tx_wecmap_map' => array (		
-			'exclude' => 1,		
-			'label' => 'LLL:EXT:wec_map/locallang_db.xml:berecord_maplabel',		
+		'tx_wecmap_map' => array (
+			'exclude' => 1,
+			'label' => 'LLL:EXT:wec_map/locallang_db.xml:berecord_maplabel',
 			'config' => array (
 				'type' => 'passthrough',
 				'form_type' => 'user',
@@ -107,7 +107,7 @@ if(tx_wecmap_backend::getExtConf('feUserRecordMap')) {
 			),
 		),
 	);
-		
+
 	t3lib_extMgm::addTCAcolumns('fe_users', $mapTCA, 1);
 	$TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_map';
 	t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;LLL:EXT:wec_map/locallang_db.xml:berecord_maplabel,tx_wecmap_map');
@@ -127,10 +127,10 @@ if(tx_wecmap_backend::getExtConf('geocodingStatus')) {
 			),
 		),
 	);
-	
+
 	t3lib_extMgm::addTCAcolumns('fe_users', $geocodeTCA, 1);
 	$TCA['fe_users']['interface']['showRecordFieldList'] .= ',tx_wecmap_geocode';
-	t3lib_extMgm::addToAllTCAtypes('fe_users', 'tx_wecmap_geocode');	
+	t3lib_extMgm::addToAllTCAtypes('fe_users', 'tx_wecmap_geocode');
 }
 
 ?>

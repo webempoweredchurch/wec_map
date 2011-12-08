@@ -66,12 +66,12 @@ function makePagination($page, $count, $itemsPerPage) {
 	if($page !== 1) {
 		$content[] = '<a href="?page='. ($page-1) .'">Previous</a>';
 	} else {
-		$content[] = '<span style="color: grey;">Previous</span>';
+		$content[] = '<span style="color: gray;">Previous</span>';
 	}
 
 	for ( $i=0; $i < $pages; $i++ ) {
 		if($page == ($i+1)) {
-			$content[] = '<span style="color: grey;">'.($i+1).'</span>';
+			$content[] = '<span style="color: gray;">'.($i+1).'</span>';
 		} else {
 			$content[] = '<a href="?page='. ($i+1) .'">'. ($i+1) .'</a>';
 		}
@@ -80,7 +80,7 @@ function makePagination($page, $count, $itemsPerPage) {
 	if($page !== $pages) {
 		$content[] = '<a href="?page='. ($page+1) .'">Next</a>';
 	} else {
-		$content[] = '<span style="color: grey;">Next</span>';
+		$content[] = '<span style="color: gray;">Next</span>';
 	}
 
 	$content[] = '</div>';

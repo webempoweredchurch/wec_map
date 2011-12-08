@@ -255,7 +255,6 @@ class tx_wecmap_map_google extends tx_wecmap_map {
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map'] = '<script src="' . $jsFile . '" type="text/javascript"></script>';
 			} else {
 				$htmlContent .= '<script src="'.$apiURL.'" type="text/javascript"></script>';
-#				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 				$htmlContent .= '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile . '" type="text/javascript"></script>';
 			}
 
