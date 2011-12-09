@@ -280,7 +280,8 @@ class tx_wecmap_map_google_v3 extends tx_wecmap_map {
 			$jsContent[] = $this->js_drawMapStart();
 //			$jsContent[] = $this->js_newGDirections();
 			$jsContent[] = $this->js_setCenter($this->lat, $this->long, $this->zoom, $this->type);
-			$jsContent = array_merge($jsContent, $this->controls);
+			if ( is_array( $this->controls ) )
+				$jsContent = array_merge($jsContent, $this->controls);
 			$jsContent[] = $this->js_icons();
 			if ( is_array( $this->groups ) )
 			{
