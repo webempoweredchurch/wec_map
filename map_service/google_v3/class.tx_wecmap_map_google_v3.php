@@ -291,7 +291,9 @@ class tx_wecmap_map_google_v3 extends tx_wecmap_map {
 						t3lib_div::devLog($this->mapName.': adding '. $group->getMarkerCount() .' markers from group '.$group->id, 'wec_map_api');
 					}
 					// devlog end
-					$jsContent = array_merge($jsContent, $group->drawMarkerJS());
+					$jsMarker = $group->drawMarkerJS();
+					if ( is_array( $jsMarker ) )
+						$jsContent = array_merge($jsContent, $jsMarker);
 					$jsContent[] = '';
 				}
 			}
