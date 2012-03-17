@@ -67,11 +67,7 @@ class tx_wecmap_geocode_google_v3 extends t3lib_svbase {
 			// format address for Google search based on local address-format for given $country
 
 			// load and init Static Info Tables
-			require_once(t3lib_extMgm::extPath('static_info_tables').'pi1/class.tx_staticinfotables_pi1.php');
-			$this->staticInfoObj = &t3lib_div::getUserObj('&tx_staticinfotables_pi1');
-			if ($this->staticInfoObj->needsInit()){
-				$this->staticInfoObj->init();
-			}
+			require_once(t3lib_extMgm::extPath('static_info_tables').'class.tx_staticinfotables_div.php');
 
 			// convert $country to ISO3
 			$countryCodeType = tx_staticinfotables_div::isoCodeType($country);
@@ -93,7 +89,7 @@ class tx_wecmap_geocode_google_v3 extends t3lib_svbase {
 				$country = $countryArray[0]['cn_iso_3'];
 
 			// format address accordingly
-			$addressString = $this->staticInfoObj->formatAddress(',', $street, $city, $zip, $state, $country);  // $country: alpha-3 ISO-code (e. g. DEU)
+			$addressString = $this->formatAddress(',', $street, $city, $zip, $state, $country);  // $country: alpha-3 ISO-code (e. g. DEU)
 			if(TYPO3_DLOG) {
 				t3lib_div::devLog('Google V3: AddressString: '.$addressString, 'wec_map_geocode', -1, array( street => $street, city => $city, zip => $zip, state => $state, country => $country) );
 			}
@@ -109,8 +105,8 @@ class tx_wecmap_geocode_google_v3 extends t3lib_svbase {
 		// build URL
 		$lookupstr = trim( $addressString );
 	  	# Google requires utf-8; convert query if neccessary
-	  	if ( $GLOBALS['TSFE']->renderCharset != 'utf-8' )
-    		$lookupstr = utf8_encode( $lookupstr );
+//	  	if ( $GLOBALS['TSFE']->renderCharset != 'utf-8' )
+//    		$lookupstr = utf8_encode( $lookupstr );
 
 		$url = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&address=' . urlencode( $lookupstr );
 
@@ -185,6 +181,95 @@ class tx_wecmap_geocode_google_v3 extends t3lib_svbase {
 
 		return $latlong;
 	}
+
+
+	/**
+	 * Formatting an address in the format specified
+	 *
+	 * @param	string		A delimiter for the fields of the returned address
+	 * @param	string		A street address
+	 * @param	string		A city
+	 * @param	string		A country subdivision code (zn_code)
+	 * @param	string		A ISO alpha-3 country code (cn_iso_3)
+	 * @param	string		A zip code
+	 * @return	string		The formated address using the country address format (cn_address_format)
+	 */
+	function formatAddress ($delim, $streetAddress, $city, $zip, $subdivisionCode='', $countryCode='')	{
+
+		if(TYPO3_MODE == 'FE')
+		{
+			require_once(t3lib_extMgm::extPath('static_info_tables').'pi1/class.tx_staticinfotables_pi1.php');
+			$staticInfoObj = &t3lib_div::getUserObj('&tx_staticinfotables_pi1');
+			if ($staticInfoObj->needsInit())
+				$staticInfoObj->init();
+			return $staticInfoObj->formatAddress($delim, $streetAddress, $city, $zip, $subdivisionCode, $countryCode);
+		}
+
+		$conf = $this->loadTypoScriptForBEModule('static_info_tables');
+
+		global $TYPO3_DB;
+
+		$formatedAddress = '';
+		$countryCode = ($countryCode ? trim($countryCode) : $this->defaultCountry);
+		$subdivisionCode = ($subdivisionCode ? trim($subdivisionCode) : ($countryCode == $this->defaultCountry ? $this->defaultCountryZone : ''));
+
+		// Get country name
+//		$countryName = $this->getStaticInfoName('COUNTRIES', $countryCode);
+		$countryName = tx_staticinfotables_div::getTitleFromIsoCode('static_countries', $countryCode, '', FALSE);
+		if (!$countryName) {
+			return $formatedAddress;
+		}
+
+			// Get address format
+		$res = $TYPO3_DB->exec_SELECTquery(
+			'cn_address_format',
+			'static_countries',
+			'cn_iso_3='.$TYPO3_DB->fullQuoteStr($countryCode,'static_countries')
+		);
+		$row = $TYPO3_DB->sql_fetch_assoc($res);
+		$TYPO3_DB->sql_free_result($res);
+		$addressFormat = $row['cn_address_format'];
+
+			// Get country subdivision name
+//		$countrySubdivisionName = $this->getStaticInfoName('SUBDIVISIONS', $subdivisionCode, $countryCode);
+		$countrySubdivisionName = tx_staticinfotables_div::getTitleFromIsoCode('static_country_zones', $subdivisionCode, $countryCode, FALSE);
+
+		// Format the address
+		$formatedAddress = $conf['addressFormat.'][$addressFormat];
+		$formatedAddress = str_replace('%street', $streetAddress, $formatedAddress);
+		$formatedAddress = str_replace('%city', $city, $formatedAddress);
+		$formatedAddress = str_replace('%zip', $zip, $formatedAddress);
+		$formatedAddress = str_replace('%countrySubdivisionCode', $subdivisionCode, $formatedAddress);
+		$formatedAddress = str_replace('%countrySubdivisionName', $countrySubdivisionName, $formatedAddress);
+		$formatedAddress = str_replace('%countryName', strtoupper($countryName), $formatedAddress);
+		$formatedAddress = implode($delim, t3lib_div::trimExplode(';', $formatedAddress, 1));
+
+		return $formatedAddress;
+	}
+
+
+	/**
+	 * Loads the TypoScript for the given extension prefix, e.g. tx_cspuppyfunctions_pi1, for use in a backend module.
+	 *
+	 * @param string $extKey
+	 * @return array
+	 */
+	function loadTypoScriptForBEModule($extKey) {
+		require_once(PATH_t3lib . 'class.t3lib_page.php');
+		require_once(PATH_t3lib . 'class.t3lib_tstemplate.php');
+		require_once(PATH_t3lib . 'class.t3lib_tsparser_ext.php');
+		list($page) = t3lib_BEfunc::getRecordsByField('pages', 'pid', 0);
+		$pageUid = intval($page['uid']);
+		$sysPageObj = t3lib_div::makeInstance('t3lib_pageSelect');
+		$rootLine = $sysPageObj->getRootLine($pageUid);
+		$TSObj = t3lib_div::makeInstance('t3lib_tsparser_ext');
+		$TSObj->tt_track = 0;
+		$TSObj->init();
+		$TSObj->runThroughTemplates($rootLine);
+		$TSObj->generateConfig();
+		return $TSObj->setup['plugin.'][$extKey . '.'];
+	}
+
 }
 
 
