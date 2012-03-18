@@ -91,7 +91,7 @@ class tx_wecmap_geocode_google_v3 extends t3lib_svbase {
 			// format address accordingly
 			$addressString = $this->formatAddress(',', $street, $city, $zip, $state, $country);  // $country: alpha-3 ISO-code (e. g. DEU)
 			if(TYPO3_DLOG) {
-				t3lib_div::devLog('Google V3: AddressString: '.$addressString, 'wec_map_geocode', -1, array( street => $street, city => $city, zip => $zip, state => $state, country => $country) );
+				t3lib_div::devLog('Google V3 addressString', 'wec_map_geocode', -1, array( street => $street, city => $city, zip => $zip, state => $state, country => $country, addressString => $addressString ) );
 			}
 			if ( !$addressString )
 				return array();
@@ -205,7 +205,7 @@ class tx_wecmap_geocode_google_v3 extends t3lib_svbase {
 			return $staticInfoObj->formatAddress($delim, $streetAddress, $city, $zip, $subdivisionCode, $countryCode);
 		}
 
-		$conf = $this->loadTypoScriptForBEModule('static_info_tables');
+		$conf = $this->loadTypoScriptForBEModule('tx_staticinfotables_pi1');
 
 		global $TYPO3_DB;
 
