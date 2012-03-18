@@ -137,11 +137,11 @@ class tx_wecmap_backend {
 		}
 
 		/* Grab the lat and long that were posted */
-		$newlat = t3lib_div::_GP('lat');
-		$newlong = t3lib_div::_GP('long');
+		$newlat = t3lib_div::_GP('wec_map_lat');
+		$newlong = t3lib_div::_GP('wec_map_long');
 
-		$origlat = t3lib_div::_GP('original_lat');
-		$origlong = t3lib_div::_GP('original_long');
+		$origlat = t3lib_div::_GP('wec_map_original_lat');
+		$origlong = t3lib_div::_GP('wec_map_original_long');
 
 		/* If the new lat/long are empty, delete our cached entry */
 		if (empty($newlat) && empty($newlong) && !empty($origlat) && !empty($origlong)) {
@@ -149,7 +149,7 @@ class tx_wecmap_backend {
 		}
 
 		/* If the lat/long changed, then insert a new entry into the cache or update it. */
-		if((($newlat != $origlat) or ($newlong != $origlong)) and (!empty($newlat) && !empty($newlong))) {
+		if((($newlat != $origlat) or ($newlong != $origlong)) and (!empty($newlat) && !empty($newlong)) and (is_numeric($newlat) && is_numeric($newlong))) {
 			tx_wecmap_cache::insert($street, $city, $state, $zip, $country, $newlat, $newlong);
 		}
 
@@ -169,10 +169,10 @@ class tx_wecmap_backend {
 				break;
 		}
 
-		$form = '<label for="lat">'.$LANG->getLL('latitude').'</label> <input name="lat" value="'.$latlong['lat'].'" />
-				 <label for="tx_wecmap[long]">'.$LANG->getLL('longitude').'</label>  <input name="long" value="'.$latlong['long'].'" />
-				 <input type="hidden" name="original_lat" value="'.$latlong['lat'].'" />
-				 <input type="hidden" name="original_long" value="'.$latlong['long'].'" />';
+		$form = '<label for="wec_map_lat">'.$LANG->getLL('latitude').'</label> <input name="wec_map_lat" value="'.$latlong['lat'].'" />
+				 <label for="wec_map_long">'.$LANG->getLL('longitude').'</label>  <input name="wec_map_long" value="'.$latlong['long'].'" />
+				 <input type="hidden" name="wec_map_original_lat" value="'.$latlong['lat'].'" />
+				 <input type="hidden" name="wec_map_original_long" value="'.$latlong['long'].'" />';
 
 		return '<p>'.$status.'</p><p>'.$form.'</p>';
 	}
