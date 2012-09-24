@@ -262,14 +262,14 @@ class tx_wecmap_map_google_v3 extends tx_wecmap_map {
 //			$jsFile2 = t3lib_extMgm::siteRelPath('wec_map') . 'res/copyrights.js';
 			if (TYPO3_MODE == 'FE') {
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps_v3'] = '<script src="'.$apiURL.'" type="text/javascript"></script>';
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map'] = '<script src="' . $jsFile  . '" type="text/javascript"></script>'
-				                                                  . '<script src="' . $jsFile2 . '" type="text/javascript"></script>'
+				$GLOBALS['TSFE']->additionalHeaderData['wec_map'] = ( $jsFile  ? '<script src="' . $jsFile  . '" type="text/javascript"></script>' : '' )
+				                                                  . ( $jsFile2 ? '<script src="' . $jsFile2 . '" type="text/javascript"></script>' : '' )
 				                                                  ;
 			} else {
 				$htmlContent .= '<script src="'.$apiURL.'" type="text/javascript"></script>';
 #				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
-				$htmlContent .= '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile  . '" type="text/javascript"></script>'
-				              . '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile2 . '" type="text/javascript"></script>'
+				$htmlContent .= ( $jsFile  ? '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile  . '" type="text/javascript"></script>' : '' )
+				              . ( $jsFile2 ? '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile2 . '" type="text/javascript"></script>' : '' )
 				              ;
 			}
 
@@ -291,9 +291,7 @@ class tx_wecmap_map_google_v3 extends tx_wecmap_map {
 						t3lib_div::devLog($this->mapName.': adding '. $group->getMarkerCount() .' markers from group '.$group->id, 'wec_map_api');
 					}
 					// devlog end
-					$jsMarker = $group->drawMarkerJS();
-					if ( is_array( $jsMarker ) )
-						$jsContent = array_merge($jsContent, $jsMarker);
+					$jsContent = array_merge($jsContent, $group->drawMarkerJS());
 					$jsContent[] = '';
 				}
 			}
