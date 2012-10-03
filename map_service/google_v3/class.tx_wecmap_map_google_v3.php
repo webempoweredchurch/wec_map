@@ -252,6 +252,7 @@ class tx_wecmap_map_google_v3 extends tx_wecmap_map {
 //			$apiURL = tx_wecmap_backend::getExtConf('apiURL');
 //			$apiURL = sprintf($apiURL, $this->lang);
 			$apiURL = "http://maps.googleapis.com/maps/api/js?sensor=false&language=" . $this->lang;
+			$mmURL  = 'http://google-maps-utility-library-v3.googlecode.com/svn/tags/markermanager/1.0/src/markermanager.js';
 
 			if (TYPO3_DLOG) {
 				t3lib_div::devLog($this->mapName.': loading API from URL: '.$apiURL, 'wec_map_api');
@@ -261,12 +262,15 @@ class tx_wecmap_map_google_v3 extends tx_wecmap_map {
 			$jsFile  = t3lib_extMgm::siteRelPath('wec_map') . 'res/wecmap_v3.js';
 //			$jsFile2 = t3lib_extMgm::siteRelPath('wec_map') . 'res/copyrights.js';
 			if (TYPO3_MODE == 'FE') {
-				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps_v3'] = '<script src="'.$apiURL.'" type="text/javascript"></script>';
+				$GLOBALS['TSFE']->additionalHeaderData['wec_map_googleMaps_v3'] = '<script src="'.$apiURL.'" type="text/javascript"></script>'
+				                                                                . '<script src="'.$mmURL .'" type="text/javascript"></script>'
+				                                                                ;
 				$GLOBALS['TSFE']->additionalHeaderData['wec_map'] = ( $jsFile  ? '<script src="' . $jsFile  . '" type="text/javascript"></script>' : '' )
 				                                                  . ( $jsFile2 ? '<script src="' . $jsFile2 . '" type="text/javascript"></script>' : '' )
 				                                                  ;
 			} else {
 				$htmlContent .= '<script src="'.$apiURL.'" type="text/javascript"></script>';
+				$htmlContent .= '<script src="'.$mmURL .'" type="text/javascript"></script>';
 #				$htmlContent .= '<script src="'.t3lib_div::getIndpEnv('TYPO3_SITE_URL'). 'typo3/contrib/prototype/prototype.js" type="text/javascript"></script>';
 				$htmlContent .= ( $jsFile  ? '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile  . '" type="text/javascript"></script>' : '' )
 				              . ( $jsFile2 ? '<script src="' . t3lib_div::getIndpEnv('TYPO3_SITE_URL') . $jsFile2 . '" type="text/javascript"></script>' : '' )

@@ -70,10 +70,10 @@ var WecMap = {
 	},
 
 	// adds markers (all markers from a specified group of a map) to the marker Manager
-//	addMarkersToManager: function(map, groupId, minZoom, maxZoom) {
-//		this.markerManagers[map].addMarkers(this.markers[map][groupId], minZoom, maxZoom);
-//		this.markerManagers[map].refresh();
-//	},
+	addMarkersToManager: function(mapId, groupId, minZoom, maxZoom) {
+		var map = this.get( mapId );
+		map.addMarkersToManagerV2( groupId, minZoom, maxZoom);
+	},
 
 	// jumps to a specific marker (determined by groupId and markerId) and zoomlevel on the map
 	jumpTo: function(mapId, groupId, markerId, zoom) {
@@ -111,11 +111,27 @@ var WecMap = {
 	},
 	
 	// loads directions on a map
-//	setDirections: function(mapId, fromAddr, toAddr) {
-//		window['gdir_' + map].load('from: ' + fromAddr + ' to: ' + toAddr, { locale: this.locale });
-//		this.maps[map].closeInfoWindow();
-//		return false;
-//	},
+	setDirections: function(mapId, fromAddr, toAddr) {
+		var map = this.get( mapId );
+		if ( !map.directionsDisplay )
+		{
+  			map.directionsDisplay = new google.maps.DirectionsRenderer();
+  			map.directionsDisplay.setMap(map);
+			map.directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+  		}
+	
+		var request = {
+			origin:start,
+			destination:end,
+			travelMode: google.maps.TravelMode.DRIVING
+		};
+		map.directionsService.route(request, function(response, status) {
+			if (status == google.maps.DirectionsStatus.OK) {
+				map.directionsDisplay.setDirections(response);
+			}
+		});
+		return false;
+	},
 
 	// opens up the directions tab window to a marker
 //	openDirectionsToHere: function(map, groupId, markerId) {
@@ -210,6 +226,8 @@ function WecMapGoogleV3( mapId )
 	this.icons = [];
 	this.infoWindow = new google.maps.InfoWindow();
 	this.bubbleData = [];
+	this.markerManager = null;
+	this.mmGroupZoom = [];
 	return this;
 }
 
@@ -240,7 +258,7 @@ WecMapGoogleV3.prototype.drawMap = function( strID )
 	google.maps.event.addListener(this.map, 'maptypeid_changed', function()
 		{
 /*		
-			// if http://code.google.com/p/gmaps-samples-v3/source/browse/trunk/custom-copyirghts/copyright.js is used
+			// if http://code.google.com/p/gmaps-samples-v3/source/browse/trunk/custom-copyrights/copyright.js is used
 			var notice = '';
 			var collection = copyrightInfo.copyrights[copyrightInfo.map.getMapTypeId()];
 			var bounds = copyrightInfo.map.getBounds();
@@ -260,8 +278,30 @@ WecMapGoogleV3.prototype.drawMap = function( strID )
 
 	for ( var layer = 0; layer < this.kmlArray.length; ++layer )
 		this.kmlArray[ layer ].setMap( this.map );
-	for ( var marker = 0; marker < this.markerArray.length; ++marker )
-		this.markerArray[ marker ].setMap( this.map );
+	// add marker through MarkerManager; don't add them directly		
+//	for ( var marker = 0; marker < this.markerArray.length; ++marker )
+//		this.markerArray[ marker ].setMap( this.map );
+	// Markermanager
+	var that = this;
+	var listener = google.maps.event.addListener(this.map, 'bounds_changed', function(){
+		WecMapGoogleV3_setupMarkers( that );
+		google.maps.event.removeListener(listener);
+  	});
+}
+
+function WecMapGoogleV3_setupMarkers( mapObj)
+{
+	mapObj.markerManager = new MarkerManager( mapObj.map );
+	google.maps.event.addListener(mapObj.markerManager, 'loaded', function(){
+		for ( var group = 0; group < mapObj.mmGroupZoom.length; ++group )
+		{
+			var groupId = mapObj.mmGroupZoom[group].groupId;
+			var minZoom = mapObj.mmGroupZoom[group].minZoom;
+			var maxZoom = mapObj.mmGroupZoom[group].maxZoom;
+			mapObj.markerManager.addMarkers( mapObj.markers[ groupId ], minZoom, maxZoom );
+		}
+		mapObj.markerManager.refresh();
+  	});
 }
 
 WecMapGoogleV3.prototype.setMapTypeId = function( MapTypeId )
@@ -333,6 +373,21 @@ WecMapGoogleV3.prototype.addMarkerV2 = function( markerId, latlng, iconId, dirTi
 		
 	return marker;
 		
+}
+
+// http://google-maps-utility-library-v3.googlecode.com/svn/tags/markermanager/1.0/docs/reference.html
+WecMapGoogleV3.prototype.addMarkersToManagerV2 = function( groupId, minZoom, maxZoom ) 
+{
+	if (!(this.mmGroupZoom instanceof Array))
+		this.mmGroupZoom = [];
+	var options = { groupId: groupId, minZoom: minZoom, maxZoom: maxZoom };
+	this.mmGroupZoom.push( options );
+	
+	if ( this.markerManager )
+	{
+		this.markerManager.addMarkers(this.markers[groupId], minZoom, maxZoom);
+		this.markerManager.refresh();
+	}
 }
 
 WecMapGoogleV3.prototype.addIconV2 = function( iconID, imagepath, shadowpath, size, shadowSize, anchor, infoAnchor )
